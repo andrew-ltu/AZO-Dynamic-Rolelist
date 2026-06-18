@@ -1,0 +1,36 @@
+{
+  "_comment": "Member directory for AZO. 'opsAttended' = REAL ops attended in 2026 (count of true months below). The promotion bar reads the assigned 'discordRank' and shows progress toward the next rank: Recruit -(1 op)-> Junior Operator -(6 ops)-> Operator -(14 ops)-> Senior Operator. SOCOMD & Senior Operator are maxed (no promotion %). 'avatar' = local file (assets/avatars/name.png) or a full URL (incl. a Discord CDN link); blank = auto initials badge. 'leadership' = senior | junior | null. Endorsement/leadership values are PLACEHOLDERS — replace with real ones. Only April, May and June have run so far (one op each); add new months as ops happen.",
+
+  "Jag McMuffin":       { "discordRank": "SOCOMD",          "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Zeus", "Mission Maker"],         "leadership": "senior" },
+  "Sir Danger":         { "discordRank": "SOCOMD",          "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Zeus", "Platoon Command", "JTAC"], "leadership": "senior" },
+  "Gunter":             { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Section Lead", "Breacher", "Marksman"], "leadership": "senior" },
+  "BadKarma":           { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Signaller", "JTAC"],            "leadership": "senior" },
+  "Monke":              { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": false, "Jun": true },  "endorsements": ["Grenadier", "Demolitions"],     "leadership": "junior" },
+  "Crowded_tank":       { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": ["Recon"],                         "leadership": null },
+
+  "Malt":               { "discordRank": "Operator",        "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Section Lead", "Marksman"],      "leadership": "senior" },
+  "GoGoBendy":          { "discordRank": "Operator",        "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": ["Combat Medic"],                  "leadership": "junior" },
+  "Krill":              { "discordRank": "Operator",        "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": ["Sharpshooter"],                  "leadership": null },
+  "AnimePanda":         { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": ["LSW Gunner"],                    "leadership": null },
+  "Chimney":            { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": ["Engineer"],                      "leadership": null },
+  "Zep":                { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": true,  "Jun": false }, "endorsements": ["Platoon Medic"],                 "leadership": "junior" },
+
+  "Spacecat82":         { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Combat Medic"],                  "leadership": "junior" },
+  "Velteck":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["LSW Gunner"],                    "leadership": null },
+  "Mas":                { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [],                                "leadership": null },
+  "HiveMynd":           { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": ["Anti-tank"],                     "leadership": null },
+  "Unknown_Lemon07":    { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": false, "Jun": true },  "endorsements": [],                                "leadership": null },
+  "Black Kaiser":       { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": [],                                "leadership": null },
+  "24pool1":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": ["Asst. Section Lead"],            "leadership": "junior" },
+  "Misaka":             { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": ["Anti-tank"],                     "leadership": null },
+  "Vain":               { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": ["Asst. Section Lead"],            "leadership": "junior" },
+  "Draznugs12":         { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": [],                                "leadership": null },
+  "Kiren77":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": ["LSW Gunner"],                    "leadership": null },
+  "sebs":               { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": [],                                "leadership": null },
+  "Terack":             { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": [],                                "leadership": null },
+  "BirdBrian":          { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": true,  "Jun": false }, "endorsements": [],                                "leadership": null },
+
+  "AbuHudhayfah":       { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": ["Grenadier"],                     "leadership": null },
+  "Orter":              { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": false, "Jun": true },  "endorsements": ["LSW Gunner"],                    "leadership": null },
+  "TheRandomHistorian": { "discordRank": "Recruit",         "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": [],                                "leadership": null }
+}

@@ -2,80 +2,64 @@
   "operation": {
     "name": "Operation Karoonda I",
     "zeus": "Jag McMuffin",
-    "tier": "Tier 2",
-    "background": "assets/backgrounds/africa.jpg",
-    "music": "assets/music/karoonda.mp3"
+    "tier": "Tier 2 Operation",
+    "date": "Sat 20 Jun 2026 · 1900 AEST",
+    "countdownTo": "2026-06-20T19:00:00+10:00",
+    "status": "upcoming",
+    "theme": "tactical-blue",
+    "background": "assets/backgrounds/african-savanna.svg",
+    "music": "assets/music/karoonda.mp3",
+    "comingSoonText": "A new role list will be released soon. Stand by for the next operation."
   },
 
-  "platoon_hq": [
-    {
-      "role": "Platoon Commander",
-      "member": "Sir Danger"
-    },
-    {
-      "role": "Signaller",
-      "member": "BadKarma"
-    },
-    {
-      "role": "Platoon Medic",
-      "member": "Zep"
-    }
+  "command": [
+    { "role": "Platoon Commander", "member": "Sir Danger" },
+    { "role": "Asst. Platoon Commander", "member": null },
+    { "role": "Signaller", "member": "BadKarma" },
+    { "role": "Platoon Medic", "member": "Zep" }
   ],
 
-  "alpha": [
+  "sections": [
     {
-      "role": "Section Leader",
-      "member": "Gunter"
+      "name": "ALPHA",
+      "roles": [
+        { "role": "Section Leader", "member": "Gunter" },
+        { "role": "Asst. Section Leader", "member": "24pool1" },
+        { "role": "Grenadier", "member": "Monke" },
+        { "role": "Grenadier", "member": "AbuHudhayfah" },
+        { "role": "LSW (Minimi)", "member": "AnimePanda" },
+        { "role": "LSW (Minimi)", "member": "Kiren77" },
+        { "role": "Combat Medic", "member": "Spacecat82" },
+        { "role": "Rifleman", "member": "TheRandomHistorian" }
+      ]
     },
     {
-      "role": "2IC",
-      "member": "24pool1"
+      "name": "BRAVO",
+      "roles": [
+        { "role": "Section Leader", "member": "Malt" },
+        { "role": "Asst. Section Leader", "member": "Vain" },
+        { "role": "Anti-tank", "member": "Misaka" },
+        { "role": "Asst. Anti-tank", "member": "HiveMynd" },
+        { "role": "LSW (Minimi)", "member": "Orter" },
+        { "role": "LSW (Minimi)", "member": "Velteck" },
+        { "role": "Combat Medic", "member": "GoGoBendy" },
+        { "role": "Rifleman", "member": "sebs" }
+      ]
     },
     {
-      "role": "Grenadier",
-      "member": "Monke"
-    },
-    {
-      "role": "LSW",
-      "member": "AnimePanda"
-    },
-    {
-      "role": "Combat Medic",
-      "member": "Spacecat82"
-    }
-  ],
-
-  "bravo": [
-    {
-      "role": "Section Leader",
-      "member": "Malt"
-    },
-    {
-      "role": "2IC",
-      "member": "Vain"
-    },
-    {
-      "role": "Anti Tank",
-      "member": "Misaka"
-    },
-    {
-      "role": "Combat Medic",
-      "member": "GoGoBendy"
-    }
-  ],
-
-  "charlie": [
-    {
-      "role": "Section Leader",
-      "member": null
-    },
-    {
-      "role": "Grenadier",
-      "member": null
-    },
-    {
-      "role": "LSW",
-      "member": null
+      "name": "CHARLIE",
+      "locked": true,
+      "note": "Reserved for Oceanic Rangers — OR are filling this section",
+      "roles": [
+        { "role": "Section Leader", "member": null },
+        { "role": "Asst. Section Leader", "member": null },
+        { "role": "Grenadier", "member": null },
+        { "role": "Grenadier", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "Combat Medic", "member": null },
+        { "role": "Rifleman", "member": null }
+      ]
     }
   ]
 }
