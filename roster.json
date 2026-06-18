@@ -9,6 +9,7 @@
     "theme": "tactical-blue",
     "background": "assets/backgrounds/african-savanna.svg",
     "music": "assets/music/anthem.mp3",
+    "musicVolume": 0.15,
     "comingSoonText": "A new role list will be released soon. Stand by for the next operation."
   },
 

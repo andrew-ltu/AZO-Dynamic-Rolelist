@@ -145,11 +145,6 @@
   .slot.is-locked{ opacity:.62; cursor:not-allowed; }
   .slot.is-locked .nm{ color:var(--muted); font-weight:600; font-style:normal; }
 
-  /* leadership star */
-  .lead-star{ flex:0 0 auto; font-size:13px; line-height:1; }
-  .lead-star.senior{ color:#ffd34d; filter:drop-shadow(0 0 4px rgba(255,211,77,.5)); }
-  .lead-star.junior{ color:var(--muted); }
-
   /* ============================ AVATAR ============================ */
   .avatar{
     --s:42px; width:var(--s); height:var(--s); flex:0 0 auto; position:relative; border-radius:50%; overflow:hidden;
@@ -435,11 +430,9 @@ function slotHTML(role, name, locked){
       <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}</div></div></div>`;
   }
   const m = member(name);
-  const lead = m.leadership ? `<span class="lead-star ${m.leadership}" title="${m.leadership==='senior'?'Senior':'Junior'} Leadership">★</span>` : '';
   return `<button class="slot ${leaderLevel(role)}" type="button" data-name="${esc(name)}">
       ${avatarHTML(m,42)}
       <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}</div></div>
-      ${lead}
     </button>`;
 }
 
@@ -639,12 +632,11 @@ function openRoster(){
   const html = order.map(rank=>{
     const list = groups[rank].sort((a,b)=> b.opsAttended-a.opsAttended || a.name.localeCompare(b.name));
     const cards = list.map(m=>{
-      const lead = m.leadership ? `<span class="lead-star ${m.leadership}">★</span>` : '';
       return `<button class="ro-card" type="button" data-name="${esc(m.name)}">
           ${avatarHTML(m,40)}
           <div style="min-width:0">
             <div class="nm">${esc(m.name)}</div>
-            <div class="rl2">${esc(m.discordRank)} ${lead}</div>
+            <div class="rl2">${esc(m.discordRank)}</div>
           </div>
           <div class="ops"><b>${m.opsAttended}</b><i>ops</i></div>
         </button>`;
@@ -666,12 +658,18 @@ function setupMusic(op){
   if(!op.music){ wrap.hidden=true; return; }
   wrap.hidden=false;
   audio.src = op.music;
+  audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15; // quiet background
   const setUI = playing=>{ wrap.classList.toggle('playing',playing); lbl.textContent = playing?'Pause anthem':'Play anthem'; };
-  btn.onclick = ()=>{
-    if(audio.paused){ audio.play().then(()=>setUI(true)).catch(()=>setUI(false)); }
-    else { audio.pause(); setUI(false); }
-  };
-  audio.play().then(()=>setUI(true)).catch(()=>setUI(false));
+  const start = ()=> audio.play().then(()=>{ setUI(true); return true; }).catch(()=>{ setUI(false); return false; });
+  btn.onclick = ()=>{ if(audio.paused) start(); else { audio.pause(); setUI(false); } };
+  // Autoplay quietly on load. Browsers block audio until the visitor interacts,
+  // so if the first attempt is refused, kick it off on their first gesture.
+  start().then(ok=>{
+    if(ok) return;
+    const EV=['pointerdown','keydown','scroll','touchstart'];
+    const kick=()=> start().then(s=>{ if(s) EV.forEach(e=>window.removeEventListener(e,kick)); });
+    EV.forEach(e=>window.addEventListener(e,kick,{passive:true}));
+  });
 }
 
 /* ---------- coming soon ---------- */
