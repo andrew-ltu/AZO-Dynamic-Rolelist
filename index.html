@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AZO Operations</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#76a8d8;
+    --dark:#0d1117;
+    --panel:rgba(13,17,23,0.88);
+    --text:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Oswald',sans-serif;
+    color:white;
+    background:url('assets/backgrounds/africa.jpg') center center/cover fixed;
+    min-height:100vh;
+}
+
+.overlay{
+    background:rgba(0,0,0,0.65);
+    min-height:100vh;
+}
+
+header{
+    text-align:center;
+    padding:40px 20px;
+}
+
+.logo{
+    width:160px;
+    margin-bottom:20px;
+}
+
+.title{
+    font-size:4rem;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.subtitle{
+    margin-top:10px;
+    color:#cfd8e3;
+    font-size:1.2rem;
+}
+
+.operation-info{
+    text-align:center;
+    margin-top:15px;
+}
+
+.operation-info h2{
+    color:var(--primary);
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:30px;
+}
+
+.command-card{
+    background:var(--panel);
+    border-left:5px solid var(--primary);
+    padding:20px;
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.command-card h2{
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.commander{
+    font-size:2rem;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+    gap:20px;
+}
+
+.section{
+    background:var(--panel);
+    backdrop-filter:blur(8px);
+    padding:20px;
+    border-top:4px solid var(--primary);
+}
+
+.section-title{
+    text-align:center;
+    color:var(--primary);
+    font-size:2rem;
+    margin-bottom:20px;
+}
+
+.role{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    transition:0.2s;
+    cursor:pointer;
+}
+
+.role:hover{
+    background:rgba(118,168,216,0.12);
+}
+
+.role img{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    margin-right:10px;
+}
+
+.role-left{
+    display:flex;
+    align-items:center;
+}
+
+.rank-leader{
+    font-size:1.1rem;
+    color:#fff;
+}
+
+.rank-standard{
+    font-size:0.95rem;
+    color:#d0d7de;
+}
+
+.popup{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:400px;
+    background:#111827;
+    border:2px solid var(--primary);
+    padding:25px;
+    display:none;
+    z-index:1000;
+}
+
+.popup img{
+    width:90px;
+    border-radius:50%;
+    display:block;
+    margin:auto;
+}
+
+.popup h2{
+    text-align:center;
+    margin:10px 0;
+}
+
+.progress{
+    height:10px;
+    background:#333;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress-fill{
+    width:67%;
+    height:100%;
+    background:var(--primary);
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    color:red;
+    font-size:1.3rem;
+}
+
+.music-button{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:var(--primary);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    cursor:pointer;
+    font-size:1rem;
+}
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#ccc;
+}
+
+</style>
+</head>
+<body>
+
+<div class="overlay">
+
+<header>
+
+<img src="assets/logos/azo-logo.png" class="logo">
+
+<h1 class="title">OPERATION KAROONDA I</h1>
+
+<div class="subtitle">
+Australian Zeus Operations
+</div>
+
+<div class="operation-info">
+<h2>Zeus: Jag McMuffin</h2>
+<p>Tier 2 Operation</p>
+</div>
+
+</header>
+
+<div class="container">
+
+<div class="command-card">
+<h2>PLATOON COMMANDER</h2>
+<div class="commander">Sir Danger</div>
+</div>
+
+<div class="grid">
+
+<div class="section">
+<div class="section-title">ALPHA</div>
+
+<div class="role" onclick="showProfile('Gunter')">
+<div class="role-left">
+<img src="assets/avatars/gunter.png">
+<div>
+<div class="rank-leader">Gunter</div>
+<div>Section Leader</div>
+</div>
+</div>
+</div>
+
+<div class="role">
+<div class="role-left">
+<img src="assets/avatars/24pool1.png">
+<div>
+<div class="rank-standard">24pool1</div>
+<div>2IC</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="section">
+<div class="section-title">BRAVO</div>
+
+<div class="role">
+<div class="role-left">
+<img src="assets/avatars/malt.png">
+<div>
+<div class="rank-leader">Malt</div>
+<div>Section Leader</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="section">
+<div class="section-title">CHARLIE</div>
+
+<div class="role">
+<div class="role-left">
+<img src="assets/avatars/recruit.png">
+<div>
+<div class="rank-standard">OPEN SLOT</div>
+<div>Available</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+AZO Operations Portal © 2026
+
+</footer>
+
+</div>
+
+<div class="popup" id="profilePopup">
+
+<span class="close" onclick="closeProfile()">✕</span>
+
+<img src="assets/avatars/gunter.png">
+
+<h2>Gunter</h2>
+
+<p><strong>Rank:</strong> Senior Operator</p>
+
+<p><strong>Ops Attended:</strong> 14</p>
+
+<div class="progress">
+<div class="progress-fill"></div>
+</div>
+
+<p style="margin-top:15px;">
+✓ Junior Leadership Endorsement
+</p>
+
+<p>
+✗ Senior Leadership Endorsement
+</p>
+
+</div>
+
+<audio id="bgMusic" loop>
+<source src="assets/music/karoonda.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-button" onclick="toggleMusic()">
+🔊 Music
+</button>
+
+<script>
+
+function showProfile(){
+    document.getElementById("profilePopup").style.display="block";
+}
+
+function closeProfile(){
+    document.getElementById("profilePopup").style.display="none";
+}
+
+function toggleMusic(){
+
+    let music = document.getElementById("bgMusic");
+
+    if(music.paused){
+        music.play();
+    } else {
+        music.pause();
+    }
+}
+
+</script>
+
+</body>
+</html>
