@@ -234,10 +234,11 @@
   .attend{ margin-top:20px; }
   .attend .block-title{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:12px; color:var(--muted); display:flex; justify-content:space-between; align-items:baseline; margin-bottom:11px; }
   .attend .block-title .cnt{ color:var(--primary-2); letter-spacing:1px; }
-  .ops-cal{ display:flex; flex-direction:column; gap:9px; }
-  .opblk{ display:flex; gap:11px; align-items:flex-start; }
-  .opblk .oplbl{ flex:0 0 42px; font-family:'Oswald'; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); text-align:right; padding-top:1px; }
-  .opdots{ display:flex; gap:5px; flex-wrap:wrap; flex:1; }
+  .att-grid{ display:flex; gap:6px; align-items:flex-end; }
+  .att-col{ flex:1 1 0; min-width:0; text-align:center; }
+  .att-dots{ display:flex; gap:4px; justify-content:center; align-items:center; min-height:15px; margin-bottom:6px; }
+  .att-m{ font-family:'Oswald'; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); }
+  .att-empty .att-m{ color:var(--muted-2); opacity:.7; }
   .opdot{ width:13px; height:13px; border-radius:50%; background:var(--bad); border:1px solid var(--line); }
   .opdot.yes{ background:var(--primary-2); border-color:var(--primary); box-shadow:0 0 6px color-mix(in srgb,var(--primary) 50%, transparent); }
   .opdot.no{ background:#0c1017; border-color:rgba(210,69,63,.5); }
@@ -351,15 +352,21 @@ const RANK_LADDER    = ['Recruit', 'Junior Operator', 'Operator', 'Senior Operat
 const RANK_THRESHOLD = { 'Junior Operator':1, 'Operator':6, 'Senior Operator':14 };
 const RANK_SORT      = { 'SOCOMD':0, 'Senior Operator':1, 'Operator':2, 'Junior Operator':3, 'Recruit':4 };
 
-/* Ops calendar for the year. 'happened' = ops already run (filled from data);
-   the rest render as upcoming. April & May had 1 op each; June onward = 32. */
-const OPS_CALENDAR = [
-  { key:'Apr', label:'Apr',   total:1,  happened:1 },
-  { key:'May', label:'May',   total:1,  happened:1 },
-  { key:'Jun', label:'Jun →', total:32, happened:1 }
+/* Attendance mirrors the AZO promotion chart (months Apr–Dec).
+   Each month: ops already run ('done') + ops upcoming ('up').
+   So far: Apr 1, May 1, Jun 1 run + 1 upcoming; Jul–Dec none yet. */
+const ATT_MONTHS = [
+  { m:'Apr', done:1, up:0 },
+  { m:'May', done:1, up:0 },
+  { m:'Jun', done:1, up:1 },
+  { m:'Jul', done:0, up:0 },
+  { m:'Aug', done:0, up:0 },
+  { m:'Sep', done:0, up:0 },
+  { m:'Oct', done:0, up:0 },
+  { m:'Nov', done:0, up:0 },
+  { m:'Dec', done:0, up:0 }
 ];
-const OPS_SO_FAR = OPS_CALENDAR.reduce((a,b)=>a+b.happened,0);
-const OPS_TOTAL  = OPS_CALENDAR.reduce((a,b)=>a+b.total,0);
+const OPS_SO_FAR = ATT_MONTHS.reduce((a,b)=>a+b.done,0);
 
 let MEMBERS = {};
 let countdownTimer = null;
@@ -553,16 +560,15 @@ function setupCountdown(op){
 /* ---------- attendance strip ---------- */
 function attendanceStrip(m){
   let attended = 0;
-  const blocks = OPS_CALENDAR.map(blk=>{
-    const went = !!m.attendance[blk.key];
+  const cols = ATT_MONTHS.map(mo=>{
+    const went = !!m.attendance[mo.m];
     let dots = '';
-    for(let i=0;i<blk.total;i++){
-      if(i < blk.happened){ if(went) attended++; dots += `<span class="opdot ${went?'yes':'no'}"></span>`; }
-      else dots += `<span class="opdot up"></span>`;
-    }
-    return `<div class="opblk"><div class="oplbl">${esc(blk.label)}</div><div class="opdots">${dots}</div></div>`;
+    for(let i=0;i<mo.done;i++){ if(went) attended++; dots += `<span class="opdot ${went?'yes':'no'}"></span>`; }
+    for(let i=0;i<mo.up;i++){ dots += `<span class="opdot up"></span>`; }
+    const empty = (mo.done+mo.up)===0;
+    return `<div class="att-col${empty?' att-empty':''}"><div class="att-dots">${dots}</div><div class="att-m">${mo.m}</div></div>`;
   }).join('');
-  return { blocks, attended };
+  return { cols, attended };
 }
 
 /* ---------- profile modal ---------- */
@@ -610,12 +616,11 @@ function openProfile(name){
     ${promoBlock}
     <div class="attend">
       <div class="block-title">Attendance · 2026 <span class="cnt">${att.attended}/${OPS_SO_FAR} ops so far</span></div>
-      <div class="ops-cal">${att.blocks}</div>
+      <div class="att-grid">${att.cols}</div>
       <div class="ops-legend">
         <span><span class="opdot yes"></span> Attended</span>
         <span><span class="opdot no"></span> Missed</span>
         <span><span class="opdot up"></span> Upcoming</span>
-        <span style="margin-left:auto">${OPS_TOTAL} ops scheduled this year</span>
       </div>
     </div>`;
 
