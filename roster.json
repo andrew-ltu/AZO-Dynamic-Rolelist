@@ -1,0 +1,81 @@
+{
+  "operation": {
+    "name": "Operation Karoonda I",
+    "zeus": "Jag McMuffin",
+    "tier": "Tier 2",
+    "background": "assets/backgrounds/africa.jpg",
+    "music": "assets/music/karoonda.mp3"
+  },
+
+  "platoon_hq": [
+    {
+      "role": "Platoon Commander",
+      "member": "Sir Danger"
+    },
+    {
+      "role": "Signaller",
+      "member": "BadKarma"
+    },
+    {
+      "role": "Platoon Medic",
+      "member": "Zep"
+    }
+  ],
+
+  "alpha": [
+    {
+      "role": "Section Leader",
+      "member": "Gunter"
+    },
+    {
+      "role": "2IC",
+      "member": "24pool1"
+    },
+    {
+      "role": "Grenadier",
+      "member": "Monke"
+    },
+    {
+      "role": "LSW",
+      "member": "AnimePanda"
+    },
+    {
+      "role": "Combat Medic",
+      "member": "Spacecat82"
+    }
+  ],
+
+  "bravo": [
+    {
+      "role": "Section Leader",
+      "member": "Malt"
+    },
+    {
+      "role": "2IC",
+      "member": "Vain"
+    },
+    {
+      "role": "Anti Tank",
+      "member": "Misaka"
+    },
+    {
+      "role": "Combat Medic",
+      "member": "GoGoBendy"
+    }
+  ],
+
+  "charlie": [
+    {
+      "role": "Section Leader",
+      "member": null
+    },
+    {
+      "role": "Grenadier",
+      "member": null
+    },
+    {
+      "role": "LSW",
+      "member": null
+    }
+  ]
+}
