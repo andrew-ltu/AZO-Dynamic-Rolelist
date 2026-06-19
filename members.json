@@ -155,9 +155,9 @@
   "Zep": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/zep.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "attendance": {
-      "Apr": false,
+      "Apr": true,
       "May": true,
       "Jun": false
     },
