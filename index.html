@@ -79,6 +79,10 @@
   .op-meta .pill{ display:inline-flex; align-items:center; gap:7px; padding:5px 13px; border:1px solid var(--line-strong); border-radius:999px; background:var(--panel); font-weight:600; letter-spacing:.4px; }
   .op-meta .pill .k{ color:var(--muted-2); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:1px; }
   .op-meta .pill .v{ color:var(--text); }
+  .op-meta button.pill{ font:inherit; cursor:pointer; }
+  .pill-map .k{ color:#36d07a; }
+  .pill-map:hover{ border-color:#36d07a; background:color-mix(in srgb,#36d07a 14%, var(--panel)); }
+  .pill-map .status-dot{ background:#36d07a; box-shadow:0 0 0 4px rgba(54,208,122,.22); animation:pulse 1.8s infinite; }
   .status-dot{ width:9px; height:9px; border-radius:50%; background:var(--primary-2); box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 25%, transparent); }
   .status-live .status-dot{ background:#36d07a; box-shadow:0 0 0 4px rgba(54,208,122,.22); animation:pulse 1.8s infinite; }
   @keyframes pulse{ 0%,100%{ transform:scale(1); opacity:1;} 50%{ transform:scale(1.25); opacity:.7;} }
@@ -189,6 +193,16 @@
   .ro-card .ops b{ font-family:'Oswald'; font-size:18px; color:var(--primary-2); display:block; line-height:1; }
   .ro-card .ops i{ font-style:normal; font-size:8px; color:var(--muted-2); text-transform:uppercase; letter-spacing:.5px; }
 
+  /* ============================ CAMPAIGN MAP ============================ */
+  .map-overlay{ position:fixed; inset:0; z-index:58; display:none; padding:24px; background:rgba(4,7,11,.86); backdrop-filter:blur(6px); overflow-y:auto; }
+  .map-overlay.show{ display:block; }
+  .map-panel{ max-width:700px; margin:0 auto; background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; }
+  .map-head{ display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-bottom:1px solid var(--line-strong); position:sticky; top:0; background:var(--panel-solid); z-index:2; }
+  .map-title{ font-family:'Oswald'; letter-spacing:3px; text-transform:uppercase; font-size:18px; border-left:3px solid #36d07a; padding-left:12px; display:flex; align-items:center; gap:10px; }
+  .map-title small{ display:block; font-family:'Inter'; letter-spacing:.3px; text-transform:none; color:var(--muted); font-size:11px; margin-top:2px; }
+  .map-body{ padding:18px; }
+  .map-img{ width:100%; height:auto; display:block; border-radius:8px; border:1px solid var(--line); box-shadow:0 10px 34px rgba(0,0,0,.55); }
+
   /* ============================ MODAL ============================ */
   .modal-back{ position:fixed; inset:0; z-index:70; background:rgba(4,7,11,0.74); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; opacity:0; transition:opacity .2s; }
   .modal-back.show{ display:flex; opacity:1; }
@@ -209,9 +223,11 @@
   .rank-recruit{ background:#374559; }
 
   .badges{ display:flex; flex-wrap:wrap; gap:7px; margin:14px 0; }
-  .badge{ display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:8px; font-size:12px; font-weight:600; background:color-mix(in srgb,var(--primary) 14%, transparent); border:1px solid var(--line); color:var(--accent); }
-  .badge.lead-senior{ background:rgba(255,211,77,.14); border-color:rgba(255,211,77,.5); color:#ffd97a; }
-  .badge.lead-junior{ background:rgba(158,208,255,.12); border-color:var(--line-strong); color:var(--accent); }
+  /* endorsements = green */
+  .badge{ display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:8px; font-size:12px; font-weight:600; background:rgba(56,193,114,.15); border:1px solid rgba(56,193,114,.5); color:#74dca0; }
+  /* leadership = yellow (senior darker/gold, junior brighter) */
+  .badge.lead-senior{ background:rgba(193,150,30,.18); border-color:rgba(214,170,50,.65); color:#d6a82e; }
+  .badge.lead-junior{ background:rgba(255,221,70,.16); border-color:rgba(255,221,70,.6); color:#ffe24f; }
 
   .stat-row{ display:flex; gap:10px; margin:16px 0; }
   .stat{ flex:1; background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:11px 8px; text-align:center; }
@@ -290,6 +306,17 @@
     </button>
   </div>
   <audio id="audio" loop></audio>
+
+  <!-- Campaign map lightbox -->
+  <div class="map-overlay" id="mapOverlay">
+    <div class="map-panel">
+      <div class="map-head">
+        <div class="map-title">Campaign Map <small>Theatre &amp; area of operations</small></div>
+        <button class="x" id="mapClose" aria-label="Close" style="position:static;width:34px;height:34px;border-radius:9px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:18px;cursor:pointer">✕</button>
+      </div>
+      <div class="map-body"><img class="map-img" id="mapImg" alt="Campaign map" /></div>
+    </div>
+  </div>
 
   <!-- Roster overlay -->
   <div class="roster-overlay" id="rosterOverlay">
@@ -482,6 +509,7 @@ function render(roster){
       <div class="op-title">${esc(op.name||'Operation')}</div>
       <div class="op-meta">
         <span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>
+        ${op.campaignMap?`<button class="pill pill-map" id="mapBtn" type="button"><span class="status-dot"></span><span class="k">LIVE:</span><span class="v">Campaign Map</span></button>`:''}
         ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
         ${op.tier?`<span class="pill"><span class="k">Tier</span><span class="v">${esc(op.tier)}</span></span>`:''}
       </div>
@@ -527,6 +555,7 @@ function render(roster){
   setupCountdown(op);
   setupMusic(op);
   setupComingSoon(op);
+  setupMap(op);
   $('#rosterOpen').onclick = openRoster;
 }
 
@@ -683,6 +712,15 @@ function setupComingSoon(op){
   $('#csPeek').onclick = ()=> cs.classList.remove('show');
 }
 
+/* ---------- campaign map ---------- */
+function setupMap(op){
+  const btn = $('#mapBtn');
+  if(!op.campaignMap || !btn) return;
+  $('#mapImg').src = op.campaignMap;
+  btn.onclick = ()=> $('#mapOverlay').classList.add('show');
+}
+function closeMap(){ $('#mapOverlay').classList.remove('show'); }
+
 /* ---------- events ---------- */
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-name]');
@@ -692,9 +730,12 @@ $('#modalClose').onclick = closeModal;
 $('#modalBack').onclick = e=>{ if(e.target===$('#modalBack')) closeModal(); };
 $('#rosterClose').onclick = closeRoster;
 $('#rosterOverlay').onclick = e=>{ if(e.target===$('#rosterOverlay')) closeRoster(); };
+$('#mapClose').onclick = closeMap;
+$('#mapOverlay').onclick = e=>{ if(e.target===$('#mapOverlay')) closeMap(); };
 document.addEventListener('keydown', e=>{
   if(e.key!=='Escape') return;
   if($('#modalBack').classList.contains('show')) closeModal();
+  else if($('#mapOverlay').classList.contains('show')) closeMap();
   else if($('#rosterOverlay').classList.contains('show')) closeRoster();
 });
 
