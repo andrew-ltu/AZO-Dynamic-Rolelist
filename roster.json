@@ -10,6 +10,7 @@
     "background": "assets/backgrounds/operation-bg.png",
     "campaignMap": "assets/campaign-map.png",
     "music": "assets/music/anthem.mp3",
+    "music2": "assets/music/anthem1.mp3",
     "musicVolume": 0.1,
     "comingSoonText": "A new role list will be released soon. Stand by for the next operation."
   },
