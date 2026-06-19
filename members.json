@@ -1,36 +1,376 @@
 {
   "_comment": "Member directory. REAL data only: discordRank + attendance come from the AZO promotion chart; opsAttended = count of attended ops there. endorsements/leadership/avatar are intentionally EMPTY — they are meant to be sourced from each member's Discord roles + profile picture (not hand-invented). Anyone not on the promotion chart = Recruit, 0 ops, no attendance. 'leadership' = senior | junior | null.",
-
-  "Jag McMuffin":       { "discordRank": "SOCOMD",          "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Sir Danger":         { "discordRank": "SOCOMD",          "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Gunter":             { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "BadKarma":           { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Monke":              { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": false, "Jun": true },  "endorsements": [], "leadership": null },
-  "Crowded_tank":       { "discordRank": "Senior Operator", "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-
-  "Malt":               { "discordRank": "Operator",        "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "GoGoBendy":          { "discordRank": "Operator",        "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": [], "leadership": null },
-  "Krill":              { "discordRank": "Operator",        "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": [], "leadership": null },
-  "AnimePanda":         { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-  "Chimney":            { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-  "Zep":                { "discordRank": "Operator",        "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": true,  "Jun": false }, "endorsements": [], "leadership": null },
-
-  "Spacecat82":         { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Velteck":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Mas":                { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "HiveMynd":           { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 3, "attendance": {"Apr": true,  "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Unknown_Lemon07":    { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": false, "Jun": true },  "endorsements": [], "leadership": null },
-  "Black Kaiser":       { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": true,  "May": true,  "Jun": false }, "endorsements": [], "leadership": null },
-  "24pool1":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Misaka":             { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Vain":               { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 2, "attendance": {"Apr": false, "May": true,  "Jun": true },  "endorsements": [], "leadership": null },
-  "Draznugs12":         { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": true,  "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-  "Kiren77":            { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": [], "leadership": null },
-  "sebs":               { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": [], "leadership": null },
-  "Terack":             { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": false, "Jun": true },  "endorsements": [], "leadership": null },
-  "BirdBrian":          { "discordRank": "Junior Operator", "avatar": "", "opsAttended": 1, "attendance": {"Apr": false, "May": true,  "Jun": false }, "endorsements": [], "leadership": null },
-
-  "AbuHudhayfah":       { "discordRank": "Recruit",         "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-  "Orter":              { "discordRank": "Recruit",         "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": [], "leadership": null },
-  "TheRandomHistorian": { "discordRank": "Recruit",         "avatar": "", "opsAttended": 0, "attendance": {"Apr": false, "May": false, "Jun": false }, "endorsements": [], "leadership": null }
+  "Jag McMuffin": {
+    "discordRank": "SOCOMD",
+    "avatar": "assets/avatars/jagmcmuffin.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [
+      "Medical",
+      "Fixed Wing",
+      "Rotary",
+      "Demolition",
+      "JTAC",
+      "Radioman"
+    ],
+    "leadership": null
+  },
+  "Sir Danger": {
+    "discordRank": "SOCOMD",
+    "avatar": "assets/avatars/sirdanger.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [
+      "Fixed Wing",
+      "Rotary"
+    ],
+    "leadership": null
+  },
+  "Gunter": {
+    "discordRank": "Senior Operator",
+    "avatar": "assets/avatars/gunter.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [
+      "Medical"
+    ],
+    "leadership": "junior"
+  },
+  "BadKarma": {
+    "discordRank": "Senior Operator",
+    "avatar": "assets/avatars/badkarma.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [
+      "Rotary"
+    ],
+    "leadership": "junior"
+  },
+  "Monke": {
+    "discordRank": "Senior Operator",
+    "avatar": "assets/avatars/monke.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": true,
+      "May": false,
+      "Jun": true
+    },
+    "endorsements": [
+      "Demolition"
+    ],
+    "leadership": null
+  },
+  "Crowded_tank": {
+    "discordRank": "Senior Operator",
+    "avatar": "assets/avatars/crowdedtank.png",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [
+      "Medical"
+    ],
+    "leadership": "junior"
+  },
+  "Malt": {
+    "discordRank": "Operator",
+    "avatar": "assets/avatars/malt.gif",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": "junior"
+  },
+  "GoGoBendy": {
+    "discordRank": "Operator",
+    "avatar": "",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": false
+    },
+    "endorsements": [
+      "Medical"
+    ],
+    "leadership": "junior"
+  },
+  "Krill": {
+    "discordRank": "Operator",
+    "avatar": "assets/avatars/krill.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": "junior"
+  },
+  "AnimePanda": {
+    "discordRank": "Operator",
+    "avatar": "assets/avatars/animepanda.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": true,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Chimney": {
+    "discordRank": "Operator",
+    "avatar": "assets/avatars/chimney.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": true,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Zep": {
+    "discordRank": "Operator",
+    "avatar": "assets/avatars/zep.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": false,
+      "May": true,
+      "Jun": false
+    },
+    "endorsements": [
+      "Medical",
+      "Rotary"
+    ],
+    "leadership": "junior"
+  },
+  "Spacecat82": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/spacecat82.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [
+      "Medical"
+    ],
+    "leadership": null
+  },
+  "Velteck": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/velteck.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Mas": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/mas.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "HiveMynd": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/hivemynd.png",
+    "opsAttended": 3,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Unknown_Lemon07": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/unknownlemon07.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": true,
+      "May": false,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Black Kaiser": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/blackkaiser.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": true,
+      "May": true,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "24pool1": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/24pool1.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": false,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Misaka": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/misaka.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": false,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Vain": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/vain.png",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": false,
+      "May": true,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Draznugs12": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/draznugs12.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": true,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Kiren77": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/kiren77.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "sebs": {
+    "discordRank": "Junior Operator",
+    "avatar": "",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Terack": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/terack.png",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": true
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "BirdBrian": {
+    "discordRank": "Junior Operator",
+    "avatar": "assets/avatars/birdbrian.gif",
+    "opsAttended": 1,
+    "attendance": {
+      "Apr": false,
+      "May": true,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "AbuHudhayfah": {
+    "discordRank": "Recruit",
+    "avatar": "assets/avatars/abuhudhayfah.png",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Orter": {
+    "discordRank": "Recruit",
+    "avatar": "assets/avatars/orter.png",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "TheRandomHistorian": {
+    "discordRank": "Recruit",
+    "avatar": "assets/avatars/therandomhistorian.png",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  }
 }
