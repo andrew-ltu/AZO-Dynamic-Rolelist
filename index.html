@@ -311,6 +311,10 @@
       <span class="eq"><i></i><i></i><i></i><i></i></span>
       <span class="lbl" id="musicLbl">Play anthem</span>
     </button>
+    <div id="anthemPicker" style="display:none; border-left:1px solid var(--line-strong);">
+      <button type="button" id="anthem1Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Switch to Anthem 1">A1</button>
+      <button type="button" id="anthem2Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Switch to Anthem 2">A2</button>
+    </div>
   </div>
   <audio id="audio" loop></audio>
 
@@ -322,11 +326,11 @@
         <button class="x" id="mapClose" aria-label="Close" style="position:static;width:34px;height:34px;border-radius:9px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:18px;cursor:pointer">✕</button>
       </div>
       <div class="map-body">
-        <p class="md-sub">A reader's guide to the ground beneath the headlines — where the ceasefire line bends and the Front holds sway. <em>Proposed / fictional geography.</em></p>
+        <p class="md-sub">A reader's guide to the ground beneath the headlines - where the ceasefire line bends and the Front holds sway. <em>Proposed / fictional geography.</em></p>
         <figure class="map-fig">
           <figcaption><b>The Lombakka Region</b> · strategic overview</figcaption>
           <svg viewBox="0 0 720 600" class="theatre-map" role="img" xmlns="http://www.w3.org/2000/svg">
-            <title>The Lombakka Region — Operation Karoonda theatre</title>
+            <title>The Lombakka Region - Operation Karoonda theatre</title>
             <desc>North Lombakka (LAF) and South Lombakka (LDF) split by a ceasefire line and no-man's-land, Bocano to the north-east, FOB Karoonda on the frontier near Niakala.</desc>
             <defs>
               <pattern id="nm" width="9" height="9" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
@@ -364,19 +368,19 @@
             <rect x="470" y="276" width="130" height="104" rx="4" fill="#5ad07a" fill-opacity="0.08" stroke="#5ad07a" stroke-width="1.6" stroke-dasharray="6 4"/>
             <text x="470" y="270" font-family="Oswald,sans-serif" font-size="11" letter-spacing="1.5" fill="#5ad07a">KAROONDA AO</text>
 
-            <text x="150" y="150" font-family="Oswald,sans-serif" font-size="17" letter-spacing="2" fill="#c98b3a">NORTH LOMBAKKA</text>
-            <text x="150" y="168" font-family="Inter,sans-serif" font-size="10" fill="#8a7a5a">Lombakkan Armed Forces · LAF</text>
+            <text x="150" y="138" font-family="Oswald,sans-serif" font-size="17" letter-spacing="2" fill="#c98b3a">NORTH LOMBAKKA</text>
+            <text x="150" y="156" font-family="Inter,sans-serif" font-size="10" fill="#8a7a5a">Lombakkan Armed Forces · LAF</text>
             <text x="150" y="430" font-family="Oswald,sans-serif" font-size="17" letter-spacing="2" fill="#6fa8df">SOUTH LOMBAKKA</text>
             <text x="150" y="448" font-family="Inter,sans-serif" font-size="10" fill="#5f7e9e">Lombakkan Defence Forces · LDF</text>
-            <text x="600" y="118" font-family="Oswald,sans-serif" font-size="14" letter-spacing="2" fill="#9aa6b4" text-anchor="middle">BOCANO</text>
-            <text x="392" y="300" font-family="Inter,sans-serif" font-size="9" fill="#d9a441" text-anchor="middle" font-style="italic">no-man's land</text>
+            <text x="600" y="114" font-family="Oswald,sans-serif" font-size="14" letter-spacing="2" fill="#9aa6b4" text-anchor="middle">BOCANO</text>
+            <text x="392" y="308" font-family="Inter,sans-serif" font-size="9" fill="#d9a441" text-anchor="middle" font-style="italic">no-man's land</text>
 
             <path d="M188 160 l3.5 7 7.5 1 -5.5 5 1.5 7.5 -6.5 -4 -6.5 4 1.5 -7.5 -5.5 -5 7.5 -1 z" fill="#ffd34d"/>
             <text x="200" y="166" font-family="Oswald,sans-serif" font-size="12" fill="#eef3f9">Stakapa</text>
             <circle cx="360" cy="150" r="3.5" fill="#d6e0ec"/>
-            <text x="368" y="154" font-family="Oswald,sans-serif" font-size="11" fill="#c7d2e0">Toela</text>
+            <text x="366" y="144" font-family="Oswald,sans-serif" font-size="11" fill="#c7d2e0">Toela</text>
             <circle cx="612" cy="196" r="3.5" fill="#d6e0ec"/>
-            <text x="620" y="200" font-family="Oswald,sans-serif" font-size="11" fill="#c7d2e0">Vimoso</text>
+            <text x="618" y="191" font-family="Oswald,sans-serif" font-size="11" fill="#c7d2e0">Vimoso</text>
             <rect x="294" y="464" width="9" height="9" fill="#6fa8df"/>
             <text x="308" y="472" font-family="Oswald,sans-serif" font-size="11" fill="#c7d2e0">Dara</text>
 
@@ -384,8 +388,8 @@
               <circle cx="532" cy="322" r="7" fill="#0b1220" stroke="#5ad07a" stroke-width="2"/>
               <path d="M532 315 v14 M525 322 h14" stroke="#5ad07a" stroke-width="2"/>
             </g>
-            <text x="544" y="320" font-family="Oswald,sans-serif" font-size="12.5" fill="#bdf0cd" font-weight="600">FOB Karoonda</text>
-            <text x="544" y="334" font-family="Inter,sans-serif" font-size="9" fill="#7fbf93">Niakala · NE frontier</text>
+            <text x="538" y="312" font-family="Oswald,sans-serif" font-size="12.5" fill="#bdf0cd" font-weight="600">FOB Karoonda</text>
+            <text x="538" y="325" font-family="Inter,sans-serif" font-size="9" fill="#7fbf93">Niakala · NE frontier</text>
 
             <g transform="translate(652,400)">
               <circle r="22" fill="#0b1220" stroke="#3a4a5e" stroke-width="1.5"/>
@@ -553,7 +557,7 @@ function slotHTML(role, name, locked){
       <div class="meta"><div class="nm">Reserved</div><div class="rl">${esc(role)}</div></div></div>`;
   }
   if(!name){
-    return `<div class="slot is-open"><span class="avatar empty" style="--s:42px">—</span>
+    return `<div class="slot is-open"><span class="avatar empty" style="--s:42px">+</span>
       <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}</div></div></div>`;
   }
   const m = member(name);
@@ -569,12 +573,22 @@ function slotHTML(role, name, locked){
 function render(roster){
   const op = roster.operation || {};
   document.documentElement.setAttribute('data-theme', op.theme || 'tactical-blue');
-  document.title = `AZO — ${op.name||'Role List'}`;
+  document.title = `AZO - ${op.name||'Role List'}`;
 
   if(op.background){
+    const tryLoad = (src, fallback)=>{
+      const img = new Image();
+      img.onload = ()=>{ $('#bgLayer').style.backgroundImage = `url("${src}")`; };
+      img.onerror = ()=>{ if(fallback) tryLoad(fallback, null); };
+      img.src = src;
+    };
+    // Try the roster.json path first, then fall back to the standard asset path
+    tryLoad(op.background, 'assets/operation-bg.png');
+  } else {
+    // No background in roster.json — try the default asset directly
     const img = new Image();
-    img.onload = ()=>{ $('#bgLayer').style.backgroundImage = `url("${op.background}")`; };
-    img.src = op.background;
+    img.onload = ()=>{ $('#bgLayer').style.backgroundImage = `url("assets/operation-bg.png")`; };
+    img.src = 'assets/operation-bg.png';
   }
 
   const statusMap = { live:{cls:'status-live', txt:'Live'}, upcoming:{cls:'', txt:'Upcoming'}, complete:{cls:'', txt:'Complete'} };
@@ -638,7 +652,7 @@ function render(roster){
       <button class="roster-open" id="rosterOpen" type="button">
         <div class="left">
           <div class="ro-title">ROSTER</div>
-          <div class="ro-sub">All active operators — click to view, sorted by rank</div>
+          <div class="ro-sub">All active operators - click to view, sorted by rank</div>
         </div>
         <div class="right">
           <div class="ro-count">${activeCount}<span>Operators</span></div>
@@ -670,7 +684,7 @@ function setupCountdown(op){
   const tick = ()=>{
     const diff = target - Date.now();
     if(diff <= 0){
-      el.innerHTML = `<div class="cd-live">⚡ Operation is live — move out!</div>${op.date?`<div class="cd-target">${esc(op.date)}</div>`:''}`;
+      el.innerHTML = `<div class="cd-live">⚡ Operation is live - move out!</div>${op.date?`<div class="cd-target">${esc(op.date)}</div>`:''}`;
       clearInterval(countdownTimer); countdownTimer=null; return;
     }
     const d=Math.floor(diff/86400000), h=Math.floor(diff/3600000)%24, m=Math.floor(diff/60000)%60, s=Math.floor(diff/1000)%60;
@@ -715,11 +729,11 @@ function openProfile(name){
   if(p.kind==='command'){
     promoBlock = `<div class="promo-label"><span class="nxt">Command staff</span><span class="pct">SOCOMD</span></div>
       <div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div>
-      <div class="promo-note">Above the operator ladder — promotion track doesn't apply.</div>`;
+      <div class="promo-note">Above the operator ladder - promotion track doesn't apply.</div>`;
   } else if(p.kind==='max'){
     promoBlock = `<div class="promo-label"><span class="nxt">Top of the operator ladder</span><span class="pct">MAX</span></div>
       <div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div>
-      <div class="promo-note">Senior Operator — fully promoted.</div>`;
+      <div class="promo-note">Senior Operator - fully promoted.</div>`;
   } else {
     promoBlock = `<div class="promo-label"><span class="nxt">Next: <b style="color:var(--text)">${esc(p.nextName)}</b></span><span class="pct">${p.progress}%</span></div>
       <div class="promo-track"><div class="promo-fill" data-w="${p.progress}" style="width:0"></div></div>
@@ -784,15 +798,46 @@ function closeRoster(){ $('#rosterOverlay').classList.remove('show'); }
 /* ---------- music ---------- */
 function setupMusic(op){
   const wrap=$('#music'), btn=$('#musicBtn'), lbl=$('#musicLbl'), audio=$('#audio');
+  const picker=$('#anthemPicker'), a1btn=$('#anthem1Btn'), a2btn=$('#anthem2Btn');
   if(!op.music){ wrap.hidden=true; return; }
   wrap.hidden=false;
-  audio.src = op.music;
-  audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15; // quiet background
+
+  // Two-anthem setup: op.music = anthem.mp3, op.music2 = anthem1.mp3
+  const anthems = [op.music];
+  if(op.music2) anthems.push(op.music2);
+
+  // Randomly pick one on load
+  let currentAnthemIdx = anthems.length > 1 ? Math.floor(Math.random() * anthems.length) : 0;
+
+  const updateAnthemBtns = ()=>{
+    if(anthems.length < 2){ picker.style.display='none'; return; }
+    picker.style.display='flex';
+    a1btn.style.color = currentAnthemIdx===0 ? 'var(--primary-2)' : 'var(--muted)';
+    a2btn.style.color = currentAnthemIdx===1 ? 'var(--primary-2)' : 'var(--muted)';
+  };
+
+  const loadAnthemIdx = (idx)=>{
+    const wasPlaying = !audio.paused;
+    currentAnthemIdx = idx;
+    audio.src = anthems[idx];
+    audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15;
+    updateAnthemBtns();
+    if(wasPlaying) audio.play().catch(()=>{});
+  };
+
+  audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15;
+  loadAnthemIdx(currentAnthemIdx);
+
   const setUI = playing=>{ wrap.classList.toggle('playing',playing); lbl.textContent = playing?'Pause anthem':'Play anthem'; };
   const start = ()=> audio.play().then(()=>{ setUI(true); return true; }).catch(()=>{ setUI(false); return false; });
+
   btn.onclick = ()=>{ if(audio.paused) start(); else { audio.pause(); setUI(false); } };
-  // Autoplay quietly on load. Browsers block audio until the visitor interacts,
-  // so if the first attempt is refused, kick it off on their first gesture.
+  a1btn.onclick = ()=>{ loadAnthemIdx(0); start(); };
+  a2btn.onclick = ()=>{ loadAnthemIdx(1); start(); };
+
+  updateAnthemBtns();
+
+  // Autoplay quietly on load
   start().then(ok=>{
     if(ok) return;
     const EV=['pointerdown','keydown','scroll','touchstart'];
@@ -807,7 +852,7 @@ function setupComingSoon(op){
   if(op.status!=='complete'){ cs.classList.remove('show'); return; }
   $('#csTitle').textContent = 'New Role List Incoming';
   $('#csText').textContent = op.comingSoonText || 'A new role list will be released soon. Stand by for the next operation.';
-  $('#csMeta').textContent = op.name ? `Last deployment — ${op.name}` : '';
+  $('#csMeta').textContent = op.name ? `Last deployment - ${op.name}` : '';
   cs.classList.add('show');
   $('#csPeek').onclick = ()=> cs.classList.remove('show');
 }
@@ -852,7 +897,7 @@ document.addEventListener('keydown', e=>{
       <h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2>
       <p>${esc(err.message)}</p>
       <p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files.
-      Run a tiny local server first — e.g. double-click <code>serve.ps1</code> — then open
+      Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open
       <code>http://localhost:8770</code>. On GitHub Pages it just works.</p>
     </div>`;
     console.error(err);
