@@ -572,7 +572,6 @@ function openProfile(name){
   const p = promotion(m.discordRank, m.opsAttended);
   const hue = hashHue(m.name);
   const att = attendanceStrip(m);
-  const rate = OPS_SO_FAR ? Math.round(att.attended/OPS_SO_FAR*100) : 0;
 
   const leadBadge = m.leadership==='senior'
     ? `<span class="badge lead-senior">★ Senior Leadership</span>`
@@ -606,7 +605,6 @@ function openProfile(name){
     <div class="stat-row">
       <div class="stat"><div class="big">${m.opsAttended}</div><div class="lbl">Ops 2026</div></div>
       <div class="stat"><div class="big">${m.endorsements.length}</div><div class="lbl">Endorsements</div></div>
-      <div class="stat"><div class="big">${rate}%</div><div class="lbl">Attendance</div></div>
     </div>
     ${promoBlock}
     <div class="attend">
