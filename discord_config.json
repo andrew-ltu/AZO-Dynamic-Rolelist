@@ -1,19 +1,21 @@
 {
-  "_comment": "AZO Discord sync config. (1) Replace guildId with your server ID. (2) List the EXACT Discord role names (case-sensitive) that should appear as endorsements. (3) Put the role name(s) that mean senior/junior leadership. These EXAMPLE role names are placeholders — replace them with your real roles. Until guildId is set AND the DISCORD_BOT_TOKEN secret exists, the sync workflow skips quietly. See DISCORD_SETUP.md.",
+  "_comment": "AZO Discord sync config. guildId + role names are filled in. Role names must match Discord EXACTLY (case-sensitive). The sync skips quietly until the DISCORD_BOT_TOKEN repo secret exists. See DISCORD_SETUP.md. (Note: the ' Endorsement' suffix is stripped automatically for display, so 'Medical Endorsement' shows as 'Medical'.)",
 
-  "guildId": "PUT-YOUR-DISCORD-SERVER-ID-HERE",
+  "guildId": "504188370507792384",
 
   "leadershipRoles": {
-    "senior": ["Senior Leadership"],
-    "junior": ["Junior Leadership"]
+    "senior": ["Senior Leadership Endorsement"],
+    "junior": ["Junior Leadership Endorsement"]
   },
 
   "endorsementRoles": [
-    "Marksman",
-    "Breacher",
-    "JTAC",
-    "Combat Medic",
-    "Engineer",
-    "Pilot"
+    "Medical Endorsement",
+    "Fixed Wing Endorsement",
+    "Rotary Endorsement",
+    "Demolition Endorsement",
+    "JTAC Endorsement",
+    "Radioman Endorsement",
+    "Marksman Endorsement",
+    "Crewman Endorsement"
   ]
 }

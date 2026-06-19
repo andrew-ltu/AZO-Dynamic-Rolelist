@@ -83,8 +83,9 @@ for (const [name, data] of Object.entries(members)) {
   matched++;
   const have = new Set(dm.roles.map(id => roleName[id]).filter(Boolean));
 
-  // endorsements = the configured roles this member actually has (config order)
-  data.endorsements = endorsementRoles.filter(r => have.has(r));
+  // endorsements = the configured roles this member actually has (config order),
+  // with the redundant " Endorsement" suffix stripped for display ("Medical Endorsement" -> "Medical")
+  data.endorsements = endorsementRoles.filter(r => have.has(r)).map(r => r.replace(/\s*Endorsement$/i, '').trim());
   // leadership from the configured leadership roles
   data.leadership = [...have].some(r => seniorRoles.has(r)) ? 'senior'
                   : [...have].some(r => juniorRoles.has(r)) ? 'junior' : null;
