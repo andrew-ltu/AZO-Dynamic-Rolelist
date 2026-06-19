@@ -7,7 +7,7 @@
     "countdownTo": "2026-06-20T19:00:00+10:00",
     "status": "upcoming",
     "theme": "tactical-blue",
-    "background": "assets/backgrounds/operation-bg.jpg",
+    "background": "assets/backgrounds/operation-bg.png",
     "music": "assets/music/anthem.mp3",
     "musicVolume": 0.1,
     "comingSoonText": "A new role list will be released soon. Stand by for the next operation."
