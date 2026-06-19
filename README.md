@@ -123,9 +123,11 @@ grouped and sorted by rank (SOCOMD → Recruit). Click anyone for their profile.
 3. **A local file.** Drop an image in `assets/avatars/` and set
    `"avatar": "assets/avatars/gunter.png"`.
 
-> Fetching someone's *live* Discord avatar needs a bot token, which can't run on a static
-> GitHub Pages site. A scheduled GitHub Action could write current URLs into `members.json` —
-> ask if you want that added.
+> **Auto-sync from Discord:** a GitHub Action (`.github/workflows/sync-discord.yml` +
+> `scripts/sync_discord.mjs`) can pull everyone's **roles → endorsements/leadership** and their
+> **profile pictures** into `assets/avatars/` automatically, updating `members.json` daily.
+> One-time setup (create a bot, add a token secret, list your roles) is in
+> **[DISCORD_SETUP.md](DISCORD_SETUP.md)**.
 
 ## Club logo
 
