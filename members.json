@@ -30,7 +30,8 @@
     },
     "endorsements": [
       "Fixed Wing",
-      "Rotary"
+      "Rotary",
+      "Crewman"
     ],
     "leadership": null
   },
