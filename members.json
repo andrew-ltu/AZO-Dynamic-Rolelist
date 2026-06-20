@@ -376,7 +376,7 @@
   },
   "earthball": {
     "discordRank": "Recruit",
-    "avatar": "",
+    "avatar": "assets/avatars/earthball.png",
     "opsAttended": 0,
     "attendance": {
       "Apr": false,
