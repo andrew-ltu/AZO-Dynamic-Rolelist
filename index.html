@@ -150,6 +150,11 @@
   .slot.is-locked{ opacity:.62; cursor:not-allowed; }
   .slot.is-locked .nm{ color:var(--muted); font-weight:600; font-style:normal; }
 
+  /* attendance check/cross badge shown on slots once op.status === "complete" */
+  .att-badge{ flex-shrink:0; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-left:6px; }
+  .att-badge.att-yes{ background:rgba(54,208,122,.16); color:#36d07a; border:1px solid rgba(54,208,122,.4); }
+  .att-badge.att-no{ background:rgba(224,73,73,.14); color:#e04949; border:1px solid rgba(224,73,73,.4); }
+
   /* ============================ AVATAR ============================ */
   .avatar{
     --s:42px; width:var(--s); height:var(--s); flex:0 0 auto; position:relative; border-radius:50%; overflow:hidden;
@@ -468,6 +473,7 @@
     <h1 id="csTitle">Stand By</h1>
     <p id="csText"></p>
     <div class="next-meta" id="csMeta"></div>
+    <a class="peek" id="csFeedback" href="" target="_blank" rel="noopener" style="display:none; text-decoration:none; margin-bottom:10px;">Give Feedback ↗</a>
     <button class="peek" id="csPeek" type="button">View last role list ↓</button>
   </div>
 
@@ -501,7 +507,7 @@ const RANK_SORT      = { 'SOCOMD':0, 'Senior Operator':1, 'Operator':2, 'Junior 
 const ATT_MONTHS = [
   { m:'Apr', done:1, up:0 },
   { m:'May', done:1, up:0 },
-  { m:'Jun', done:1, up:1 },
+  { m:'Jun', done:2, up:0 },
   { m:'Jul', done:0, up:0 },
   { m:'Aug', done:0, up:0 },
   { m:'Sep', done:0, up:0 },
@@ -567,7 +573,7 @@ function leaderLevel(role){
 }
 
 /* ---------- render: role slot ---------- */
-function slotHTML(role, name, locked){
+function slotHTML(role, name, locked, attendedSet, showAtt){
   if(locked){
     return `<div class="slot is-locked" title="Reserved for Oceanic Rangers">
       <span class="avatar locked" style="--s:42px">🔒</span>
@@ -580,9 +586,15 @@ function slotHTML(role, name, locked){
   const m = member(name);
   const lvl = leaderLevel(role);
   const av = lvl==='lvl-command' ? 54 : lvl==='lvl-section' ? 48 : 42;
+  const badge = showAtt
+    ? (attendedSet && attendedSet.has(name)
+        ? `<span class="att-badge att-yes" title="Attended">✓</span>`
+        : `<span class="att-badge att-no" title="Did not attend">✗</span>`)
+    : '';
   return `<button class="slot ${lvl}" type="button" data-name="${esc(name)}">
       ${avatarHTML(m,av)}
       <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}</div></div>
+      ${badge}
     </button>`;
 }
 
@@ -610,12 +622,14 @@ function render(roster){
 
   const statusMap = { live:{cls:'status-live', txt:'Live'}, upcoming:{cls:'', txt:'Upcoming'}, complete:{cls:'', txt:'Complete'} };
   const st = statusMap[op.status] || statusMap.upcoming;
+  const showAtt = op.status === 'complete';
+  const attendedSet = new Set(roster.attended || []);
 
-  const cmd = (roster.command||[]).map(r=>slotHTML(r.role, r.member, false)).join('');
+  const cmd = (roster.command||[]).map(r=>slotHTML(r.role, r.member, false, attendedSet, showAtt)).join('');
   const sections = (roster.sections||[]).map(sec=>{
     const roles = sec.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map(r=>slotHTML(r.role, r.member, !!sec.locked)).join('');
+    const rows = roles.map(r=>slotHTML(r.role, r.member, !!sec.locked, attendedSet, showAtt)).join('');
     const headRight = sec.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
@@ -869,9 +883,12 @@ function setupMusic(op){
 function setupComingSoon(op){
   const cs=$('#comingSoon');
   if(op.status!=='complete'){ cs.classList.remove('show'); return; }
-  $('#csTitle').textContent = 'New Role List Incoming';
+  $('#csTitle').textContent = 'Operation Complete';
   $('#csText').textContent = op.comingSoonText || 'A new role list will be released soon. Stand by for the next operation.';
   $('#csMeta').textContent = op.name ? `Last deployment - ${op.name}` : '';
+  const fb = $('#csFeedback');
+  if(op.feedbackForm){ fb.href = op.feedbackForm; fb.style.display='inline-block'; }
+  else { fb.style.display='none'; }
   cs.classList.add('show');
   $('#csPeek').onclick = ()=> cs.classList.remove('show');
 }

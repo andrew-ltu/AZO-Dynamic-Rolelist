@@ -4,16 +4,15 @@
     "zeus": "Jag McMuffin",
     "tier": "Tier 2 Operation",
     "date": "Sat 20 Jun 2026 · 1900 AEST",
-    "countdownTo": "2026-06-20T19:00:00+10:00",
-    "status": "upcoming",
+    "status": "complete",
     "theme": "tactical-blue",
     "background": "assets/backgrounds/operation-bg.png",
     "campaignMap": "assets/campaign-map.png",
-    "music": "assets/music/anthem.mp3",
-    "music2": "assets/music/anthem1.mp3",
-    "musicVolume": 0.1,
-    "comingSoonText": "A new role list will be released soon. Stand by for the next operation."
+    "feedbackForm": "https://forms.gle/SPoTNHAT17HwALhm9",
+    "comingSoonText": "Operation Karoonda I is complete. Thanks for deploying with AZO - let us know how it went."
   },
+
+  "attended": ["24pool1", "AnimePanda", "BadKarma", "GoGoBendy", "Gunter", "HiveMynd", "Misaka", "Monke", "Sir Danger", "Vain"],
 
   "command": [
     { "role": "Platoon Commander", "member": "Sir Danger" },

@@ -106,11 +106,11 @@
   "GoGoBendy": {
     "discordRank": "Operator",
     "avatar": "",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
       "Apr": true,
       "May": true,
-      "Jun": false
+      "Jun": true
     },
     "endorsements": [
       "Medical"
@@ -132,11 +132,11 @@
   "AnimePanda": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/animepanda.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "attendance": {
       "Apr": true,
       "May": false,
-      "Jun": false
+      "Jun": true
     },
     "endorsements": [],
     "leadership": null
