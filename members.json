@@ -1,13 +1,20 @@
 {
-  "_comment": "Member directory. REAL data only: discordRank + attendance come from the AZO promotion chart; opsAttended = count of attended ops there. endorsements/leadership/avatar are intentionally EMPTY - they are meant to be sourced from each member's Discord roles + profile picture (not hand-invented). Anyone not on the promotion chart = Recruit, 0 ops, no attendance. 'leadership' = senior | junior | null.",
+  "_comment": "Member directory. REAL data only: discordRank comes from the AZO promotion chart. attendance[month] is an ARRAY of booleans, one entry per completed op that month (see ATT_MONTHS.done in index.html for how many ops ran each month) - this lets a month with 2+ ops (e.g. Jun) track each op separately instead of one shared flag. opsAttended is auto-derived by index.html from these arrays at render time; the stored value here is just a human-readable mirror, kept in sync manually when editing. endorsements/leadership/avatar are intentionally sourced from Discord roles + profile picture, not hand-invented. Anyone not on the promotion chart = Recruit, 0 ops.",
   "Jag McMuffin": {
     "discordRank": "SOCOMD",
     "avatar": "assets/avatars/jagmcmuffin.png",
     "opsAttended": 3,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        false
+      ]
     },
     "endorsements": [
       "Medical",
@@ -22,11 +29,18 @@
   "Sir Danger": {
     "discordRank": "SOCOMD",
     "avatar": "assets/avatars/sirdanger.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [
       "Fixed Wing",
@@ -38,11 +52,18 @@
   "Gunter": {
     "discordRank": "Senior Operator",
     "avatar": "assets/avatars/gunter.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [
       "Medical"
@@ -52,11 +73,18 @@
   "BadKarma": {
     "discordRank": "Senior Operator",
     "avatar": "assets/avatars/badkarma.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [
       "Rotary"
@@ -66,11 +94,18 @@
   "Monke": {
     "discordRank": "Senior Operator",
     "avatar": "assets/avatars/monke.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
-      "Apr": true,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [
       "Demolition"
@@ -82,9 +117,16 @@
     "avatar": "assets/avatars/crowdedtank.png",
     "opsAttended": 0,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [
       "Medical"
@@ -94,11 +136,18 @@
   "Malt": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/malt.gif",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": "junior"
@@ -108,9 +157,16 @@
     "avatar": "",
     "opsAttended": 3,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        false,
+        true
+      ]
     },
     "endorsements": [
       "Medical"
@@ -122,9 +178,16 @@
     "avatar": "assets/avatars/krill.png",
     "opsAttended": 2,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": false
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": "junior"
@@ -134,9 +197,16 @@
     "avatar": "assets/avatars/animepanda.png",
     "opsAttended": 2,
     "attendance": {
-      "Apr": true,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -146,9 +216,16 @@
     "avatar": "assets/avatars/chimney.png",
     "opsAttended": 1,
     "attendance": {
-      "Apr": true,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        true
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -156,11 +233,18 @@
   "Zep": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/zep.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": false
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        false,
+        true
+      ]
     },
     "endorsements": [
       "Medical",
@@ -171,11 +255,18 @@
   "Spacecat82": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/spacecat82.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [
       "Medical"
@@ -185,11 +276,18 @@
   "Velteck": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/velteck.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -199,9 +297,16 @@
     "avatar": "assets/avatars/mas.png",
     "opsAttended": 3,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -209,11 +314,18 @@
   "HiveMynd": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/hivemynd.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -223,9 +335,16 @@
     "avatar": "assets/avatars/unknownlemon07.png",
     "opsAttended": 2,
     "attendance": {
-      "Apr": true,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        true
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        true,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -235,9 +354,16 @@
     "avatar": "assets/avatars/blackkaiser.png",
     "opsAttended": 2,
     "attendance": {
-      "Apr": true,
-      "May": true,
-      "Jun": false
+      "Apr": [
+        true
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -245,11 +371,18 @@
   "24pool1": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/24pool1.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
-      "Apr": false,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -257,11 +390,18 @@
   "Misaka": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/misaka.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
-      "Apr": false,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -269,11 +409,18 @@
   "Vain": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/vain.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "attendance": {
-      "Apr": false,
-      "May": true,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -283,9 +430,16 @@
     "avatar": "assets/avatars/draznugs12.png",
     "opsAttended": 1,
     "attendance": {
-      "Apr": true,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        true
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -293,11 +447,18 @@
   "Kiren77": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/kiren77.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -305,11 +466,18 @@
   "sebs": {
     "discordRank": "Junior Operator",
     "avatar": "",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        true,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -319,9 +487,16 @@
     "avatar": "assets/avatars/terack.png",
     "opsAttended": 1,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        true,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -331,9 +506,16 @@
     "avatar": "assets/avatars/birdbrian.gif",
     "opsAttended": 1,
     "attendance": {
-      "Apr": false,
-      "May": true,
-      "Jun": false
+      "Apr": [
+        false
+      ],
+      "May": [
+        true
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -343,9 +525,16 @@
     "avatar": "assets/avatars/abuhudhayfah.png",
     "opsAttended": 0,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -355,9 +544,16 @@
     "avatar": "assets/avatars/orter.png",
     "opsAttended": 1,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": true
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        true
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -367,9 +563,16 @@
     "avatar": "assets/avatars/therandomhistorian.png",
     "opsAttended": 0,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null
@@ -379,9 +582,16 @@
     "avatar": "assets/avatars/earthball.png",
     "opsAttended": 0,
     "attendance": {
-      "Apr": false,
-      "May": false,
-      "Jun": false
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
     },
     "endorsements": [],
     "leadership": null

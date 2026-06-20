@@ -12,7 +12,7 @@
     "comingSoonText": "Operation Karoonda I is complete. Thanks for deploying with AZO - let us know how it went."
   },
 
-  "attended": ["24pool1", "AnimePanda", "BadKarma", "GoGoBendy", "Gunter", "HiveMynd", "Misaka", "Monke", "Sir Danger", "Vain", "Orter", "Velteck", "sebs", "Spacecat82", "Kiren77", "Malt"],
+  "attended": ["24pool1", "AnimePanda", "BadKarma", "GoGoBendy", "Gunter", "HiveMynd", "Misaka", "Monke", "Sir Danger", "Vain", "Orter", "Velteck", "sebs", "Spacecat82", "Kiren77", "Malt", "Zep"],
 
   "command": [
     { "role": "Platoon Commander", "member": "Sir Danger" },
