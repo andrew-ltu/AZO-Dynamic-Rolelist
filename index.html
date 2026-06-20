@@ -453,7 +453,7 @@
     <button class="peek" id="csPeek" type="button">View last role list ↓</button>
   </div>
 
-  <!-- AZO emblem — fallback drawn if assets/logo.png is missing -->
+  <!-- AZO emblem - fallback drawn if assets/logo.png is missing -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="azoEmblem" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="47" fill="#0c2747" stroke="#e8b53a" stroke-width="2.5"/>
@@ -584,7 +584,7 @@ function render(roster){
     // Try the roster.json path first, then fall back to the standard asset path
     tryLoad(op.background, 'assets/operation-bg.png');
   } else {
-    // No background in roster.json — try the default asset directly
+    // No background in roster.json - try the default asset directly
     const img = new Image();
     img.onload = ()=>{ $('#bgLayer').style.backgroundImage = `url("assets/operation-bg.png")`; };
     img.src = 'assets/operation-bg.png';

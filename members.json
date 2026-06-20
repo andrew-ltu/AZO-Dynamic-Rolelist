@@ -1,5 +1,5 @@
 {
-  "_comment": "Member directory. REAL data only: discordRank + attendance come from the AZO promotion chart; opsAttended = count of attended ops there. endorsements/leadership/avatar are intentionally EMPTY — they are meant to be sourced from each member's Discord roles + profile picture (not hand-invented). Anyone not on the promotion chart = Recruit, 0 ops, no attendance. 'leadership' = senior | junior | null.",
+  "_comment": "Member directory. REAL data only: discordRank + attendance come from the AZO promotion chart; opsAttended = count of attended ops there. endorsements/leadership/avatar are intentionally EMPTY - they are meant to be sourced from each member's Discord roles + profile picture (not hand-invented). Anyone not on the promotion chart = Recruit, 0 ops, no attendance. 'leadership' = senior | junior | null.",
   "Jag McMuffin": {
     "discordRank": "SOCOMD",
     "avatar": "assets/avatars/jagmcmuffin.png",
@@ -365,6 +365,18 @@
   "TheRandomHistorian": {
     "discordRank": "Recruit",
     "avatar": "assets/avatars/therandomhistorian.png",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": false,
+      "May": false,
+      "Jun": false
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "earthball": {
+    "discordRank": "Recruit",
+    "avatar": "",
     "opsAttended": 0,
     "attendance": {
       "Apr": false,

@@ -33,7 +33,8 @@
         { "role": "LSW (Minimi)", "member": "AnimePanda" },
         { "role": "LSW (Minimi)", "member": "Kiren77" },
         { "role": "Combat Medic", "member": "Spacecat82" },
-        { "role": "Rifleman", "member": "TheRandomHistorian" }
+        { "role": "Rifleman", "member": "TheRandomHistorian" },
+        { "role": "Role TBD", "member": "earthball" }
       ]
     },
     {
@@ -47,21 +48,6 @@
         { "role": "LSW (Minimi)", "member": "Velteck" },
         { "role": "Combat Medic", "member": "GoGoBendy" },
         { "role": "Rifleman", "member": "sebs" }
-      ]
-    },
-    {
-      "name": "CHARLIE",
-      "locked": true,
-      "note": "Reserved for Oceanic Rangers — OR are filling this section",
-      "roles": [
-        { "role": "Section Leader", "member": null },
-        { "role": "Asst. Section Leader", "member": null },
-        { "role": "Grenadier", "member": null },
-        { "role": "Grenadier", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "Combat Medic", "member": null },
-        { "role": "Rifleman", "member": null }
       ]
     }
   ]
