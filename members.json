@@ -353,11 +353,11 @@
   "Orter": {
     "discordRank": "Recruit",
     "avatar": "assets/avatars/orter.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "attendance": {
       "Apr": false,
       "May": false,
-      "Jun": false
+      "Jun": true
     },
     "endorsements": [],
     "leadership": null
