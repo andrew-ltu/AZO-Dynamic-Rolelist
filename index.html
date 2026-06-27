@@ -125,6 +125,14 @@
   .lock-note{ padding:11px 16px; font-size:11.5px; color:var(--muted-2); border-top:1px dashed var(--line); background:rgba(0,0,0,.18); display:flex; gap:8px; align-items:center; }
   .lock-note .lk{ color:var(--muted); }
 
+  /* endorsement requirement pill shown on role label */
+  .endorse-pill{
+    display:inline-flex; align-items:center; margin-left:7px; padding:2px 6px;
+    border-radius:4px; font-size:9px; font-weight:700; letter-spacing:.5px;
+    text-transform:uppercase; vertical-align:middle;
+    background:rgba(255,193,40,0.13); border:1px solid rgba(255,193,40,0.45); color:#ffc128;
+  }
+
   /* member row */
   .slot{ display:flex; align-items:center; gap:12px; padding:9px 11px; border-radius:10px; cursor:pointer; border:1px solid transparent; transition:background .15s, border-color .15s, transform .12s; text-align:left; width:100%; background:transparent; color:inherit; font:inherit; }
   .slot:hover{ background:color-mix(in srgb,var(--primary) 12%, transparent); border-color:var(--line-strong); transform:translateX(2px); }
@@ -581,15 +589,20 @@ function leaderLevel(role){
 }
 
 /* ---------- render: role slot ---------- */
-function slotHTML(role, name, locked, attendedSet, showAtt){
+function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel){
+  const role = typeof roleObj === 'string' ? roleObj : roleObj.role;
+  const endorsePill = (!locked && roleObj.endorsementRequired)
+    ? `<span class="endorse-pill">${esc(roleObj.endorsementType || 'Endorsement Req.')}</span>`
+    : '';
   if(locked){
-    return `<div class="slot is-locked" title="Reserved for Oceanic Rangers">
+    const label = lockedLabel || 'Reserved';
+    return `<div class="slot is-locked">
       <span class="avatar locked" style="--s:42px">🔒</span>
-      <div class="meta"><div class="nm">Reserved</div><div class="rl">${esc(role)}</div></div></div>`;
+      <div class="meta"><div class="nm">${esc(label)}</div><div class="rl">${esc(role)}</div></div></div>`;
   }
   if(!name){
     return `<div class="slot is-open"><span class="avatar empty" style="--s:42px">+</span>
-      <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}</div></div></div>`;
+      <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}${endorsePill}</div></div></div>`;
   }
   const m = member(name);
   const lvl = leaderLevel(role);
@@ -601,7 +614,7 @@ function slotHTML(role, name, locked, attendedSet, showAtt){
     : '';
   return `<button class="slot ${lvl}" type="button" data-name="${esc(name)}">
       ${avatarHTML(m,av)}
-      <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}</div></div>
+      <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
       ${badge}
     </button>`;
 }
@@ -633,17 +646,31 @@ function render(roster){
   const showAtt = op.status === 'complete';
   const attendedSet = new Set(roster.attended || []);
 
-  const cmd = (roster.command||[]).map(r=>slotHTML(r.role, r.member, false, attendedSet, showAtt)).join('');
+  const cmd = (roster.command||[]).map(r=>slotHTML(r, r.member, false, attendedSet, showAtt)).join('');
   const sections = (roster.sections||[]).map(sec=>{
     const roles = sec.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map(r=>slotHTML(r.role, r.member, !!sec.locked, attendedSet, showAtt)).join('');
+    const rows = roles.map(r=>slotHTML(r, r.member, !!sec.locked, attendedSet, showAtt, sec.lockedLabel)).join('');
     const headRight = sec.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
-    const note = sec.locked && sec.note ? `<div class="lock-note"><span class="lk">🔒</span><span>${esc(sec.note)}</span></div>` : '';
+    const note = sec.locked && sec.lockedLabel ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>` : '';
     return `<div class="sec ${sec.locked?'locked':''} bracketed">
         <div class="sec-head">${esc(sec.name)} ${headRight}</div>
+        <div class="sec-body">${rows}</div>${note}
+      </div>`;
+  }).join('');
+
+  const attachments = (roster.attachments||[]).map(att=>{
+    const roles = att.roles||[];
+    const filled = roles.filter(r=>r.member).length;
+    const rows = roles.map(r=>slotHTML(r, r.member, !!att.locked, attendedSet, showAtt, att.lockedLabel)).join('');
+    const headRight = att.locked
+      ? `<span class="lock" title="Locked">🔒</span>`
+      : `<span class="count">${filled}/${roles.length}</span>`;
+    const note = att.locked && att.lockedLabel ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>` : '';
+    return `<div class="sec ${att.locked?'locked':''} bracketed">
+        <div class="sec-head">${esc(att.name)} ${headRight}</div>
         <div class="sec-body">${rows}</div>${note}
       </div>`;
   }).join('');
@@ -686,6 +713,8 @@ function render(roster){
     </section>
 
     <section class="sections">${sections}</section>
+
+    ${attachments ? `<section class="sections">${attachments}</section>` : ''}
 
     <section class="roster-teaser">
       <button class="roster-open" id="rosterOpen" type="button">
