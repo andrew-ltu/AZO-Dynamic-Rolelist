@@ -13,35 +13,35 @@
   },
   "attended": [],
   "command": [
-    { "role": "Platoon Commander", "member": null, "endorsementRequired": true },
-    { "role": "Asst. Platoon Commander", "member": null, "endorsementRequired": true },
-    { "role": "Signaller", "member": null, "endorsementRequired": true, "endorsementType": "JTAC Endorsement" }
+    { "role": "Platoon Commander",      "member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+    { "role": "Asst. Platoon Commander","member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+    { "role": "Signaller",              "member": null, "endorsementRequired": true, "endorsementType": "JTAC Endorsement" }
   ],
   "sections": [
     {
       "name": "ALPHA",
       "roles": [
-        { "role": "Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Grenadier", "member": null },
-        { "role": "Grenadier", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "Rifleman", "member": null },
-        { "role": "Rifleman", "member": null }
+        { "role": "Section Leader",      "member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Asst. Section Leader","member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Grenadier",           "member": null },
+        { "role": "Grenadier",           "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "Rifleman",            "member": null },
+        { "role": "Rifleman",            "member": null }
       ]
     },
     {
       "name": "BRAVO",
       "roles": [
-        { "role": "Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Anti-tank", "member": null },
-        { "role": "Asst. Anti-tank", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "Rifleman", "member": null },
-        { "role": "Rifleman", "member": null }
+        { "role": "Section Leader",      "member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Asst. Section Leader","member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Anti-tank",           "member": null },
+        { "role": "Asst. Anti-tank",     "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "Rifleman",            "member": null },
+        { "role": "Rifleman",            "member": null }
       ]
     },
     {
@@ -49,14 +49,14 @@
       "locked": true,
       "lockedLabel": "13th Crash Division",
       "roles": [
-        { "role": "Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
-        { "role": "Grenadier", "member": null },
-        { "role": "Grenadier", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "LSW (Minimi)", "member": null },
-        { "role": "Rifleman", "member": null },
-        { "role": "Rifleman", "member": null }
+        { "role": "Section Leader",      "member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Asst. Section Leader","member": null, "endorsementRequired": true, "endorsementType": "Leadership Endorsement" },
+        { "role": "Grenadier",           "member": null },
+        { "role": "Grenadier",           "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "LSW (Minimi)",        "member": null },
+        { "role": "Rifleman",            "member": null },
+        { "role": "Rifleman",            "member": null }
       ]
     }
   ],
@@ -64,10 +64,10 @@
     {
       "name": "MEDICAL TEAM",
       "roles": [
-        { "role": "Platoon Medic", "member": null, "endorsementRequired": true },
-        { "role": "Medic", "member": null, "endorsementRequired": true },
-        { "role": "Medic", "member": null, "endorsementRequired": true },
-        { "role": "Medic", "member": null, "endorsementRequired": true }
+        { "role": "Platoon Medic","member": null, "endorsementRequired": true, "endorsementType": "Medical Endorsement" },
+        { "role": "Medic",        "member": null, "endorsementRequired": true, "endorsementType": "Medical Endorsement" },
+        { "role": "Medic",        "member": null, "endorsementRequired": true, "endorsementType": "Medical Endorsement" },
+        { "role": "Medic",        "member": null, "endorsementRequired": true, "endorsementType": "Medical Endorsement" }
       ]
     },
     {
@@ -75,10 +75,10 @@
       "locked": true,
       "lockedLabel": "Blackjack",
       "roles": [
-        { "role": "Pilot", "member": null },
-        { "role": "Co-pilot", "member": null },
-        { "role": "Crew Chief", "member": null },
-        { "role": "Gunner", "member": null }
+        { "role": "Pilot",       "member": null },
+        { "role": "Co-pilot",    "member": null },
+        { "role": "Crew Chief",  "member": null },
+        { "role": "Gunner",      "member": null }
       ]
     }
   ]
