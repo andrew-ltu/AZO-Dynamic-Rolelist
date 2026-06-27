@@ -1034,10 +1034,10 @@ $('#mapClose').onclick = closeMap;
 $('#mapOverlay').onclick = e=>{ if(e.target===$('#mapOverlay')) closeMap(); };
 document.addEventListener('keydown', e=>{
   if(e.key!=='Escape') return;
-  if($('#claimBack').classList.contains('show')) closeClaim();
-  else if($('#modalBack').classList.contains('show')) closeModal();
-  else if($('#mapOverlay').classList.contains('show')) closeMap();
-  else if($('#rosterOverlay').classList.contains('show')) closeRoster();
+  const cb=$('#claimBack'); if(cb && cb.classList.contains('show')){ closeClaim(); return; }
+  const mb=$('#modalBack'); if(mb && mb.classList.contains('show')){ closeModal(); return; }
+  const mo=$('#mapOverlay'); if(mo && mo.classList.contains('show')){ closeMap(); return; }
+  const ro=$('#rosterOverlay'); if(ro && ro.classList.contains('show')){ closeRoster(); return; }
 });
 
 /* ---------- claim slot ---------- */
@@ -1045,7 +1045,7 @@ const GITHUB_OWNER = 'andrew-ltu';
 const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
 const GITHUB_FILE  = 'roster.json';
 // Replace the value below with your fine-grained PAT (Contents: Read & Write)
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = 'PASTE_FRESH_TOKEN_HERE'; // generate a new one at github.com/settings/personal-access-tokens
 
 let claimContext = null; // { section, roleIndex, roleLabel }
 let liveRoster   = null; // latest fetched roster object
@@ -1132,10 +1132,10 @@ function setClaimStatus(msg, cls){
   el.className = cls;
 }
 
-$('#claimCancel').onclick = closeClaim;
-$('#claimBack').onclick = e=>{ if(e.target===$('#claimBack')) closeClaim(); };
-$('#claimConfirm').onclick = submitClaim;
-$('#claimInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitClaim(); });
+const _cb=$('#claimBack'); if(_cb){ _cb.onclick=e=>{ if(e.target===_cb) closeClaim(); }; }
+const _cc=$('#claimCancel'); if(_cc){ _cc.onclick=closeClaim; }
+const _cf=$('#claimConfirm'); if(_cf){ _cf.onclick=submitClaim; }
+const _ci=$('#claimInput'); if(_ci){ _ci.addEventListener('keydown',e=>{ if(e.key==='Enter') submitClaim(); }); }
 
 /* ---------- boot ---------- */
 (async function(){
