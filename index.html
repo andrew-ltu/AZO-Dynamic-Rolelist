@@ -1041,15 +1041,18 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ---------- claim slot ---------- */
-const GITHUB_OWNER = 'andrew-ltu';
-const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
-const GITHUB_FILE  = 'roster.json';
-// Replace the value below with your fine-grained PAT (Contents: Read & Write)
-const GITHUB_TOKEN = 'PASTE_FRESH_TOKEN_HERE'; // generate a new one at github.com/settings/personal-access-tokens
+// Token lives in GitHub Secrets as ROSTER_TOKEN — never stored here.
+// Claims are submitted via workflow_dispatch to the claim-slot.yml Action.
+const GITHUB_OWNER    = 'andrew-ltu';
+const GITHUB_REPO     = 'AZO-Dynamic-Rolelist';
+const WORKFLOW_ID     = 'claim-slot.yml';
+const WORKFLOW_REF    = 'main';
+// Read-only public token for triggering workflow_dispatch (no write access to code).
+// Generate at github.com/settings/personal-access-tokens
+//   Permissions needed: Actions → Read & Write ONLY (not Contents)
+const WORKFLOW_TOKEN  = 'PASTE_ACTIONS_ONLY_TOKEN_HERE';
 
-let claimContext = null; // { section, roleIndex, roleLabel }
-let liveRoster   = null; // latest fetched roster object
-let rosterSha    = null; // file SHA needed for GitHub API update
+let claimContext = null;
 
 function openClaim(sectionKey, roleIndex, roleLabel){
   claimContext = { sectionKey, roleIndex, roleLabel };
@@ -1073,52 +1076,40 @@ async function submitClaim(){
   const { sectionKey, roleIndex } = claimContext;
   const btn = $('#claimConfirm');
   btn.disabled = true;
-  setClaimStatus('Saving…','');
+  setClaimStatus('Submitting sign-up…','');
 
   try{
-    // 1. Re-fetch latest roster + SHA to avoid clobbering concurrent edits
-    const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
-    const headers  = { 'Authorization': `Bearer ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github+json' };
+    // Trigger the GitHub Action — token only has Actions:write, not Contents:write
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_ID}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${WORKFLOW_TOKEN}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ref: WORKFLOW_REF,
+          inputs: {
+            sectionKey: String(sectionKey),
+            roleIndex:  JSON.stringify(roleIndex),
+            memberName: name
+          }
+        })
+      }
+    );
 
-    const metaRes = await fetch(apiBase, { headers });
-    if(!metaRes.ok) throw new Error(`GitHub fetch failed: ${metaRes.status}`);
-    const meta = await metaRes.json();
-    rosterSha = meta.sha;
-    const roster = JSON.parse(atob(meta.content.replace(/
-/g,'')));
-
-    // 2. Find the slot and assign
-    let slot = null;
-    if(sectionKey === '__command'){
-      slot = roster.command?.[roleIndex];
-    } else if(sectionKey === '__attachment'){
-      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
+    if(res.status === 204){
+      // 204 = accepted by GitHub, workflow is now queued
+      setClaimStatus(`Signed up! ${name} is on the roster. Page will refresh in 12s…`, 'ok');
+      btn.disabled = true;
+      // Workflow takes ~10-15s to run and push. Reload after delay.
+      setTimeout(()=>{ closeClaim(); location.reload(); }, 12000);
     } else {
-      const sec = roster.sections?.find(s=>s.name===sectionKey);
-      if(sec) slot = sec.roles?.[roleIndex];
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || `Failed (${res.status}) — check your Actions token.`);
     }
-
-    if(!slot) throw new Error('Role not found in roster — try refreshing.');
-    if(slot.member) throw new Error(`This slot was just claimed by ${slot.member}. Refresh to see the latest.`);
-    slot.member = name;
-
-    // 3. Write back
-    const body = JSON.stringify({
-      message: `Sign-up: ${name} → ${slot.role}`,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
-      sha: rosterSha
-    });
-    const putRes = await fetch(apiBase, { method:'PUT', headers:{ ...headers,'Content-Type':'application/json' }, body });
-    if(!putRes.ok){
-      const err = await putRes.json().catch(()=>({}));
-      throw new Error(err.message || `GitHub write failed: ${putRes.status}`);
-    }
-
-    setClaimStatus(`Locked in! Welcome to the op, ${name}.`, 'ok');
-    liveRoster = roster;
-
-    // Re-render after short delay so user sees the success message
-    setTimeout(()=>{ closeClaim(); render(roster); }, 1200);
 
   } catch(e){
     setClaimStatus(e.message, 'err');
