@@ -1,52 +1,84 @@
 {
   "operation": {
-    "name": "Operation Karoonda I",
-    "zeus": "Jag McMuffin",
+    "name": "Operation Karoonda",
+    "zeus": null,
     "tier": "Tier 2 Operation",
-    "date": "Sat 20 Jun 2026 · 1900 AEST",
-    "status": "complete",
+    "date": null,
+    "status": "upcoming",
     "theme": "tactical-blue",
     "background": "assets/backgrounds/operation-bg.png",
     "campaignMap": "assets/campaign-map.png",
-    "feedbackForm": "https://forms.gle/SPoTNHAT17HwALhm9",
-    "comingSoonText": "Operation Karoonda I is complete. Thanks for deploying with AZO - let us know how it went."
+    "feedbackForm": null,
+    "comingSoonText": null
   },
-
-  "attended": ["24pool1", "AnimePanda", "BadKarma", "GoGoBendy", "Gunter", "HiveMynd", "Misaka", "Monke", "Sir Danger", "Vain", "Orter", "Velteck", "sebs", "Spacecat82", "Kiren77", "Malt", "Zep"],
-
+  "attended": [],
   "command": [
-    { "role": "Platoon Commander", "member": "Sir Danger" },
-    { "role": "Asst. Platoon Commander", "member": null },
-    { "role": "Signaller", "member": "BadKarma" },
-    { "role": "Platoon Medic", "member": "Zep" }
+    { "role": "Platoon Commander", "member": null, "endorsementRequired": true },
+    { "role": "Asst. Platoon Commander", "member": null, "endorsementRequired": true },
+    { "role": "Signaller", "member": null, "endorsementRequired": true, "endorsementType": "JTAC Endorsement" }
   ],
-
   "sections": [
     {
       "name": "ALPHA",
       "roles": [
-        { "role": "Section Leader", "member": "Gunter" },
-        { "role": "Asst. Section Leader", "member": "24pool1" },
-        { "role": "Grenadier", "member": "Monke" },
-        { "role": "Grenadier", "member": "AbuHudhayfah" },
-        { "role": "LSW (Minimi)", "member": "AnimePanda" },
-        { "role": "LSW (Minimi)", "member": "Kiren77" },
-        { "role": "Combat Medic", "member": "Spacecat82" },
-        { "role": "Rifleman", "member": "TheRandomHistorian" },
-        { "role": "Role TBD", "member": "Earthball" }
+        { "role": "Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Grenadier", "member": null },
+        { "role": "Grenadier", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "Rifleman", "member": null },
+        { "role": "Rifleman", "member": null }
       ]
     },
     {
       "name": "BRAVO",
       "roles": [
-        { "role": "Section Leader", "member": "Malt" },
-        { "role": "Asst. Section Leader", "member": "Vain" },
-        { "role": "Anti-tank", "member": "Misaka" },
-        { "role": "Asst. Anti-tank", "member": "HiveMynd" },
-        { "role": "LSW (Minimi)", "member": "Orter" },
-        { "role": "LSW (Minimi)", "member": "Velteck" },
-        { "role": "Combat Medic", "member": "GoGoBendy" },
-        { "role": "Rifleman", "member": "sebs" }
+        { "role": "Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Anti-tank", "member": null },
+        { "role": "Asst. Anti-tank", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "Rifleman", "member": null },
+        { "role": "Rifleman", "member": null }
+      ]
+    },
+    {
+      "name": "CHARLIE",
+      "locked": true,
+      "lockedLabel": "13th Crash Division",
+      "roles": [
+        { "role": "Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Asst. Section Leader", "member": null, "endorsementRequired": true },
+        { "role": "Grenadier", "member": null },
+        { "role": "Grenadier", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "LSW (Minimi)", "member": null },
+        { "role": "Rifleman", "member": null },
+        { "role": "Rifleman", "member": null }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "name": "MEDICAL TEAM",
+      "roles": [
+        { "role": "Platoon Medic", "member": null, "endorsementRequired": true },
+        { "role": "Medic", "member": null, "endorsementRequired": true },
+        { "role": "Medic", "member": null, "endorsementRequired": true },
+        { "role": "Medic", "member": null, "endorsementRequired": true }
+      ]
+    },
+    {
+      "name": "BLACKJACK",
+      "locked": true,
+      "lockedLabel": "Blackjack",
+      "roles": [
+        { "role": "Pilot", "member": null },
+        { "role": "Co-pilot", "member": null },
+        { "role": "Crew Chief", "member": null },
+        { "role": "Gunner", "member": null }
       ]
     }
   ]
