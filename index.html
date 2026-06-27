@@ -308,6 +308,30 @@
   .load-err{ max-width:620px; margin:60px auto; padding:24px; border:1px solid var(--line-strong); border-radius:14px; background:var(--panel); color:var(--muted); line-height:1.6; }
   .load-err code{ background:#000; padding:2px 7px; border-radius:5px; color:var(--accent); }
 
+  /* ============================ CLAIM MODAL ============================ */
+  #claimBack{ position:fixed; inset:0; z-index:75; background:rgba(4,7,11,0.78); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; }
+  #claimBack.show{ display:flex; }
+  #claimModal{ width:min(400px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); overflow:hidden; }
+  #claimModal .cm-head{ padding:20px 22px 0; }
+  #claimModal .cm-tag{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:11px; color:var(--primary-2); margin-bottom:6px; }
+  #claimModal .cm-role{ font-family:'Oswald'; font-size:22px; font-weight:700; color:#fff; }
+  #claimModal .cm-body{ padding:18px 22px 22px; }
+  #claimModal label{ display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  #claimInput{ width:100%; background:#0a0e14; border:1px solid var(--line-strong); border-radius:10px; padding:11px 14px; color:var(--text); font:inherit; font-size:15px; font-weight:600; outline:none; transition:border-color .15s; }
+  #claimInput:focus{ border-color:var(--primary); }
+  #claimInput::placeholder{ color:var(--muted-2); font-weight:400; }
+  .cm-hint{ font-size:11.5px; color:var(--muted-2); margin-top:8px; }
+  .cm-actions{ display:flex; gap:10px; margin-top:16px; }
+  .cm-btn{ flex:1; padding:11px; border-radius:10px; font:inherit; font-size:14px; font-weight:700; cursor:pointer; border:1px solid var(--line-strong); transition:background .15s, border-color .15s; }
+  .cm-btn.confirm{ background:var(--primary); border-color:var(--primary); color:#fff; }
+  .cm-btn.confirm:hover{ background:color-mix(in srgb,var(--primary) 80%,#fff); }
+  .cm-btn.confirm:disabled{ opacity:.5; cursor:not-allowed; }
+  .cm-btn.cancel{ background:transparent; color:var(--muted); }
+  .cm-btn.cancel:hover{ background:rgba(255,255,255,.05); color:var(--text); }
+  #claimStatus{ font-size:12.5px; margin-top:12px; min-height:18px; }
+  #claimStatus.err{ color:#e04949; }
+  #claimStatus.ok{ color:#36d07a; }
+
   @media (max-width:560px){
     .op-meta{ font-size:12.5px; }
     #music button span.lbl{ display:none; }
@@ -485,6 +509,26 @@
     <button class="peek" id="csPeek" type="button">View last role list ↓</button>
   </div>
 
+  <!-- Claim slot modal -->
+  <div id="claimBack">
+    <div id="claimModal">
+      <div class="cm-head">
+        <div class="cm-tag">Sign Up</div>
+        <div class="cm-role" id="claimRoleLabel"></div>
+      </div>
+      <div class="cm-body">
+        <label for="claimInput">Your name (as it appears on the roster)</label>
+        <input id="claimInput" type="text" placeholder="e.g. Gunter" autocomplete="off" maxlength="48" />
+        <div class="cm-hint">This will be saved to the roster immediately and visible to everyone.</div>
+        <div class="cm-actions">
+          <button class="cm-btn cancel" id="claimCancel" type="button">Cancel</button>
+          <button class="cm-btn confirm" id="claimConfirm" type="button">Claim Role</button>
+        </div>
+        <div id="claimStatus"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- AZO emblem - fallback drawn if assets/logo.png is missing -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="azoEmblem" viewBox="0 0 100 100">
@@ -589,7 +633,7 @@ function leaderLevel(role){
 }
 
 /* ---------- render: role slot ---------- */
-function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel){
+function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel, claimCtx){
   const role = typeof roleObj === 'string' ? roleObj : roleObj.role;
   const endorsePill = (!locked && roleObj.endorsementRequired)
     ? `<span class="endorse-pill">${esc(roleObj.endorsementType || 'Endorsement Req.')}</span>`
@@ -601,8 +645,12 @@ function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel){
       <div class="meta"><div class="nm">${esc(label)}</div><div class="rl">${esc(role)}</div></div></div>`;
   }
   if(!name){
-    return `<div class="slot is-open"><span class="avatar empty" style="--s:42px">+</span>
-      <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}${endorsePill}</div></div></div>`;
+    // Vacant — render as a clickable claim button
+    const ctxJson = claimCtx ? esc(JSON.stringify(claimCtx)) : '';
+    return `<button class="slot is-open" type="button" data-claim="${ctxJson}" data-role-label="${esc(role)}">
+      <span class="avatar empty" style="--s:42px">+</span>
+      <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}${endorsePill}</div></div>
+    </button>`;
   }
   const m = member(name);
   const lvl = leaderLevel(role);
@@ -646,11 +694,14 @@ function render(roster){
   const showAtt = op.status === 'complete';
   const attendedSet = new Set(roster.attended || []);
 
-  const cmd = (roster.command||[]).map(r=>slotHTML(r, r.member, false, attendedSet, showAtt)).join('');
+  const cmd = (roster.command||[]).map((r,i)=>slotHTML(r, r.member, false, attendedSet, showAtt, null,
+    {sectionKey:'__command', roleIndex:i})).join('');
+
   const sections = (roster.sections||[]).map(sec=>{
     const roles = sec.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map(r=>slotHTML(r, r.member, !!sec.locked, attendedSet, showAtt, sec.lockedLabel)).join('');
+    const rows = roles.map((r,i)=>slotHTML(r, r.member, !!sec.locked, attendedSet, showAtt, sec.lockedLabel,
+      {sectionKey:sec.name, roleIndex:i})).join('');
     const headRight = sec.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
@@ -661,10 +712,11 @@ function render(roster){
       </div>`;
   }).join('');
 
-  const attachments = (roster.attachments||[]).map(att=>{
+  const attachments = (roster.attachments||[]).map((att,attIdx)=>{
     const roles = att.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map(r=>slotHTML(r, r.member, !!att.locked, attendedSet, showAtt, att.lockedLabel)).join('');
+    const rows = roles.map((r,roleIdx)=>slotHTML(r, r.member, !!att.locked, attendedSet, showAtt, att.lockedLabel,
+      {sectionKey:'__attachment', roleIndex:{attIdx, roleIdx}})).join('');
     const headRight = att.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
@@ -960,6 +1012,17 @@ function closeMap(){ $('#mapOverlay').classList.remove('show'); }
 
 /* ---------- events ---------- */
 document.addEventListener('click', e=>{
+  // Claim a vacant slot
+  const claimBtn = e.target.closest('[data-claim]');
+  if(claimBtn && claimBtn.dataset.claim){
+    try{
+      const ctx = JSON.parse(claimBtn.dataset.claim);
+      const roleLabel = claimBtn.dataset.roleLabel || 'Role';
+      openClaim(ctx.sectionKey, ctx.roleIndex, roleLabel);
+    } catch(_){}
+    return;
+  }
+  // Open member profile
   const t = e.target.closest('[data-name]');
   if(t){ openProfile(t.dataset.name); }
 });
@@ -971,10 +1034,108 @@ $('#mapClose').onclick = closeMap;
 $('#mapOverlay').onclick = e=>{ if(e.target===$('#mapOverlay')) closeMap(); };
 document.addEventListener('keydown', e=>{
   if(e.key!=='Escape') return;
-  if($('#modalBack').classList.contains('show')) closeModal();
+  if($('#claimBack').classList.contains('show')) closeClaim();
+  else if($('#modalBack').classList.contains('show')) closeModal();
   else if($('#mapOverlay').classList.contains('show')) closeMap();
   else if($('#rosterOverlay').classList.contains('show')) closeRoster();
 });
+
+/* ---------- claim slot ---------- */
+const GITHUB_OWNER = 'andrew-ltu';
+const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
+const GITHUB_FILE  = 'roster.json';
+// Replace the value below with your fine-grained PAT (Contents: Read & Write)
+const GITHUB_TOKEN = 'PASTE_YOUR_TOKEN_HERE';
+
+let claimContext = null; // { section, roleIndex, roleLabel }
+let liveRoster   = null; // latest fetched roster object
+let rosterSha    = null; // file SHA needed for GitHub API update
+
+function openClaim(sectionKey, roleIndex, roleLabel){
+  claimContext = { sectionKey, roleIndex, roleLabel };
+  $('#claimRoleLabel').textContent = roleLabel;
+  $('#claimInput').value = '';
+  $('#claimStatus').textContent = '';
+  $('#claimStatus').className = '';
+  $('#claimConfirm').disabled = false;
+  $('#claimBack').classList.add('show');
+  setTimeout(()=> $('#claimInput').focus(), 80);
+}
+function closeClaim(){
+  $('#claimBack').classList.remove('show');
+  claimContext = null;
+}
+
+async function submitClaim(){
+  const name = $('#claimInput').value.trim();
+  if(!name){ setClaimStatus('Enter your name first.','err'); return; }
+
+  const { sectionKey, roleIndex } = claimContext;
+  const btn = $('#claimConfirm');
+  btn.disabled = true;
+  setClaimStatus('Saving…','');
+
+  try{
+    // 1. Re-fetch latest roster + SHA to avoid clobbering concurrent edits
+    const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+    const headers  = { 'Authorization': `Bearer ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github+json' };
+
+    const metaRes = await fetch(apiBase, { headers });
+    if(!metaRes.ok) throw new Error(`GitHub fetch failed: ${metaRes.status}`);
+    const meta = await metaRes.json();
+    rosterSha = meta.sha;
+    const roster = JSON.parse(atob(meta.content.replace(/
+/g,'')));
+
+    // 2. Find the slot and assign
+    let slot = null;
+    if(sectionKey === '__command'){
+      slot = roster.command?.[roleIndex];
+    } else if(sectionKey === '__attachment'){
+      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
+    } else {
+      const sec = roster.sections?.find(s=>s.name===sectionKey);
+      if(sec) slot = sec.roles?.[roleIndex];
+    }
+
+    if(!slot) throw new Error('Role not found in roster — try refreshing.');
+    if(slot.member) throw new Error(`This slot was just claimed by ${slot.member}. Refresh to see the latest.`);
+    slot.member = name;
+
+    // 3. Write back
+    const body = JSON.stringify({
+      message: `Sign-up: ${name} → ${slot.role}`,
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
+      sha: rosterSha
+    });
+    const putRes = await fetch(apiBase, { method:'PUT', headers:{ ...headers,'Content-Type':'application/json' }, body });
+    if(!putRes.ok){
+      const err = await putRes.json().catch(()=>({}));
+      throw new Error(err.message || `GitHub write failed: ${putRes.status}`);
+    }
+
+    setClaimStatus(`Locked in! Welcome to the op, ${name}.`, 'ok');
+    liveRoster = roster;
+
+    // Re-render after short delay so user sees the success message
+    setTimeout(()=>{ closeClaim(); render(roster); }, 1200);
+
+  } catch(e){
+    setClaimStatus(e.message, 'err');
+    btn.disabled = false;
+  }
+}
+
+function setClaimStatus(msg, cls){
+  const el = $('#claimStatus');
+  el.textContent = msg;
+  el.className = cls;
+}
+
+$('#claimCancel').onclick = closeClaim;
+$('#claimBack').onclick = e=>{ if(e.target===$('#claimBack')) closeClaim(); };
+$('#claimConfirm').onclick = submitClaim;
+$('#claimInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitClaim(); });
 
 /* ---------- boot ---------- */
 (async function(){
