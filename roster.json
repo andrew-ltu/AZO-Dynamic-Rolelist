@@ -9,9 +9,9 @@
     "background": "assets/backgrounds/operation-bg.png",
     "campaignMap": "assets/campaign-map.png",
     "feedbackForm": null,
-    "comingSoonText": null
+    "comingSoonText": null,
     "music": "anthem1.mp3",
-    "music2": "anthem2.mp3",
+    "music2": "anthem2.mp3"
   },
   "attended": [],
   "command": [
