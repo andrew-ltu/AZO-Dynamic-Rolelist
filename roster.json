@@ -15,7 +15,7 @@
   "command": [
     {
       "role": "Platoon Commander",
-      "member": "Jag McMuffin",
+      "member": null,
       "endorsementRequired": true,
       "endorsementType": "Leadership Endorsement"
     },
