@@ -79,13 +79,13 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": null,
+          "member": "Gunter",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Asst. Section Leader",
-          "member": null,
+          "member": "Misaka",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
