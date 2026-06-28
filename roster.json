@@ -15,7 +15,7 @@
   "command": [
     {
       "role": "Platoon Commander",
-      "member": null,
+      "member": "SirDanger",
       "endorsementRequired": true,
       "endorsementType": "Leadership Endorsement"
     },
