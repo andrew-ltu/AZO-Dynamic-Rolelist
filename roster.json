@@ -194,23 +194,23 @@
     {
       "name": "BLACKJACK",
       "locked": true,
-      "lockedLabel": "Blackjack",
+      "lockedLabel": "External Crew: Blackjack",
       "roles": [
         {
           "role": "Pilot",
-          "member": null
+          "member": "1st Lt B. Hag"
         },
         {
           "role": "Co-pilot",
-          "member": null
+          "member": "2d Lt D. Mason"
         },
         {
           "role": "Crew Chief",
-          "member": null
+          "member": "TSgt C. Weeb"
         },
         {
           "role": "Gunner",
-          "member": null
+          "member": "SSgt J. Jabbzo"
         }
       ]
     }
