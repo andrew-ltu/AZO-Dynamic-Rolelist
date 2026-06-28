@@ -177,7 +177,7 @@
         },
         {
           "role": "Medic",
-          "member": null,
+          "member": "Spacecat82",
           "endorsementRequired": true,
           "endorsementType": "Medical Endorsement"
         },
