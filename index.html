@@ -749,6 +749,7 @@ function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel, clai
   }
 
   const m = member(name);
+  const isExternal = !MEMBERS[name]; // not in members.json — guest/external crew
   const lvl = leaderLevel(role);
   const av = lvl==='lvl-command' ? 54 : lvl==='lvl-section' ? 48 : 42;
   const badge = showAtt
@@ -756,6 +757,13 @@ function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel, clai
         ? `<span class="att-badge att-yes" title="Attended">✓</span>`
         : `<span class="att-badge att-no" title="Did not attend">✗</span>`)
     : '';
+  if(isExternal){
+    return `<div class="slot ${lvl}" style="cursor:default;">
+        ${avatarHTML(m,av)}
+        <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
+        ${badge}
+      </div>`;
+  }
   return `<button class="slot ${lvl}" type="button" data-name="${esc(name)}">
       ${avatarHTML(m,av)}
       <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
