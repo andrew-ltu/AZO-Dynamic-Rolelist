@@ -215,7 +215,7 @@
   /* ============================ PROFILE MODAL ============================ */
   .modal-back{ position:fixed; inset:0; z-index:70; background:rgba(4,7,11,0.74); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; opacity:0; transition:opacity .2s; }
   .modal-back.show{ display:flex; opacity:1; }
-  .modal bracketed{ width:min(440px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; transform:translateY(8px) scale(.98); transition:transform .22s; max-height:90vh; overflow-y:auto; }
+  .modal{ width:min(440px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; transform:translateY(8px) scale(.98); transition:transform .22s; max-height:90vh; overflow-y:auto; }
   .modal-back.show .modal{ transform:none; }
   .modal-banner{ height:84px; background:linear-gradient(120deg, color-mix(in srgb,var(--primary) 55%, #000), color-mix(in srgb,var(--primary-2) 40%, #000)); position:relative; }
   .modal-banner::after{ content:""; position:absolute; inset:0; background:repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 8px, transparent 8px 16px); }
@@ -842,7 +842,6 @@ function render(roster){
         ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
         ${op.tier?`<span class="pill"><span class="k">Tier</span><span class="v">${esc(op.tier)}</span></span>`:''}
       </div>
-      ${op.countdownTo ? `
       <div class="countdown" id="countdown">
         <div class="cd-label">Operation begins in</div>
         <div class="cd-units">
@@ -851,8 +850,8 @@ function render(roster){
           <div class="cd-unit"><span class="cd-num" data-cd="m">--</span><span class="cd-u">Mins</span></div>
           <div class="cd-unit"><span class="cd-num" data-cd="s">--</span><span class="cd-u">Secs</span></div>
         </div>
-        ${op.date?`<div class="cd-target">${esc(op.date)}</div>`:''}
-      </div>` : (op.date?`<div class="op-meta"><span class="pill"><span class="k">Date</span><span class="v">${esc(op.date)}</span></span></div>`:'')}
+        ${op.date?`<div class="cd-target">${esc(op.date)}</div>`:'<div class="cd-target">Saturday 5 July 2026 · 19:00 AEST</div>'}
+      </div>
       <div class="divider"></div>
     </header>
 
@@ -892,11 +891,14 @@ function render(roster){
 }
 
 /* ---------- countdown ---------- */
+/* Sat 5 Jul 2026 19:00 AEST = UTC+10 → 09:00 UTC */
+const HARDCODED_COUNTDOWN = '2026-07-05T09:00:00Z';
+
 function setupCountdown(op){
   if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; }
   const el = $('#countdown');
-  if(!el || !op.countdownTo) return;
-  const target = new Date(op.countdownTo).getTime();
+  if(!el) return;
+  const target = new Date(op.countdownTo || HARDCODED_COUNTDOWN).getTime();
   if(isNaN(target)){ el.style.display='none'; return; }
   const pad = n => String(n).padStart(2,'0');
   const tick = ()=>{
@@ -976,16 +978,7 @@ function openProfile(name){
       <div class="stat"><div class="big">${m.opsAttended}</div><div class="lbl">Ops 2026</div></div>
       <div class="stat"><div class="big">${m.endorsements.length}</div><div class="lbl">Endorsements</div></div>
     </div>
-    ${promoBlock}
-    <div class="attend">
-      <div class="block-title">Attendance · 2026 <span class="cnt">${att.attended}/${OPS_SO_FAR} ops so far</span></div>
-      <div class="att-grid">${att.cols}</div>
-      <div class="ops-legend">
-        <span><span class="opdot yes"></span> Attended</span>
-        <span><span class="opdot no"></span> Missed</span>
-        <span><span class="opdot up"></span> Upcoming</span>
-      </div>
-    </div>`;
+    ${promoBlock}`;
 
   $('#modalBack').classList.add('show');
   requestAnimationFrame(()=>{ const f=$('.promo-fill[data-w]'); if(f) f.style.width = f.dataset.w+'%'; });
