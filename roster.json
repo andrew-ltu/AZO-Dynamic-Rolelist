@@ -171,7 +171,7 @@
         },
         {
           "role": "Medic",
-          "member": "Gunter",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Medical Endorsement"
         },
