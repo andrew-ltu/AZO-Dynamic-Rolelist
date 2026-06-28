@@ -5,7 +5,6 @@
 
 const GITHUB_OWNER = 'andrew-ltu';
 const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
-const GITHUB_FILE  = 'roster.json';
 const ALLOWED_ORIGINS = [
   'https://andrew-ltu.github.io',
   'https://azo-dynamic-rolelist.pages.dev'
@@ -44,21 +43,32 @@ export default {
     }
 
     const name = memberName.trim();
-    const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+    const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
     const headers = {
       'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
       'Accept': 'application/vnd.github+json',
       'User-Agent': 'AZO-Claim-Worker'
     };
 
-    // 1. Fetch current roster
-    const getRes = await fetch(apiBase, { headers });
-    if (!getRes.ok) {
-      return json({ error: `GitHub fetch failed: ${getRes.status}` }, 502);
+    // 1. Fetch current roster AND members directory in parallel
+    const [rosterRes, membersRes] = await Promise.all([
+      fetch(`${baseRepoUrl}/roster.json`, { headers }),
+      fetch(`${baseRepoUrl}/members.json`, { headers })
+    ]);
+
+    if (!rosterRes.ok) {
+      return json({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502);
     }
-    const meta = await getRes.json();
-    const sha = meta.sha;
-    const roster = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+    if (!membersRes.ok) {
+      return json({ error: `GitHub members fetch failed: ${membersRes.status}` }, 502);
+    }
+
+    const rosterMeta = await rosterRes.json();
+    const membersMeta = await membersRes.json();
+
+    const sha = rosterMeta.sha;
+    const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
+    const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
 
     // 2. Find the slot
     let slot = null;
@@ -78,9 +88,40 @@ export default {
     if (!slot) return json({ error: 'Role not found — refresh and try again' }, 404);
     if (slot.member) return json({ error: `Already claimed by ${slot.member}` }, 409);
 
+    // 2.5 Validation: Check if user is certified for this slot
+    if (slot.endorsementRequired && slot.endorsementType) {
+      // Look up member case-insensitively to prevent casing typing errors from breaking it
+      const memberKey = Object.keys(membersData).find(k => k.toLowerCase() === name.toLowerCase());
+      const member = memberKey ? membersData[memberKey] : null;
+
+      if (!member) {
+        return json({ error: `Access Denied: "${name}" is not a registered member in the directory.` }, 403);
+      }
+
+      // Handle Leadership Slots
+      if (slot.endorsementType === "Leadership Endorsement") {
+        if (!member.leadership) {
+          return json({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403);
+        }
+      } 
+      // Handle Qualification Endorsements (Medical, JTAC, etc.)
+      else {
+        // Strip " Endorsement" from strings like "Medical Endorsement" to match tags like "Medical"
+        const requiredEndorsement = slot.endorsementType.replace(" Endorsement", "");
+        
+        const hasEndorsement = member.endorsements && member.endorsements.some(
+          e => e.toLowerCase() === requiredEndorsement.toLowerCase()
+        );
+
+        if (!hasEndorsement) {
+          return json({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403);
+        }
+      }
+    }
+
     // 3. Assign and write back
     slot.member = name;
-    const putRes = await fetch(apiBase, {
+    const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
       method: 'PUT',
       headers: { ...headers, 'Content-Type': 'application/json' },
       body: JSON.stringify({
