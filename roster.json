@@ -165,7 +165,7 @@
       "roles": [
         {
           "role": "Platoon Medic",
-          "member": null,
+          "member": "Zep",
           "endorsementRequired": true,
           "endorsementType": "Medical Endorsement"
         },
