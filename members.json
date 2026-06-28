@@ -595,7 +595,9 @@
         false
       ]
     },
-    "endorsements": [],
+    "endorsements": [
+      "Medical"
+    ],
     "leadership": null
   },
   "Crallers": {
