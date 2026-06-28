@@ -597,5 +597,65 @@
     },
     "endorsements": [],
     "leadership": null
+  },
+  "Crallers": {
+    "discordId": "179421557163163650",
+    "discordRank": "Recruit",
+    "avatar": "",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "blueberet": {
+    "discordId": "678926904774098955",
+    "discordRank": "Recruit",
+    "avatar": "",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
+  },
+  "Jon Taiwan": {
+    "discordId": "1354384792153493597",
+    "discordRank": "Recruit",
+    "avatar": "",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
   }
 }
