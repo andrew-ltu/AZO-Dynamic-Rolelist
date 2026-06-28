@@ -38,7 +38,7 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": null,
+          "member": "maltr",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
