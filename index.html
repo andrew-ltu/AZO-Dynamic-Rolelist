@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   /* ============================ THEMES ============================ */
-  /* Pick a theme per-op via "theme" in roster.json. Add your own below. */
   :root{
     --bg:#0a0e14;
     --panel:rgba(16,22,31,0.86);
@@ -37,7 +36,6 @@
     font-family:'Inter',system-ui,sans-serif; color:var(--text); background:var(--bg);
     min-height:100vh; position:relative; overflow-x:hidden;
   }
-  /* Background image layer (operation.background) + neutral tactical overlay */
   #bgLayer{
     position:fixed; inset:0; z-index:-2; background-size:cover; background-position:center;
     background-repeat:no-repeat; opacity:0.42; filter:blur(7px) saturate(0.95) contrast(1.02);
@@ -68,7 +66,6 @@
   .brand{ display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:16px; }
   .brand .wordmark{ font-family:'Oswald'; font-weight:700; letter-spacing:3px; font-size:15px; color:var(--muted); text-transform:uppercase; }
   .brand .wordmark b{ color:var(--primary-2); }
-
   .op-title{
     font-family:'Oswald'; font-weight:700; text-transform:uppercase;
     font-size:clamp(34px, 6vw, 66px); line-height:1.02; letter-spacing:1.5px; margin:4px 0 6px;
@@ -88,7 +85,6 @@
   .status-live .status-dot{ background:#36d07a; box-shadow:0 0 0 4px rgba(54,208,122,.22); animation:pulse 1.8s infinite; }
   @keyframes pulse{ 0%,100%{ transform:scale(1); opacity:1;} 50%{ transform:scale(1.25); opacity:.7;} }
 
-  /* countdown */
   .countdown{ margin:24px auto 0; }
   .cd-label{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:3px; font-size:12px; color:var(--muted); margin-bottom:11px; }
   .cd-units{ display:flex; justify-content:center; gap:9px; }
@@ -97,15 +93,12 @@
   .cd-u{ font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-top:7px; display:block; }
   .cd-target{ margin-top:13px; font-family:'Oswald'; letter-spacing:2px; text-transform:uppercase; font-size:13px; color:var(--primary-2); }
   .cd-live{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:clamp(18px,4vw,24px); color:#36d07a; padding:14px; }
-
   .divider{ height:1px; max-width:760px; margin:26px auto 0; background:linear-gradient(90deg, transparent, var(--line-strong), transparent); }
 
-  /* ============================ COMMAND (PLATOON HQ) ============================ */
+  /* ============================ COMMAND ============================ */
   .command{ margin:34px auto 8px; max-width:660px; text-align:center; background:var(--panel); border:1px solid var(--line-strong); border-radius:var(--radius); padding:22px 22px 26px; box-shadow:var(--shadow); position:relative; }
   .section-tag{ display:inline-block; font-family:'Oswald'; font-weight:600; letter-spacing:3px; text-transform:uppercase; font-size:13px; color:#fff; background:var(--primary); padding:6px 16px; border-radius:7px; margin-bottom:6px; }
   .command .hq-grid{ display:grid; gap:6px; margin-top:14px; }
-
-  /* corner brackets */
   .bracketed::before,.bracketed::after{ content:""; position:absolute; width:16px; height:16px; border:2px solid var(--line-strong); }
   .bracketed::before{ left:-1px; top:-1px; border-right:0; border-bottom:0; border-top-left-radius:6px; }
   .bracketed::after{ right:-1px; bottom:-1px; border-left:0; border-top:0; border-bottom-right-radius:6px; }
@@ -124,8 +117,6 @@
   .sec-body{ padding:8px; display:flex; flex-direction:column; gap:4px; }
   .lock-note{ padding:11px 16px; font-size:11.5px; color:var(--muted-2); border-top:1px dashed var(--line); background:rgba(0,0,0,.18); display:flex; gap:8px; align-items:center; }
   .lock-note .lk{ color:var(--muted); }
-
-  /* endorsement requirement pill shown on role label */
   .endorse-pill{
     display:inline-flex; align-items:center; margin-left:7px; padding:2px 6px;
     border-radius:4px; font-size:9px; font-weight:700; letter-spacing:.5px;
@@ -140,8 +131,6 @@
   .slot .meta{ min-width:0; flex:1; }
   .slot .nm{ font-weight:700; font-size:15px; line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .slot .rl{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:1.4px; font-size:10.5px; color:var(--muted); margin-top:2px; }
-
-  /* hierarchy: Platoon Commander (biggest) > Section Leader (mid) > roles (base) */
   .slot.lvl-section, .slot.lvl-command{ background:color-mix(in srgb,var(--primary) 9%, transparent); border-color:var(--line); }
   .slot.lvl-section{ padding:13px 12px; }
   .slot.lvl-section .nm{ font-size:22px; }
@@ -150,15 +139,14 @@
   .slot.lvl-command .nm{ font-size:23px; }
   .slot.lvl-command .rl{ font-size:12px; color:var(--primary-2); }
   .command .slot.lvl-command .nm{ font-size:26px; }
-
-  /* open + locked slots */
-  .slot.is-open{ opacity:.72; cursor:default; }
+  .slot.is-open{ opacity:.72; }
   .slot.is-open .nm{ color:var(--muted); font-style:italic; font-weight:600; }
-  .slot.is-open:hover, .slot.is-locked:hover{ transform:none; background:transparent; border-color:transparent; }
+  .slot.is-open:hover{ opacity:1; }
   .slot.is-locked{ opacity:.62; cursor:not-allowed; }
+  .slot.is-locked:hover{ transform:none; background:transparent; border-color:transparent; }
   .slot.is-locked .nm{ color:var(--muted); font-weight:600; font-style:normal; }
-
-  /* attendance check/cross badge shown on slots once op.status === "complete" */
+  /* endorsed-only slots that the user can't claim — still clickable to show why */
+  .slot.is-open.needs-endorse{ cursor:pointer; }
   .att-badge{ flex-shrink:0; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-left:6px; }
   .att-badge.att-yes{ background:rgba(54,208,122,.16); color:#36d07a; border:1px solid rgba(54,208,122,.4); }
   .att-badge.att-no{ background:rgba(224,73,73,.14); color:#e04949; border:1px solid rgba(224,73,73,.4); }
@@ -174,7 +162,7 @@
   .avatar.empty{ background:#1a222e; border-style:dashed; color:var(--muted-2); }
   .avatar.locked{ background:#1a222e; border-style:dashed; color:var(--muted-2); font-size:calc(var(--s)*0.42); }
 
-  /* ============================ ROSTER (expandable) ============================ */
+  /* ============================ ROSTER ============================ */
   .roster-teaser{ margin-top:54px; }
   .roster-open{ width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 26px; border-radius:16px; background:var(--panel); border:1px solid var(--line-strong); cursor:pointer; color:inherit; font:inherit; transition:border-color .15s, transform .12s, background .15s; position:relative; overflow:hidden; }
   .roster-open::before{ content:""; position:absolute; right:-40px; top:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb,var(--primary) 22%, transparent), transparent 70%); }
@@ -185,7 +173,6 @@
   .ro-count{ font-family:'Oswald'; font-size:32px; font-weight:700; color:var(--primary-2); line-height:1; }
   .ro-count span{ display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-2); font-family:'Inter'; font-weight:600; }
   .ro-go{ font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-family:'Oswald'; }
-
   .roster-overlay{ position:fixed; inset:0; z-index:56; display:none; padding:24px; background:rgba(4,7,11,.8); backdrop-filter:blur(6px); overflow-y:auto; }
   .roster-overlay.show{ display:block; }
   .ro-panel{ max-width:1080px; margin:0 auto; background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); overflow:hidden; }
@@ -215,8 +202,6 @@
   .map-title{ font-family:'Oswald'; letter-spacing:3px; text-transform:uppercase; font-size:18px; border-left:3px solid #36d07a; padding-left:12px; display:flex; align-items:center; gap:10px; }
   .map-title small{ display:block; font-family:'Inter'; letter-spacing:.3px; text-transform:none; color:var(--muted); font-size:11px; margin-top:2px; }
   .map-body{ padding:18px 18px 22px; }
-  .md-sub{ color:var(--muted); font-size:12.5px; line-height:1.55; margin:0 0 16px; max-width:64ch; }
-  .md-sub em{ color:var(--muted-2); font-style:italic; }
   .map-fig{ margin:0; }
   .map-fig figcaption{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:11px; color:var(--muted); margin-bottom:9px; }
   .map-fig figcaption b{ color:var(--text); font-weight:600; letter-spacing:1.5px; }
@@ -227,7 +212,7 @@
   .map-toggle button{ background:transparent; border:0; color:var(--muted); font-family:'Oswald',sans-serif; font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 13px; cursor:pointer; }
   .map-toggle button.on{ background:var(--primary); color:#fff; }
 
-  /* ============================ MODAL ============================ */
+  /* ============================ PROFILE MODAL ============================ */
   .modal-back{ position:fixed; inset:0; z-index:70; background:rgba(4,7,11,0.74); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; opacity:0; transition:opacity .2s; }
   .modal-back.show{ display:flex; opacity:1; }
   .modal{ width:min(440px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; transform:translateY(8px) scale(.98); transition:transform .22s; max-height:90vh; overflow-y:auto; }
@@ -245,19 +230,14 @@
   .rank-operator{ background:linear-gradient(135deg,#2b6aa0,#4a90d9); }
   .rank-junior-operator{ background:linear-gradient(135deg,#3f607e,#6f9dc4); }
   .rank-recruit{ background:#374559; }
-
   .badges{ display:flex; flex-wrap:wrap; gap:7px; margin:14px 0; }
-  /* endorsements = green */
   .badge{ display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:8px; font-size:12px; font-weight:600; background:rgba(56,193,114,.15); border:1px solid rgba(56,193,114,.5); color:#74dca0; }
-  /* leadership = yellow (senior darker/gold, junior brighter) */
   .badge.lead-senior{ background:rgba(193,150,30,.18); border-color:rgba(214,170,50,.65); color:#d6a82e; }
   .badge.lead-junior{ background:rgba(255,221,70,.16); border-color:rgba(255,221,70,.6); color:#ffe24f; }
-
   .stat-row{ display:flex; gap:10px; margin:16px 0; }
   .stat{ flex:1; background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:11px 8px; text-align:center; }
   .stat .big{ font-family:'Oswald'; font-size:23px; font-weight:700; color:#fff; }
   .stat .lbl{ font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-top:2px; }
-
   .promo-label{ display:flex; justify-content:space-between; align-items:baseline; font-size:12.5px; margin:18px 0 7px; }
   .promo-label .nxt{ color:var(--muted); }
   .promo-label .pct{ font-family:'Oswald'; color:var(--primary-2); font-weight:600; }
@@ -265,7 +245,6 @@
   .promo-fill{ height:100%; border-radius:999px; background:linear-gradient(90deg, var(--primary), var(--primary-2)); width:0; transition:width .8s cubic-bezier(.2,.8,.2,1); box-shadow:0 0 12px color-mix(in srgb,var(--primary) 60%, transparent); }
   .promo-fill.maxed{ background:linear-gradient(90deg,#ffce4d,#ffe08a); box-shadow:0 0 12px rgba(255,206,77,.5); }
   .promo-note{ font-size:11.5px; color:var(--muted-2); margin-top:8px; }
-
   .attend{ margin-top:20px; }
   .attend .block-title{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:12px; color:var(--muted); display:flex; justify-content:space-between; align-items:baseline; margin-bottom:11px; }
   .attend .block-title .cnt{ color:var(--primary-2); letter-spacing:1px; }
@@ -311,16 +290,67 @@
   /* ============================ CLAIM MODAL ============================ */
   #claimBack{ position:fixed; inset:0; z-index:75; background:rgba(4,7,11,0.78); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; }
   #claimBack.show{ display:flex; }
-  #claimModal{ width:min(400px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); overflow:hidden; }
-  #claimModal .cm-head{ padding:20px 22px 0; }
-  #claimModal .cm-tag{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:11px; color:var(--primary-2); margin-bottom:6px; }
-  #claimModal .cm-role{ font-family:'Oswald'; font-size:22px; font-weight:700; color:#fff; }
-  #claimModal .cm-body{ padding:18px 22px 22px; }
-  #claimModal label{ display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-  #claimInput{ width:100%; background:#0a0e14; border:1px solid var(--line-strong); border-radius:10px; padding:11px 14px; color:var(--text); font:inherit; font-size:15px; font-weight:600; outline:none; transition:border-color .15s; }
+  #claimModal{
+    width:min(420px,100%); background:var(--panel-solid); border:1px solid var(--line-strong);
+    border-radius:18px; box-shadow:var(--shadow); overflow:hidden; max-height:90vh; overflow-y:auto;
+  }
+
+  /* step 1 — warning screen */
+  #claimStep1{ padding:24px 22px 22px; }
+  .cm-step-tag{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:10px; color:var(--muted-2); margin-bottom:10px; }
+  .cm-role-title{ font-family:'Oswald'; font-size:22px; font-weight:700; color:#fff; margin-bottom:16px; line-height:1.2; }
+
+  /* warning box */
+  .warn-box{
+    border-radius:10px; padding:14px 16px;
+    background:rgba(210,69,63,.12); border:1px solid rgba(210,69,63,.40);
+  }
+  .warn-box .warn-head{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Oswald'; font-weight:700; font-size:13.5px; color:#ff7070;
+    text-transform:uppercase; letter-spacing:.8px; margin-bottom:10px;
+  }
+  .warn-box .warn-icon{ font-size:16px; flex-shrink:0; }
+  .warn-box ul{
+    margin:0; padding:0 0 0 18px;
+    font-size:13px; color:rgba(238,243,249,.82); line-height:1.7;
+  }
+  .warn-box ul li{ margin-bottom:2px; }
+
+  /* endorsement-blocked screen */
+  .endorse-block{
+    margin-top:14px; border-radius:10px; padding:14px 16px;
+    background:rgba(255,193,40,.09); border:1px solid rgba(255,193,40,.38);
+    font-size:13px; color:rgba(238,243,249,.8); line-height:1.6;
+  }
+  .endorse-block strong{ display:block; color:#ffc128; font-size:13.5px; margin-bottom:6px; }
+
+  /* discord coming-soon notice */
+  .discord-soon{
+    margin-top:14px; display:flex; align-items:center; gap:9px;
+    padding:10px 14px; border-radius:9px;
+    background:rgba(88,101,242,.13); border:1px solid rgba(88,101,242,.38);
+    font-size:12px; color:var(--muted); line-height:1.5;
+  }
+  .discord-soon .ds-icon{ font-size:16px; flex-shrink:0; }
+  .discord-soon strong{ color:#8a9fff; }
+
+  .cm-step1-actions{ display:flex; gap:10px; margin-top:18px; }
+
+  /* step 2 — name entry */
+  #claimStep2{ padding:0 22px 22px; display:none; }
+  #claimStep2.active{ display:block; }
+  #claimStep2 .cm-back{ background:none; border:none; color:var(--muted); font:inherit; font-size:12px; cursor:pointer; padding:14px 0 10px; display:flex; align-items:center; gap:5px; }
+  #claimStep2 .cm-back:hover{ color:var(--text); }
+  #claimStep2 label{ display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  #claimInput{
+    width:100%; background:#0a0e14; border:1px solid var(--line-strong); border-radius:10px;
+    padding:11px 14px; color:var(--text); font:inherit; font-size:15px; font-weight:600;
+    outline:none; transition:border-color .15s;
+  }
   #claimInput:focus{ border-color:var(--primary); }
   #claimInput::placeholder{ color:var(--muted-2); font-weight:400; }
-  .cm-hint{ font-size:11.5px; color:var(--muted-2); margin-top:8px; }
+  .cm-hint{ font-size:11.5px; color:var(--muted-2); margin-top:8px; line-height:1.5; }
   .cm-actions{ display:flex; gap:10px; margin-top:16px; }
   .cm-btn{ flex:1; padding:11px; border-radius:10px; font:inherit; font-size:14px; font-weight:700; cursor:pointer; border:1px solid var(--line-strong); transition:background .15s, border-color .15s; }
   .cm-btn.confirm{ background:var(--primary); border-color:var(--primary); color:#fff; }
@@ -343,8 +373,7 @@
 <body>
   <div id="bgLayer"></div>
   <div id="bgOverlay"></div>
-
-  <div class="wrap" id="app"><!-- rendered by JS --></div>
+  <div class="wrap" id="app"></div>
 
   <!-- Music player -->
   <div id="music" hidden>
@@ -353,8 +382,8 @@
       <span class="lbl" id="musicLbl">Play anthem</span>
     </button>
     <div id="anthemPicker" style="display:none; border-left:1px solid var(--line-strong);">
-      <button type="button" id="anthem1Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Switch to Anthem 1">A1</button>
-      <button type="button" id="anthem2Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Switch to Anthem 2">A2</button>
+      <button type="button" id="anthem1Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Anthem 1">A1</button>
+      <button type="button" id="anthem2Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:12px 12px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;" title="Anthem 2">A2</button>
     </div>
   </div>
   <audio id="audio" loop></audio>
@@ -376,11 +405,11 @@
         <div class="map-view" data-view="img">
           <figure class="map-fig">
             <figcaption><b>The Lombakka Region</b> · strategic overview</figcaption>
-            <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region - strategic overview" loading="lazy" />
+            <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region" loading="lazy" />
           </figure>
           <figure class="map-fig" style="margin-top:20px">
             <figcaption><b>Operation Karoonda</b> · Niakala area of operations</figcaption>
-            <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda - Niakala area of operations control overlay" loading="lazy" />
+            <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy" />
           </figure>
         </div>
         <div class="map-view" data-view="svg" hidden>
@@ -499,7 +528,7 @@
     </div>
   </div>
 
-  <!-- Coming-soon takeover (operation.status === "complete") -->
+  <!-- Coming-soon takeover -->
   <div id="comingSoon">
     <span class="logo" style="--ls:104px"><svg class="logo-svg" viewBox="0 0 100 100" aria-hidden="true"><use href="#azoEmblem"/></svg><img class="logo-img" src="assets/logo.png" alt="AZO" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()"></span>
     <h1 id="csTitle">Stand By</h1>
@@ -509,27 +538,64 @@
     <button class="peek" id="csPeek" type="button">View last role list ↓</button>
   </div>
 
-  <!-- Claim slot modal -->
+  <!-- ==================== CLAIM MODAL ==================== -->
+  <!--
+    Two-step flow:
+      Step 1 — show warning + endorsement check + discord-soon notice.
+                "I understand, proceed" advances to step 2.
+      Step 2 — name entry + submit.
+  -->
   <div id="claimBack">
-    <div id="claimModal">
-      <div class="cm-head">
-        <div class="cm-tag">Sign Up</div>
-        <div class="cm-role" id="claimRoleLabel"></div>
+    <div id="claimModal" role="dialog" aria-modal="true">
+
+      <!-- STEP 1: Warning -->
+      <div id="claimStep1">
+        <div class="cm-step-tag">Sign Up · Step 1 of 2</div>
+        <div class="cm-role-title" id="claimRoleLabel"></div>
+
+        <div class="warn-box">
+          <div class="warn-head"><span class="warn-icon">⚠</span> Read before signing up</div>
+          <ul>
+            <li>Once you lock in a slot, you remain locked in for this operation.</li>
+            <li>To be unassigned, a staff member must manually edit the roster.</li>
+            <li>After signing up, the page takes <strong>1–2 minutes</strong> to update — this is normal.</li>
+            <li>Only one person can hold each slot. If someone else signs up first, your claim will be rejected.</li>
+          </ul>
+        </div>
+
+        <!-- shown only when endorsement is required -->
+        <div class="endorse-block" id="endorseBlock" style="display:none"></div>
+
+        <div class="discord-soon">
+          <span class="ds-icon">🔗</span>
+          <span><strong>Discord login coming soon.</strong> For now, enter your exact roster name on the next screen.</span>
+        </div>
+
+        <div class="cm-step1-actions">
+          <button class="cm-btn cancel" id="claimCancelStep1" type="button">Cancel</button>
+          <button class="cm-btn confirm" id="claimProceed" type="button">I understand — proceed</button>
+        </div>
       </div>
-      <div class="cm-body">
-        <label for="claimInput">Your name (as it appears on the roster)</label>
+
+      <!-- STEP 2: Name entry -->
+      <div id="claimStep2">
+        <button class="cm-back" id="claimBackStep" type="button">← Back</button>
+        <div class="cm-step-tag">Sign Up · Step 2 of 2</div>
+        <div class="cm-role-title" id="claimRoleLabel2"></div>
+        <label for="claimInput">Your name (exactly as it appears on the roster)</label>
         <input id="claimInput" type="text" placeholder="e.g. Gunter" autocomplete="off" maxlength="48" />
-        <div class="cm-hint">This will be saved to the roster immediately and visible to everyone.</div>
+        <div class="cm-hint" id="claimHint">Your name must match the roster exactly. Case-sensitive.</div>
         <div class="cm-actions">
           <button class="cm-btn cancel" id="claimCancel" type="button">Cancel</button>
           <button class="cm-btn confirm" id="claimConfirm" type="button">Claim Role</button>
         </div>
         <div id="claimStatus"></div>
       </div>
+
     </div>
   </div>
 
-  <!-- AZO emblem - fallback drawn if assets/logo.png is missing -->
+  <!-- AZO emblem -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="azoEmblem" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="47" fill="#0c2747" stroke="#e8b53a" stroke-width="2.5"/>
@@ -543,29 +609,17 @@
 <script>
 /* ============================================================
    AZO Dynamic Role List
-   Data: roster.json (current op) + members.json (member directory)
+   Data: roster.json + members.json
    ============================================================ */
 
-/* Promotion ladder. opsAttended = real ops attended in 2026.
-   Thresholds are cumulative totals to REACH the next rank.
-   SOCOMD = command staff (above ladder). */
 const RANK_LADDER    = ['Recruit', 'Junior Operator', 'Operator', 'Senior Operator'];
 const RANK_THRESHOLD = { 'Junior Operator':1, 'Operator':6, 'Senior Operator':14 };
 const RANK_SORT      = { 'SOCOMD':0, 'Senior Operator':1, 'Operator':2, 'Junior Operator':3, 'Recruit':4 };
 
-/* Attendance mirrors the AZO promotion chart (months Apr–Dec).
-   Each month: ops already run ('done') + ops upcoming ('up').
-   So far: Apr 1, May 1, Jun 1 run + 1 upcoming; Jul–Dec none yet. */
 const ATT_MONTHS = [
-  { m:'Apr', done:1, up:0 },
-  { m:'May', done:1, up:0 },
-  { m:'Jun', done:2, up:0 },
-  { m:'Jul', done:0, up:0 },
-  { m:'Aug', done:0, up:0 },
-  { m:'Sep', done:0, up:0 },
-  { m:'Oct', done:0, up:0 },
-  { m:'Nov', done:0, up:0 },
-  { m:'Dec', done:0, up:0 }
+  { m:'Apr', done:1, up:0 }, { m:'May', done:1, up:0 }, { m:'Jun', done:2, up:0 },
+  { m:'Jul', done:0, up:0 }, { m:'Aug', done:0, up:0 }, { m:'Sep', done:0, up:0 },
+  { m:'Oct', done:0, up:0 }, { m:'Nov', done:0, up:0 }, { m:'Dec', done:0, up:0 }
 ];
 const OPS_SO_FAR = ATT_MONTHS.reduce((a,b)=>a+b.done,0);
 
@@ -587,8 +641,6 @@ const rankClass = r => 'rank-'+r.toLowerCase().replace(/[^a-z0-9]+/g,'-');
 function member(name){
   const m = MEMBERS[name] || {};
   const attendance = m.attendance || {};
-  // opsAttended is derived from the attendance arrays, not the stored field -
-  // this guarantees the count and the dots can never drift out of sync.
   let opsAttended = 0;
   ATT_MONTHS.forEach(mo=>{
     const raw = attendance[mo.m];
@@ -606,12 +658,11 @@ function member(name){
   };
 }
 
-/* promotion from current rank + ops attended */
 function promotion(rank, ops){
   if(rank === 'SOCOMD') return { kind:'command' };
   const idx = RANK_LADDER.indexOf(rank);
-  if(idx === RANK_LADDER.length-1) return { kind:'max' };          // Senior Operator
-  const base = idx < 0 ? 0 : idx;                                   // unknown rank -> base of ladder
+  if(idx === RANK_LADDER.length-1) return { kind:'max' };
+  const base = idx < 0 ? 0 : idx;
   const nextName = RANK_LADDER[base+1];
   const T = RANK_THRESHOLD[nextName];
   const progress = Math.max(0, Math.min(100, Math.round(ops/T*100)));
@@ -624,7 +675,6 @@ function avatarHTML(m, size, extra=''){
   return `<span class="avatar ${extra}" style="--s:${size}px;--h:${hue}">${esc(initials(m.name))}${img}</span>`;
 }
 
-/* leader level for the name-size hierarchy */
 function leaderLevel(role){
   if(/asst|assistant/i.test(role)) return '';
   if(/platoon commander|^commander/i.test(role)) return 'lvl-command';
@@ -632,26 +682,44 @@ function leaderLevel(role){
   return '';
 }
 
+/* ---------- endorsement check ----------
+   Returns true if the named member has the required endorsement for this role.
+   endorsementType is a string like "Leadership Endorsement", "JTAC Endorsement", "Medical Endorsement".
+   We do a case-insensitive keyword match against the member's endorsements array. */
+function memberHasEndorsement(memberName, endorsementType){
+  const m = MEMBERS[memberName];
+  if(!m) return false; // not on roster at all
+  const arr = Array.isArray(m.endorsements) ? m.endorsements : [];
+  const needle = endorsementType.toLowerCase();
+  return arr.some(e => e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
+}
+
 /* ---------- render: role slot ---------- */
 function slotHTML(roleObj, name, locked, attendedSet, showAtt, lockedLabel, claimCtx){
   const role = typeof roleObj === 'string' ? roleObj : roleObj.role;
-  const endorsePill = (!locked && roleObj.endorsementRequired)
-    ? `<span class="endorse-pill">${esc(roleObj.endorsementType || 'Endorsement Req.')}</span>`
-    : '';
+  const endorseRequired = !locked && roleObj.endorsementRequired;
+  const endorseType     = endorseRequired ? (roleObj.endorsementType || 'Endorsement Req.') : '';
+
+  const endorsePill = endorseRequired
+    ? `<span class="endorse-pill">${esc(endorseType)}</span>` : '';
+
   if(locked){
     const label = lockedLabel || 'Reserved';
     return `<div class="slot is-locked">
       <span class="avatar locked" style="--s:42px">🔒</span>
       <div class="meta"><div class="nm">${esc(label)}</div><div class="rl">${esc(role)}</div></div></div>`;
   }
+
   if(!name){
-    // Vacant — render as a clickable claim button
     const ctxJson = claimCtx ? esc(JSON.stringify(claimCtx)) : '';
-    return `<button class="slot is-open" type="button" data-claim="${ctxJson}" data-role-label="${esc(role)}">
+    const endorseAttr = endorseRequired ? `data-endorse-type="${esc(endorseType)}"` : '';
+    return `<button class="slot is-open${endorseRequired?' needs-endorse':''}" type="button"
+        data-claim="${ctxJson}" data-role-label="${esc(role)}" ${endorseAttr}>
       <span class="avatar empty" style="--s:42px">+</span>
       <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}${endorsePill}</div></div>
     </button>`;
   }
+
   const m = member(name);
   const lvl = leaderLevel(role);
   const av = lvl==='lvl-command' ? 54 : lvl==='lvl-section' ? 48 : 42;
@@ -680,32 +748,31 @@ function render(roster){
       img.onerror = ()=>{ if(fallback) tryLoad(fallback, null); };
       img.src = src;
     };
-    // Try the roster.json path first, then fall back to the standard asset path
     tryLoad(op.background, 'assets/operation-bg.png');
   } else {
-    // No background in roster.json - try the default asset directly
     const img = new Image();
     img.onload = ()=>{ $('#bgLayer').style.backgroundImage = `url("assets/operation-bg.png")`; };
     img.src = 'assets/operation-bg.png';
   }
 
-  const statusMap = { live:{cls:'status-live', txt:'Live'}, upcoming:{cls:'', txt:'Upcoming'}, complete:{cls:'', txt:'Complete'} };
+  const statusMap = { live:{cls:'status-live',txt:'Live'}, upcoming:{cls:'',txt:'Upcoming'}, complete:{cls:'',txt:'Complete'} };
   const st = statusMap[op.status] || statusMap.upcoming;
   const showAtt = op.status === 'complete';
   const attendedSet = new Set(roster.attended || []);
 
-  const cmd = (roster.command||[]).map((r,i)=>slotHTML(r, r.member, false, attendedSet, showAtt, null,
-    {sectionKey:'__command', roleIndex:i})).join('');
+  const cmd = (roster.command||[]).map((r,i)=>
+    slotHTML(r, r.member, false, attendedSet, showAtt, null, {sectionKey:'__command', roleIndex:i})).join('');
 
   const sections = (roster.sections||[]).map(sec=>{
     const roles = sec.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map((r,i)=>slotHTML(r, r.member, !!sec.locked, attendedSet, showAtt, sec.lockedLabel,
-      {sectionKey:sec.name, roleIndex:i})).join('');
+    const rows = roles.map((r,i)=>
+      slotHTML(r, r.member, !!sec.locked, attendedSet, showAtt, sec.lockedLabel, {sectionKey:sec.name, roleIndex:i})).join('');
     const headRight = sec.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
-    const note = sec.locked && sec.lockedLabel ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>` : '';
+    const note = sec.locked && sec.lockedLabel
+      ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>` : '';
     return `<div class="sec ${sec.locked?'locked':''} bracketed">
         <div class="sec-head">${esc(sec.name)} ${headRight}</div>
         <div class="sec-body">${rows}</div>${note}
@@ -715,12 +782,14 @@ function render(roster){
   const attachments = (roster.attachments||[]).map((att,attIdx)=>{
     const roles = att.roles||[];
     const filled = roles.filter(r=>r.member).length;
-    const rows = roles.map((r,roleIdx)=>slotHTML(r, r.member, !!att.locked, attendedSet, showAtt, att.lockedLabel,
-      {sectionKey:'__attachment', roleIndex:{attIdx, roleIdx}})).join('');
+    const rows = roles.map((r,roleIdx)=>
+      slotHTML(r, r.member, !!att.locked, attendedSet, showAtt, att.lockedLabel,
+        {sectionKey:'__attachment', roleIndex:{attIdx, roleIdx}})).join('');
     const headRight = att.locked
       ? `<span class="lock" title="Locked">🔒</span>`
       : `<span class="count">${filled}/${roles.length}</span>`;
-    const note = att.locked && att.lockedLabel ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>` : '';
+    const note = att.locked && att.lockedLabel
+      ? `<div class="lock-note"><span class="lk">🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>` : '';
     return `<div class="sec ${att.locked?'locked':''} bracketed">
         <div class="sec-head">${esc(att.name)} ${headRight}</div>
         <div class="sec-body">${rows}</div>${note}
@@ -815,16 +884,11 @@ function setupCountdown(op){
   countdownTimer = setInterval(tick, 1000);
 }
 
-/* ---------- attendance strip ----------
-   Each completed op across the whole season gets a running index (0-based).
-   Per current data: index 0 = Apr op, index OPS_SO_FAR-1 = most recent
-   completed op. Only those two dots get a name tooltip; every other dot
-   (attended or not, upcoming or not) shows no tooltip at all. */
+/* ---------- attendance ---------- */
 const OP_NAME_BY_INDEX = { 0: 'Emerald Veil pt 1', [OPS_SO_FAR-1]: 'Emerald Veil pt 2' };
 
 function attendanceStrip(m){
-  let attended = 0;
-  let doneIdx = 0;
+  let attended = 0, doneIdx = 0;
   const cols = ATT_MONTHS.map(mo=>{
     const raw = m.attendance[mo.m];
     const arr = Array.isArray(raw) ? raw : (raw ? [true] : []);
@@ -848,7 +912,6 @@ function attendanceStrip(m){
 function openProfile(name){
   const m = member(name);
   const p = promotion(m.discordRank, m.opsAttended);
-  const hue = hashHue(m.name);
   const att = attendanceStrip(m);
 
   const leadBadge = m.leadership==='senior'
@@ -900,31 +963,24 @@ function openProfile(name){
 }
 function closeModal(){ $('#modalBack').classList.remove('show'); }
 
-/* ---------- roster overlay (sorted by rank) ---------- */
+/* ---------- roster overlay ---------- */
 function openRoster(){
   const members = Object.keys(MEMBERS).filter(k=>k!=='_comment').map(member);
   const groups = {};
   members.forEach(m=>{ (groups[m.discordRank] = groups[m.discordRank] || []).push(m); });
   const order = Object.keys(groups).sort((a,b)=> (RANK_SORT[a]??9)-(RANK_SORT[b]??9) || a.localeCompare(b));
-
   const html = order.map(rank=>{
     const list = groups[rank].sort((a,b)=> b.opsAttended-a.opsAttended || a.name.localeCompare(b.name));
-    const cards = list.map(m=>{
-      return `<button class="ro-card" type="button" data-name="${esc(m.name)}">
-          ${avatarHTML(m,40)}
-          <div style="min-width:0">
-            <div class="nm">${esc(m.name)}</div>
-            <div class="rl2">${esc(m.discordRank)}</div>
-          </div>
-          <div class="ops"><b>${m.opsAttended}</b><i>ops</i></div>
-        </button>`;
-    }).join('');
+    const cards = list.map(m=>`<button class="ro-card" type="button" data-name="${esc(m.name)}">
+        ${avatarHTML(m,40)}
+        <div style="min-width:0"><div class="nm">${esc(m.name)}</div><div class="rl2">${esc(m.discordRank)}</div></div>
+        <div class="ops"><b>${m.opsAttended}</b><i>ops</i></div>
+      </button>`).join('');
     return `<div class="ro-group">
         <div class="ro-group-h">${esc(rank)} <b>${list.length}</b></div>
         <div class="ro-grid">${cards}</div>
       </div>`;
   }).join('');
-
   $('#rosterBody').innerHTML = html;
   $('#rosterOverlay').classList.add('show');
 }
@@ -936,45 +992,31 @@ function setupMusic(op){
   const picker=$('#anthemPicker'), a1btn=$('#anthem1Btn'), a2btn=$('#anthem2Btn');
   if(!op.music){ wrap.hidden=true; return; }
   wrap.hidden=false;
-
-  // Two-anthem setup: op.music = anthem.mp3, op.music2 = anthem1.mp3
   const anthems = [op.music];
   if(op.music2) anthems.push(op.music2);
-
-  // Randomly pick one on load
   let currentAnthemIdx = anthems.length > 1 ? Math.floor(Math.random() * anthems.length) : 0;
-
   const updateAnthemBtns = ()=>{
     if(anthems.length < 2){ picker.style.display='none'; return; }
     picker.style.display='flex';
     a1btn.style.color = currentAnthemIdx===0 ? 'var(--primary-2)' : 'var(--muted)';
     a2btn.style.color = currentAnthemIdx===1 ? 'var(--primary-2)' : 'var(--muted)';
   };
-
   const loadAnthemIdx = (idx)=>{
     const wasPlaying = !audio.paused;
     currentAnthemIdx = idx;
-    audio.pause();
-    audio.src = anthems[idx];
-    audio.load();
+    audio.pause(); audio.src = anthems[idx]; audio.load();
     audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15;
     updateAnthemBtns();
     if(wasPlaying) audio.play().catch(()=>{});
   };
-
   audio.volume = (typeof op.musicVolume==='number') ? op.musicVolume : 0.15;
   loadAnthemIdx(currentAnthemIdx);
-
   const setUI = playing=>{ wrap.classList.toggle('playing',playing); lbl.textContent = playing?'Pause anthem':'Play anthem'; };
   const start = ()=> audio.play().then(()=>{ setUI(true); return true; }).catch(()=>{ setUI(false); return false; });
-
   btn.onclick = ()=>{ if(audio.paused) start(); else { audio.pause(); setUI(false); } };
   a1btn.onclick = ()=>{ loadAnthemIdx(0); start(); };
   a2btn.onclick = ()=>{ loadAnthemIdx(1); start(); };
-
   updateAnthemBtns();
-
-  // Autoplay quietly on load
   start().then(ok=>{
     if(ok) return;
     const EV=['pointerdown','keydown','scroll','touchstart'];
@@ -1010,28 +1052,29 @@ function setupMap(op){
 }
 function closeMap(){ $('#mapOverlay').classList.remove('show'); }
 
-/* ---------- events ---------- */
+/* ---------- global click routing ---------- */
 document.addEventListener('click', e=>{
-  // Claim a vacant slot
   const claimBtn = e.target.closest('[data-claim]');
   if(claimBtn && claimBtn.dataset.claim){
     try{
       const ctx = JSON.parse(claimBtn.dataset.claim);
-      const roleLabel = claimBtn.dataset.roleLabel || 'Role';
-      openClaim(ctx.sectionKey, ctx.roleIndex, roleLabel);
+      const roleLabel    = claimBtn.dataset.roleLabel || 'Role';
+      const endorseType  = claimBtn.dataset.endorseType || '';
+      openClaim(ctx.sectionKey, ctx.roleIndex, roleLabel, endorseType);
     } catch(_){}
     return;
   }
-  // Open member profile
   const t = e.target.closest('[data-name]');
   if(t){ openProfile(t.dataset.name); }
 });
+
 $('#modalClose').onclick = closeModal;
 $('#modalBack').onclick = e=>{ if(e.target===$('#modalBack')) closeModal(); };
 $('#rosterClose').onclick = closeRoster;
 $('#rosterOverlay').onclick = e=>{ if(e.target===$('#rosterOverlay')) closeRoster(); };
 $('#mapClose').onclick = closeMap;
 $('#mapOverlay').onclick = e=>{ if(e.target===$('#mapOverlay')) closeMap(); };
+
 document.addEventListener('keydown', e=>{
   if(e.key!=='Escape') return;
   const cb=$('#claimBack'); if(cb && cb.classList.contains('show')){ closeClaim(); return; }
@@ -1040,30 +1083,96 @@ document.addEventListener('keydown', e=>{
   const ro=$('#rosterOverlay'); if(ro && ro.classList.contains('show')){ closeRoster(); return; }
 });
 
-/* ---------- claim slot ---------- */
-// No token stored here. Claims POST to a Cloudflare Worker which holds the secret.
+/* ============================================================
+   CLAIM FLOW
+   Step 1: warning + endorsement gate + discord-soon notice
+   Step 2: name entry + live endorsement re-check + submit
+   ============================================================ */
+
 const CLAIM_ENDPOINT = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
 
-let claimContext = null;
+let claimContext = null; // { sectionKey, roleIndex, roleLabel, endorseType }
 
-function openClaim(sectionKey, roleIndex, roleLabel){
-  claimContext = { sectionKey, roleIndex, roleLabel };
-  $('#claimRoleLabel').textContent = roleLabel;
+function openClaim(sectionKey, roleIndex, roleLabel, endorseType){
+  claimContext = { sectionKey, roleIndex, roleLabel, endorseType };
+
+  // populate step 1
+  $('#claimRoleLabel').textContent  = roleLabel;
+  $('#claimRoleLabel2').textContent = roleLabel;
+
+  // endorsement block message
+  const eb = $('#endorseBlock');
+  if(endorseType){
+    eb.style.display = 'block';
+    eb.innerHTML = `<strong>⚠ Endorsement required: ${esc(endorseType)}</strong>
+      This role requires a <b>${esc(endorseType)}</b>.
+      If your name is not on the endorsement list, your claim will be rejected by the server.
+      Contact staff if you believe this is incorrect.`;
+  } else {
+    eb.style.display = 'none';
+  }
+
+  // reset step 2
   $('#claimInput').value = '';
   $('#claimStatus').textContent = '';
   $('#claimStatus').className = '';
   $('#claimConfirm').disabled = false;
+  $('#claimHint').style.color = '';
+
+  // show step 1, hide step 2
+  $('#claimStep1').style.display = 'block';
+  $('#claimStep2').classList.remove('active');
+
   $('#claimBack').classList.add('show');
-  setTimeout(()=> $('#claimInput').focus(), 80);
 }
+
 function closeClaim(){
   $('#claimBack').classList.remove('show');
   claimContext = null;
 }
 
+function goToStep2(){
+  $('#claimStep1').style.display = 'none';
+  $('#claimStep2').classList.add('active');
+  setTimeout(()=> $('#claimInput').focus(), 80);
+}
+
+/* Live endorsement check as user types — just a warning, not a hard block
+   (server enforces). Keeps UX smooth while still informing them. */
+$('#claimInput').addEventListener('input', ()=>{
+  if(!claimContext || !claimContext.endorseType) return;
+  const name = $('#claimInput').value.trim();
+  if(!name) return;
+  const has = memberHasEndorsement(name, claimContext.endorseType);
+  const hint = $('#claimHint');
+  if(!has && MEMBERS[name]){
+    hint.style.color = '#e04949';
+    hint.textContent = `${name} does not have a ${claimContext.endorseType} on record. Your claim will be rejected.`;
+  } else if(has){
+    hint.style.color = '#36d07a';
+    hint.textContent = `Endorsement confirmed for ${name}.`;
+  } else {
+    hint.style.color = '';
+    hint.textContent = 'Your name must match the roster exactly. Case-sensitive.';
+  }
+});
+
 async function submitClaim(){
   const name = $('#claimInput').value.trim();
   if(!name){ setClaimStatus('Enter your name first.','err'); return; }
+
+  /* Client-side endorsement pre-check.
+     If name is known locally AND endorsement is required AND they don't have it,
+     block early with a clear message. The server enforces this too. */
+  if(claimContext.endorseType && MEMBERS[name]){
+    if(!memberHasEndorsement(name, claimContext.endorseType)){
+      setClaimStatus(
+        `You do not have the required ${claimContext.endorseType}. Contact staff to be added to the endorsement list.`,
+        'err'
+      );
+      return;
+    }
+  }
 
   const { sectionKey, roleIndex } = claimContext;
   const btn = $('#claimConfirm');
@@ -1074,23 +1183,15 @@ async function submitClaim(){
     const res = await fetch(CLAIM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sectionKey: String(sectionKey),
-        roleIndex:  roleIndex,
-        memberName: name
-      })
+      body: JSON.stringify({ sectionKey: String(sectionKey), roleIndex, memberName: name })
     });
-
     const data = await res.json().catch(()=>({}));
-
     if(res.ok){
-      setClaimStatus(`Signed up! ${name} is on the roster. Refreshing…`, 'ok');
-      btn.disabled = true;
-      setTimeout(()=>{ closeClaim(); location.reload(); }, 3000);
+      setClaimStatus(`Signed up! ${name} is on the roster. Refreshing in a moment…`, 'ok');
+      setTimeout(()=>{ closeClaim(); location.reload(); }, 3500);
     } else {
       throw new Error(data.error || `Failed (${res.status})`);
     }
-
   } catch(e){
     setClaimStatus(e.message, 'err');
     btn.disabled = false;
@@ -1103,10 +1204,14 @@ function setClaimStatus(msg, cls){
   el.className = cls;
 }
 
-const _cb=$('#claimBack'); if(_cb){ _cb.onclick=e=>{ if(e.target===_cb) closeClaim(); }; }
-const _cc=$('#claimCancel'); if(_cc){ _cc.onclick=closeClaim; }
-const _cf=$('#claimConfirm'); if(_cf){ _cf.onclick=submitClaim; }
-const _ci=$('#claimInput'); if(_ci){ _ci.addEventListener('keydown',e=>{ if(e.key==='Enter') submitClaim(); }); }
+/* wire up claim modal buttons */
+$('#claimBack').onclick    = e=>{ if(e.target===$('#claimBack')) closeClaim(); };
+$('#claimCancelStep1').onclick = closeClaim;
+$('#claimProceed').onclick = goToStep2;
+$('#claimBackStep').onclick = ()=>{ $('#claimStep2').classList.remove('active'); $('#claimStep1').style.display='block'; };
+$('#claimCancel').onclick  = closeClaim;
+$('#claimConfirm').onclick = submitClaim;
+$('#claimInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitClaim(); });
 
 /* ---------- boot ---------- */
 (async function(){
@@ -1122,7 +1227,7 @@ const _ci=$('#claimInput'); if(_ci){ _ci.addEventListener('keydown',e=>{ if(e.ke
       <h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2>
       <p>${esc(err.message)}</p>
       <p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files.
-      Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open
+      Run a tiny local server first — e.g. double-click <code>serve.ps1</code> — then open
       <code>http://localhost:8770</code>. On GitHub Pages it just works.</p>
     </div>`;
     console.error(err);
