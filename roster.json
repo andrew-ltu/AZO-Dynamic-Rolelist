@@ -44,7 +44,7 @@
         },
         {
           "role": "Asst. Section Leader",
-          "member": "Jon Taiwan",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
@@ -91,7 +91,7 @@
         },
         {
           "role": "Anti-tank",
-          "member": null
+          "member": "Jon Taiwan"
         },
         {
           "role": "Asst. Anti-tank",
