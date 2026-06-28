@@ -6,15 +6,21 @@
 const GITHUB_OWNER = 'andrew-ltu';
 const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
 const GITHUB_FILE  = 'roster.json';
-const ALLOWED_ORIGIN = 'https://andrew-ltu.github.io';
+const ALLOWED_ORIGINS = [
+  'https://andrew-ltu.github.io',
+  'https://azo-dynamic-rolelist.pages.dev'
+];
 
 export default {
   async fetch(request, env) {
+    const origin = request.headers.get('Origin') || '';
+    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
     // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
-          'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+          'Access-Control-Allow-Origin': allowedOrigin,
           'Access-Control-Allow-Methods': 'POST, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type',
         }
@@ -96,7 +102,7 @@ export default {
         status,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+          'Access-Control-Allow-Origin': allowedOrigin,
         }
       });
     }
