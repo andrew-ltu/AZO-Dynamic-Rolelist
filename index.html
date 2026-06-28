@@ -1041,16 +1041,8 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ---------- claim slot ---------- */
-// Token lives in GitHub Secrets as ROSTER_TOKEN — never stored here.
-// Claims are submitted via workflow_dispatch to the claim-slot.yml Action.
-const GITHUB_OWNER    = 'andrew-ltu';
-const GITHUB_REPO     = 'AZO-Dynamic-Rolelist';
-const WORKFLOW_ID     = 'claim-slot.yml';
-const WORKFLOW_REF    = 'main';
-// Read-only public token for triggering workflow_dispatch (no write access to code).
-// Generate at github.com/settings/personal-access-tokens
-//   Permissions needed: Actions → Read & Write ONLY (not Contents)
-const WORKFLOW_TOKEN  = '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';
+// No token stored here. Claims POST to a Cloudflare Worker which holds the secret.
+const CLAIM_ENDPOINT = 'https://azo-claim.andrewltu.workers.dev';
 
 let claimContext = null;
 
@@ -1079,36 +1071,24 @@ async function submitClaim(){
   setClaimStatus('Submitting sign-up…','');
 
   try{
-    // Trigger the GitHub Action — token only has Actions:write, not Contents:write
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_ID}/dispatches`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${WORKFLOW_TOKEN}`,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ref: WORKFLOW_REF,
-          inputs: {
-            sectionKey: String(sectionKey),
-            roleIndex:  JSON.stringify(roleIndex),
-            memberName: name
-          }
-        })
-      }
-    );
+    const res = await fetch(CLAIM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sectionKey: String(sectionKey),
+        roleIndex:  roleIndex,
+        memberName: name
+      })
+    });
 
-    if(res.status === 204){
-      // 204 = accepted by GitHub, workflow is now queued
-      setClaimStatus(`Signed up! ${name} is on the roster. Page will refresh in 12s…`, 'ok');
+    const data = await res.json().catch(()=>({}));
+
+    if(res.ok){
+      setClaimStatus(`Signed up! ${name} is on the roster. Refreshing…`, 'ok');
       btn.disabled = true;
-      // Workflow takes ~10-15s to run and push. Reload after delay.
-      setTimeout(()=>{ closeClaim(); location.reload(); }, 12000);
+      setTimeout(()=>{ closeClaim(); location.reload(); }, 3000);
     } else {
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || `Failed (${res.status}) — check your Actions token.`);
+      throw new Error(data.error || `Failed (${res.status})`);
     }
 
   } catch(e){
