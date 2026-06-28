@@ -597,5 +597,18 @@
     },
     "endorsements": [],
     "leadership": null
+    },
+    "blueberet": {
+      "discordRank": "Recruit",
+      "avatar": "assets/avatars/blueberet.png",
+      "opsAttended": 0,
+      "attendance": {
+        "Apr": [false],
+        "May": [false],
+        "Jun": [false, false]
+      },
+      "endorsements": [],
+      "leadership": null
+    }
   }
 }
