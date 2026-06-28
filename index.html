@@ -145,7 +145,7 @@
   .slot.is-locked{ opacity:.62; cursor:not-allowed; }
   .slot.is-locked:hover{ transform:none; background:transparent; border-color:transparent; }
   .slot.is-locked .nm{ color:var(--muted); font-weight:600; font-style:normal; }
-  /* endorsed-only slots that the user can't claim — still clickable to show why */
+  /* endorsed-only slots that the user can't claim - still clickable to show why */
   .slot.is-open.needs-endorse{ cursor:pointer; }
   .att-badge{ flex-shrink:0; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; margin-left:6px; }
   .att-badge.att-yes{ background:rgba(54,208,122,.16); color:#36d07a; border:1px solid rgba(54,208,122,.4); }
@@ -215,7 +215,7 @@
   /* ============================ PROFILE MODAL ============================ */
   .modal-back{ position:fixed; inset:0; z-index:70; background:rgba(4,7,11,0.74); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; opacity:0; transition:opacity .2s; }
   .modal-back.show{ display:flex; opacity:1; }
-  .modal{ width:min(440px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; transform:translateY(8px) scale(.98); transition:transform .22s; max-height:90vh; overflow-y:auto; }
+  .modal bracketed{ width:min(440px,100%); background:var(--panel-solid); border:1px solid var(--line-strong); border-radius:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; transform:translateY(8px) scale(.98); transition:transform .22s; max-height:90vh; overflow-y:auto; }
   .modal-back.show .modal{ transform:none; }
   .modal-banner{ height:84px; background:linear-gradient(120deg, color-mix(in srgb,var(--primary) 55%, #000), color-mix(in srgb,var(--primary-2) 40%, #000)); position:relative; }
   .modal-banner::after{ content:""; position:absolute; inset:0; background:repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 8px, transparent 8px 16px); }
@@ -295,7 +295,7 @@
     border-radius:18px; box-shadow:var(--shadow); overflow:hidden; max-height:90vh; overflow-y:auto;
   }
 
-  /* step 1 — warning screen */
+  /* step 1 - warning screen */
   #claimStep1{ padding:24px 22px 22px; }
   .cm-step-tag{ font-family:'Oswald'; text-transform:uppercase; letter-spacing:2px; font-size:10px; color:var(--muted-2); margin-bottom:10px; }
   .cm-role-title{ font-family:'Oswald'; font-size:22px; font-weight:700; color:#fff; margin-bottom:16px; line-height:1.2; }
@@ -337,7 +337,7 @@
 
   .cm-step1-actions{ display:flex; gap:10px; margin-top:18px; }
 
-  /* step 2 — name entry */
+  /* step 2 - name entry */
   #claimStep2{ padding:0 22px 22px; display:none; }
   #claimStep2.active{ display:block; }
   #claimStep2 .cm-back{ background:none; border:none; color:var(--muted); font:inherit; font-size:12px; cursor:pointer; padding:14px 0 10px; display:flex; align-items:center; gap:5px; }
@@ -350,6 +350,22 @@
   }
   #claimInput:focus{ border-color:var(--primary); }
   #claimInput::placeholder{ color:var(--muted-2); font-weight:400; }
+  
+  /* Filter Selection Dropdown Container */
+  .dropdown-container { position: relative; width: 100%; }
+  .op-dropdown-list {
+    position: absolute; top: 100%; left: 0; right: 0; max-height: 190px; overflow-y: auto;
+    background: var(--panel-solid); border: 1px solid var(--line-strong); border-radius: 10px;
+    z-index: 99; margin-top: 5px; box-shadow: var(--shadow); display: none;
+  }
+  .op-dropdown-item {
+    padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--line);
+    font-weight: 600; text-align: left; color: var(--text); font-size: 14px;
+    transition: background .12s;
+  }
+  .op-dropdown-item:hover { background: color-mix(in srgb, var(--primary) 15%, transparent); }
+  .op-dropdown-item:last-child { border-bottom: none; }
+
   .cm-hint{ font-size:11.5px; color:var(--muted-2); margin-top:8px; line-height:1.5; }
   .cm-actions{ display:flex; gap:10px; margin-top:16px; }
   .cm-btn{ flex:1; padding:11px; border-radius:10px; font:inherit; font-size:14px; font-weight:700; cursor:pointer; border:1px solid var(--line-strong); transition:background .15s, border-color .15s; }
@@ -461,7 +477,13 @@
           </figure>
           <figure class="map-fig" style="margin-top:20px">
             <figcaption><b>Operation Karoonda</b> · Niakala area of operations</figcaption>
-            <svg viewBox="0 0 971 832" class="map-svg" role="img" xmlns="http://www.w3.org/2000/svg" style="font-family:Georgia,'Times New Roman',serif">
+            <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy" />
+          </figure>
+        </div>
+        <div class="map-view" data-view="svg" hidden>
+          <figure class="map-fig">
+            <figcaption><b>The Lombakka Region</b> · strategic overview</figcaption>
+            <svg viewBox="0 0 852 771" class="map-svg" role="img" xmlns="http://www.w3.org/2000/svg" style="font-family:Georgia,'Times New Roman',serif">
               <defs><clipPath id="ofr"><rect x="18" y="88" width="742" height="727" rx="4"/></clipPath></defs>
               <text x="24" y="44" font-size="25" font-weight="bold" fill="#3a2f25">Operation Karoonda - Niakala Area of Operations</text>
               <text x="26" y="72" font-size="14" fill="#9a8a72">Proposed control overlay · UN Mission for Lombakka · 10.2 × 10.2 km</text>
@@ -483,7 +505,7 @@
               <text x="418" y="296" text-anchor="end" font-size="11.5" fill="#6a6052">Grower Company</text>
               <g fill="#4f7d3f"><circle cx="152" cy="602" r="5"/><circle cx="205" cy="624" r="5"/><circle cx="515" cy="640" r="5"/><circle cx="525" cy="660" r="5"/><circle cx="470" cy="668" r="5"/><circle cx="47" cy="756" r="5"/><circle cx="225" cy="778" r="5"/><circle cx="415" cy="748" r="5"/><circle cx="620" cy="772" r="5"/><circle cx="548" cy="802" r="5"/></g>
               <g font-size="13" fill="#2e2820"><text x="164" y="606">Saheli</text><text x="217" y="628">Cock-Fights</text><text x="528" y="635">Eladio</text><text x="538" y="664">Tonny</text><text x="483" y="682">Farmer-Market</text><text x="59" y="760">Cordon</text><text x="237" y="782">Noroti</text><text x="403" y="744" text-anchor="end">Shake-Shake</text><text x="608" y="776" text-anchor="end">Slaughter-House</text><text x="536" y="806" text-anchor="end">Tiki</text></g>
-              <path d="M545 724 l11 9 -11 9 -11 -9 z" fill="#2f6fb0"/><text x="562" y="739" font-size="13.5" font-weight="bold" fill="#2a3f6a">FOB Karoonda</text>
+              <path d="M545 724 l11 9 -11 9 -11 -9 z" fill="#2f6fb0"/><text x="562" y="739" font-size="13.5" font-weight="bold" fill="#2a3f6a">FOB FOB Karoonda</text>
               <text x="790" y="110" font-size="16" font-weight="bold" fill="#3a2f25">Control</text>
               <g font-size="12.5" fill="#2e2820">
                 <g transform="translate(790,138)"><circle cx="6" r="7" fill="none" stroke="#b8841f" stroke-width="2.5"/><circle cx="6" r="2.6" fill="#c9912a"/><text x="22" y="4">Regional capital</text></g>
@@ -511,7 +533,7 @@
       <div class="ro-head">
         <div>
           <div class="ro-h-title">ROSTER</div>
-          <div class="ro-h-sub">All active operators · sorted by rank</div>
+          <div class="ro-h-sub">All active operators - sorted by rank</div>
         </div>
         <button class="x" id="rosterClose" aria-label="Close" style="position:static;width:34px;height:34px;border-radius:9px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:18px;cursor:pointer">✕</button>
       </div>
@@ -541,16 +563,16 @@
   <!-- ==================== CLAIM MODAL ==================== -->
   <!--
     Two-step flow:
-      Step 1 — show warning + endorsement check + discord-soon notice.
+      Step 1: show warning + endorsement check + discord-soon notice.
                 "I understand, proceed" advances to step 2.
-      Step 2 — name entry + submit.
+      Step 2: name entry + submit.
   -->
   <div id="claimBack">
     <div id="claimModal" role="dialog" aria-modal="true">
 
       <!-- STEP 1: Warning -->
       <div id="claimStep1">
-        <div class="cm-step-tag">Sign Up · Step 1 of 2</div>
+        <div class="cm-step-tag">Sign Up - Step 1 of 2</div>
         <div class="cm-role-title" id="claimRoleLabel"></div>
 
         <div class="warn-box">
@@ -558,7 +580,7 @@
           <ul>
             <li>Once you lock in a slot, you remain locked in for this operation.</li>
             <li>To be unassigned, a staff member must manually edit the roster.</li>
-            <li>After signing up, the page takes <strong>1–2 minutes</strong> to update — this is normal.</li>
+            <li>After signing up, the page takes <strong>1-2 minutes</strong> to update - this is normal.</li>
             <li>Only one person can hold each slot. If someone else signs up first, your claim will be rejected.</li>
           </ul>
         </div>
@@ -568,22 +590,28 @@
 
         <div class="discord-soon">
           <span class="ds-icon">🔗</span>
-          <span><strong>Discord login coming soon.</strong> For now, enter your exact roster name on the next screen.</span>
+          <span><strong>Discord login coming soon.</strong> For now, choose your exact roster name on the next screen.</span>
         </div>
 
         <div class="cm-step1-actions">
           <button class="cm-btn cancel" id="claimCancelStep1" type="button">Cancel</button>
-          <button class="cm-btn confirm" id="claimProceed" type="button">I understand — proceed</button>
+          <button class="cm-btn confirm" id="claimProceed" type="button">I understand - proceed</button>
         </div>
       </div>
 
       <!-- STEP 2: Name entry -->
       <div id="claimStep2">
         <button class="cm-back" id="claimBackStep" type="button">← Back</button>
-        <div class="cm-step-tag">Sign Up · Step 2 of 2</div>
+        <div class="cm-step-tag">Sign Up - Step 2 of 2</div>
         <div class="cm-role-title" id="claimRoleLabel2"></div>
         <label for="claimInput">Your name (exactly as it appears on the roster)</label>
-        <input id="claimInput" type="text" placeholder="e.g. Gunter" autocomplete="off" maxlength="48" />
+        
+        <!-- Filter Select Dropdown System Container -->
+        <div class="dropdown-container">
+          <input id="claimInput" type="text" placeholder="Type to search your name..." autocomplete="off" maxlength="48" />
+          <div id="operatorDropdown" class="op-dropdown-list"></div>
+        </div>
+
         <div class="cm-hint" id="claimHint">Your name must match the roster exactly. Case-sensitive.</div>
         <div class="cm-actions">
           <button class="cm-btn cancel" id="claimCancel" type="button">Cancel</button>
@@ -859,6 +887,7 @@ function render(roster){
   setupMusic(op);
   setupComingSoon(op);
   setupMap(op);
+  buildOperatorDropdown();
   $('#rosterOpen').onclick = openRoster;
 }
 
@@ -1118,6 +1147,7 @@ function openClaim(sectionKey, roleIndex, roleLabel, endorseType){
   $('#claimStatus').className = '';
   $('#claimConfirm').disabled = false;
   $('#claimHint').style.color = '';
+  $('#claimHint').textContent = 'Your name must match the roster exactly. Case-sensitive.';
 
   // show step 1, hide step 2
   $('#claimStep1').style.display = 'block';
@@ -1128,6 +1158,7 @@ function openClaim(sectionKey, roleIndex, roleLabel, endorseType){
 
 function closeClaim(){
   $('#claimBack').classList.remove('show');
+  $('#operatorDropdown').style.display = 'none';
   claimContext = null;
 }
 
@@ -1137,33 +1168,103 @@ function goToStep2(){
   setTimeout(()=> $('#claimInput').focus(), 80);
 }
 
-/* Live endorsement check as user types — just a warning, not a hard block
-   (server enforces). Keeps UX smooth while still informing them. */
-$('#claimInput').addEventListener('input', ()=>{
-  if(!claimContext || !claimContext.endorseType) return;
-  const name = $('#claimInput').value.trim();
-  if(!name) return;
-  const has = memberHasEndorsement(name, claimContext.endorseType);
+/* Generates dropdown scroll item DOM pieces directly out of the data roster maps */
+function buildOperatorDropdown(){
+  const container = $('#operatorDropdown');
+  if (!container) return;
+  const sortedNames = Object.keys(MEMBERS).filter(k => k !== '_comment').sort();
+  container.innerHTML = sortedNames.map(name => `<div class="op-dropdown-item" data-value="${esc(name)}">${esc(name)}</div>`).join('');
+  
+  container.querySelectorAll('.op-dropdown-item').forEach(item => {
+    item.addEventListener('mousedown', (e) => {
+      e.preventDefault(); // Stop input blur race condition triggers
+      const chosenName = item.dataset.value;
+      $('#claimInput').value = chosenName;
+      container.style.display = 'none';
+      checkLiveEndorsement(chosenName);
+    });
+  });
+}
+
+function checkLiveEndorsement(name){
+  if(!claimContext) return;
   const hint = $('#claimHint');
-  if(!has && MEMBERS[name]){
-    hint.style.color = '#e04949';
-    hint.textContent = `${name} does not have a ${claimContext.endorseType} on record. Your claim will be rejected.`;
-  } else if(has){
-    hint.style.color = '#36d07a';
-    hint.textContent = `Endorsement confirmed for ${name}.`;
-  } else {
+  if(!name){
     hint.style.color = '';
     hint.textContent = 'Your name must match the roster exactly. Case-sensitive.';
+    return;
   }
+  
+  if(!MEMBERS[name]){
+    hint.style.color = '#e04949';
+    hint.textContent = `"${name}" is not found on the active operator roster.`;
+    return;
+  }
+
+  if(claimContext.endorseType){
+    const has = memberHasEndorsement(name, claimContext.endorseType);
+    if(!has){
+      hint.style.color = '#e04949';
+      hint.textContent = `${name} does not have a ${claimContext.endorseType} on record. Your claim will be rejected.`;
+    } else {
+      hint.style.color = '#36d07a';
+      hint.textContent = `Endorsement confirmed for ${name}.`;
+    }
+  } else {
+    hint.style.color = '#36d07a';
+    hint.textContent = `Valid operator name selected.`;
+  }
+}
+
+/* Wire filtering dropdown toggles directly over text selection inputs */
+$('#claimInput').addEventListener('input', ()=>{
+  const val = $('#claimInput').value.trim();
+  checkLiveEndorsement(val);
+  
+  const container = $('#operatorDropdown');
+  const items = container.querySelectorAll('.op-dropdown-item');
+  let matchCount = 0;
+  
+  items.forEach(item => {
+    const isMatch = item.dataset.value.toLowerCase().includes(val.toLowerCase());
+    item.style.display = isMatch ? 'block' : 'none';
+    if (isMatch) matchCount++;
+  });
+  
+  container.style.display = matchCount > 0 ? 'block' : 'none';
+});
+
+$('#claimInput').addEventListener('focus', ()=>{
+  const val = $('#claimInput').value.trim();
+  const container = $('#operatorDropdown');
+  const items = container.querySelectorAll('.op-dropdown-item');
+  let matchCount = 0;
+  
+  items.forEach(item => {
+    const isMatch = item.dataset.value.toLowerCase().includes(val.toLowerCase());
+    item.style.display = isMatch ? 'block' : 'none';
+    if (isMatch) matchCount++;
+  });
+  
+  container.style.display = matchCount > 0 ? 'block' : 'none';
+});
+
+$('#claimInput').addEventListener('blur', ()=>{
+  setTimeout(() => {
+    $('#operatorDropdown').style.display = 'none';
+  }, 180);
 });
 
 async function submitClaim(){
   const name = $('#claimInput').value.trim();
   if(!name){ setClaimStatus('Enter your name first.','err'); return; }
 
-  /* Client-side endorsement pre-check.
-     If name is known locally AND endorsement is required AND they don't have it,
-     block early with a clear message. The server enforces this too. */
+  /* Enforce server validation guard rails locally. If input text does not match an explicit roster key, block submission. */
+  if(!MEMBERS[name]){
+    setClaimStatus('Access Denied: You must select a valid active operator name from the roster.', 'err');
+    return;
+  }
+
   if(claimContext.endorseType && MEMBERS[name]){
     if(!memberHasEndorsement(name, claimContext.endorseType)){
       setClaimStatus(
@@ -1227,7 +1328,7 @@ $('#claimInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitClai
       <h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2>
       <p>${esc(err.message)}</p>
       <p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files.
-      Run a tiny local server first — e.g. double-click <code>serve.ps1</code> — then open
+      Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open
       <code>http://localhost:8770</code>. On GitHub Pages it just works.</p>
     </div>`;
     console.error(err);
