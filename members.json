@@ -676,5 +676,25 @@
     },
     "endorsements": [],
     "leadership": null
+  },
+  "Mietsko": {
+    "discordId": "1310305215077158965",
+    "discordRank": "Recruit",
+    "avatar": "",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
   }
 }

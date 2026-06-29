@@ -30,7 +30,7 @@
     },
     {
       "role": "Signaller",
-      "member": null,
+      "member": "BadKarma",
       "endorsementRequired": true,
       "endorsementType": "JTAC Endorsement"
     }
@@ -57,7 +57,7 @@
         },
         {
           "role": "Grenadier",
-          "member": null
+          "member": "24pool1"
         },
         {
           "role": "LSW (Minimi)",
@@ -65,7 +65,7 @@
         },
         {
           "role": "LSW (Minimi)",
-          "member": null
+          "member": "AnimePanda"
         },
         {
           "role": "Rifleman",
@@ -98,7 +98,7 @@
         },
         {
           "role": "Asst. Anti-tank",
-          "member": null
+          "member": "Orter"
         },
         {
           "role": "LSW (Minimi)",
@@ -106,7 +106,7 @@
         },
         {
           "role": "LSW (Minimi)",
-          "member": null
+          "member": "Vain"
         },
         {
           "role": "Rifleman",
@@ -114,14 +114,12 @@
         },
         {
           "role": "Rifleman",
-          "member": null
+          "member": "Earthball"
         }
       ]
     },
     {
       "name": "CHARLIE",
-      "locked": true,
-      "lockedLabel": "13th Crash Division",
       "roles": [
         {
           "role": "Section Leader",
