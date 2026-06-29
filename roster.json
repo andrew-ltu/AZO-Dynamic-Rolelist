@@ -29,7 +29,7 @@
     },
     {
       "role": "Signaller",
-      "member": null,
+      "member": "BadKarma",
       "endorsementRequired": true,
       "endorsementType": "JTAC Endorsement"
     }
