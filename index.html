@@ -858,7 +858,7 @@ function render(roster){
           <div class="cd-unit"><span class="cd-num" data-cd="m">--</span><span class="cd-u">Mins</span></div>
           <div class="cd-unit"><span class="cd-num" data-cd="s">--</span><span class="cd-u">Secs</span></div>
         </div>
-        ${op.date?`<div class="cd-target">${esc(op.date)}</div>`:'<div class="cd-target">Saturday 5 July 2026 · 19:00 AEST</div>'}
+        ${op.date?`<div class="cd-target">${esc(op.date)}</div>`:'<div class="cd-target">Friday 4 July 2026 · 19:00 AEST</div>'}
       </div>
       <div class="divider"></div>
     </header>
@@ -899,8 +899,8 @@ function render(roster){
 }
 
 /* ---------- countdown ---------- */
-/* Sat 5 Jul 2026 19:00 AEST = UTC+10 → 09:00 UTC */
-const HARDCODED_COUNTDOWN = '2026-07-05T09:00:00Z';
+/* Sat 4 Jul 2026 19:00 AEST = UTC+10 → 09:00 UTC */
+const HARDCODED_COUNTDOWN = '2026-07-04T09:00:00Z';
 
 function setupCountdown(op){
   if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; }

@@ -11,7 +11,8 @@
     "feedbackForm": null,
     "comingSoonText": null,
     "music": "assets/music/anthem1.mp3",
-    "music2": "assets/music/anthem2.mp3"
+    "music2": "assets/music/anthem2.mp3",
+    "countdownTo": "2026-07-04T09:00:00Z"
   },
   "attended": [],
   "command": [
@@ -29,7 +30,7 @@
     },
     {
       "role": "Signaller",
-      "member": "BadKarma",
+      "member": null,
       "endorsementRequired": true,
       "endorsementType": "JTAC Endorsement"
     }
@@ -56,15 +57,15 @@
         },
         {
           "role": "Grenadier",
-          "member": "24pool1"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "AnimePanda"
+          "member": "Astolfo"
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Mietsko"
+          "member": null
         },
         {
           "role": "Rifleman",
@@ -97,15 +98,15 @@
         },
         {
           "role": "Asst. Anti-tank",
-          "member": "Orter"
-        },
-        {
-          "role": "LSW (Minimi)",
           "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Vain"
+          "member": "SlurpyGamer06_YT"
+        },
+        {
+          "role": "LSW (Minimi)",
+          "member": null
         },
         {
           "role": "Rifleman",
@@ -113,7 +114,7 @@
         },
         {
           "role": "Rifleman",
-          "member": "Earthball"
+          "member": null
         }
       ]
     },
@@ -124,23 +125,23 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": null,
-          "endorsementRequired": true,
-          "endorsementType": "Leadership Endorsement"
+          "member": "Cmdr. Garuda XIII"
         },
         {
           "role": "Asst. Section Leader",
-          "member": null,
-          "endorsementRequired": true,
-          "endorsementType": "Leadership Endorsement"
+          "member": null
+        },
+        {
+          "role": "Grenadier",
+          "member": "Snr Ctr. Unphayzable"
         },
         {
           "role": "Grenadier",
           "member": null
         },
         {
-          "role": "Grenadier",
-          "member": null
+          "role": "LSW (Minimi)",
+          "member": "SecOps. Dan"
         },
         {
           "role": "LSW (Minimi)",
@@ -193,6 +194,8 @@
     },
     {
       "name": "BLACKJACK",
+      "locked": true,
+      "lockedLabel": "External Crew: Blackjack",
       "roles": [
         {
           "role": "Pilot",
