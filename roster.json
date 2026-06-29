@@ -47,7 +47,7 @@
         },
         {
           "role": "Asst. Section Leader",
-          "member": null,
+          "member": "Vain",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
@@ -61,7 +61,7 @@
         },
         {
           "role": "LSW (Minimi)",
-          "member": null
+          "member": "Astolfo"
         },
         {
           "role": "LSW (Minimi)",
@@ -106,7 +106,7 @@
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Vain"
+          "member": null
         },
         {
           "role": "Rifleman",
