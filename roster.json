@@ -192,8 +192,6 @@
     },
     {
       "name": "BLACKJACK",
-      "locked": true,
-      "lockedLabel": "External Crew: Blackjack",
       "roles": [
         {
           "role": "Pilot",
