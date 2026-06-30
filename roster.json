@@ -114,7 +114,7 @@
         },
         {
           "role": "Rifleman",
-          "member": "Earthball"
+          "member": null
         }
       ]
     },
@@ -180,7 +180,7 @@
         },
         {
           "role": "Medic",
-          "member": null,
+          "member": "Earthball",
           "endorsementRequired": true,
           "endorsementType": "Medical Endorsement"
         }
