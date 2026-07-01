@@ -700,7 +700,7 @@
   "Gill": {
     "discordId": "173612996680089600",
     "discordRank": "Junior Operator",
-    "avatar": "",
+    "avatar": "assets/avatars/gill.png",
     "opsAttended": 2,
     "attendance": {
       "Apr": [
@@ -720,7 +720,7 @@
   "Xeonovaes": {
     "discordId": "1445639562302062696",
     "discordRank": "Recruit",
-    "avatar": "",
+    "avatar": "assets/avatars/xeonovaes.png",
     "opsAttended": 0,
     "attendance": {
       "Apr": [
