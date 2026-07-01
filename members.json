@@ -716,5 +716,25 @@
     },
     "endorsements": [],
     "leadership": null
+  },
+  "Xeonovaes": {
+    "discordId": "1445639562302062696",
+    "discordRank": "Recruit",
+    "avatar": "",
+    "opsAttended": 0,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
   }
 }
