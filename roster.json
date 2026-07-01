@@ -74,6 +74,10 @@
         {
           "role": "Rifleman",
           "member": "blueberet"
+        },
+        {
+          "role": "Rifleman",
+          "member": null
         }
       ]
     },
@@ -115,6 +119,10 @@
         {
           "role": "Rifleman",
           "member": "Terack"
+        },
+        {
+          "role": "Rifleman",
+          "member": null
         }
       ]
     },

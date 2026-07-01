@@ -696,5 +696,25 @@
     },
     "endorsements": [],
     "leadership": null
+  },
+  "Gill": {
+    "discordId": "173612996680089600",
+    "discordRank": "Junior Operator",
+    "avatar": "",
+    "opsAttended": 2,
+    "attendance": {
+      "Apr": [
+        false
+      ],
+      "May": [
+        false
+      ],
+      "Jun": [
+        false,
+        false
+      ]
+    },
+    "endorsements": [],
+    "leadership": null
   }
 }
