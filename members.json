@@ -704,10 +704,10 @@
     "opsAttended": 2,
     "attendance": {
       "Apr": [
-        false
+        true
       ],
       "May": [
-        false
+        true
       ],
       "Jun": [
         false,
