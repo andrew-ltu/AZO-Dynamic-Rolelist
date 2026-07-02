@@ -55,32 +55,33 @@ a{color:var(--primary-2);}
 
 /* ======================== SIDE PANEL ======================== */
 #sidePanel{
-  position:fixed;top:var(--banner-h);right:0;width:var(--sp-w);
+  position:fixed;top:var(--banner-h);left:0;width:var(--sp-w);
   height:calc(100vh - var(--banner-h));
   background:rgba(5,8,13,.98);
-  border-left:1px solid rgba(54,208,122,.12);
+  border-right:1px solid rgba(54,208,122,.18);
   backdrop-filter:blur(20px);
   z-index:60;display:flex;flex-direction:column;
-  transform:translateX(100%);
+  transform:translateX(-100%);
   transition:transform .28s cubic-bezier(.4,0,.2,1);
-  box-shadow:-16px 0 60px rgba(0,0,0,.75);
+  box-shadow:16px 0 60px rgba(0,0,0,.75);
 }
 #sidePanel.open{transform:translateX(0);}
 #spToggle{
-  position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:61;
-  width:22px;height:88px;
-  background:rgba(5,8,13,.92);
-  border:1px solid rgba(54,208,122,.22);border-right:none;
-  border-radius:7px 0 0 7px;
-  cursor:pointer;color:rgba(54,208,122,.6);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  transition:right .28s cubic-bezier(.4,0,.2,1),color .15s,background .15s;
+  position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:61;
+  width:34px;height:140px;
+  background:linear-gradient(180deg,rgba(5,10,18,.97),rgba(10,22,38,.97));
+  border:1px solid rgba(54,208,122,.38);border-left:none;
+  border-radius:0 10px 10px 0;
+  cursor:pointer;color:rgba(54,208,122,.85);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  transition:left .28s cubic-bezier(.4,0,.2,1),color .15s,background .15s,border-color .15s;
   padding:0;
+  box-shadow:4px 0 24px rgba(0,0,0,.5),inset -1px 0 0 rgba(54,208,122,.08);
 }
-#spToggle:hover{background:rgba(54,208,122,.08);color:rgba(54,208,122,.9);}
-body.sp-open #spToggle{right:var(--sp-w);color:#36d07a;}
-.sp-toggle-arrow{font-size:10px;line-height:1;}
-.sp-toggle-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;color:inherit;text-transform:uppercase;}
+#spToggle:hover{background:linear-gradient(180deg,rgba(10,28,48,.97),rgba(18,40,62,.97));color:#36d07a;border-color:rgba(54,208,122,.65);}
+body.sp-open #spToggle{left:var(--sp-w);color:#36d07a;border-color:rgba(54,208,122,.55);}
+.sp-toggle-arrow{font-size:13px;line-height:1;}
+.sp-toggle-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;writing-mode:vertical-rl;color:inherit;text-transform:uppercase;}
 
 /* Panel header */
 .sp-head{
@@ -369,13 +370,14 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .promo-note{font-size:11px;color:var(--muted-2);margin-top:7px;}
 
 /* ======================== MUSIC ======================== */
-#music{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;align-items:center;background:var(--panel);border:1px solid var(--line-strong);border-radius:999px;box-shadow:var(--shadow);overflow:hidden;}
-#music button{background:transparent;border:0;color:var(--text);cursor:pointer;padding:10px 15px;display:flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:12.5px;}
-#music .eq{display:inline-flex;gap:2px;height:13px;align-items:flex-end;}
-#music .eq i{width:3px;background:var(--primary-2);border-radius:2px;height:5px;}
+#music{position:fixed;right:20px;bottom:20px;z-index:40;display:flex;align-items:center;background:rgba(8,14,22,.95);border:1px solid var(--line-strong);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(54,208,122,.08);overflow:hidden;backdrop-filter:blur(10px);}
+#music button{background:transparent;border:0;color:var(--text);cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:10px;font:inherit;font-weight:700;font-size:14px;letter-spacing:.3px;}
+#music button:hover{color:#fff;}
+#music .eq{display:inline-flex;gap:3px;height:16px;align-items:flex-end;}
+#music .eq i{width:4px;background:var(--primary-2);border-radius:2px;height:6px;}
 #music.playing .eq i{animation:eq .9s ease-in-out infinite;}
 #music .eq i:nth-child(2){animation-delay:.15s;}#music .eq i:nth-child(3){animation-delay:.3s;}#music .eq i:nth-child(4){animation-delay:.45s;}
-@keyframes eq{0%,100%{height:4px;}50%{height:13px;}}
+@keyframes eq{0%,100%{height:4px;}50%{height:16px;}}
 
 /* ======================== COMING SOON OVERLAY ======================== */
 #comingSoon{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(180deg,rgba(5,8,14,.93),rgba(5,8,14,.98));backdrop-filter:blur(4px);}
@@ -490,30 +492,6 @@ footer b{color:var(--muted);}
       <span class="sp-nb-live"><span class="sp-live-dot"></span>LIVE</span>
     </button>
 
-    <!-- Campaign status widget -->
-    <div class="sp-campaign-widget">
-      <div class="sp-cw-op">
-        <div class="sp-cw-op-name">Op Karoonda I</div>
-        <div class="sp-cw-op-status complete">Complete</div>
-      </div>
-      <div class="sp-cw-supply">
-        <div class="sp-cw-row">
-          <span class="sp-cw-force aus">AUS</span>
-          <div class="sp-cw-bar-wrap"><div class="sp-cw-bar" style="--pct:95%;--col:#3d87d4;"></div></div>
-          <span class="sp-cw-pct">95% <span class="sp-cw-delta down">▼5%</span></span>
-        </div>
-        <div class="sp-cw-row">
-          <span class="sp-cw-force luf">LUF</span>
-          <div class="sp-cw-bar-wrap"><div class="sp-cw-bar" style="--pct:80%;--col:#d94040;"></div></div>
-          <span class="sp-cw-pct">80% <span class="sp-cw-delta down">▼20%</span></span>
-        </div>
-      </div>
-      <div class="sp-cw-op" style="margin-top:11px;padding-top:11px;border-top:1px solid rgba(100,160,210,.08);">
-        <div class="sp-cw-op-name">Op Karoonda II</div>
-        <div class="sp-cw-op-status upcoming">Upcoming</div>
-      </div>
-    </div>
-
     <div class="sp-divider"></div>
 
     <!-- PERSONNEL -->
@@ -569,21 +547,38 @@ footer b{color:var(--muted);}
     </div>
     <div class="map-body">
 
-      <!-- Lombakka Region image -->
-      <figure class="map-fig">
-        <figcaption><b>The Lombakka Region</b> · strategic overview</figcaption>
-        <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region" loading="lazy"
-          onerror="this.closest('figure').style.display='none'"/>
-      </figure>
+      <!-- Casualties — TOP, count up on open -->
+      <div class="map-intel-card" style="margin-bottom:16px;">
+        <div class="map-intel-title">Confirmed Casualties — Op Karoonda I</div>
+        <div class="cas-grid">
+          <div class="cas-card aus">
+            <div class="cas-force aus">Australian Forces</div>
+            <div class="cas-num aus" id="ausKia">0</div>
+            <div class="cas-label">KIA</div>
+          </div>
+          <div class="cas-card luf">
+            <div class="cas-force luf">LUF Forces</div>
+            <div class="cas-num luf" id="lufKia">0</div>
+            <div class="cas-label">KIA</div>
+          </div>
+        </div>
+      </div>
 
-      <!-- Karoonda AO image -->
-      <figure class="map-fig" style="margin-top:18px;">
-        <figcaption><b>Operation Karoonda</b> · Niakala area of operations</figcaption>
-        <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy"
-          onerror="this.closest('figure').style.display='none'"/>
-      </figure>
+      <!-- Maps side by side -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <figure class="map-fig" style="margin:0;">
+          <figcaption><b>Lombakka Region</b> · overview</figcaption>
+          <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region" loading="lazy"
+            onerror="this.closest('figure').style.display='none'" style="max-height:220px;object-fit:cover;"/>
+        </figure>
+        <figure class="map-fig" style="margin:0;">
+          <figcaption><b>Op Karoonda</b> · Niakala AO</figcaption>
+          <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy"
+            onerror="this.closest('figure').style.display='none'" style="max-height:220px;object-fit:cover;"/>
+        </figure>
+      </div>
 
-      <!-- Intel grid: supply + casualties -->
+      <!-- Intel grid: supply + campaign status -->
       <div class="map-intel-grid">
 
         <!-- Supply levels -->
@@ -591,9 +586,7 @@ footer b{color:var(--muted);}
           <div class="map-intel-title">Supply — Op Karoonda I</div>
           <table class="supply-table">
             <thead>
-              <tr>
-                <th>Force</th><th>Before</th><th>After</th><th>Δ</th>
-              </tr>
+              <tr><th>Force</th><th>Before</th><th>After</th><th>Δ</th></tr>
             </thead>
             <tbody>
               <tr>
@@ -612,27 +605,16 @@ footer b{color:var(--muted);}
           </table>
         </div>
 
-        <!-- Next op -->
-        <div class="map-intel-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;">
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;">Next Deployment</div>
-          <div style="font-family:'Oswald';font-size:18px;letter-spacing:1px;color:#fff;">Op Karoonda II</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);border-radius:5px;padding:4px 10px;">UPCOMING</div>
-        </div>
-
-        <!-- Casualties -->
-        <div class="map-intel-card span2">
-          <div class="map-intel-title">Confirmed Casualties — Op Karoonda I</div>
-          <div class="cas-grid">
-            <div class="cas-card aus">
-              <div class="cas-force aus">Australian Forces</div>
-              <div class="cas-num aus" id="ausKia">0</div>
-              <div class="cas-label">KIA</div>
-            </div>
-            <div class="cas-card luf">
-              <div class="cas-force luf">LUF Forces</div>
-              <div class="cas-num luf" id="lufKia">0</div>
-              <div class="cas-label">KIA</div>
-            </div>
+        <!-- Campaign status: Karoonda I + II -->
+        <div class="map-intel-card" style="display:flex;flex-direction:column;gap:10px;justify-content:center;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-family:'Oswald';font-size:15px;letter-spacing:.5px;color:#fff;">Op Karoonda I</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#36d07a;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.25);border-radius:4px;padding:3px 8px;">COMPLETE</div>
+          </div>
+          <div style="height:1px;background:rgba(100,160,210,.1);"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-family:'Oswald';font-size:15px;letter-spacing:.5px;color:#fff;">Op Karoonda II</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);border-radius:4px;padding:3px 8px;">UPCOMING</div>
           </div>
         </div>
 
@@ -1090,15 +1072,10 @@ function setupMusic(op){
   audio.volume=(typeof op.musicVolume==='number')?op.musicVolume:.15;loadIdx(curIdx);
   const setUI=pl=>{wrap.classList.toggle('playing',pl);lbl.textContent=pl?'Pause anthem':'Play anthem';};
   const start=()=>audio.play().then(()=>{setUI(true);return true;}).catch(()=>{setUI(false);return false;});
+  // Only play when user explicitly clicks — no autoplay
   btn.onclick=()=>{if(audio.paused)start();else{audio.pause();setUI(false);}};
   a1btn.onclick=()=>{loadIdx(0);start();};a2btn.onclick=()=>{loadIdx(1);start();};
   updateBtns();
-  start().then(ok=>{
-    if(ok)return;
-    const EV=['pointerdown','keydown','scroll','touchstart'];
-    const kick=()=>start().then(s=>{if(s)EV.forEach(e=>window.removeEventListener(e,kick));});
-    EV.forEach(e=>window.addEventListener(e,kick,{passive:true}));
-  });
 }
 
 /* ---------- coming soon takeover ---------- */
@@ -1153,7 +1130,7 @@ function closeMap(){$('#mapOverlay').classList.remove('show');}
 function spOpen(){
   $('#sidePanel').classList.add('open');
   document.body.classList.add('sp-open');
-  $('#spArrow').textContent='▶';
+  $('#spArrow').textContent='◀';
 }
 function spClose(){
   $('#sidePanel').classList.remove('open');
