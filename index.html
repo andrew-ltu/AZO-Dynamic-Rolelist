@@ -341,8 +341,8 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .modal-banner::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 7px,transparent 7px 14px);}
 .modal .x{position:absolute;top:11px;right:11px;z-index:3;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:17px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;}
 .modal .x:hover{background:var(--primary);}
-.modal-body{padding:0 22px 22px;margin-top:-42px;position:relative;}
-.modal .avatar{--s:84px;border-width:3px;box-shadow:0 6px 22px rgba(0,0,0,.55);}
+.modal-body{padding:0 22px 22px;margin-top:-32px;position:relative;}
+.modal .avatar{--s:64px;border-width:3px;box-shadow:0 6px 22px rgba(0,0,0,.55);}
 .modal h2{font-family:'Oswald';font-size:24px;margin:12px 0 2px;letter-spacing:.4px;}
 .rank-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-family:'Oswald';letter-spacing:1.5px;text-transform:uppercase;font-size:11.5px;font-weight:600;color:#fff;background:var(--primary);border:1px solid var(--line-strong);}
 .rank-socomd{background:linear-gradient(135deg,#1b2a46,#2e4c88);}
@@ -1001,7 +1001,7 @@ function openProfile(name){
     promoBlock=`<div class="promo-label"><span class="nxt">Next: <b style="color:var(--text)">${esc(p.nextName)}</b></span><span class="pct">${p.progress}%</span></div><div class="promo-track"><div class="promo-fill" data-w="${p.progress}" style="width:0"></div></div><div class="promo-note">${p.remaining} more op${p.remaining===1?'':'s'} to reach ${esc(p.nextName)} (needs ${p.T} total).</div>`;
   }
   $('#modalBody').innerHTML=`
-    ${avatarHTML(m,84)}
+    ${avatarHTML(m,64)}
     <h2>${esc(m.name)}</h2>
     <div><span class="rank-badge ${rankClass(m.discordRank)}">${esc(m.discordRank)}</span></div>
     <div class="badges">${leadBadge}${endorse}</div>
