@@ -179,33 +179,33 @@ body.sp-open #spToggle{left:var(--sp-w);color:#36d07a;border-color:rgba(54,208,1
 .sp-foot-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.25);text-align:center;}
 
 /* ======================== HEADER ======================== */
-header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
-.brand{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
+header.hero{text-align:center;padding:20px 16px 10px;position:relative;}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;}
 .logo{position:relative;display:inline-grid;width:var(--ls,60px);height:var(--ls,60px);flex:0 0 auto;}
 .logo-svg,.logo-img{grid-area:1/1;width:100%;height:100%;}
 .logo-svg{filter:drop-shadow(0 3px 10px rgba(0,0,0,.55));}
 .logo-img{object-fit:contain;border-radius:50%;}
-.wordmark{font-family:'Share Tech Mono',monospace;font-weight:400;letter-spacing:3px;font-size:13px;color:var(--muted);text-transform:uppercase;}
+.wordmark{font-family:'Share Tech Mono',monospace;font-weight:400;letter-spacing:2.5px;font-size:11px;color:var(--muted);text-transform:uppercase;}
 .wordmark b{color:var(--primary-2);}
-.op-title{font-family:'Oswald';font-weight:700;text-transform:uppercase;font-size:clamp(32px,5.5vw,62px);line-height:1.02;letter-spacing:1px;margin:4px 0 6px;background:linear-gradient(180deg,#fff 20%,var(--primary-2) 150%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-.op-meta{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;align-items:center;margin-top:10px;font-size:13.5px;}
-.op-meta .pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(12,18,26,.6);font-weight:600;letter-spacing:.4px;backdrop-filter:blur(4px);}
-.op-meta .pill .k{color:var(--muted-2);font-family:'Share Tech Mono',monospace;text-transform:uppercase;font-size:10px;letter-spacing:1.5px;}
+.op-title{font-family:'Oswald';font-weight:700;text-transform:uppercase;font-size:clamp(20px,3.2vw,32px);line-height:1.05;letter-spacing:.6px;margin:2px 0 4px;background:linear-gradient(180deg,#fff 20%,var(--primary-2) 150%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.op-meta{display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center;align-items:center;margin-top:4px;font-size:11.5px;}
+.op-meta .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(12,18,26,.6);font-weight:600;letter-spacing:.4px;backdrop-filter:blur(4px);}
+.op-meta .pill .k{color:var(--muted-2);font-family:'Share Tech Mono',monospace;text-transform:uppercase;font-size:9px;letter-spacing:1.5px;}
 .op-meta .pill .v{color:var(--text);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--primary-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--primary-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);}
 .status-live .status-dot,.pill-live .status-dot{background:#36d07a;box-shadow:0 0 0 3px rgba(54,208,122,.2);animation:pulse 1.8s infinite;}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.28);opacity:.7;}}
 
 /* Countdown */
-.countdown{margin:22px auto 0;}
-.cd-label{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:3px;font-size:11px;color:var(--muted);margin-bottom:10px;}
-.cd-units{display:flex;justify-content:center;gap:8px;}
-.cd-unit{min-width:72px;background:var(--panel);border:1px solid var(--line-strong);border-radius:11px;padding:12px 6px 9px;box-shadow:var(--shadow);}
-.cd-num{font-family:'Share Tech Mono',monospace;font-weight:400;font-size:clamp(24px,4.5vw,34px);line-height:1;color:#fff;display:block;font-variant-numeric:tabular-nums;}
-.cd-u{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-top:6px;display:block;}
-.cd-target{margin-top:12px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;font-size:11px;color:var(--primary-2);}
-.cd-live{font-family:'Oswald';text-transform:uppercase;letter-spacing:2px;font-size:clamp(16px,4vw,22px);color:#36d07a;padding:14px;}
-.divider{height:1px;max-width:720px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--line-strong),transparent);}
+.countdown{margin:10px auto 0;}
+.cd-label{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2.5px;font-size:9px;color:var(--muted);margin-bottom:5px;}
+.cd-units{display:flex;justify-content:center;gap:5px;}
+.cd-unit{min-width:44px;background:var(--panel);border:1px solid var(--line-strong);border-radius:8px;padding:6px 4px 4px;box-shadow:var(--shadow);}
+.cd-num{font-family:'Share Tech Mono',monospace;font-weight:400;font-size:clamp(15px,2.6vw,20px);line-height:1;color:#fff;display:block;font-variant-numeric:tabular-nums;}
+.cd-u{font-family:'Share Tech Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-top:3px;display:block;}
+.cd-target{margin-top:6px;font-family:'Share Tech Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;font-size:10px;color:var(--primary-2);}
+.cd-live{font-family:'Oswald';text-transform:uppercase;letter-spacing:2px;font-size:clamp(14px,3vw,18px);color:#36d07a;padding:8px;}
+.divider{height:1px;max-width:720px;margin:14px auto 0;background:linear-gradient(90deg,transparent,var(--line-strong),transparent);}
 
 /* ======================== COMMAND ======================== */
 .command{margin:30px auto 8px;max-width:640px;text-align:center;background:var(--panel);border:1px solid var(--line-strong);border-radius:var(--radius);padding:20px 20px 24px;box-shadow:var(--shadow);position:relative;}
@@ -919,7 +919,7 @@ function render(roster){
   $('#app').innerHTML=`
     <header class="hero">
       <div class="brand">
-        <span class="logo" style="--ls:60px">
+        <span class="logo" style="--ls:40px">
           <svg class="logo-svg" viewBox="0 0 100 100" aria-hidden="true"><use href="#azoEmblem"/></svg>
           <img class="logo-img" src="assets/logo.png" alt="AZO" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">
         </span>
@@ -927,9 +927,8 @@ function render(roster){
       </div>
       <div class="op-title">${esc(op.name||'Operation')}</div>
       <div class="op-meta">
-        <span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>
+        ${st.txt!=='Upcoming'?`<span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>`:''}
         ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
-        ${op.tier?`<span class="pill"><span class="k">Tier</span><span class="v">${esc(op.tier)}</span></span>`:''}
       </div>
       <div class="countdown" id="countdown">
         <div class="cd-label">Operation begins in</div>
