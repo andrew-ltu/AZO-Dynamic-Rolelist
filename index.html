@@ -61,6 +61,7 @@ a{color:var(--primary-2);}
   border-right:1px solid rgba(54,208,122,.18);
   backdrop-filter:blur(20px);
   z-index:60;display:flex;flex-direction:column;
+  overflow:hidden;
   transform:translateX(-100%);
   transition:transform .28s cubic-bezier(.4,0,.2,1);
   box-shadow:16px 0 60px rgba(0,0,0,.75);
@@ -77,9 +78,14 @@ a{color:var(--primary-2);}
   transition:left .28s cubic-bezier(.4,0,.2,1),color .15s,background .15s,border-color .15s;
   padding:0;
   box-shadow:4px 0 24px rgba(0,0,0,.5),inset -1px 0 0 rgba(54,208,122,.08);
+  animation:spToggleGlow 2.6s ease-in-out infinite;
 }
 #spToggle:hover{background:linear-gradient(180deg,rgba(10,28,48,.97),rgba(18,40,62,.97));color:#36d07a;border-color:rgba(54,208,122,.65);}
-body.sp-open #spToggle{left:var(--sp-w);color:#36d07a;border-color:rgba(54,208,122,.55);}
+body.sp-open #spToggle{left:var(--sp-w);color:#36d07a;border-color:rgba(54,208,122,.55);animation:none;}
+@keyframes spToggleGlow{
+  0%,100%{box-shadow:4px 0 24px rgba(0,0,0,.5),inset -1px 0 0 rgba(54,208,122,.08),0 0 6px rgba(54,208,122,.22),0 0 0 rgba(54,208,122,0);border-color:rgba(54,208,122,.38);}
+  50%{box-shadow:4px 0 24px rgba(0,0,0,.5),inset -1px 0 0 rgba(54,208,122,.08),0 0 20px rgba(54,208,122,.75),0 0 5px rgba(54,208,122,.5);border-color:rgba(54,208,122,.75);}
+}
 .sp-toggle-arrow{font-size:13px;line-height:1;}
 .sp-toggle-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;writing-mode:vertical-rl;color:inherit;text-transform:uppercase;}
 
@@ -247,27 +253,6 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .att-badge.att-no{background:rgba(200,64,58,.12);color:#d94040;border:1px solid rgba(200,64,58,.38);}
 
 /* ======================== AVATAR ======================== */
-.avatar{--s:42px;width:var(--s);height:var(--s);flex:0 0 auto;position:relative;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-family:'Oswald';font-weight:600;color:#fff;font-size:calc(var(--s)*0.38);background:hsl(var(--h,200),42%,22%);border:2px solid color-mix(in srgb,hsl(var(--h,200),42%,38%) 60%,transparent);}
-.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.avatar.empty{background:rgba(255,255,255,.04);color:var(--muted-2);border-style:dashed;border-color:var(--line-strong);}
-.avatar.empty::before{content:"+";font-size:calc(var(--s)*.55);color:var(--muted-2);}
-
-/* ======================== ATTENDANCE DOTS ======================== */
-.attend{margin-top:18px;}
-.attend .block-title{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-.attend .block-title .cnt{color:var(--primary-2);}
-.att-grid{display:flex;gap:5px;align-items:flex-end;}
-.att-col{flex:1 1 0;min-width:0;text-align:center;}
-.att-dots{display:flex;gap:3px;justify-content:center;align-items:center;min-height:13px;margin-bottom:5px;}
-.att-m{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}
-.att-empty .att-m{color:var(--muted-2);opacity:.6;}
-.opdot{width:12px;height:12px;border-radius:50%;background:var(--bad,#0a0f16);border:1px solid var(--line);}
-.opdot.yes{background:var(--primary-2);border-color:var(--primary);box-shadow:0 0 5px color-mix(in srgb,var(--primary) 50%,transparent);}
-.opdot.no{background:#0b0f15;border-color:rgba(200,64,58,.45);}
-.opdot.up{background:transparent;border-style:dashed;border-color:var(--line-strong);opacity:.6;}
-.ops-legend{display:flex;gap:12px;margin-top:10px;font-size:10px;color:var(--muted-2);flex-wrap:wrap;}
-.ops-legend span{display:inline-flex;align-items:center;gap:5px;}
-.ops-legend .opdot{width:10px;height:10px;}
 
 /* ======================== ROSTER (OPERATORS) ======================== */
 .roster-overlay{position:fixed;inset:0;z-index:56;display:none;padding:20px;background:rgba(3,6,11,.84);backdrop-filter:blur(8px);overflow-y:auto;}
@@ -292,9 +277,9 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .ro-card .ops i{font-style:normal;font-size:8px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.5px;}
 
 /* ======================== MAP OVERLAY ======================== */
-.map-overlay{position:fixed;inset:0;z-index:58;display:none;padding:20px;background:rgba(3,6,11,.88);backdrop-filter:blur(7px);overflow-y:auto;}
+.map-overlay{position:fixed;top:var(--banner-h);left:0;right:0;bottom:0;z-index:58;display:none;padding:20px;background:rgba(3,6,11,.88);backdrop-filter:blur(7px);overflow-y:auto;}
 .map-overlay.show{display:block;}
-.map-panel{max-width:720px;margin:0 auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.map-panel{max-width:960px;margin:0 auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
 .map-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line-strong);position:sticky;top:0;background:var(--panel-solid);z-index:2;}
 .map-title{font-family:'Oswald';letter-spacing:2px;text-transform:uppercase;font-size:17px;color:#fff;display:flex;align-items:center;gap:10px;}
 .map-title .map-live-pill{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#36d07a;background:rgba(54,208,122,.1);border:1px solid rgba(54,208,122,.25);border-radius:4px;padding:3px 7px;}
@@ -311,16 +296,28 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .map-intel-card.span2{grid-column:span 2;}
 .map-intel-title{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:9.5px;color:rgba(54,208,122,.6);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .map-intel-title::after{content:"";flex:1;height:1px;background:rgba(54,208,122,.12);}
-.supply-table{width:100%;border-collapse:collapse;font-size:12px;}
-.supply-table th{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);padding:3px 6px 7px;text-align:center;font-weight:400;}
-.supply-table th:first-child{text-align:left;padding-left:0;}
-.supply-table td{padding:5px 6px;color:var(--text);border-top:1px solid rgba(100,160,210,.07);}
-.supply-table td:first-child{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding-left:0;}
-.supply-force-aus{color:#3d87d4;}
-.supply-force-luf{color:#d94040;}
-.supply-val{text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;}
-.supply-delta{text-align:center;font-family:'Share Tech Mono',monospace;font-size:11px;}
-.supply-delta.down{color:#d94040;}
+.supply-bar-block{margin-bottom:14px;}
+.supply-bar-block:last-child{margin-bottom:0;}
+.supply-bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.supply-bar-label{font-family:'Share Tech Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;}
+.supply-bar-label.aus{color:#3d87d4;}
+.supply-bar-label.luf{color:#d94040;}
+.supply-bar-vals{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);}
+.supply-bar-vals .now{font-weight:700;color:var(--text);}
+.supply-bar-vals .delta{margin-left:5px;}
+.supply-bar-vals .delta.down{color:#d94040;}
+.supply-bar-track{height:10px;border-radius:999px;background:rgba(8,14,22,.9);overflow:hidden;border:1px solid var(--line);}
+.supply-bar-fill{height:100%;border-radius:999px;width:100%;transition:width .25s linear;}
+.supply-bar-fill.aus{background:linear-gradient(90deg,#2a68ab,#3d87d4);box-shadow:0 0 10px rgba(61,135,212,.45);}
+.supply-bar-fill.luf{background:linear-gradient(90deg,#a52e2a,#d94040);box-shadow:0 0 10px rgba(217,64,64,.45);}
+
+/* Territorial control */
+.terr-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid rgba(100,160,210,.07);}
+.terr-row:first-child{border-top:0;padding-top:0;}
+.terr-name{font-size:12.5px;color:var(--text);font-weight:600;}
+.terr-status{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid;transition:background .5s,border-color .5s,color .5s,box-shadow .5s;}
+.terr-status.contested{color:var(--amber);background:rgba(240,180,41,.1);border-color:rgba(240,180,41,.32);}
+.terr-status.luf-occupied{color:#ff6b6b;background:rgba(217,64,64,.16);border-color:rgba(217,64,64,.55);box-shadow:0 0 10px rgba(217,64,64,.35);}
 
 /* Casualty counters */
 .cas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -459,7 +456,7 @@ footer b{color:var(--muted);}
 <!-- Side panel toggle -->
 <button id="spToggle" type="button" aria-label="Toggle command panel">
   <span class="sp-toggle-arrow" id="spArrow">▶</span>
-  <span class="sp-toggle-text">CMD</span>
+  <span class="sp-toggle-text">NEW</span>
 </button>
 
 <!-- Side panel -->
@@ -564,45 +561,28 @@ footer b{color:var(--muted);}
         </div>
       </div>
 
-      <!-- Maps side by side -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-        <figure class="map-fig" style="margin:0;">
-          <figcaption><b>Lombakka Region</b> · overview</figcaption>
-          <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region" loading="lazy"
-            onerror="this.closest('figure').style.display='none'" style="max-height:220px;object-fit:cover;"/>
-        </figure>
-        <figure class="map-fig" style="margin:0;">
-          <figcaption><b>Op Karoonda</b> · Niakala AO</figcaption>
-          <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy"
-            onerror="this.closest('figure').style.display='none'" style="max-height:220px;object-fit:cover;"/>
-        </figure>
-      </div>
+      <!-- Intel grid: supply + campaign status + territorial control — ABOVE the maps -->
+      <div class="map-intel-grid" style="margin-top:0;margin-bottom:16px;">
 
-      <!-- Intel grid: supply + campaign status -->
-      <div class="map-intel-grid">
-
-        <!-- Supply levels -->
+        <!-- Supply levels (animated bars, ticks down on open) -->
         <div class="map-intel-card">
           <div class="map-intel-title">Supply — Op Karoonda I</div>
-          <table class="supply-table">
-            <thead>
-              <tr><th>Force</th><th>Before</th><th>After</th><th>Δ</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="supply-force-aus">AUS</td>
-                <td class="supply-val">100%</td>
-                <td class="supply-val">95%</td>
-                <td class="supply-delta down">▼5%</td>
-              </tr>
-              <tr>
-                <td class="supply-force-luf">LUF</td>
-                <td class="supply-val">100%</td>
-                <td class="supply-val">80%</td>
-                <td class="supply-delta down">▼20%</td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div class="supply-bar-block">
+            <div class="supply-bar-top">
+              <span class="supply-bar-label aus">AUS</span>
+              <span class="supply-bar-vals"><span class="now" id="ausSupplyVal">100%</span><span class="delta down" id="ausSupplyDelta"></span></span>
+            </div>
+            <div class="supply-bar-track"><div class="supply-bar-fill aus" id="ausSupplyBar" style="width:100%;"></div></div>
+          </div>
+
+          <div class="supply-bar-block">
+            <div class="supply-bar-top">
+              <span class="supply-bar-label luf">LUF</span>
+              <span class="supply-bar-vals"><span class="now" id="lufSupplyVal">100%</span><span class="delta down" id="lufSupplyDelta"></span></span>
+            </div>
+            <div class="supply-bar-track"><div class="supply-bar-fill luf" id="lufSupplyBar" style="width:100%;"></div></div>
+          </div>
         </div>
 
         <!-- Campaign status: Karoonda I + II -->
@@ -618,6 +598,37 @@ footer b{color:var(--muted);}
           </div>
         </div>
 
+        <!-- Territorial control — flips contested → LUF occupied on open, like the casualty ticker -->
+        <div class="map-intel-card span2">
+          <div class="map-intel-title">Territorial Control — Post Op Karoonda I</div>
+          <div class="terr-row">
+            <div class="terr-name">Swaly Town</div>
+            <div class="terr-status contested" id="terrSwaly">Contested</div>
+          </div>
+          <div class="terr-row">
+            <div class="terr-name">Cattle Ranch</div>
+            <div class="terr-status contested" id="terrCattle">Contested</div>
+          </div>
+          <div class="terr-row">
+            <div class="terr-name">Duey</div>
+            <div class="terr-status contested" id="terrDuey">Contested</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Maps side by side — bigger -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <figure class="map-fig" style="margin:0;">
+          <figcaption><b>Lombakka Region</b> · overview</figcaption>
+          <img class="map-img" src="assets/campaign-map-region.png" alt="The Lombakka Region" loading="lazy"
+            onerror="this.closest('figure').style.display='none'" style="max-height:400px;object-fit:contain;background:rgba(0,0,0,.25);"/>
+        </figure>
+        <figure class="map-fig" style="margin:0;">
+          <figcaption><b>Op Karoonda</b> · Niakala AO</figcaption>
+          <img class="map-img" src="assets/campaign-map-operation.png" alt="Operation Karoonda AO" loading="lazy"
+            onerror="this.closest('figure').style.display='none'" style="max-height:400px;object-fit:contain;background:rgba(0,0,0,.25);"/>
+        </figure>
       </div>
     </div>
   </div>
@@ -741,8 +752,6 @@ const ATT_MONTHS = [
   {m:'Jul',done:0,up:0},{m:'Aug',done:0,up:0},{m:'Sep',done:0,up:0},
   {m:'Oct',done:0,up:0},{m:'Nov',done:0,up:0},{m:'Dec',done:0,up:0}
 ];
-const OPS_SO_FAR = ATT_MONTHS.reduce((n,mo)=>n+mo.done,0);
-const OP_NAME_BY_INDEX = {0:'Emerald Veil pt 1',[OPS_SO_FAR-1]:'Emerald Veil pt 2'};
 
 let MEMBERS = {};
 let countdownTimer = null;
@@ -810,29 +819,6 @@ function memberHasEndorsement(memberName,endorsementType){
   const arr=Array.isArray(m.endorsements)?m.endorsements:[];
   const needle=endorsementType.toLowerCase();
   return arr.some(e=>e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
-}
-
-/* ---------- attendance strip ---------- */
-function attendanceStrip(m){
-  let attended=0;
-  let doneIdx=0;
-  const cols=ATT_MONTHS.map(mo=>{
-    const raw=m.attendance[mo.m];
-    const arr=Array.isArray(raw)?raw:(raw?[true]:[]);
-    let dots='';
-    for(let i=0;i<mo.done;i++){
-      const went=!!arr[i];
-      if(went)attended++;
-      const opName=OP_NAME_BY_INDEX[doneIdx];
-      const title=opName?` title="${esc(opName)}"` :'';
-      dots+=`<span class="opdot ${went?'yes':'no'}"${title}></span>`;
-      doneIdx++;
-    }
-    for(let i=0;i<mo.up;i++){dots+=`<span class="opdot up"></span>`;}
-    const empty=(mo.done+mo.up)===0;
-    return `<div class="att-col${empty?' att-empty':''}"><div class="att-dots">${dots}</div><div class="att-m">${mo.m}</div></div>`;
-  }).join('');
-  return{cols,attended};
 }
 
 /* ---------- slot HTML ---------- */
@@ -1014,26 +1000,16 @@ function openProfile(name){
   } else {
     promoBlock=`<div class="promo-label"><span class="nxt">Next: <b style="color:var(--text)">${esc(p.nextName)}</b></span><span class="pct">${p.progress}%</span></div><div class="promo-track"><div class="promo-fill" data-w="${p.progress}" style="width:0"></div></div><div class="promo-note">${p.remaining} more op${p.remaining===1?'':'s'} to reach ${esc(p.nextName)} (needs ${p.T} total).</div>`;
   }
-  const attData=attendanceStrip(m);
   $('#modalBody').innerHTML=`
     ${avatarHTML(m,84)}
     <h2>${esc(m.name)}</h2>
     <div><span class="rank-badge ${rankClass(m.discordRank)}">${esc(m.discordRank)}</span></div>
     <div class="badges">${leadBadge}${endorse}</div>
     <div class="stat-row">
-      <div class="stat"><div class="big">${attData.attended}</div><div class="lbl">Ops 2026</div></div>
+      <div class="stat"><div class="big">${m.opsAttended}</div><div class="lbl">Ops 2026</div></div>
       <div class="stat"><div class="big">${m.endorsements.length}</div><div class="lbl">Endorsements</div></div>
     </div>
-    ${promoBlock}
-    <div class="attend">
-      <div class="block-title"><span>Attendance · 2026</span><span class="cnt">${attData.attended}/${OPS_SO_FAR} ops so far</span></div>
-      <div class="att-grid">${attData.cols}</div>
-      <div class="ops-legend">
-        <span><span class="opdot yes"></span>Attended</span>
-        <span><span class="opdot no"></span>Missed</span>
-        <span><span class="opdot up"></span>Upcoming</span>
-      </div>
-    </div>`;
+    ${promoBlock}`;
   $('#modalBack').classList.add('show');
   requestAnimationFrame(()=>{const f=$('.promo-fill[data-w]');if(f)f.style.width=f.dataset.w+'%';});
 }
@@ -1109,18 +1085,72 @@ function countUp(el,target,duration){
   requestAnimationFrame(step);
 }
 
+function countDownPercent(numEl,barEl,from,to,duration){
+  if(!numEl||!barEl)return;
+  numEl.textContent=from+'%';
+  barEl.style.width=from+'%';
+  let startTime=null;
+  const step=(ts)=>{
+    if(!startTime)startTime=ts;
+    const progress=Math.min((ts-startTime)/duration,1);
+    const ease=1-Math.pow(1-progress,3);
+    const val=Math.round(from-(from-to)*ease);
+    numEl.textContent=val+'%';
+    barEl.style.width=val+'%';
+    if(progress<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function flipTerritory(sel,delay){
+  setTimeout(()=>{
+    const el=$(sel);
+    if(!el)return;
+    el.classList.remove('contested');
+    el.classList.add('luf-occupied');
+    el.textContent='LUF Occupied';
+  },delay);
+}
+
 function openMap(){
   casAnimDone=false;
   $('#mapOverlay').classList.add('show');
-  // Reset counters then animate
+  // Reset casualty counters
   const aus=$('#ausKia'),luf=$('#lufKia');
   if(aus)aus.textContent='0';
   if(luf)luf.textContent='0';
+
+  // Reset supply bars
+  const ausBar=$('#ausSupplyBar'),lufBar=$('#lufSupplyBar');
+  const ausVal=$('#ausSupplyVal'),lufVal=$('#lufSupplyVal');
+  const ausDelta=$('#ausSupplyDelta'),lufDelta=$('#lufSupplyDelta');
+  if(ausBar)ausBar.style.width='100%';
+  if(lufBar)lufBar.style.width='100%';
+  if(ausVal)ausVal.textContent='100%';
+  if(lufVal)lufVal.textContent='100%';
+  if(ausDelta)ausDelta.textContent='';
+  if(lufDelta)lufDelta.textContent='';
+
+  // Reset territorial control rows
+  ['#terrSwaly','#terrCattle','#terrDuey'].forEach(sel=>{
+    const el=$(sel);
+    if(el){el.classList.remove('luf-occupied');el.classList.add('contested');el.textContent='Contested';}
+  });
+
   setTimeout(()=>{
     if(!casAnimDone){
       casAnimDone=true;
       countUp($('#ausKia'),17,1800);
-      countUp($('#lufKia'),49,2400);
+      countUp($('#lufKia'),124,2400);
+      countDownPercent(ausVal,ausBar,100,95,1600);
+      countDownPercent(lufVal,lufBar,100,80,1600);
+      setTimeout(()=>{
+        if(ausDelta)ausDelta.textContent=' ▼5%';
+        if(lufDelta)lufDelta.textContent=' ▼20%';
+      },1650);
+      flipTerritory('#terrSwaly',1900);
+      flipTerritory('#terrCattle',2300);
+      flipTerritory('#terrDuey',2700);
     }
   },350);
 }
