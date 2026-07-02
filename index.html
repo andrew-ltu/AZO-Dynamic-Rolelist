@@ -644,13 +644,6 @@ const RANK_LADDER    = ['Recruit', 'Junior Operator', 'Operator', 'Senior Operat
 const RANK_THRESHOLD = { 'Junior Operator':1, 'Operator':6, 'Senior Operator':14 };
 const RANK_SORT      = { 'SOCOMD':0, 'Senior Operator':1, 'Operator':2, 'Junior Operator':3, 'Recruit':4 };
 
-const ATT_MONTHS = [
-  { m:'Apr', done:1, up:0 }, { m:'May', done:1, up:0 }, { m:'Jun', done:2, up:0 },
-  { m:'Jul', done:0, up:0 }, { m:'Aug', done:0, up:0 }, { m:'Sep', done:0, up:0 },
-  { m:'Oct', done:0, up:0 }, { m:'Nov', done:0, up:0 }, { m:'Dec', done:0, up:0 }
-];
-const OPS_SO_FAR = ATT_MONTHS.reduce((a,b)=>a+b.done,0);
-
 let MEMBERS = {};
 let countdownTimer = null;
 const $ = (s,el=document)=>el.querySelector(s);
@@ -668,19 +661,11 @@ const rankClass = r => 'rank-'+r.toLowerCase().replace(/[^a-z0-9]+/g,'-');
 
 function member(name){
   const m = MEMBERS[name] || {};
-  const attendance = m.attendance || {};
-  let opsAttended = 0;
-  ATT_MONTHS.forEach(mo=>{
-    const raw = attendance[mo.m];
-    const arr = Array.isArray(raw) ? raw : (raw ? [true] : []);
-    for(let i=0;i<mo.done;i++){ if(arr[i]) opsAttended++; }
-  });
   return {
     name,
     avatar: m.avatar || '',
-    opsAttended,
+    opsAttended: m.opsAttended || 0,
     discordRank: m.discordRank || 'Recruit',
-    attendance,
     endorsements: Array.isArray(m.endorsements) ? m.endorsements : [],
     leadership: m.leadership || null
   };
@@ -923,35 +908,12 @@ function setupCountdown(op){
   countdownTimer = setInterval(tick, 1000);
 }
 
-/* ---------- attendance ---------- */
-const OP_NAME_BY_INDEX = { 0: 'Emerald Veil pt 1', [OPS_SO_FAR-1]: 'Emerald Veil pt 2' };
-
-function attendanceStrip(m){
-  let attended = 0, doneIdx = 0;
-  const cols = ATT_MONTHS.map(mo=>{
-    const raw = m.attendance[mo.m];
-    const arr = Array.isArray(raw) ? raw : (raw ? [true] : []);
-    let dots = '';
-    for(let i=0;i<mo.done;i++){
-      const went = !!arr[i];
-      if(went) attended++;
-      const opName = OP_NAME_BY_INDEX[doneIdx];
-      const title = opName ? ` title="${esc(opName)}"` : '';
-      dots += `<span class="opdot ${went?'yes':'no'}"${title}></span>`;
-      doneIdx++;
-    }
-    for(let i=0;i<mo.up;i++){ dots += `<span class="opdot up"></span>`; }
-    const empty = (mo.done+mo.up)===0;
-    return `<div class="att-col${empty?' att-empty':''}"><div class="att-dots">${dots}</div><div class="att-m">${mo.m}</div></div>`;
-  }).join('');
-  return { cols, attended };
-}
+/* attendance tracking removed — opsAttended stored directly in members.json */
 
 /* ---------- profile modal ---------- */
 function openProfile(name){
   const m = member(name);
   const p = promotion(m.discordRank, m.opsAttended);
-  const att = attendanceStrip(m);
 
   const leadBadge = m.leadership==='senior'
     ? `<span class="badge lead-senior">★ Senior Leadership</span>`
