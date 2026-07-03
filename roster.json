@@ -21,18 +21,6 @@
       "member": "Sir Danger",
       "endorsementRequired": true,
       "endorsementType": "Leadership Endorsement"
-    },
-    {
-      "role": "Asst. Platoon Commander",
-      "member": null,
-      "endorsementRequired": true,
-      "endorsementType": "Leadership Endorsement"
-    },
-    {
-      "role": "Signaller",
-      "member": null,
-      "endorsementRequired": true,
-      "endorsementType": "JTAC Endorsement"
     }
   ],
   "sections": [
@@ -78,6 +66,14 @@
         {
           "role": "Rifleman",
           "member": "HiveMynd"
+        },
+        {
+          "role": "Rifleman",
+          "member": "The Raven"
+        },
+        {
+          "role": "Rifleman",
+          "member": null
         }
       ]
     },
@@ -123,6 +119,10 @@
         {
           "role": "Rifleman",
           "member": "Xeonovaes"
+        },
+        {
+          "role": "Rifleman",
+          "member": null
         }
       ]
     },
@@ -155,11 +155,11 @@
         },
         {
           "role": "Rifleman",
-          "member": null
+          "member": "Snr Ctr. Kenn"
         },
         {
           "role": "Rifleman",
-          "member": null
+          "member": "Snr Ctr. Boomer"
         }
       ]
     }
