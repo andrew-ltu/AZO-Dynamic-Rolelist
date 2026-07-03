@@ -245,7 +245,9 @@
     "discordRank": "Recruit",
     "avatar": "assets/avatars/crallers.png",
     "opsAttended": 0,
-    "endorsements": [],
+    "endorsements": [
+      "Medical"
+    ],
     "leadership": null
   },
   "blueberet": {
@@ -298,7 +300,7 @@
   "The Raven": {
     "discordId": "1062040553807675493",
     "discordRank": "Recruit",
-    "avatar": "",
+    "avatar": "assets/avatars/theraven.gif",
     "opsAttended": 0,
     "endorsements": [],
     "leadership": null
