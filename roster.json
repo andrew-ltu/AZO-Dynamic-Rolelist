@@ -20,6 +20,12 @@
       "role": "Platoon Commander",
       "member": "Sir Danger",
       "endorsementRequired": true,
+      "endorsementType": "JTAC Endorsement"
+    },
+        {
+      "role": "JTAC",
+      "member": null
+      "endorsementRequired": true,
       "endorsementType": "Leadership Endorsement"
     }
   ],
