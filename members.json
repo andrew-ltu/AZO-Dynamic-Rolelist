@@ -315,5 +315,13 @@
     "opsAttended": 0,
     "endorsements": [],
     "leadership": null
+  },
+    "Mitch": {
+    "discordId": "267212454633799680",
+    "discordRank": "Recruit",
+    "avatar": "assets/avatars/mitch.png",
+    "opsAttended": 0,
+    "endorsements": [],
+    "leadership": null
   }
 }
