@@ -106,7 +106,7 @@
         },
         {
           "role": "Rifleman",
-          "member": "Crallers"
+          "member": "Eartball"
         },
         {
           "role": "Rifleman",
@@ -184,7 +184,7 @@
         },
         {
           "role": "Medic",
-          "member": "Earthball",
+          "member": "Crallers",
           "endorsementRequired": true,
           "endorsementType": "Medical Endorsement"
         }
