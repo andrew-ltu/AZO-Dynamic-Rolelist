@@ -24,7 +24,7 @@
     },
     {
       "role": "JTAC",
-      "member": null
+      "member": "Jäger"
     }
   ],
   "sections": [
@@ -33,13 +33,13 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": "Malt",
+          "member": "Vain",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Asst. Section Leader",
-          "member": "Vain",
+          "member": "24pool1",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
@@ -49,7 +49,7 @@
         },
         {
           "role": "Grenadier",
-          "member": "24pool1"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
@@ -61,7 +61,7 @@
         },
         {
           "role": "Rifleman",
-          "member": "Velteck"
+          "member": null
         },
         {
           "role": "Rifleman",
