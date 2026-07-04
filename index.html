@@ -1180,19 +1180,10 @@ function openProfile(name){
     <div><span class="rank-badge ${rankClass(m.discordRank)}">${esc(m.discordRank)}</span></div>
     <div class="badges">${leadBadge}${endorse}</div>
     <div class="stat-row">
-      <div class="stat"><div class="big">${attData.attended}</div><div class="lbl">Ops 2026</div></div>
+      <div class="stat"><div class="big">${m.opsAttended}</div><div class="lbl">Ops 2026</div></div>
       <div class="stat"><div class="big">${m.endorsements.length}</div><div class="lbl">Endorsements</div></div>
     </div>
-    ${promoBlock}
-    <div class="attend">
-      <div class="block-title"><span>Attendance · 2026</span><span class="cnt">${attData.attended}/${OPS_SO_FAR} ops so far</span></div>
-      <div class="att-grid">${attData.cols}</div>
-      <div class="ops-legend">
-        <span><span class="opdot yes"></span>Attended</span>
-        <span><span class="opdot no"></span>Missed</span>
-        <span><span class="opdot up"></span>Upcoming</span>
-      </div>
-    </div>`;
+    ${promoBlock}`;
   $('#modalBack').classList.add('show');
   requestAnimationFrame(()=>{const f=$('.promo-fill[data-w]');if(f)f.style.width=f.dataset.w+'%';});
 }
