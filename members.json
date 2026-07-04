@@ -108,7 +108,8 @@
     "opsAttended": 3,
     "endorsements": [
       "Medical",
-      "Rotary"
+      "Rotary",
+      "Marksman"
     ],
     "leadership": "junior"
   },
@@ -160,7 +161,9 @@
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/24pool1.png",
     "opsAttended": 3,
-    "endorsements": [],
+    "endorsements": [
+      "Marksman"
+    ],
     "leadership": "junior"
   },
   "Misaka": {
@@ -308,7 +311,7 @@
   "Ronan1076": {
     "discordId": "307723802601586688",
     "discordRank": "Recruit",
-    "avatar": "",
+    "avatar": "assets/avatars/ronan1076.png",
     "opsAttended": 0,
     "endorsements": [],
     "leadership": null
