@@ -617,7 +617,7 @@ footer b{color:var(--muted);}
       <div style="position:relative;background:#1a2535;border-radius:12px;border:1px solid var(--line-strong);overflow:hidden;">
 
         <!-- Map legend -->
-        <div style="position:absolute;top:10px;right:10px;z-index:5;background:rgba(5,8,14,.88);border:1px solid rgba(100,160,210,.2);border-radius:8px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:9.5px;line-height:1;">
+        <div style="position:absolute;bottom:60px;right:10px;z-index:5;background:rgba(5,8,14,.88);border:1px solid rgba(100,160,210,.2);border-radius:8px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:9.5px;line-height:1;">
           <div style="color:rgba(100,160,210,.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Control</div>
           <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#e8c84a;border:1.5px solid #b8960a;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">Regional capital</span></div>
           <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#c0392b;border:1.5px solid #8b0000;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">LUF stronghold</span></div>
@@ -640,161 +640,137 @@ footer b{color:var(--muted);}
           <span id="sliderLabelAfter" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(200,80,60,.6);white-space:nowrap;flex-shrink:0;">After</span>
         </div>
 
-        <svg id="niakalaMap" viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:'Share Tech Mono',monospace;">
+                <svg id="niakalaMap" viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:'Share Tech Mono',monospace;">
           <defs>
-            <!-- Territory fill patterns -->
             <filter id="glow">
               <feGaussianBlur stdDeviation="3" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
+            <radialGradient id="terrainGrad" cx="40%" cy="45%" r="60%">
+              <stop offset="0%" stop-color="#243444"/>
+              <stop offset="100%" stop-color="#182230"/>
+            </radialGradient>
           </defs>
 
-          <!-- Background terrain -->
-          <rect width="700" height="520" fill="#1e2d3e"/>
-          <!-- Subtle terrain gradient -->
-          <radialGradient id="terrainGrad" cx="40%" cy="45%" r="60%">
-            <stop offset="0%" stop-color="#243444"/>
-            <stop offset="100%" stop-color="#182230"/>
-          </radialGradient>
           <rect width="700" height="520" fill="url(#terrainGrad)"/>
 
-          <!-- ===== TERRITORY ZONES (pre-op state) ===== -->
+          <!-- RIVER -->
+          <path d="M 148,33 C 181,80 205,116 189,155 C 172,195 219,234 266,270 C 308,302 285,359 302,416 C 311,459 321,491 321,491"
+            stroke="#4a88c8" stroke-width="2.2" fill="none" opacity="0.5"/>
 
-          <!-- Contested zone - middle band -->
+          <!-- MAIN ROAD (MSR) -->
+          <path d="M 27,479 C 87,409 148,316 183,236 C 219,187 323,152 391,139 C 492,117 592,139 655,146"
+            stroke="#6090cc" stroke-width="2.5" fill="none" opacity="0.7"/>
 
-          <!-- Govt/secure zone - lower half and east -->
+          <!-- FOB GROUND LINE (dashed) -->
+          <path d="M 110,401 C 191,446 285,452 360,458 C 426,463 464,463 497,461"
+            stroke="#6090cc" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.45"/>
 
-          <!-- ===== NORTH LOMBAKKA CEASEFIRE LINE ===== -->
-          <line x1="30" y1="58" x2="670" y2="48" stroke="#e8c84a" stroke-width="2" stroke-dasharray="10,5" opacity="0.9"/>
-          <text x="200" y="42" fill="#e8c84a" font-size="9" letter-spacing="2" text-anchor="middle" opacity="0.85">NORTH LOMBAKKA — CEASEFIRE LINE</text>
+          <!-- SETTLEMENTS -->
 
-          <!-- ===== MAIN ROAD (MSR) ===== -->
-          <!-- Vertical road north-south through centre -->
-          <path d="M 340 50 Q 330 150 320 250 Q 310 350 330 450" stroke="#6090cc" stroke-width="2.5" fill="none" opacity="0.7"/>
-          <!-- Road east -->
-          <path d="M 320 250 Q 420 240 520 230 Q 580 225 640 220" stroke="#6090cc" stroke-width="2" fill="none" opacity="0.6"/>
-          <!-- Road west branch -->
-          <path d="M 320 180 Q 220 190 140 200 Q 90 210 60 220" stroke="#6090cc" stroke-width="1.8" fill="none" opacity="0.55"/>
-
-          <!-- ===== FOB GROUND LINE (dashed) ===== -->
-          <path d="M 60 280 Q 150 320 250 350 Q 330 370 400 400 Q 460 420 510 430"
-            stroke="#6090cc" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.5"/>
-
-          <!-- ===== RIVER ===== -->
-          <path d="M 120 80 Q 180 130 200 190 Q 215 240 210 310 Q 205 370 220 430"
-            stroke="#4a88c8" stroke-width="2" fill="none" opacity="0.45" stroke-linejoin="round"/>
-
-          <!-- ===== LUF EXPANSION OVERLAY (hidden until animation) ===== -->
-          <!-- These appear after Op Karoonda I — LUF captures 3 contested areas -->
-
-          <!-- Expansion label arrows -->
-
-          <!-- ===== SETTLEMENTS ===== -->
-          <!-- REGIONAL CAPITAL: Shwasana (LUF stronghold / regional capital) -->
-          <circle id="circ_shwasana" cx="195" cy="168" r="9" fill="#e8c84a" stroke="#8b6900" stroke-width="2" style="transition:fill .8s,stroke .8s"/>
-          <text x="220" y="165" fill="#e8d870" font-size="10" font-weight="bold">Shwasana</text>
-          <text x="220" y="176" fill="#b0a040" font-size="8">Grower Company</text>
+          <!-- REGIONAL CAPITAL: Shwasana -->
+          <circle id="circ_shwasana" cx="389" cy="136" r="9" fill="#e8c84a" stroke="#8b6900" stroke-width="2" style="transition:fill .8s,stroke .8s"/>
+          <text x="402" y="132" fill="#e8d870" font-size="10" font-weight="bold">Shwasana</text>
+          <text x="402" y="143" fill="#b0a040" font-size="7.5">Grower Company</text>
 
           <!-- LUF Strongholds (red) -->
-          <circle cx="125" cy="105" r="6" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="100" y="99" fill="#e08070" font-size="9" text-anchor="middle">Wahala</text>
+          <circle cx="38" cy="67" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <text x="52" cy="67" fill="#e08070" font-size="9"><tspan x="52" y="71">Wahala</tspan></text>
 
-          <circle cx="90" cy="152" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="68" y="165" fill="#e08070" font-size="9" text-anchor="middle">Scrapyard</text>
+          <circle cx="164" cy="120" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <text x="154" y="113" fill="#e08070" font-size="9" text-anchor="end">Scrapyard</text>
 
-          <circle cx="152" cy="148" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="138" y="143" fill="#e08070" font-size="9">Dehiba</text>
+          <circle cx="139" cy="146" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <text x="129" y="139" fill="#e08070" font-size="9" text-anchor="end">Dehiba</text>
 
-          <circle cx="155" cy="183" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="115" y="193" fill="#e08070" font-size="9">Mike's Place</text>
+          <circle cx="240" cy="186" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <text x="228" y="197" fill="#e08070" font-size="9" text-anchor="end">Mike's Place</text>
 
-          <!-- Contested (orange) -->
-          <circle cx="290" cy="88" r="6" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
-          <text x="310" y="91" fill="#f0c060" font-size="9">Savala</text>
+          <!-- Contested (orange/yellow) -->
+          <circle cx="125" cy="27" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <text x="138" y="31" fill="#f0c060" font-size="9">Share-Croppers</text>
 
-          <circle id="circ_swop" cx="375" cy="138" r="5.5" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text x="388" y="141" fill="#f0c060" font-size="9">Swop'ly Town</text>
+          <circle id="circ_zavlofiti" cx="294" cy="37" r="6" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
+          <text x="305" y="33" fill="#e8d870" font-size="9.5" font-weight="bold">Zavlofiti</text>
 
-          <circle cx="197" cy="222" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
-          <text x="212" y="225" fill="#f0c060" font-size="9">Pala</text>
+          <circle cx="434" cy="90" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <text x="447" y="94" fill="#f0c060" font-size="9">Savala</text>
 
-          <circle cx="248" cy="204" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
-          <text x="240" y="197" fill="#f0c060" font-size="9">Fresh-Fish</text>
+          <circle id="circ_swop" cx="466" cy="143" r="5.5" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
+          <text x="478" y="147" fill="#f0c060" font-size="9">Swayly Town</text>
 
-          <circle cx="358" cy="174" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
-          <text x="363" y="170" fill="#f0c060" font-size="9">Kakaki</text>
+          <circle cx="349" cy="195" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <text x="337" y="191" fill="#f0c060" font-size="9" text-anchor="end">Kahaki</text>
 
-          <!-- ShareCroppers (near ceasefire line) -->
-          <circle cx="72" cy="68" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
-          <text x="77" y="65" fill="#f0c060" font-size="9">ShareCroppers</text>
+          <circle cx="266" cy="220" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <text x="256" y="213" fill="#f0c060" font-size="9" text-anchor="end">Fresh-Fish</text>
 
-          <!-- Zavlofiti (near ceasefire, regional) -->
-          <circle id="circ_zavlofiti" cx="310" cy="65" r="6" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text x="318" y="62" fill="#e8d870" font-size="9.5" font-weight="bold">Zavlofiti</text>
+          <circle cx="183" cy="235" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <text x="171" y="245" fill="#f0c060" font-size="9" text-anchor="end">Pala</text>
 
           <!-- Govt/Secure (green) -->
-          <circle cx="462" cy="148" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="472" y="151" fill="#70c870" font-size="9">Cattle Ranch</text>
+          <circle cx="651" cy="144" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="638" y="140" fill="#70c870" font-size="9" text-anchor="end">Cattle Ranch</text>
 
-          <circle cx="532" cy="170" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="542" y="173" fill="#70c870" font-size="9">Duey</text>
+          <circle cx="683" cy="160" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="671" y="155" fill="#70c870" font-size="9" text-anchor="end">Duey</text>
 
-          <circle cx="278" cy="245" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="288" y="248" fill="#70c870" font-size="9">Fantasi</text>
+          <circle cx="353" cy="239" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="365" y="243" fill="#70c870" font-size="9">Fantasi</text>
 
-          <circle cx="298" cy="270" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="308" y="273" fill="#70c870" font-size="9">Chiliti</text>
+          <circle cx="428" cy="255" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="440" y="259" fill="#70c870" font-size="9">Chihiti</text>
 
-          <circle cx="265" cy="295" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="275" y="298" fill="#70c870" font-size="9">Binbi</text>
+          <circle cx="432" cy="292" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="444" y="296" fill="#70c870" font-size="9">Binbi</text>
 
-          <circle cx="118" cy="310" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="128" y="313" fill="#70c870" font-size="9">Saheli</text>
+          <circle cx="126" cy="368" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="138" y="372" fill="#70c870" font-size="9">Saheli</text>
 
-          <circle cx="143" cy="330" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="153" y="333" fill="#70c870" font-size="9">Cock-Fight</text>
+          <circle cx="176" cy="383" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="188" y="387" fill="#70c870" font-size="9">Cock-Fights</text>
 
-          <circle cx="285" cy="370" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="295" y="373" fill="#70c870" font-size="9">Eladio</text>
+          <circle cx="469" cy="395" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="481" y="399" fill="#70c870" font-size="9">Eladio</text>
 
-          <circle cx="295" cy="390" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="305" y="393" fill="#70c870" font-size="9">Tommy</text>
+          <circle cx="478" cy="409" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="466" y="422" fill="#70c870" font-size="9" text-anchor="end">Tonny</text>
 
-          <circle cx="260" cy="408" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="270" y="411" fill="#70c870" font-size="9">Farmer-Market</text>
+          <circle cx="426" cy="415" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="414" y="425" fill="#70c870" font-size="9" text-anchor="end">Farmer-Market</text>
 
-          <circle cx="105" cy="430" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="115" y="433" fill="#70c870" font-size="9">Cordon</text>
+          <circle cx="27" cy="478" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="39" y="482" fill="#70c870" font-size="9">Cordon</text>
 
-          <circle cx="170" cy="458" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="180" y="461" fill="#70c870" font-size="9">Shake-Shaka</text>
+          <circle cx="375" cy="472" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="363" y="465" fill="#70c870" font-size="9" text-anchor="end">Shake-Shake</text>
 
-          <circle cx="155" cy="476" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="165" y="479" fill="#70c870" font-size="9">Noroti</text>
+          <circle cx="195" cy="494" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="207" y="498" fill="#70c870" font-size="9">Noroti</text>
 
-          <circle cx="366" cy="435" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="376" y="438" fill="#70c870" font-size="9">Slaughter-House</text>
+          <circle cx="557" cy="489" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="545" y="482" fill="#70c870" font-size="9" text-anchor="end">Slaughter-House</text>
 
-          <circle cx="390" cy="460" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="400" y="463" fill="#70c870" font-size="9">Tiki</text>
+          <circle cx="500" cy="511" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <text x="512" y="515" fill="#70c870" font-size="9">Tiki</text>
 
-          <!-- ===== FOB KAROONDA (diamond) ===== -->
-          <rect x="399" y="412" width="16" height="16" rx="1" transform="rotate(45 407 420)"
+          <!-- FOB KAROONDA (diamond) -->
+          <rect x="489" y="447" width="16" height="16" rx="1" transform="rotate(45 497 455)"
             fill="#3a6abf" stroke="#1a3a9f" stroke-width="2"/>
-          <text x="425" y="418" fill="#80a8ff" font-size="10" font-weight="bold">FOB Karoonda</text>
+          <text x="515" y="459" fill="#80a8ff" font-size="10" font-weight="bold">FOB Karoonda</text>
 
           <!-- North arrow -->
-          <g transform="translate(660,480)">
+          <g transform="translate(670,490)">
             <text x="0" y="-6" fill="rgba(200,220,240,.5)" font-size="10" text-anchor="middle">N</text>
             <text x="0" y="4" fill="rgba(200,220,240,.4)" font-size="7" text-anchor="middle">↑</text>
           </g>
 
-          <!-- Scale label -->
-          <g transform="translate(30,500)">
+          <!-- Scale -->
+          <g transform="translate(30,505)">
             <line x1="0" y1="0" x2="60" y2="0" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
             <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
             <line x1="60" y1="-4" x2="60" y2="4" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
-            <text x="30" y="-6" fill="rgba(200,220,240,.45)" font-size="8" text-anchor="middle">~5 km</text>
+            <text x="30" y="-8" fill="rgba(200,220,240,.45)" font-size="8" text-anchor="middle">~5 km</text>
           </g>
         </svg>
 
