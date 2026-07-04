@@ -322,4 +322,12 @@
     "endorsements": [],
     "leadership": null
   }
+  "Jäger": {
+    "discordId": "254553396546109440",
+    "discordRank": "Recruit",
+    "avatar": "assets/avatars/jager.png",
+    "opsAttended": 0,
+    "endorsements": [],
+    "leadership": null
+  }
 }
