@@ -23,6 +23,7 @@
     "endorsements": [
       "Fixed Wing",
       "Rotary",
+      "Marksman",
       "Crewman"
     ],
     "leadership": null
@@ -322,7 +323,7 @@
     "endorsements": [],
     "leadership": null
   },
-  "J\u00e4ger": {
+  "Jäger": {
     "discordId": "254553396546109440",
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/jger.png",
