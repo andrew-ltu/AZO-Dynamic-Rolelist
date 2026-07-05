@@ -3,7 +3,7 @@
   "Jag McMuffin": {
     "discordRank": "SOCOMD",
     "avatar": "assets/avatars/jagmcmuffin.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Medical",
       "Fixed Wing",
@@ -19,11 +19,10 @@
   "Sir Danger": {
     "discordRank": "SOCOMD",
     "avatar": "assets/avatars/sirdanger.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Fixed Wing",
       "Rotary",
-      "Marksman",
       "Crewman"
     ],
     "leadership": null
@@ -49,7 +48,7 @@
   "Monke": {
     "discordRank": "Senior Operator",
     "avatar": "assets/avatars/monke.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [
       "Demolition"
     ],
@@ -104,7 +103,7 @@
   "Zep": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/zep.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [
       "Medical",
       "Rotary",
@@ -159,7 +158,7 @@
   "24pool1": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/24pool1.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [
       "Marksman"
     ],
@@ -168,14 +167,14 @@
   "Misaka": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/misaka.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [],
     "leadership": "junior"
   },
   "Vain": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/vain.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [],
     "leadership": "junior"
   },
@@ -203,7 +202,7 @@
   "Terack": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/terack.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -236,17 +235,17 @@
     "leadership": null
   },
   "Earthball": {
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/earthball.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
   "Crallers": {
     "discordId": "179421557163163650",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/crallers.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [
       "Medical"
     ],
@@ -254,17 +253,17 @@
   },
   "blueberet": {
     "discordId": "678926904774098955",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/blueberet.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
   "Jon Taiwan": {
     "discordId": "1354384792153493597",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/jontaiwan.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
@@ -287,7 +286,7 @@
     "discordId": "173612996680089600",
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/gill.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "endorsements": [],
     "leadership": null
   },
@@ -301,9 +300,9 @@
   },
   "The Raven": {
     "discordId": "1062040553807675493",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/theraven.gif",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
@@ -323,7 +322,7 @@
     "endorsements": [],
     "leadership": null
   },
-  "Jäger": {
+  "J\u00e4ger": {
     "discordId": "254553396546109440",
     "discordRank": "Recruit",
     "avatar": "assets/avatars/jger.png",

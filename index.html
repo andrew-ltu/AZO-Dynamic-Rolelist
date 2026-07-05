@@ -536,6 +536,74 @@ footer b{color:var(--muted);}
       <span class="sp-nb-label">Op Feedback</span>
       <span class="sp-soon-badge">SOON</span>
     </button>
+
+    <div class="sp-divider"></div>
+
+    <!-- ARCHIVE -->
+    <div class="sp-sec-label">Archive</div>
+    <button class="sp-nav-btn" id="spPrevOpsBtn">
+      <span class="sp-nb-icon">📜</span>
+      <span class="sp-nb-label">Previous Ops Attendance</span>
+    </button>
+  </div>
+
+  <!-- Prev ops slide-in panel -->
+  <div id="spPrevOpsPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
+    <button class="sp-cs-back" id="spPrevOpsBack">← Back</button>
+    <div style="flex:1;overflow-y:auto;padding:0 0 20px;">
+      <!-- Op Karoonda II -->
+      <div style="padding:0 16px 16px;">
+        <div style="font-family:'Oswald';font-size:16px;letter-spacing:1px;color:#fff;margin-bottom:2px;">Op Karoonda II</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">4 JULY 2026 · NIAKALA AO</div>
+
+        <!-- Command -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Command</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+            <span style="font-size:12px;">Sir Danger</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+            <span style="font-size:12px;color:var(--muted);">Jäger</span><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
+        </div>
+
+        <!-- ALPHA -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Alpha</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          ${[['Vain','✓','yes'],['24pool1','✓','yes'],['Monke','✓','yes'],['Mietsko','✗','no'],['AnimePanda','✗','no'],['blueberet','✓','yes'],['HiveMynd','✗','no'],['The Raven','✓','yes']].map(([n,m,c])=>
+            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
+              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- BRAVO -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Bravo</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          ${[['Gunter','✗','no'],['Misaka','✓','yes'],['Jon Taiwan','✓','yes'],['Orter','✗','no'],['Mitch','✗','no'],['Gill','✓','yes'],['Earthball','✓','yes'],['Terack','✓','yes'],['Xeonovaes','✗','no']].map(([n,m,c])=>
+            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
+              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- MEDICAL -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Medical Team</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          ${[['Zep','✓','yes'],['GoGoBendy','✗','no'],['Spacecat82','✗','no'],['Crallers','✓','yes']].map(([n,m,c])=>
+            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
+              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- CHARLIE note -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Charlie (External)</div>
+        <div style="font-size:11px;color:var(--muted-2);line-height:1.5;">13th Crash Division — attendance tracked externally by their command.</div>
+
+        <!-- BLACKJACK note -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Blackjack (All attended ✓)</div>
+        <div style="font-size:11px;color:var(--muted-2);line-height:1.5;">1st Lt B. Hag · 2d Lt D.Mason · TSgt C. Weeb · SSgt J.Jabbzo</div>
+      </div>
+    </div>
   </div>
 
   <div class="sp-foot">
@@ -567,10 +635,10 @@ footer b{color:var(--muted);}
 
         <!-- Casualties -->
         <div class="map-intel-card">
-          <div class="map-intel-title">Casualties — Op Karoonda I</div>
+          <div class="map-intel-title">Casualties — Op Karoonda II</div>
           <div class="cas-grid">
             <div class="cas-card aus" style="padding:10px 8px;">
-              <div class="cas-force aus">AUS</div>
+              <div class="cas-force aus">ADF</div>
               <div class="cas-num aus" id="ausKia" style="font-size:28px;">0</div>
               <div class="cas-label">KIA</div>
             </div>
@@ -584,10 +652,10 @@ footer b{color:var(--muted);}
 
         <!-- Supply -->
         <div class="map-intel-card">
-          <div class="map-intel-title">Supply — Op Karoonda I</div>
+          <div class="map-intel-title">Supply — Op Karoonda II</div>
           <div class="supply-bars" style="margin-top:4px;">
             <div class="supply-bar-row">
-              <span class="supply-bar-label aus">AUS</span>
+              <span class="supply-bar-label aus">ADF</span>
               <div class="supply-bar-track"><div class="supply-bar-fill aus" id="ausSupplyBar" style="width:100%"></div></div>
               <span class="supply-bar-pct aus" id="ausSupplyPct">100%</span>
             </div>
@@ -608,7 +676,68 @@ footer b{color:var(--muted);}
           <div style="height:1px;background:rgba(100,160,210,.1);"></div>
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <span style="font-family:'Oswald';font-size:15px;color:#fff;">Op Karoonda II</span>
-            <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);border-radius:4px;padding:3px 8px;">UPCOMING</span>
+            <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#36d07a;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.25);border-radius:4px;padding:3px 8px;">COMPLETE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 10 Kills — Op Karoonda II -->
+      <div class="map-intel-card" style="margin-bottom:16px;">
+        <div class="map-intel-title">Top 10 Kills — Op Karoonda II</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;">
+          <div style="display:contents;">
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--amber);min-width:18px;">1</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">1st Lt B. Hag</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">50</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">2</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">Boomer</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">26</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">3</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">blueberet</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">15</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">4</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">Jon Taiwan</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">11</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">5</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">The Raven</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">10</span>
+            </div>
+          </div>
+          <div style="display:contents;">
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">6</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">Astolfo</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">8</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">7</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">Vain</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">8</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">8</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">[13th CD] Mad Dan</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">7</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">9</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">A. Vostov</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">7</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:18px;">10</span>
+              <span style="flex:1;font-size:12.5px;font-weight:600;">2ndLT. Tooko</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">6</span>
+            </div>
           </div>
         </div>
       </div>
@@ -894,11 +1023,12 @@ const RANK_SORT      = {'SOCOMD':0,'Senior Operator':1,'Operator':2,'Junior Oper
 
 const ATT_MONTHS = [
   {m:'Apr',done:1,up:0},{m:'May',done:1,up:0},{m:'Jun',done:2,up:0},
-  {m:'Jul',done:0,up:0},{m:'Aug',done:0,up:0},{m:'Sep',done:0,up:0},
+  {m:'Jul',done:1,up:0},{m:'Aug',done:0,up:0},{m:'Sep',done:0,up:0},
   {m:'Oct',done:0,up:0},{m:'Nov',done:0,up:0},{m:'Dec',done:0,up:0}
 ];
 const OPS_SO_FAR = ATT_MONTHS.reduce((n,mo)=>n+mo.done,0);
-const OP_NAME_BY_INDEX = {0:'Emerald Veil pt 1',[OPS_SO_FAR-1]:'Emerald Veil pt 2'};
+const OP_NAME_BY_INDEX = {0:'Emerald Veil pt 1',3:'Karoonda I',4:'Karoonda I (2nd)',5:'Karoonda II'};
+
 
 let MEMBERS = {};
 let countdownTimer = null;
@@ -1242,9 +1372,9 @@ function setupComingSoon(op){
   $('#csPeek').onclick=()=>cs.classList.remove('show');
 }
 
-/* Slider-driven before/after state */
+/* Slider-driven before/after state — Op Karoonda II */
 const MAP_BEFORE = { ausCas:0, lufCas:0, ausSupply:100, lufSupply:100 };
-const MAP_AFTER  = { ausCas:17, lufCas:132, ausSupply:95, lufSupply:80 };
+const MAP_AFTER  = { ausCas:13, lufCas:165, ausSupply:92, lufSupply:55 };
 
 function applyMapState(t){
   const lerp=(a,b,x)=>Math.round(a+(b-a)*x);
@@ -1333,7 +1463,8 @@ $('#spRosterBtn').onclick=()=>{ openRoster(); };
 $('#spCalendarBtn').onclick=()=>showSpComingSoon('Operations Calendar');
 $('#spTrainingBtn').onclick=()=>showSpComingSoon('Training');
 $('#spFeedbackBtn').onclick=()=>showSpComingSoon('Op Feedback Summary');
-$('#spComingSoonBack').onclick=()=>{ const el=$('#spComingSoonPanel'); if(el)el.style.transform='translateX(100%)'; };
+$('#spPrevOpsBtn').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(0)'; };
+$('#spPrevOpsBack').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(100%)'; };
 
 /* ---------- global click routing ---------- */
 document.addEventListener('click',e=>{

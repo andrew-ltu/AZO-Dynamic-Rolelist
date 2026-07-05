@@ -4,17 +4,32 @@
     "zeus": null,
     "tier": "Tier 2 Operation",
     "date": null,
-    "status": "upcoming",
+    "status": "complete",
     "theme": "tactical-blue",
     "background": "assets/backgrounds/operation-bg.png",
     "campaignMap": "assets/campaign-map.png",
-    "feedbackForm": null,
-    "comingSoonText": null,
+    "feedbackForm": "https://forms.gle/SPoTNHAT17HwALhm9",
+    "comingSoonText": "Operation Karoonda II is complete. Thanks for deploying with AZO.",
     "music": "assets/music/anthem1.mp3",
     "music2": "assets/music/anthem2.mp3",
     "countdownTo": "2026-07-04T09:00:00Z"
   },
-  "attended": [],
+  "attended": [
+    "24pool1",
+    "blueberet",
+    "Crallers",
+    "Earthball",
+    "Gill",
+    "Jag McMuffin",
+    "Jon Taiwan",
+    "Misaka",
+    "Monke",
+    "Sir Danger",
+    "Terack",
+    "The Raven",
+    "Vain",
+    "Zep"
+  ],
   "command": [
     {
       "role": "Platoon Commander",
@@ -24,7 +39,7 @@
     },
     {
       "role": "JTAC",
-      "member": "Jäger"
+      "member": "J\u00e4ger"
     }
   ],
   "sections": [
