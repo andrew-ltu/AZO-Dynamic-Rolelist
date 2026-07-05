@@ -526,11 +526,6 @@ footer b{color:var(--muted);}
       <span class="sp-nb-label">Ops Calendar</span>
       <span class="sp-soon-badge">SOON</span>
     </button>
-    <button class="sp-nav-btn" id="spTrainingBtn">
-      <span class="sp-nb-icon">🎯</span>
-      <span class="sp-nb-label">Training</span>
-      <span class="sp-soon-badge">SOON</span>
-    </button>
     <a class="sp-nav-btn" href="https://forms.gle/K4qAERXegng7jYiD6" target="_blank" rel="noopener" style="text-decoration:none;">
       <span class="sp-nb-icon">📋</span>
       <span class="sp-nb-label">Op Feedback</span>
@@ -550,6 +545,25 @@ footer b{color:var(--muted);}
       <span class="sp-nb-icon">📜</span>
       <span class="sp-nb-label">Previous Ops Attendance</span>
     </button>
+  </div>
+
+  <!-- Feedback slide-in panel -->
+  <div id="spFeedbackPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
+    <button class="sp-cs-back" id="spFeedbackBack">← Back</button>
+    <div style="flex:1;overflow-y:auto;padding:16px;">
+      <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;margin-bottom:4px;">Op Feedback</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:18px;">Share your experience and help improve future operations.</div>
+      <a href="https://forms.gle/K4qAERXegng7jYiD6" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);margin-bottom:10px;">
+        <span style="font-size:22px;">📝</span>
+        <div><div style="font-family:'Oswald';font-size:14px;color:#fff;">Op Creator Feedback</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate the operation, mission design &amp; Zeus</div></div>
+        <span style="margin-left:auto;color:var(--primary-2);">↗</span>
+      </a>
+      <a href="https://forms.gle/6iytmMj8NGTJFCN78" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);">
+        <span style="font-size:22px;">🪖</span>
+        <div><div style="font-family:'Oswald';font-size:14px;color:#fff;">Team Lead Feedback</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate your section leader &amp; leadership chain</div></div>
+        <span style="margin-left:auto;color:var(--primary-2);">↗</span>
+      </a>
+    </div>
   </div>
 
   <!-- Prev ops slide-in panel -->
@@ -909,38 +923,38 @@ footer b{color:var(--muted);}
           <text x="402" y="143" fill="#b0a040" font-size="7.5">Grower Company</text>
 
           <!-- LUF Strongholds (red) -->
-          <circle cx="38" cy="67" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <circle id="circ_Wahala" cx="38" cy="67" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
           <text x="52" cy="67" fill="#e08070" font-size="9"><tspan x="52" y="71">Wahala</tspan></text>
 
-          <circle cx="164" cy="120" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <circle id="circ_Scrapyard" cx="164" cy="120" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
           <text x="154" y="113" fill="#e08070" font-size="9" text-anchor="end">Scrapyard</text>
 
-          <circle cx="139" cy="146" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <circle id="circ_Dehiba" cx="139" cy="146" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
           <text x="129" y="139" fill="#e08070" font-size="9" text-anchor="end">Dehiba</text>
 
-          <circle cx="240" cy="186" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
+          <circle id="circ_MikesPlace" cx="240" cy="186" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
           <text x="228" y="197" fill="#e08070" font-size="9" text-anchor="end">Mike's Place</text>
 
           <!-- Contested (orange/yellow) -->
-          <circle cx="125" cy="27" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <circle id="circ_ShareCroppers" cx="125" cy="27" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
           <text x="138" y="31" fill="#f0c060" font-size="9">Share-Croppers</text>
 
           <circle id="circ_zavlofiti" cx="294" cy="37" r="6" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
           <text x="305" y="33" fill="#e8d870" font-size="9.5" font-weight="bold">Zavlofiti</text>
 
-          <circle cx="434" cy="90" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <circle id="circ_Savala" cx="434" cy="90" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
           <text x="447" y="94" fill="#f0c060" font-size="9">Savala</text>
 
           <circle id="circ_swop" cx="466" cy="143" r="5.5" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
           <text x="478" y="147" fill="#f0c060" font-size="9">Swayly Town</text>
 
-          <circle cx="349" cy="195" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <circle id="circ_Kahaki" cx="349" cy="195" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
           <text x="337" y="191" fill="#f0c060" font-size="9" text-anchor="end">Kahaki</text>
 
-          <circle cx="266" cy="220" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <circle id="circ_FreshFish" cx="266" cy="220" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
           <text x="256" y="213" fill="#f0c060" font-size="9" text-anchor="end">Fresh-Fish</text>
 
-          <circle cx="183" cy="235" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
+          <circle id="circ_Pala" cx="183" cy="235" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5"/>
           <text x="171" y="245" fill="#f0c060" font-size="9" text-anchor="end">Pala</text>
 
           <!-- Govt/Secure (green) -->
@@ -956,13 +970,13 @@ footer b{color:var(--muted);}
           <circle cx="428" cy="255" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
           <text x="440" y="259" fill="#70c870" font-size="9">Chihiti</text>
 
-          <circle cx="432" cy="292" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <circle id="circ_Binbi" cx="432" cy="292" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
           <text x="444" y="296" fill="#70c870" font-size="9">Binbi</text>
 
-          <circle cx="126" cy="368" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <circle id="circ_Saheli" cx="126" cy="368" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
           <text x="138" y="372" fill="#70c870" font-size="9">Saheli</text>
 
-          <circle cx="176" cy="383" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
+          <circle id="circ_CockFight" cx="176" cy="383" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
           <text x="188" y="387" fill="#70c870" font-size="9">Cock-Fights</text>
 
           <circle cx="469" cy="395" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
@@ -1376,7 +1390,7 @@ function setupCountdown(op){
   const el=$('#countdown');
   if(!el)return;
   // Hide countdown entirely for completed operations
-  if(op.status==='complete'){el.style.display='none';return;}
+  // countdown always shown
   const target=new Date(op.countdownTo||HARDCODED_COUNTDOWN).getTime();
   if(isNaN(target)){el.style.display='none';return;}
   const pad=n=>String(n).padStart(2,'0');
@@ -1498,12 +1512,32 @@ function applyMapState(t){
   if(ausPct) ausPct.textContent=ausS+'%';
   if(lufBar) lufBar.style.width=lufS+'%';
   if(lufPct) lufPct.textContent=lufS+'%';
-  const ids=['circ_shwasana','circ_zavlofiti','circ_swop'];
-  ids.forEach(id=>{
+
+  // Circles that become LUF stronghold (red) after op
+  const lufIds=['circ_shwasana','circ_zavlofiti','circ_swop',
+    'circ_Wahala','circ_Scrapyard','circ_Dehiba','circ_MikesPlace',
+    'circ_ShareCroppers','circ_Savala','circ_Kahaki','circ_FreshFish','circ_Pala'];
+  lufIds.forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
     if(t>=0.5){el.setAttribute('fill','#c0392b');el.setAttribute('stroke','#8b0000');}
-    else{el.setAttribute('fill','#e8c84a');el.setAttribute('stroke','#8b6900');}
+    else{
+      // Restore original colours
+      const origYellow=['circ_shwasana','circ_zavlofiti','circ_swop'];
+      const origOrange=['circ_Savala','circ_Kahaki','circ_FreshFish','circ_Pala','circ_ShareCroppers'];
+      if(origYellow.includes(id)){el.setAttribute('fill','#e8c84a');el.setAttribute('stroke','#8b6900');}
+      else if(origOrange.includes(id)){el.setAttribute('fill','#e8a030');el.setAttribute('stroke','#a06010');}
+      else{el.setAttribute('fill','#c0392b');el.setAttribute('stroke','#8b0000');}
+    }
+  });
+
+  // Circles that become contested (orange) after op
+  const contestedIds=['circ_Saheli','circ_CockFight','circ_Binbi'];
+  contestedIds.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(t>=0.5){el.setAttribute('fill','#e8a030');el.setAttribute('stroke','#a06010');}
+    else{el.setAttribute('fill','#3a8c3a');el.setAttribute('stroke','#1a5c1a');}
   });
   const before=$('#sliderLabelBefore'), after=$('#sliderLabelAfter');
   if(before) before.style.color = t<0.5 ? '#36d07a' : 'rgba(54,208,122,.35)';
@@ -1570,8 +1604,8 @@ $('#spClose').onclick=spClose;
 $('#spMapBtn').onclick=()=>{ spClose(); openMap(); };
 $('#spRosterBtn').onclick=()=>{ openRoster(); };
 $('#spCalendarBtn').onclick=()=>showSpComingSoon('Operations Calendar');
-$('#spTrainingBtn').onclick=()=>showSpComingSoon('Training');
-$('#spFeedbackBtn').onclick=()=>showSpComingSoon('Op Feedback Summary');
+$('#spFeedbackBtn').onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(0)'; };
+$('#spFeedbackBack').onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(100%)'; };
 $('#spPrevOpsBtn').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(0)'; };
 $('#spPrevOpsBack').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(100%)'; };
 
