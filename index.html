@@ -573,40 +573,60 @@ footer b{color:var(--muted);}
         <!-- ALPHA -->
         <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Alpha</div>
         <div style="display:flex;flex-direction:column;gap:3px;">
-          ${[['Vain','✓','yes'],['24pool1','✓','yes'],['Monke','✓','yes'],['Mietsko','✗','no'],['AnimePanda','✗','no'],['blueberet','✓','yes'],['HiveMynd','✗','no'],['The Raven','✓','yes']].map(([n,m,c])=>
-            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
-              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
-            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Vain</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">24pool1</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Monke</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;color:var(--muted);">Mietsko</span><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">AnimePanda</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">blueberet</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">HiveMynd</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;">The Raven</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
         </div>
 
         <!-- BRAVO -->
         <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Bravo</div>
         <div style="display:flex;flex-direction:column;gap:3px;">
-          ${[['Gunter','✗','no'],['Misaka','✓','yes'],['Jon Taiwan','✓','yes'],['Orter','✗','no'],['Mitch','✗','no'],['Gill','✓','yes'],['Earthball','✓','yes'],['Terack','✓','yes'],['Xeonovaes','✗','no']].map(([n,m,c])=>
-            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
-              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
-            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;color:var(--muted);">Gunter</span><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Misaka</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Jon Taiwan</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;color:var(--muted);">Orter</span><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;color:var(--muted);">Mitch</span><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Gill</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Earthball</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Terack</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;">Xeonovaes</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
         </div>
 
         <!-- MEDICAL -->
         <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Medical Team</div>
         <div style="display:flex;flex-direction:column;gap:3px;">
-          ${[['Zep','✓','yes'],['GoGoBendy','✗','no'],['Spacecat82','✗','no'],['Crallers','✓','yes']].map(([n,m,c])=>
-            `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-              <span style="font-size:12px;${c==='no'?'color:var(--muted);':''}">${n}</span>
-              <span style="color:${c==='yes'?'#36d07a':'#d94040'};font-size:14px;font-weight:700;">${m}</span>
-            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Zep</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">GoGoBendy</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Spacecat82</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;">Crallers</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
         </div>
 
-        <!-- CHARLIE note -->
-        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Charlie (External)</div>
-        <div style="font-size:11px;color:var(--muted-2);line-height:1.5;">13th Crash Division — attendance tracked externally by their command.</div>
+        <!-- CHARLIE -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Charlie (13th Crash Division — Joint Op)</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Cmdr. Garuda XIII</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Cmmsr Tooko</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Snr Ctr. Unphayzable</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Lt. Fracture</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">SecOps. Dan</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">QM. DODO</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">Snr Ctr. Kenn</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;">Snr Ctr. Boomer</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+        </div>
 
-        <!-- BLACKJACK note -->
-        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Blackjack (All attended ✓)</div>
-        <div style="font-size:11px;color:var(--muted-2);line-height:1.5;">1st Lt B. Hag · 2d Lt D.Mason · TSgt C. Weeb · SSgt J.Jabbzo</div>
+        <!-- BLACKJACK -->
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:10px 0 6px;">Blackjack</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">1st Lt B. Hag</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">2d Lt D. Mason</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="font-size:12px;">TSgt C. Weeb</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;"><span style="font-size:12px;">SSgt J. Jabbzo</span><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -640,7 +660,7 @@ footer b{color:var(--muted);}
 
         <!-- Casualties -->
         <div class="map-intel-card">
-          <div class="map-intel-title">Casualties — Op Karoonda II</div>
+          <div class="map-intel-title">Casualties — Campaign Total (K1 + K2)</div>
           <div class="cas-grid">
             <div class="cas-card aus" style="padding:10px 8px;">
               <div class="cas-force aus">ADF</div>
@@ -1273,6 +1293,8 @@ function setupCountdown(op){
   if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
   const el=$('#countdown');
   if(!el)return;
+  // Hide countdown entirely for completed operations
+  if(op.status==='complete'){el.style.display='none';return;}
   const target=new Date(op.countdownTo||HARDCODED_COUNTDOWN).getTime();
   if(isNaN(target)){el.style.display='none';return;}
   const pad=n=>String(n).padStart(2,'0');
@@ -1377,9 +1399,9 @@ function setupComingSoon(op){
   $('#csPeek').onclick=()=>cs.classList.remove('show');
 }
 
-/* Slider-driven before/after state — Op Karoonda II */
+/* Slider-driven before/after state — cumulative Karoonda I + II */
 const MAP_BEFORE = { ausCas:0, lufCas:0, ausSupply:100, lufSupply:100 };
-const MAP_AFTER  = { ausCas:13, lufCas:165, ausSupply:92, lufSupply:55 };
+const MAP_AFTER  = { ausCas:30, lufCas:214, ausSupply:90, lufSupply:42 };
 
 function applyMapState(t){
   const lerp=(a,b,x)=>Math.round(a+(b-a)*x);

@@ -73,7 +73,7 @@
   "GoGoBendy": {
     "discordRank": "Operator",
     "avatar": "",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [
       "Medical"
     ],
@@ -89,7 +89,7 @@
   "AnimePanda": {
     "discordRank": "Operator",
     "avatar": "assets/avatars/animepanda.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "endorsements": [],
     "leadership": null
   },
@@ -114,7 +114,7 @@
   "Spacecat82": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/spacecat82.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Medical"
     ],
@@ -137,7 +137,7 @@
   "HiveMynd": {
     "discordRank": "Junior Operator",
     "avatar": "assets/avatars/hivemynd.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [],
     "leadership": null
   },
@@ -292,9 +292,9 @@
   },
   "Xeonovaes": {
     "discordId": "1445639562302062696",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/xeonovaes.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
@@ -324,9 +324,9 @@
   },
   "J\u00e4ger": {
     "discordId": "254553396546109440",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "assets/avatars/jger.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   }
