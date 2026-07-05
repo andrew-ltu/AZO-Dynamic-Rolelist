@@ -148,7 +148,6 @@ body.sp-open #spToggle{animation:none;}
 .sp-cw-op-status{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
 .sp-cw-op-status.complete{color:#36d07a;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.25);}
 .sp-cw-op-status.upcoming{color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);}
-.sp-cw-supply{display:flex;flex-direction:column;gap:6px;margin-top:6px;}
 .sp-cw-row{display:flex;align-items:center;gap:8px;}
 .sp-cw-force{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;width:26px;flex-shrink:0;}
 .sp-cw-force.aus{color:#3d87d4;}
@@ -313,26 +312,14 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .map-fig figcaption b{color:var(--text);}
 .map-img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line-strong);box-shadow:0 8px 30px rgba(0,0,0,.55);}
 
-/* Supply & casualty panels inside map */
+
 .map-intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
 .map-intel-card{background:rgba(8,14,22,.7);border:1px solid var(--line);border-radius:11px;padding:14px 16px;}
 .map-intel-card.span2{grid-column:span 2;}
 .map-intel-title{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:9.5px;color:rgba(54,208,122,.6);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .map-intel-title::after{content:"";flex:1;height:1px;background:rgba(54,208,122,.12);}
 
-/* Supply progress bars */
-.supply-bars{display:flex;flex-direction:column;gap:12px;}
-.supply-bar-row{display:flex;align-items:center;gap:10px;}
-.supply-bar-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;width:30px;flex-shrink:0;}
-.supply-bar-label.aus{color:#3d87d4;}
-.supply-bar-label.luf{color:#d94040;}
-.supply-bar-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;border:1px solid rgba(100,160,210,.1);}
-.supply-bar-fill{height:100%;border-radius:99px;width:100%;transition:width .05s linear;}
-.supply-bar-fill.aus{background:linear-gradient(90deg,#1a5fa0,#3d87d4);}
-.supply-bar-fill.luf{background:linear-gradient(90deg,#8b1a1a,#d94040);}
-.supply-bar-pct{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:600;min-width:38px;text-align:right;}
-.supply-bar-pct.aus{color:#3d87d4;}
-.supply-bar-pct.luf{color:#d94040;}
+
 #mapSlider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(100,160,210,.6);cursor:pointer;box-shadow:0 0 6px rgba(0,0,0,.5);}
 #mapSlider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(100,160,210,.6);cursor:pointer;}
 
@@ -848,21 +835,7 @@ footer b{color:var(--muted);}
         </div>
 
         <!-- Supply -->
-        <div class="map-intel-card">
-          <div class="map-intel-title">Supply — Op Karoonda II</div>
-          <div class="supply-bars" style="margin-top:4px;">
-            <div class="supply-bar-row">
-              <span class="supply-bar-label aus">ADF</span>
-              <div class="supply-bar-track"><div class="supply-bar-fill aus" id="ausSupplyBar" style="width:100%"></div></div>
-              <span class="supply-bar-pct aus" id="ausSupplyPct">100%</span>
-            </div>
-            <div class="supply-bar-row" style="margin-top:10px;">
-              <span class="supply-bar-label luf">LUF</span>
-              <div class="supply-bar-track"><div class="supply-bar-fill luf" id="lufSupplyBar" style="width:100%"></div></div>
-              <span class="supply-bar-pct luf" id="lufSupplyPct">100%</span>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- Op Status card removed -->
       </div>
@@ -1558,22 +1531,14 @@ function setupComingSoon(op){
 }
 
 /* Slider-driven before/after state — cumulative Karoonda I + II */
-const MAP_BEFORE = { ausCas:0, lufCas:0, ausSupply:100, lufSupply:100 };
-const MAP_AFTER  = { ausCas:30, lufCas:214, ausSupply:90, lufSupply:42 };
+const MAP_BEFORE = { ausCas:0, lufCas:0 };
+const MAP_AFTER  = { ausCas:30, lufCas:214 };
 
 function applyMapState(t){
   const lerp=(a,b,x)=>Math.round(a+(b-a)*x);
   const ausEl=$('#ausKia'), lufEl=$('#lufKia');
   if(ausEl) ausEl.textContent = lerp(MAP_BEFORE.ausCas, MAP_AFTER.ausCas, t);
   if(lufEl) lufEl.textContent = lerp(MAP_BEFORE.lufCas, MAP_AFTER.lufCas, t);
-  const ausBar=$('#ausSupplyBar'), ausPct=$('#ausSupplyPct');
-  const lufBar=$('#lufSupplyBar'), lufPct=$('#lufSupplyPct');
-  const ausS = lerp(MAP_BEFORE.ausSupply, MAP_AFTER.ausSupply, t);
-  const lufS = lerp(MAP_BEFORE.lufSupply, MAP_AFTER.lufSupply, t);
-  if(ausBar) ausBar.style.width=ausS+'%';
-  if(ausPct) ausPct.textContent=ausS+'%';
-  if(lufBar) lufBar.style.width=lufS+'%';
-  if(lufPct) lufPct.textContent=lufS+'%';
   const ids=['circ_shwasana','circ_zavlofiti','circ_swop'];
   ids.forEach(id=>{
     const el=document.getElementById(id);
