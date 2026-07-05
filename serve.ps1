@@ -7,43 +7,122 @@
 #
 # Then open http://localhost:8770/  (it opens automatically). Ctrl+C to stop.
 
-$port = 8770
+$preferredPort = if ($env:AZO_PORT) { [int]$env:AZO_PORT } else { 8770 }
 $root = $PSScriptRoot
-$mime = @{
-  '.html'='text/html; charset=utf-8'; '.json'='application/json; charset=utf-8'
-  '.js'='text/javascript'; '.css'='text/css'; '.mp3'='audio/mpeg'; '.ogg'='audio/ogg'
-  '.wav'='audio/wav'; '.png'='image/png'; '.jpg'='image/jpeg'; '.jpeg'='image/jpeg'
-  '.gif'='image/gif'; '.svg'='image/svg+xml'; '.webp'='image/webp'; '.ico'='image/x-icon'
+$python = Get-Command py -ErrorAction SilentlyContinue
+if (-not $python) { $python = Get-Command python -ErrorAction SilentlyContinue }
+$node = Get-Command node -ErrorAction SilentlyContinue
+
+if (-not $python -and -not $node) {
+  Write-Host "Python or Node.js is required to run the preview server. Please install either one." -ForegroundColor Red
+  exit 1
 }
 
-$listener = [System.Net.HttpListener]::new()
-$listener.Prefixes.Add("http://localhost:$port/")
-try { $listener.Start() }
-catch { Write-Host "Could not bind port $port. Is the server already running?" -ForegroundColor Red; exit 1 }
-
-Write-Host "AZO role list preview  ->  http://localhost:$port/   (Ctrl+C to stop)" -ForegroundColor Cyan
-try { Start-Process "http://localhost:$port/" } catch {}
-
-while ($listener.IsListening) {
+$port = $preferredPort
+$usedPorts = @()
+for ($candidate = $preferredPort; $candidate -le 8785; $candidate++) {
   try {
-    $ctx  = $listener.GetContext()
-    $path = [System.Uri]::UnescapeDataString($ctx.Request.Url.AbsolutePath).TrimStart('/')
-    if ([string]::IsNullOrEmpty($path)) { $path = 'index.html' }
-    $file = Join-Path $root $path
+    $socket = [System.Net.Sockets.TcpClient]::new()
+    $socket.Connect('127.0.0.1', $candidate)
+    $socket.Close()
+    $usedPorts += $candidate
+  }
+  catch {
+    $port = $candidate
+    break
+  }
+}
 
-    if (Test-Path $file -PathType Leaf) {
-      $ext = [System.IO.Path]::GetExtension($file).ToLower()
-      $ct  = if ($mime.ContainsKey($ext)) { $mime[$ext] } else { 'application/octet-stream' }
-      $bytes = [System.IO.File]::ReadAllBytes($file)
-      $ctx.Response.ContentType = $ct
-      $ctx.Response.Headers.Add('Cache-Control','no-store')
-      $ctx.Response.ContentLength64 = $bytes.Length
-      $ctx.Response.OutputStream.Write($bytes, 0, $bytes.Length)
-    } else {
-      $ctx.Response.StatusCode = 404
-      $msg = [System.Text.Encoding]::UTF8.GetBytes("404 Not Found: $path")
-      $ctx.Response.OutputStream.Write($msg, 0, $msg.Length)
+if ($port -gt 8785) {
+  Write-Host "Could not find a free preview port between $preferredPort and 8785." -ForegroundColor Red
+  exit 1
+}
+
+if ($python) {
+  $serverScript = Join-Path $root '.tmp_preview_server.py'
+  @"
+import http.server
+import socketserver
+import sys
+from pathlib import Path
+
+root = Path(r'$root')
+port = $port
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(root), **kwargs)
+
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
+
+with socketserver.TCPServer(('127.0.0.1', port), Handler) as httpd:
+    print(f'AZO role list preview  ->  http://127.0.0.1:{port}/   (Ctrl+C to stop)')
+    sys.stdout.flush()
+    httpd.serve_forever()
+"@ | Set-Content -Path $serverScript -Encoding UTF8
+
+  Write-Host "AZO role list preview  ->  http://localhost:$port/   (Ctrl+C to stop)" -ForegroundColor Cyan
+  try { Start-Process "http://localhost:$port/" } catch {}
+  & $python.Source $serverScript
+} else {
+  $serverScript = Join-Path $root '.tmp_preview_server.js'
+  $env:AZO_PORT = $port
+  $env:AZO_ROOT = $root
+  @'
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const PORT = parseInt(process.env.AZO_PORT, 10) || 8770;
+const PUBLIC_DIR = process.env.AZO_ROOT;
+
+const MIME_TYPES = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon'
+};
+
+const server = http.createServer((req, res) => {
+  let urlPath = req.url.split('?')[0];
+  let filePath = path.join(PUBLIC_DIR, urlPath);
+  
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(filePath, 'index.html');
+  }
+
+  if (!filePath.startsWith(PUBLIC_DIR)) {
+    res.statusCode = 403;
+    res.end('Forbidden');
+    return;
+  }
+
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.statusCode = 404;
+      res.end('Not Found');
+      return;
     }
-    $ctx.Response.OutputStream.Close()
-  } catch {}
+    const ext = path.extname(filePath).toLowerCase();
+    res.setHeader('Content-Type', MIME_TYPES[ext] || 'application/octet-stream');
+    res.setHeader('Cache-Control', 'no-store');
+    res.end(data);
+  });
+});
+
+server.listen(PORT, '127.0.0.1', () => {
+  console.log(`AZO role list preview  ->  http://127.0.0.1:${PORT}/   (Ctrl+C to stop)`);
+});
+'@ | Set-Content -Path $serverScript -Encoding UTF8
+
+  Write-Host "AZO role list preview  ->  http://localhost:$port/   (Ctrl+C to stop)" -ForegroundColor Cyan
+  try { Start-Process "http://localhost:$port/" } catch {}
+  & $node.Source $serverScript
 }
