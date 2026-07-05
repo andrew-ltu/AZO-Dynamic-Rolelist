@@ -526,21 +526,11 @@ footer b{color:var(--muted);}
       <span class="sp-nb-label">Ops Calendar</span>
       <span class="sp-soon-badge">SOON</span>
     </button>
-    <button class="sp-nav-btn" id="spTrainingBtn">
-      <span class="sp-nb-icon">🎯</span>
-      <span class="sp-nb-label">Training</span>
-      <span class="sp-soon-badge">SOON</span>
+
+    <button class="sp-nav-btn" id="spFeedbackBtn">
+      <span class="sp-nb-icon">📝</span>
+      <span class="sp-nb-label">Feedback</span>
     </button>
-    <a class="sp-nav-btn" href="https://forms.gle/K4qAERXegng7jYiD6" target="_blank" rel="noopener" style="text-decoration:none;">
-      <span class="sp-nb-icon">📋</span>
-      <span class="sp-nb-label">Op Feedback</span>
-      <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:#36d07a;opacity:.7;">↗</span>
-    </a>
-    <a class="sp-nav-btn" href="https://forms.gle/6iytmMj8NGTJFCN78" target="_blank" rel="noopener" style="text-decoration:none;">
-      <span class="sp-nb-icon">🎖</span>
-      <span class="sp-nb-label">Leadership Feedback</span>
-      <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:#36d07a;opacity:.7;">↗</span>
-    </a>
 
     <div class="sp-divider"></div>
 
@@ -550,6 +540,34 @@ footer b{color:var(--muted);}
       <span class="sp-nb-icon">📜</span>
       <span class="sp-nb-label">Previous Ops Attendance</span>
     </button>
+  </div>
+
+
+  <!-- Feedback slide-in panel -->
+  <div id="spFeedbackPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
+    <button class="sp-cs-back" id="spFeedbackBack">← Back</button>
+    <div style="flex:1;overflow-y:auto;padding:16px;">
+      <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;margin-bottom:4px;">Op Feedback</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:18px;">Share your experience and help us improve future operations.</div>
+
+      <a href="https://forms.gle/K4qAERXegng7jYiD6" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);margin-bottom:10px;transition:background .15s;">
+        <span style="font-size:22px;">📝</span>
+        <div>
+          <div style="font-family:'Oswald';font-size:14px;letter-spacing:.5px;color:#fff;">Op Creator Feedback</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate the operation, mission design &amp; Zeus</div>
+        </div>
+        <span style="margin-left:auto;color:var(--primary-2);font-size:14px;">↗</span>
+      </a>
+
+      <a href="https://forms.gle/6iytmMj8NGTJFCN78" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);transition:background .15s;">
+        <span style="font-size:22px;">🪖</span>
+        <div>
+          <div style="font-family:'Oswald';font-size:14px;letter-spacing:.5px;color:#fff;">Team Lead Feedback</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate your section leader &amp; leadership chain</div>
+        </div>
+        <span style="margin-left:auto;color:var(--primary-2);font-size:14px;">↗</span>
+      </a>
+    </div>
   </div>
 
   <!-- Prev ops slide-in panel -->
@@ -1488,8 +1506,8 @@ $('#spClose').onclick=spClose;
 $('#spMapBtn').onclick=()=>{ spClose(); openMap(); };
 $('#spRosterBtn').onclick=()=>{ openRoster(); };
 $('#spCalendarBtn').onclick=()=>showSpComingSoon('Operations Calendar');
-$('#spTrainingBtn').onclick=()=>showSpComingSoon('Training');
-$('#spFeedbackBtn').onclick=()=>showSpComingSoon('Op Feedback Summary');
+$('#spFeedbackBtn').onclick=()=>{ const el=$('#spFeedbackPanel'); if(el)el.style.transform='translateX(0)'; };
+$('#spFeedbackBack').onclick=()=>{ const el=$('#spFeedbackPanel'); if(el)el.style.transform='translateX(100%)'; };
 $('#spPrevOpsBtn').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(0)'; };
 $('#spPrevOpsBack').onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(100%)'; };
 
