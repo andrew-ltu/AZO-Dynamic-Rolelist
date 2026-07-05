@@ -1026,11 +1026,11 @@ footer b{color:var(--muted);}
           <circle id="circ_duey" cx="683" cy="160" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
           <text id="text_duey" x="671" y="155" fill="#70c870" font-size="9" text-anchor="end" style="transition:fill .8s">Duey</text>
 
-          <circle cx="353" cy="239" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="365" y="243" fill="#e08070" font-size="9">Fantasi</text>
+          <circle id="circ_fantasi" cx="353" cy="239" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
+          <text id="text_fantasi" x="365" y="243" fill="#f0c060" font-size="9" style="transition:fill .8s">Fantasi</text>
 
-          <circle cx="428" cy="255" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="440" y="259" fill="#e08070" font-size="9">Chihiti</text>
+          <circle id="circ_chihiti" cx="428" cy="255" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
+          <text id="text_chihiti" x="440" y="259" fill="#f0c060" font-size="9" style="transition:fill .8s">Chihiti</text>
 
           <circle id="circ_binbi" cx="432" cy="292" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
           <text id="text_binbi" x="444" y="296" fill="#70c870" font-size="9" style="transition:fill .8s">Binbi</text>
@@ -1589,7 +1589,9 @@ function applyMapState(t){
     { id: 'circ_kahaki', tId: 'text_kahaki', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
     { id: 'circ_savala', tId: 'text_savala', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
     { id: 'circ_cattleranch', tId: 'text_cattleranch', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
-    { id: 'circ_duey', tId: 'text_duey', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' }
+    { id: 'circ_duey', tId: 'text_duey', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
+    { id: 'circ_fantasi', tId: 'text_fantasi', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
+    { id: 'circ_chihiti', tId: 'text_chihiti', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' }
   ];
   const contestedTransitions = [
     { id: 'circ_saheli', tId: 'text_saheli', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
