@@ -505,14 +505,6 @@ footer b{color:var(--muted);}
 
     <div class="sp-divider"></div>
 
-    <!-- OPERATIONS -->
-    <div class="sp-sec-label">Operations</div>
-    <button class="sp-nav-btn" id="spRatingsBtn">
-      <span class="sp-nb-icon">⭐</span>
-      <span class="sp-nb-label">Op Ratings</span>
-    </button>
-
-    <div class="sp-divider"></div>
 
     <!-- ARCHIVE -->
     <div class="sp-sec-label">Archive</div>
@@ -691,7 +683,7 @@ footer b{color:var(--muted);}
         <button onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.acc-arrow2').textContent=b.style.display==='none'?'▶':'▼';" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;text-align:left;">
           <div>
             <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;">Op Karoonda II</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:2px;">4 JULY 2026 · 20 attended</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:2px;">4 JULY 2026 · 32 attended (incl. joint units)</div>
           </div>
           <span class="acc-arrow2" style="font-size:11px;color:var(--muted);">▶</span>
         </button>
@@ -759,11 +751,33 @@ footer b{color:var(--muted);}
       <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;margin-bottom:2px;">Op Ratings</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Community ratings per operation.</div>
 
-      <!-- MARCH -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">March</div>
+      <!-- JULY (most recent first) -->
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.7);text-transform:uppercase;margin:8px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(54,208,122,.18);display:flex;align-items:center;gap:6px;">July <span style="font-size:8px;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.3);border-radius:3px;padding:1px 5px;color:#36d07a;letter-spacing:1px;">CURRENT</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Red Water</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Sir Danger</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.0<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+      </div>
+
+      <!-- JUNE -->
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">June</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda I</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil III</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+      </div>
+
+      <!-- MAY -->
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">May</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Desert Mourning</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: —</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
       </div>
 
       <!-- APRIL -->
@@ -773,33 +787,11 @@ footer b{color:var(--muted);}
         <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">6.7<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
       </div>
 
-      <!-- MAY -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">May</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Desert Mourning</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: —</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- JUNE -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">June</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil III</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda I</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- JULY -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">July</div>
+      <!-- MARCH -->
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">March</div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Red Water</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Sir Danger</div></div>
+        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.0<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
       </div>
     </div>
   </div>
@@ -828,30 +820,29 @@ footer b{color:var(--muted);}
     </div>
     <div class="map-body">
 
-      <!-- Stats row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <!-- Compact stats bar overlaid on map top -->
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
 
-        <!-- Casualties -->
-        <div class="map-intel-card">
-          <div class="map-intel-title">Casualties — Campaign Total (K1 + K2)</div>
-          <div class="cas-grid">
-            <div class="cas-card aus" style="padding:10px 8px;">
-              <div class="cas-force aus">ADF</div>
-              <div class="cas-num aus" id="ausKia" style="font-size:28px;">0</div>
-              <div class="cas-label">KIA</div>
+        <!-- Casualties compact card -->
+        <div style="background:linear-gradient(135deg,rgba(8,14,22,.95),rgba(12,20,32,.92));border:1px solid rgba(100,160,210,.18);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:14px;flex-shrink:0;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(100,160,210,.5);white-space:nowrap;">KIA — K1+K2</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="text-align:center;">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:#3d87d4;text-transform:uppercase;margin-bottom:2px;">ADF</div>
+              <div id="ausKia" style="font-family:'Oswald';font-size:26px;font-weight:700;color:#3d87d4;line-height:1;">0</div>
             </div>
-            <div class="cas-card luf" style="padding:10px 8px;">
-              <div class="cas-force luf">LUF</div>
-              <div class="cas-num luf" id="lufKia" style="font-size:28px;">0</div>
-              <div class="cas-label">KIA</div>
+            <div style="width:1px;height:32px;background:rgba(100,160,210,.15);"></div>
+            <div style="text-align:center;">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:#d94040;text-transform:uppercase;margin-bottom:2px;">LUF</div>
+              <div id="lufKia" style="font-family:'Oswald';font-size:26px;font-weight:700;color:#d94040;line-height:1;">0</div>
             </div>
           </div>
         </div>
 
-        <!-- Top 10 Kills — Op Karoonda II -->
-        <div class="map-intel-card">
-          <div class="map-intel-title">Top 10 Kills — Op Karoonda II</div>
-        <div id="killsLeaderboard" style="display:flex;flex-direction:column;gap:0;">
+        <!-- Top 10 Kills compact card -->
+        <div style="background:linear-gradient(135deg,rgba(8,14,22,.95),rgba(12,20,32,.92));border:1px solid rgba(100,160,210,.18);border-radius:10px;padding:10px 14px;flex:1;min-width:0;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(100,160,210,.5);margin-bottom:8px;">Top 10 Kills — Op Karoonda II</div>
+        <div id="killsLeaderboard" style="display:grid;grid-template-columns:1fr 1fr;gap:0 12px;">
           <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
             <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:gold;min-width:22px;text-align:right;">1</span>
             <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">1st Lt B. Hag</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#9b59b6;background:#9b59b61a;border:1px solid #9b59b644;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AFSOC</span></span>
@@ -904,7 +895,7 @@ footer b{color:var(--muted);}
           </div>
         </div>
       </div><!-- end Top 10 -->
-      </div><!-- end stats grid -->
+      </div><!-- end stats flex -->
 
       <!-- Interactive SVG Map -->
       <div style="position:relative;background:#1a2535;border-radius:12px;border:1px solid var(--line-strong);overflow:hidden;">
@@ -1683,7 +1674,7 @@ const spToggle = $('#spToggle'); if(spToggle) spToggle.onclick=()=>$('#sidePanel
 const spCloseBtn = $('#spClose'); if(spCloseBtn) spCloseBtn.onclick=spClose;
 const spMapBtn = $('#spMapBtn'); if(spMapBtn) spMapBtn.onclick=()=>{ spClose(); openMap(); };
 const spRosterBtn = $('#spRosterBtn'); if(spRosterBtn) spRosterBtn.onclick=()=>{ openRoster(); };
-const spRatingsBtn = $('#spRatingsBtn'); if(spRatingsBtn) spRatingsBtn.onclick=()=>{ const el=$('#spRatingsPanel'); if(el) el.style.transform='translateX(0)'; };
+// Op Ratings panel still accessible via direct panel (spRatingsPanel) if needed
 const spRatingsBack = $('#spRatingsBack'); if(spRatingsBack) spRatingsBack.onclick=()=>{ const el=$('#spRatingsPanel'); if(el) el.style.transform='translateX(100%)'; };
 const spFeedbackBtn = $('#spFeedbackBtn'); if(spFeedbackBtn) spFeedbackBtn.onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(0)'; };
 const spFeedbackBack = $('#spFeedbackBack'); if(spFeedbackBack) spFeedbackBack.onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(100%)'; };
