@@ -2327,15 +2327,16 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   const autoNameSection = $('#autoNameSection');
   const claimInput = $('#claimInput');
   
-  if (currentUser && currentUser.rosterName) {
-    // User is logged in - show their name automatically
-    $('#autoUserName').textContent = currentUser.rosterName;
+  if (currentUser) {
+    // User is logged in — show their name automatically
+    const name = currentUser.rosterName || currentUser.displayName;
+    $('#autoUserName').textContent = name;
     nameInputSection.style.display = 'none';
     autoNameSection.style.display = 'block';
     
     // Check endorsement immediately
     if(endorseType){
-      const has=memberHasEndorsement(currentUser.rosterName,endorseType);
+      const has=memberHasEndorsement(name,endorseType);
       if(!has){
         $('#claimHint').style.color='#d94040';
         $('#claimHint').textContent=`You do not have a ${endorseType} on record.`;
@@ -2347,17 +2348,6 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
       $('#claimHint').style.color='#36d07a';
       $('#claimHint').textContent='You are eligible for this role.';
     }
-  } else if (currentUser) {
-    // User is logged in but no rosterName match - pre-fill input
-    nameInputSection.style.display = 'block';
-    autoNameSection.style.display = 'none';
-    claimInput.value = currentUser.displayName;
-    // Trigger filtering so matching names show
-    const e = new Event('input');
-    claimInput.dispatchEvent(e);
-    claimInput.select();
-    $('#claimHint').style.color='';
-    $('#claimHint').textContent='Select your name from the roster below or type to search.';
   } else {
     // User not logged in - show name input
     nameInputSection.style.display = 'block';
@@ -2413,9 +2403,9 @@ $('#claimInput').addEventListener('blur',()=>setTimeout(()=>{$('#operatorDropdow
 async function submitClaim(){
   let name;
   
-  // If user is logged in, use their roster name
-  if (currentUser && currentUser.rosterName) {
-    name = currentUser.rosterName;
+  // If user is logged in, use their roster name or display name
+  if (currentUser) {
+    name = currentUser.rosterName || currentUser.displayName;
   } else {
     // Otherwise get from input
     name = $('#claimInput').value.trim();
@@ -2424,7 +2414,8 @@ async function submitClaim(){
   }
   
   if(claimContext.endorseType){
-    if(!MEMBERS[name]){setClaimStatus(`Your name is not on the roster. Contact staff before signing up for a role that requires a ${claimContext.endorseType}.`,'err');return;}
+    if(!name){setClaimStatus('Enter your name first.','err');return;}
+    if(!currentUser && !MEMBERS[name]){setClaimStatus(`Your name is not on the roster. Contact staff before signing up for a role that requires a ${claimContext.endorseType}.`,'err');return;}
     if(!memberHasEndorsement(name,claimContext.endorseType)){setClaimStatus(`You do not have the required ${claimContext.endorseType}. Contact staff to be added to the endorsement list.`,'err');return;}
   }
   const{sectionKey,roleIndex}=claimContext;

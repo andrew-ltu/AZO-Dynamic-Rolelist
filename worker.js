@@ -436,11 +436,12 @@ async function handleClaimSlot(request, env, origin) {
   }
 
   const { sectionKey, roleIndex, memberName } = body;
-  if (!sectionKey || roleIndex === undefined || !memberName?.trim()) {
+  if (!sectionKey || roleIndex === undefined) {
     return jsonResponse({ error: 'Missing required fields' }, 400, origin);
   }
 
-  const name = memberName.trim();
+  let name = (memberName || '').trim();
+
   const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
   const headers = {
     'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
@@ -467,6 +468,36 @@ async function handleClaimSlot(request, env, origin) {
   const sha = rosterMeta.sha;
   const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
   const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
+
+  // If user sent a valid JWT, resolve their roster name by Discord ID or display name
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const payload = await verifyToken(authHeader.substring(7), env.JWT_SECRET);
+    if (payload) {
+      const userResult = await env.DB.prepare(`
+        SELECT id, username, global_name FROM users WHERE id = ?
+      `).bind(payload.sub).first();
+      if (userResult) {
+        let matchedName = null;
+        // Try by Discord ID
+        for (const [n, d] of Object.entries(membersData)) {
+          if (d.discordId === userResult.id) { matchedName = n; break; }
+        }
+        // Fallback by display name (case-insensitive)
+        if (!matchedName) {
+          const display = (userResult.global_name || userResult.username || '').toLowerCase();
+          for (const [n] of Object.entries(membersData)) {
+            if (n.toLowerCase() === display) { matchedName = n; break; }
+          }
+        }
+        if (matchedName) name = matchedName;
+      }
+    }
+  }
+
+  if (!name) {
+    return jsonResponse({ error: 'Missing member name' }, 400, origin);
+  }
 
   // Find the slot
   let slot = null;
