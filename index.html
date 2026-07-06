@@ -41,13 +41,16 @@ a{color:var(--primary-2);}
   height:var(--banner-h);
   background:linear-gradient(90deg,rgba(88,101,242,.18),rgba(88,101,242,.10),rgba(88,101,242,.18));
   border-bottom:1px solid rgba(88,101,242,.28);
-  display:flex;align-items:center;justify-content:center;gap:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
   font-family:'Share Tech Mono',monospace;font-size:11.5px;color:var(--muted);
   letter-spacing:.4px;
+  padding:0 16px;
 }
+#discordBanner .ds-left{display:flex;align-items:center;gap:8px;}
+#discordBanner .ds-right{display:flex;align-items:center;gap:12px;}
 #discordBanner .ds-icon{color:rgba(88,101,242,.9);font-size:14px;}
 #discordBanner strong{color:#7a8fff;}
-#discordBanner .ds-sep{opacity:.4;}
+#discordBanner .ds-sep{opacity:.4;margin:0 4px;}
 
 /* ======================== LAYOUT ======================== */
 .wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px;padding-top:calc(var(--banner-h) + 4px);}
@@ -561,22 +564,24 @@ footer b{color:var(--muted);}
 
 <!-- Discord Auth Banner -->
 <div id="discordBanner">
-  <div id="authNotLoggedIn" style="display:none;">
-    <span class="ds-icon">🔗</span>
-    <strong>Sign in with Discord to claim roles</strong>
-    <span class="ds-sep">|</span>
-    <button id="loginBtn" style="background:#5865F2;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Login with Discord</button>
+  <div class="ds-left">
+    <div id="authNotLoggedIn" style="display:none;">
+      <span class="ds-icon">🔗</span>
+      <strong>Sign in with Discord to claim roles</strong>
+      <span class="ds-sep">|</span>
+      <button id="loginBtn" style="background:#5865F2;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Login with Discord</button>
+    </div>
   </div>
-  <div id="authLoggedIn" style="display:none;gap:16px;">
-    <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
-    <strong id="userName"></strong>
-    <span class="ds-sep">|</span>
-    <span id="userRole" style="color:#36d07a;"></span>
-    <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
-    <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;margin-left:auto;">Logout</button>
+  <div class="ds-right">
+    <div id="authLoggedIn" style="display:none;align-items:center;">
+      <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
+      <strong id="userName"></strong>
+      <span class="ds-sep">|</span>
+      <span id="userRole" style="color:#36d07a;"></span>
+      <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
+      <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;">Logout</button>
+    </div>
   </div>
-  <span class="ds-sep">·</span>
-  <span>Easier slot assignment on the way</span>
 </div>
 
 <!-- Side panel toggle -->
@@ -1278,7 +1283,7 @@ footer b{color:var(--muted);}
       <div class="cm-role-title" id="claimRoleLabel2"></div>
       <label for="claimInput">Your name (exactly as on the roster)</label>
       <div class="dropdown-container">
-        <input id="claimInput" type="text" placeholder="Type to search your name…" autocomplete="off" maxlength="48"/>
+        <input id="claimInput" type="text" placeholder="Enter your name" autocomplete="off" maxlength="48"/>
         <div id="operatorDropdown" class="op-dropdown-list"></div>
       </div>
       <div class="cm-hint" id="claimHint">Your name must match the roster exactly. Case-sensitive.</div>
