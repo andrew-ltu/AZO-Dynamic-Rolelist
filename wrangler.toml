@@ -1,3 +1,8 @@
 name = "azo-dynamic-rolelist-api"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "azo"
+database_id = "19d2b5fd-4de0-4afa-87d1-3edbd39c7575"
