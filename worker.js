@@ -5,7 +5,8 @@ const GITHUB_OWNER = 'andrew-ltu';
 const GITHUB_REPO = 'AZO-Dynamic-Rolelist';
 const ALLOWED_ORIGINS = [
   'https://andrew-ltu.github.io',
-  'https://azo-dynamic-rolelist.pages.dev'
+  'https://azo-dynamic-rolelist.pages.dev',
+  'http://localhost:8770'
 ];
 
 const DISCORD_API = 'https://discord.com/api/v10';
@@ -278,6 +279,34 @@ async function handleGetUser(request, env, origin) {
   
   const roles = rolesResult.results.map(r => r.role_name);
   
+  // Try to find roster name from members.json by Discord ID
+  let rosterName = null;
+  try {
+    const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+    const headers = {
+      'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'User-Agent': 'AZO-Worker'
+    };
+    
+    const membersRes = await fetch(`${baseRepoUrl}/members.json`, { headers });
+    if (membersRes.ok) {
+      const membersMeta = await membersRes.json();
+      const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
+      
+      // Find member by Discord ID
+      for (const [name, data] of Object.entries(membersData)) {
+        if (data.discordId === userResult.id) {
+          rosterName = name;
+          break;
+        }
+      }
+    }
+  } catch (e) {
+    // If fetching members.json fails, just continue without roster name
+    console.error('Failed to fetch roster name:', e);
+  }
+  
   return jsonResponse({
     user: {
       id: userResult.id,
@@ -286,7 +315,8 @@ async function handleGetUser(request, env, origin) {
       avatar: userResult.avatar,
       email: userResult.email,
       isAdmin: userResult.is_admin === 1,
-      roles
+      roles,
+      rosterName
     }
   }, 200, origin);
 }
