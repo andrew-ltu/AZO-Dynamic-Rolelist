@@ -1337,6 +1337,15 @@ let MEMBERS = {};
 let countdownTimer = null;
 const $ = (s,el=document)=>el.querySelector(s);
 
+/* Helper function for checking endorsements - used by admin panel */
+function memberHasEndorsement(memberName,endorsementType){
+  const m=MEMBERS[memberName];
+  if(!m)return false;
+  const arr=Array.isArray(m.endorsements)?m.endorsements:[];
+  const needle=endorsementType.toLowerCase();
+  return arr.some(e=>e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
+}
+
 /* ============================================================
    DISCORD AUTHENTICATION
    ============================================================ */
@@ -1830,14 +1839,6 @@ function leaderLevel(role){
   if(/platoon commander|^commander/i.test(role))return 'lvl-command';
   if(/section leader/i.test(role))return 'lvl-section';
   return '';
-}
-
-function memberHasEndorsement(memberName,endorsementType){
-  const m=MEMBERS[memberName];
-  if(!m)return false;
-  const arr=Array.isArray(m.endorsements)?m.endorsements:[];
-  const needle=endorsementType.toLowerCase();
-  return arr.some(e=>e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
 }
 
 /* ---------- attendance strip ---------- */
