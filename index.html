@@ -41,13 +41,13 @@ a{color:var(--primary-2);}
   height:var(--banner-h);
   background:linear-gradient(90deg,rgba(88,101,242,.18),rgba(88,101,242,.10),rgba(88,101,242,.18));
   border-bottom:1px solid rgba(88,101,242,.28);
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
   font-family:'Share Tech Mono',monospace;font-size:11.5px;color:var(--muted);
   letter-spacing:.4px;
   padding:0 16px;
 }
 #discordBanner .ds-left{display:flex;align-items:center;gap:8px;}
-#discordBanner .ds-right{display:flex;align-items:center;gap:12px;}
+#discordBanner .ds-right{display:flex;align-items:center;gap:12px;margin-left:auto;}
 #discordBanner .ds-icon{color:rgba(88,101,242,.9);font-size:14px;}
 #discordBanner strong{color:#7a8fff;}
 #discordBanner .ds-sep{opacity:.4;margin:0 4px;}
@@ -565,7 +565,7 @@ footer b{color:var(--muted);}
 <!-- Discord Auth Banner -->
 <div id="discordBanner">
   <div class="ds-left">
-    <div id="authNotLoggedIn" style="display:none;">
+    <div id="authNotLoggedIn" style="display:none;align-items:center;gap:12px;">
       <span class="ds-icon">🔗</span>
       <strong>Sign in with Discord to claim roles</strong>
       <span class="ds-sep">|</span>
