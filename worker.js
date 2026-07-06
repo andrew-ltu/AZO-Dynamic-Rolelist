@@ -12,7 +12,7 @@ const ALLOWED_ORIGINS = [
 const DISCORD_API = 'https://discord.com/api/v10';
 const DISCORD_GUILD_ID = '504188370507792384';
 const REDIRECT_URI = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/auth/callback';
-const ADMIN_IDS = ['203678139220623361', '207012290401271818'];
+const ADMIN_IDS = ['203678139220623361', '207012290401271818', '850370739998818335'];
 
 // Helper: CORS headers
 function corsHeaders(origin) {
