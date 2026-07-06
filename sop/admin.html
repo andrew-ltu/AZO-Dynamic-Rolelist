@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin SOPs - AZO</title>
+  <link rel="stylesheet" href="member.html">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a1628 0%, #1a2942 100%);
+      color: #e0e6ed;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .header {
+      background: rgba(10, 22, 40, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(232, 161, 48, 0.3);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      background: #e8a130;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .back-btn:hover { background: #c88820; }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 40px;
+      background: rgba(26, 41, 66, 0.6);
+      border: 1px solid rgba(232, 161, 48, 0.2);
+      border-radius: 12px;
+    }
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #e8a130;
+    }
+    .subtitle {
+      color: #a0b5cc;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+    h2 {
+      font-size: 24px;
+      margin: 30px 0 15px;
+      color: #e8a130;
+      border-bottom: 2px solid rgba(232, 161, 48, 0.3);
+      padding-bottom: 10px;
+    }
+    h3 {
+      font-size: 20px;
+      margin: 20px 0 10px;
+      color: #f0b850;
+    }
+    p, li {
+      margin-bottom: 10px;
+      color: #c5d3e0;
+    }
+    ul, ol {
+      margin: 15px 0 15px 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="back-btn">← Back to SOPs</a>
+  </div>
+
+  <div class="container">
+    <h1>⚙️ Admin SOPs</h1>
+    <div class="subtitle">Administrative and leadership procedures</div>
+
+    <h2>1. Zeus Responsibilities</h2>
+    <h3>1.1 Pre-Operation Planning</h3>
+    <ul>
+      <li>Create mission briefing and objectives</li>
+      <li>Design balanced scenarios for player count</li>
+      <li>Test mission for technical issues</li>
+      <li>Coordinate with team leaders on force composition</li>
+      <li>Prepare backup plans for contingencies</li>
+    </ul>
+
+    <h3>1.2 Operation Execution</h3>
+    <ul>
+      <li>Conduct pre-mission briefing clearly and concisely</li>
+      <li>Monitor mission pacing and player engagement</li>
+      <li>Adapt difficulty based on player performance</li>
+      <li>Provide tactical challenges without unfair situations</li>
+      <li>Maintain immersion and narrative coherence</li>
+    </ul>
+
+    <h2>2. Team Leader Duties</h2>
+    <h3>2.1 Personnel Management</h3>
+    <ul>
+      <li>Track team member attendance</li>
+      <li>Assign roles based on qualifications and experience</li>
+      <li>Mentor new members</li>
+      <li>Provide feedback and performance reviews</li>
+    </ul>
+
+    <h3>2.2 Tactical Leadership</h3>
+    <ul>
+      <li>Brief team on specific objectives</li>
+      <li>Coordinate with other team leaders</li>
+      <li>Make tactical decisions within Zeus guidance</li>
+      <li>Ensure proper communications protocol</li>
+    </ul>
+
+    <h2>3. Member Management</h2>
+    <h3>3.1 Role Assignments</h3>
+    <ul>
+      <li>Review member certifications in <code>members.json</code></li>
+      <li>Assign roles through the roster system</li>
+      <li>Update member endorsements as earned</li>
+      <li>Track operational experience (<code>opsAttended</code>)</li>
+    </ul>
+
+    <h3>3.2 Discord OAuth & Database</h3>
+    <ul>
+      <li>Monitor user authentication logs</li>
+      <li>Grant/revoke admin privileges in database</li>
+      <li>Assign team roles (<code>user_roles</code> table)</li>
+      <li>Review SOP access logs for security</li>
+    </ul>
+
+    <p style="margin-top: 40px; text-align: center; color: #a0b5cc;">
+      🔒 CONFIDENTIAL - Admin Use Only
+    </p>
+  </div>
+</body>
+</html>

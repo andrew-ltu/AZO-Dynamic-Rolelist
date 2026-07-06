@@ -1,151 +1,407 @@
-// AZO Claim Slot — Cloudflare Worker
-// Deploy at: https://dash.cloudflare.com → Workers → Create Worker
-// Add secret: wrangler secret put GITHUB_TOKEN
-//   (use your ROSTER_TOKEN — Contents read/write on AZO-Dynamic-Rolelist)
+// AZO Dynamic Rolelist - Enhanced Worker with Discord OAuth
+// Cloudflare Worker with D1 Database
 
 const GITHUB_OWNER = 'andrew-ltu';
-const GITHUB_REPO  = 'AZO-Dynamic-Rolelist';
+const GITHUB_REPO = 'AZO-Dynamic-Rolelist';
 const ALLOWED_ORIGINS = [
   'https://andrew-ltu.github.io',
   'https://azo-dynamic-rolelist.pages.dev'
 ];
 
+const DISCORD_API = 'https://discord.com/api/v10';
+const REDIRECT_URI = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/auth/callback';
+
+// Helper: CORS headers
+function corsHeaders(origin) {
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true'
+  };
+}
+
+// Helper: JSON response
+function jsonResponse(data, status = 200, origin = '') {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders(origin)
+    }
+  });
+}
+
+// Helper: Generate JWT token
+async function generateToken(userId, secret) {
+  const header = { alg: 'HS256', typ: 'JWT' };
+  const payload = {
+    sub: userId,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
+  };
+  
+  const encodedHeader = btoa(JSON.stringify(header)).replace(/=/g, '');
+  const encodedPayload = btoa(JSON.stringify(payload)).replace(/=/g, '');
+  const message = `${encodedHeader}.${encodedPayload}`;
+  
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
+  const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  
+  return `${message}.${encodedSignature}`;
+}
+
+// Helper: Verify JWT token
+async function verifyToken(token, secret) {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    
+    const [encodedHeader, encodedPayload, signature] = parts;
+    const message = `${encodedHeader}.${encodedPayload}`;
+    
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['verify']
+    );
+    
+    const signatureBytes = Uint8Array.from(
+      atob(signature.replace(/-/g, '+').replace(/_/g, '/')),
+      c => c.charCodeAt(0)
+    );
+    
+    const valid = await crypto.subtle.verify(
+      'HMAC',
+      key,
+      signatureBytes,
+      encoder.encode(message)
+    );
+    
+    if (!valid) return null;
+    
+    const payload = JSON.parse(atob(encodedPayload));
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      return null; // Expired
+    }
+    
+    return payload;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Main router
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-
+    
     // CORS preflight
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': allowedOrigin,
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        }
-      });
+      return new Response(null, { headers: corsHeaders(origin) });
     }
-
-    if (request.method !== 'POST') {
-      return json({ error: 'Method not allowed' }, 405);
+    
+    // Route: Discord OAuth login
+    if (url.pathname === '/auth/login') {
+      return handleLogin(env);
     }
-
-    let body;
-    try {
-      body = await request.json();
-    } catch {
-      return json({ error: 'Invalid JSON' }, 400);
+    
+    // Route: Discord OAuth callback
+    if (url.pathname === '/auth/callback') {
+      return handleCallback(request, env);
     }
-
-    const { sectionKey, roleIndex, memberName } = body;
-    if (!sectionKey || roleIndex === undefined || !memberName?.trim()) {
-      return json({ error: 'Missing required fields' }, 400);
+    
+    // Route: Get current user
+    if (url.pathname === '/api/user') {
+      return handleGetUser(request, env, origin);
     }
-
-    const name = memberName.trim();
-    const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-    const headers = {
-      'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github+json',
-      'User-Agent': 'AZO-Claim-Worker'
-    };
-
-    // 1. Fetch current roster AND members directory in parallel
-    const [rosterRes, membersRes] = await Promise.all([
-      fetch(`${baseRepoUrl}/roster.json`, { headers }),
-      fetch(`${baseRepoUrl}/members.json`, { headers })
-    ]);
-
-    if (!rosterRes.ok) {
-      return json({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502);
+    
+    // Route: Logout
+    if (url.pathname === '/api/logout') {
+      return handleLogout(request, env, origin);
     }
-    if (!membersRes.ok) {
-      return json({ error: `GitHub members fetch failed: ${membersRes.status}` }, 502);
+    
+    // Route: Claim slot (existing functionality)
+    if (url.pathname === '/claim' && request.method === 'POST') {
+      return handleClaimSlot(request, env, origin);
     }
-
-    const rosterMeta = await rosterRes.json();
-    const membersMeta = await membersRes.json();
-
-    const sha = rosterMeta.sha;
-    const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
-    const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
-
-    // 2. Find the slot
-    let slot = null;
-    try {
-      if (sectionKey === '__command') {
-        slot = roster.command?.[Number(roleIndex)];
-      } else if (sectionKey === '__attachment') {
-        slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
-      } else {
-        const sec = roster.sections?.find(s => s.name === sectionKey);
-        if (sec) slot = sec.roles?.[Number(roleIndex)];
-      }
-    } catch (e) {
-      return json({ error: 'Invalid role index' }, 400);
-    }
-
-    if (!slot) return json({ error: 'Role not found — refresh and try again' }, 404);
-    if (slot.member) return json({ error: `Already claimed by ${slot.member}` }, 409);
-
-    // 2.5 Validation: Check if user is certified for this slot
-    if (slot.endorsementRequired && slot.endorsementType) {
-      // Look up member case-insensitively to prevent casing typing errors from breaking it
-      const memberKey = Object.keys(membersData).find(k => k.toLowerCase() === name.toLowerCase());
-      const member = memberKey ? membersData[memberKey] : null;
-
-      if (!member) {
-        return json({ error: `Access Denied: "${name}" is not a registered member in the directory.` }, 403);
-      }
-
-      // Handle Leadership Slots
-      if (slot.endorsementType === "Leadership Endorsement") {
-        if (!member.leadership) {
-          return json({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403);
-        }
-      } 
-      // Handle Qualification Endorsements (Medical, JTAC, etc.)
-      else {
-        // Strip " Endorsement" from strings like "Medical Endorsement" to match tags like "Medical"
-        const requiredEndorsement = slot.endorsementType.replace(" Endorsement", "");
-        
-        const hasEndorsement = member.endorsements && member.endorsements.some(
-          e => e.toLowerCase() === requiredEndorsement.toLowerCase()
-        );
-
-        if (!hasEndorsement) {
-          return json({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403);
-        }
-      }
-    }
-
-    // 3. Assign and write back
-    slot.member = name;
-    const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
-      method: 'PUT',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `Sign-up: ${name} → ${slot.role}`,
-        content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
-        sha
-      })
-    });
-
-    if (!putRes.ok) {
-      const err = await putRes.json().catch(() => ({}));
-      return json({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502);
-    }
-
-    return json({ ok: true, message: `${name} assigned to ${slot.role}` });
-
-    function json(data, status = 200) {
-      return new Response(JSON.stringify(data), {
-        status,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': allowedOrigin,
-        }
-      });
-    }
+    
+    return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
+
+// Handler: Discord login - redirect to Discord OAuth
+async function handleLogin(env) {
+  const params = new URLSearchParams({
+    client_id: env.DISCORD_CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    response_type: 'code',
+    scope: 'identify email guilds.members.read'
+  });
+  
+  return Response.redirect(`${DISCORD_API}/oauth2/authorize?${params}`, 302);
+}
+
+// Handler: Discord OAuth callback
+async function handleCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get('code');
+  
+  if (!code) {
+    return new Response('Missing authorization code', { status: 400 });
+  }
+  
+  try {
+    // Exchange code for access token
+    const tokenResponse = await fetch(`${DISCORD_API}/oauth2/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: env.DISCORD_CLIENT_ID,
+        client_secret: env.DISCORD_CLIENT_SECRET,
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri: REDIRECT_URI
+      })
+    });
+    
+    if (!tokenResponse.ok) {
+      throw new Error('Failed to exchange code for token');
+    }
+    
+    const tokenData = await tokenResponse.json();
+    
+    // Get user info from Discord
+    const userResponse = await fetch(`${DISCORD_API}/users/@me`, {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+    
+    if (!userResponse.ok) {
+      throw new Error('Failed to fetch user info');
+    }
+    
+    const user = await userResponse.json();
+    
+    // Store user in database
+    const now = Math.floor(Date.now() / 1000);
+    await env.DB.prepare(`
+      INSERT INTO users (id, username, discriminator, global_name, avatar, email, created_at, last_login, is_admin)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+      ON CONFLICT(id) DO UPDATE SET
+        username = excluded.username,
+        global_name = excluded.global_name,
+        avatar = excluded.avatar,
+        email = excluded.email,
+        last_login = excluded.last_login
+    `).bind(
+      user.id,
+      user.username,
+      user.discriminator || '',
+      user.global_name || user.username,
+      user.avatar || '',
+      user.email || '',
+      now,
+      now
+    ).run();
+    
+    // Generate JWT token
+    const jwtToken = await generateToken(user.id, env.JWT_SECRET);
+    
+    // Create session in database
+    await env.DB.prepare(`
+      INSERT INTO sessions (id, user_id, created_at, expires_at)
+      VALUES (?, ?, ?, ?)
+    `).bind(
+      jwtToken,
+      user.id,
+      now,
+      now + (30 * 24 * 60 * 60) // 30 days
+    ).run();
+    
+    // Redirect to SOP index with token
+    const redirectUrl = `https://andrew-ltu.github.io/AZO-Dynamic-Rolelist/sop/?token=${jwtToken}`;
+    return Response.redirect(redirectUrl, 302);
+    
+  } catch (error) {
+    return new Response(`Authentication failed: ${error.message}`, { status: 500 });
+  }
+}
+
+// Handler: Get current user
+async function handleGetUser(request, env, origin) {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  }
+  
+  const token = authHeader.substring(7);
+  const payload = await verifyToken(token, env.JWT_SECRET);
+  
+  if (!payload) {
+    return jsonResponse({ error: 'Invalid token' }, 401, origin);
+  }
+  
+  // Get user from database
+  const userResult = await env.DB.prepare(`
+    SELECT id, username, global_name, avatar, email, is_admin
+    FROM users WHERE id = ?
+  `).bind(payload.sub).first();
+  
+  if (!userResult) {
+    return jsonResponse({ error: 'User not found' }, 404, origin);
+  }
+  
+  // Get user roles
+  const rolesResult = await env.DB.prepare(`
+    SELECT role_name FROM user_roles WHERE user_id = ?
+  `).bind(payload.sub).all();
+  
+  const roles = rolesResult.results.map(r => r.role_name);
+  
+  return jsonResponse({
+    user: {
+      id: userResult.id,
+      username: userResult.username,
+      displayName: userResult.global_name,
+      avatar: userResult.avatar,
+      email: userResult.email,
+      isAdmin: userResult.is_admin === 1,
+      roles
+    }
+  }, 200, origin);
+}
+
+// Handler: Logout
+async function handleLogout(request, env, origin) {
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.substring(7);
+    
+    // Delete session from database
+    await env.DB.prepare(`
+      DELETE FROM sessions WHERE id = ?
+    `).bind(token).run();
+  }
+  
+  return jsonResponse({ ok: true }, 200, origin);
+}
+
+// Handler: Claim slot (existing functionality preserved)
+async function handleClaimSlot(request, env, origin) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
+  }
+
+  const { sectionKey, roleIndex, memberName } = body;
+  if (!sectionKey || roleIndex === undefined || !memberName?.trim()) {
+    return jsonResponse({ error: 'Missing required fields' }, 400, origin);
+  }
+
+  const name = memberName.trim();
+  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+  const headers = {
+    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
+    'Accept': 'application/vnd.github+json',
+    'User-Agent': 'AZO-Claim-Worker'
+  };
+
+  // Fetch current roster AND members directory
+  const [rosterRes, membersRes] = await Promise.all([
+    fetch(`${baseRepoUrl}/roster.json`, { headers }),
+    fetch(`${baseRepoUrl}/members.json`, { headers })
+  ]);
+
+  if (!rosterRes.ok) {
+    return jsonResponse({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502, origin);
+  }
+  if (!membersRes.ok) {
+    return jsonResponse({ error: `GitHub members fetch failed: ${membersRes.status}` }, 502, origin);
+  }
+
+  const rosterMeta = await rosterRes.json();
+  const membersMeta = await membersRes.json();
+
+  const sha = rosterMeta.sha;
+  const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
+  const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
+
+  // Find the slot
+  let slot = null;
+  try {
+    if (sectionKey === '__command') {
+      slot = roster.command?.[Number(roleIndex)];
+    } else if (sectionKey === '__attachment') {
+      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
+    } else {
+      const sec = roster.sections?.find(s => s.name === sectionKey);
+      if (sec) slot = sec.roles?.[Number(roleIndex)];
+    }
+  } catch (e) {
+    return jsonResponse({ error: 'Invalid role index' }, 400, origin);
+  }
+
+  if (!slot) return jsonResponse({ error: 'Role not found — refresh and try again' }, 404, origin);
+  if (slot.member) return jsonResponse({ error: `Already claimed by ${slot.member}` }, 409, origin);
+
+  // Validation: Check if user is certified for this slot
+  if (slot.endorsementRequired && slot.endorsementType) {
+    const memberKey = Object.keys(membersData).find(k => k.toLowerCase() === name.toLowerCase());
+    const member = memberKey ? membersData[memberKey] : null;
+
+    if (!member) {
+      return jsonResponse({ error: `Access Denied: "${name}" is not a registered member in the directory.` }, 403, origin);
+    }
+
+    if (slot.endorsementType === "Leadership Endorsement") {
+      if (!member.leadership) {
+        return jsonResponse({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403, origin);
+      }
+    } else {
+      const requiredEndorsement = slot.endorsementType.replace(" Endorsement", "");
+      const hasEndorsement = member.endorsements && member.endorsements.some(
+        e => e.toLowerCase() === requiredEndorsement.toLowerCase()
+      );
+
+      if (!hasEndorsement) {
+        return jsonResponse({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403, origin);
+      }
+    }
+  }
+
+  // Assign and write back
+  slot.member = name;
+  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
+    method: 'PUT',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: `Sign-up: ${name} → ${slot.role}`,
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
+      sha
+    })
+  });
+
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
+  }
+
+  return jsonResponse({ ok: true, message: `${name} assigned to ${slot.role}` }, 200, origin);
+}

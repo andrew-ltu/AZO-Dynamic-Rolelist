@@ -2,7 +2,14 @@ name = "azo-dynamic-rolelist-api"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
+# D1 Database for user authentication and role management
 [[d1_databases]]
 binding = "DB"
-database_name = "azo"
+database_name = "azo-database"
 database_id = "19d2b5fd-4de0-4afa-87d1-3edbd39c7575"
+
+# Environment variables (set via wrangler secret put)
+# DISCORD_CLIENT_ID - Discord OAuth app client ID
+# DISCORD_CLIENT_SECRET - Discord OAuth app client secret
+# JWT_SECRET - Secret key for JWT token signing
+# GITHUB_TOKEN - GitHub personal access token (existing)
