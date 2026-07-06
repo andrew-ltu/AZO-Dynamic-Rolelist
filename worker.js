@@ -10,6 +10,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 const DISCORD_API = 'https://discord.com/api/v10';
+const DISCORD_GUILD_ID = '504188370507792384';
 const REDIRECT_URI = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/auth/callback';
 
 // Helper: CORS headers
@@ -225,6 +226,52 @@ async function handleCallback(request, env) {
       now
     ).run();
     
+    // Fetch guild member info to get Discord roles
+    let roleNames = [];
+    try {
+      const memberResponse = await fetch(
+        `${DISCORD_API}/users/@me/guilds/${DISCORD_GUILD_ID}/member`,
+        { headers: { Authorization: `Bearer ${tokenData.access_token}` } }
+      );
+      if (memberResponse.ok) {
+        const memberData = await memberResponse.json();
+        const roleIds = memberData.roles || [];
+        
+        // Fetch guild roles to map IDs to names
+        let guildRoles = [];
+        if (env.DISCORD_BOT_TOKEN) {
+          const rolesResponse = await fetch(
+            `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
+            { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } }
+          );
+          if (rolesResponse.ok) guildRoles = await rolesResponse.json();
+        }
+        if (!guildRoles.length) {
+          // Fall back to OAuth token
+          try {
+            const fallbackResp = await fetch(
+              `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
+              { headers: { Authorization: `Bearer ${tokenData.access_token}` } }
+            );
+            if (fallbackResp.ok) guildRoles = await fallbackResp.json();
+          } catch (_) {}
+        }
+        
+        const roleMap = {};
+        guildRoles.forEach(r => { roleMap[r.id] = r.name; });
+        roleNames = roleIds.map(id => roleMap[id]).filter(Boolean);
+        
+        // Update user_roles in database
+        await env.DB.prepare(`DELETE FROM user_roles WHERE user_id = ?`).bind(user.id).run();
+        const stmt = `INSERT INTO user_roles (user_id, role_name, assigned_at, assigned_by) VALUES (?, ?, ?, ?)`;
+        for (const roleName of roleNames) {
+          await env.DB.prepare(stmt).bind(user.id, roleName, now, 'discord-sync').run();
+        }
+      }
+    } catch (e) {
+      console.error('Failed to sync Discord roles:', e);
+    }
+    
     // Generate JWT token
     const jwtToken = await generateToken(user.id, env.JWT_SECRET);
     
@@ -279,7 +326,7 @@ async function handleGetUser(request, env, origin) {
   
   const roles = rolesResult.results.map(r => r.role_name);
   
-  // Try to find roster name from members.json by Discord ID
+  // Try to find roster name from members.json by Discord ID or display name
   let rosterName = null;
   try {
     const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
@@ -301,10 +348,53 @@ async function handleGetUser(request, env, origin) {
           break;
         }
       }
+      // Fallback: match by display name (case-insensitive)
+      if (!rosterName) {
+        const displayName = (userResult.global_name || userResult.username || '').toLowerCase();
+        for (const [name] of Object.entries(membersData)) {
+          if (name.toLowerCase() === displayName) {
+            rosterName = name;
+            break;
+          }
+        }
+      }
     }
   } catch (e) {
     // If fetching members.json fails, just continue without roster name
     console.error('Failed to fetch roster name:', e);
+  }
+  
+  // On-demand role sync if DB has no roles and bot token is available
+  if (!roles.length && env.DISCORD_BOT_TOKEN) {
+    try {
+      const memberResp = await fetch(
+        `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/members/${userResult.id}`,
+        { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (memberResp.ok) {
+        const memberData = await memberResp.json();
+        const roleIds = memberData.roles || [];
+        const rolesResp = await fetch(
+          `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
+          { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } }
+        );
+        const guildRoles = rolesResp.ok ? await rolesResp.json() : [];
+        const roleMap = {};
+        guildRoles.forEach(r => { roleMap[r.id] = r.name; });
+        const fetchedRoles = roleIds.map(id => roleMap[id]).filter(Boolean);
+        if (fetchedRoles.length) {
+          const now = Math.floor(Date.now() / 1000);
+          await env.DB.prepare(`DELETE FROM user_roles WHERE user_id = ?`).bind(userResult.id).run();
+          const stmt = `INSERT INTO user_roles (user_id, role_name, assigned_at, assigned_by) VALUES (?, ?, ?, ?)`;
+          for (const roleName of fetchedRoles) {
+            await env.DB.prepare(stmt).bind(userResult.id, roleName, now, 'discord-sync').run();
+          }
+          roles.push(...fetchedRoles);
+        }
+      }
+    } catch (e) {
+      console.error('On-demand role sync failed:', e);
+    }
   }
   
   return jsonResponse({

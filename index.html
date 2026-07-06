@@ -46,8 +46,6 @@ a{color:var(--primary-2);}
   letter-spacing:.4px;
   padding:0 16px;
 }
-#discordBanner .ds-left{display:flex;align-items:center;gap:8px;}
-#discordBanner .ds-right{display:flex;align-items:center;gap:12px;margin-left:auto;}
 #discordBanner .ds-icon{color:rgba(88,101,242,.9);font-size:14px;}
 #discordBanner strong{color:#7a8fff;}
 #discordBanner .ds-sep{opacity:.4;margin:0 4px;}
@@ -564,23 +562,19 @@ footer b{color:var(--muted);}
 
 <!-- Discord Auth Banner -->
 <div id="discordBanner">
-  <div class="ds-left">
-    <div id="authNotLoggedIn" style="display:none;align-items:center;gap:12px;">
-      <span class="ds-icon">🔗</span>
-      <strong>Sign in with Discord to claim roles</strong>
-      <span class="ds-sep">|</span>
-      <button id="loginBtn" style="background:#5865F2;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Login with Discord</button>
-    </div>
+  <div id="authNotLoggedIn" style="display:none;align-items:center;gap:12px;">
+    <span class="ds-icon">🔗</span>
+    <strong>Sign in with Discord to claim roles</strong>
+    <span class="ds-sep">|</span>
+    <button id="loginBtn" style="background:#5865F2;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Login with Discord</button>
   </div>
-  <div class="ds-right">
-    <div id="authLoggedIn" style="display:none;align-items:center;">
-      <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
-      <strong id="userName"></strong>
-      <span class="ds-sep">|</span>
-      <span id="userRole" style="color:#36d07a;"></span>
-      <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
-      <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;">Logout</button>
-    </div>
+  <div id="authLoggedIn" style="display:none;align-items:center;gap:12px;">
+    <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
+    <strong id="userName"></strong>
+    <span class="ds-sep">|</span>
+    <span id="userRole" style="color:#36d07a;"></span>
+    <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
+    <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;">Logout</button>
   </div>
 </div>
 
@@ -727,11 +721,7 @@ footer b{color:var(--muted);}
         <div><div style="font-family:'Oswald';font-size:14px;color:#fff;">Op Creator Feedback</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate the operation, mission design &amp; Zeus</div></div>
         <span style="margin-left:auto;color:var(--primary-2);">↗</span>
       </a>
-      <a href="https://forms.gle/6iytmMj8NGTJFCN78" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);">
-        <span style="font-size:22px;">🪖</span>
-        <div><div style="font-family:'Oswald';font-size:14px;color:#fff;">Team Lead Feedback</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate your section leader &amp; leadership chain</div></div>
-        <span style="margin-left:auto;color:var(--primary-2);">↗</span>
-      </a>
+
     </div>
   </div>
 
@@ -2335,6 +2325,7 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   // If user is logged in, auto-fill their name and hide the input
   const nameInputSection = $('#nameInputSection');
   const autoNameSection = $('#autoNameSection');
+  const claimInput = $('#claimInput');
   
   if (currentUser && currentUser.rosterName) {
     // User is logged in - show their name automatically
@@ -2356,11 +2347,22 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
       $('#claimHint').style.color='#36d07a';
       $('#claimHint').textContent='You are eligible for this role.';
     }
+  } else if (currentUser) {
+    // User is logged in but no rosterName match - pre-fill input
+    nameInputSection.style.display = 'block';
+    autoNameSection.style.display = 'none';
+    claimInput.value = currentUser.displayName;
+    // Trigger filtering so matching names show
+    const e = new Event('input');
+    claimInput.dispatchEvent(e);
+    claimInput.select();
+    $('#claimHint').style.color='';
+    $('#claimHint').textContent='Select your name from the roster below or type to search.';
   } else {
     // User not logged in - show name input
     nameInputSection.style.display = 'block';
     autoNameSection.style.display = 'none';
-    $('#claimInput').value='';
+    claimInput.value='';
     $('#claimHint').style.color='';
     $('#claimHint').textContent='Your name must match the roster exactly. Case-sensitive.';
   }
