@@ -1542,8 +1542,10 @@ function renderAdminSlot(slot, sectionKey, slotIdx) {
   </div>`;
 }
 
-// Save operation settings
-$('#saveOpSettings').addEventListener('click', async () => {
+// Admin panel initialization (wrapped to ensure DOM is ready)
+function initAdminPanel() {
+  // Save operation settings
+  $('#saveOpSettings').addEventListener('click', async () => {
   if (!currentRoster) return;
   
   const countdownValue = $('#adminCountdown').value;
@@ -1782,7 +1784,7 @@ if (adminPanelBtn) adminPanelBtn.addEventListener('click', openAdminPanel);
 
 const adminCloseBtn = $('#adminCloseBtn');
 if (adminCloseBtn) adminCloseBtn.addEventListener('click', closeAdminPanel);
-
+} // End initAdminPanel function
 
 
 /* ---------- helpers ---------- */
@@ -2383,6 +2385,11 @@ $('#claimConfirm').onclick=submitClaim;
 $('#claimInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitClaim();});
 
 /* ---------- boot ---------- */
+// Wait for DOM to be fully loaded before initializing admin panel
+document.addEventListener('DOMContentLoaded', () => {
+  initAdminPanel();
+});
+
 (async function(){
   // Initialize Discord auth first
   await initAuth();
