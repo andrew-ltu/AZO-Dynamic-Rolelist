@@ -445,6 +445,116 @@ footer b{color:var(--muted);}
   .map-intel-card.span2{grid-column:span 1;}
   .sp-campaign-widget{display:none;}
 }
+
+/* ======================== ADMIN PANEL ======================== */
+#adminPanel{
+  position:fixed;inset:0;z-index:200;
+  background:var(--bg);
+  overflow-y:auto;display:none;
+  padding:var(--banner-h) 0 40px;
+}
+#adminPanel.show{display:block;}
+.admin-wrap{max-width:1200px;margin:0 auto;padding:20px;}
+.admin-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 0 20px;border-bottom:2px solid var(--line-strong);
+  margin-bottom:24px;
+}
+.admin-header h1{
+  font-family:'Oswald';font-size:28px;letter-spacing:2px;
+  text-transform:uppercase;margin:0;color:var(--primary-2);
+}
+.admin-close{
+  background:var(--panel);border:1px solid var(--line-strong);
+  color:var(--text);padding:8px 18px;border-radius:8px;
+  cursor:pointer;font:inherit;font-weight:600;
+  transition:background .15s;
+}
+.admin-close:hover{background:var(--primary);color:#fff;}
+
+.admin-section{
+  background:var(--panel);border:1px solid var(--line-strong);
+  border-radius:12px;padding:20px;margin-bottom:20px;
+}
+.admin-section-title{
+  font-family:'Oswald';font-size:18px;letter-spacing:2px;
+  text-transform:uppercase;color:#fff;margin:0 0 16px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+.admin-form{display:grid;gap:16px;}
+.admin-form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
+.admin-field{display:flex;flex-direction:column;gap:6px;}
+.admin-field label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
+}
+.admin-field input,.admin-field select,.admin-field textarea{
+  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
+  border-radius:6px;padding:10px 12px;color:var(--text);
+  font:inherit;font-size:14px;outline:none;
+  transition:border-color .15s;
+}
+.admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{
+  border-color:var(--primary);
+}
+.admin-field textarea{min-height:80px;resize:vertical;}
+
+.admin-btn-group{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.admin-btn{
+  padding:10px 20px;border-radius:8px;font:inherit;
+  font-weight:600;cursor:pointer;border:1px solid var(--line-strong);
+  transition:all .15s;
+}
+.admin-btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);}
+.admin-btn-primary:hover{background:var(--primary-2);}
+.admin-btn-secondary{background:transparent;color:var(--text);}
+.admin-btn-secondary:hover{background:var(--panel-solid);}
+.admin-btn-danger{background:#d94040;color:#fff;border-color:#d94040;}
+.admin-btn-danger:hover{background:#c02020;}
+
+.admin-slots-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.admin-slot-item{
+  background:rgba(0,0,0,.3);border:1px solid var(--line);
+  border-radius:8px;padding:12px 14px;
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+}
+.admin-slot-info{display:flex;flex-direction:column;gap:4px;}
+.admin-slot-role{font-weight:600;font-size:14px;}
+.admin-slot-member{font-size:12px;color:var(--muted);}
+.admin-slot-endorsement{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  color:#f0b429;background:rgba(240,180,41,.1);
+  border:1px solid rgba(240,180,41,.3);
+  border-radius:4px;padding:2px 6px;margin-top:2px;display:inline-block;
+}
+
+.admin-section-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.admin-section-item{
+  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
+  border-radius:10px;padding:16px;
+}
+.admin-section-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.admin-section-name{font-family:'Oswald';font-size:16px;color:#fff;}
+
+.admin-mini-btn{
+  padding:6px 12px;font-size:12px;border-radius:6px;
+  font-weight:600;cursor:pointer;border:1px solid var(--line);
+  background:transparent;color:var(--text);transition:all .15s;
+}
+.admin-mini-btn:hover{background:var(--panel);border-color:var(--primary);}
+.admin-mini-btn-danger{color:#ff6060;border-color:rgba(200,64,58,.4);}
+.admin-mini-btn-danger:hover{background:rgba(200,64,58,.15);border-color:#d94040;}
+
+.admin-status-msg{
+  padding:12px 16px;border-radius:8px;margin-top:16px;
+  font-size:13px;display:none;
+}
+.admin-status-msg.show{display:block;}
+.admin-status-msg.success{background:rgba(54,208,122,.15);border:1px solid rgba(54,208,122,.4);color:#36d07a;}
+.admin-status-msg.error{background:rgba(200,64,58,.15);border:1px solid rgba(200,64,58,.4);color:#ff6060;}
 </style>
 </head>
 <body>
@@ -462,6 +572,7 @@ footer b{color:var(--muted);}
     <strong id="userName"></strong>
     <span class="ds-sep">|</span>
     <span id="userRole" style="color:#36d07a;"></span>
+    <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
     <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;margin-left:auto;">Logout</button>
   </div>
   <span class="ds-sep">·</span>
@@ -1271,6 +1382,7 @@ async function initAuth() {
 function renderAuthUI() {
   const notLoggedIn = $('#authNotLoggedIn');
   const loggedIn = $('#authLoggedIn');
+  const adminBtn = $('#adminPanelBtn');
   
   if (currentUser) {
     notLoggedIn.style.display = 'none';
@@ -1288,9 +1400,15 @@ function renderAuthUI() {
     else if (currentUser.roles && currentUser.roles.length > 0) roleText = currentUser.roles.join(', ');
     
     $('#userRole').textContent = roleText;
+    
+    // Show admin button if user is admin
+    if (adminBtn) {
+      adminBtn.style.display = currentUser.isAdmin ? 'block' : 'none';
+    }
   } else {
     notLoggedIn.style.display = 'flex';
     loggedIn.style.display = 'none';
+    if (adminBtn) adminBtn.style.display = 'none';
   }
 }
 
@@ -1311,6 +1429,351 @@ $('#logoutBtn').addEventListener('click', async () => {
   renderAuthUI();
   window.location.reload();
 });
+
+/* ============================================================
+   ADMIN PANEL
+   ============================================================ */
+let currentRoster = null;
+
+function openAdminPanel() {
+  if (!currentUser || !currentUser.isAdmin) {
+    alert('Access denied: Admin privileges required');
+    return;
+  }
+  loadAdminData();
+  $('#adminPanel').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAdminPanel() {
+  $('#adminPanel').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function loadAdminData() {
+  if (!currentRoster) return;
+  
+  const op = currentRoster.operation || {};
+  $('#adminOpName').value = op.name || '';
+  $('#adminZeus').value = op.zeus || '';
+  $('#adminDate').value = op.date || '';
+  
+  // Convert ISO to datetime-local format
+  if (op.countdownTo) {
+    const dt = new Date(op.countdownTo);
+    const local = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000);
+    $('#adminCountdown').value = local.toISOString().slice(0, 16);
+  }
+  
+  $('#adminStatus').value = op.status || 'upcoming';
+  $('#adminTheme').value = op.theme || 'tactical-blue';
+  
+  renderAdminSections();
+}
+
+function renderAdminSections() {
+  const container = $('#adminSectionsList');
+  if (!container || !currentRoster) return;
+  
+  const sections = currentRoster.sections || [];
+  const command = currentRoster.command || [];
+  
+  let html = '';
+  
+  // Command section
+  if (command.length > 0) {
+    html += `<div class="admin-section-item">
+      <div class="admin-section-header">
+        <span class="admin-section-name">🎖️ Platoon HQ (Command)</span>
+      </div>
+      <div class="admin-slots-list">
+        ${command.map((slot, idx) => renderAdminSlot(slot, '__command', idx)).join('')}
+      </div>
+      <div class="admin-btn-group">
+        <button class="admin-mini-btn" onclick="addSlotToSection('__command')">+ Add Slot</button>
+      </div>
+    </div>`;
+  }
+  
+  // Regular sections
+  sections.forEach((section, secIdx) => {
+    html += `<div class="admin-section-item">
+      <div class="admin-section-header">
+        <span class="admin-section-name">${esc(section.name)}</span>
+        <div style="display:flex;gap:8px;">
+          <button class="admin-mini-btn" onclick="editSectionName('${secIdx}')">Edit Name</button>
+          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSection('${secIdx}')">Delete</button>
+        </div>
+      </div>
+      <div class="admin-slots-list">
+        ${(section.roles || []).map((slot, idx) => renderAdminSlot(slot, secIdx, idx)).join('')}
+      </div>
+      <div class="admin-btn-group">
+        <button class="admin-mini-btn" onclick="addSlotToSection('${secIdx}')">+ Add Slot</button>
+      </div>
+    </div>`;
+  });
+  
+  container.innerHTML = html;
+}
+
+function renderAdminSlot(slot, sectionKey, slotIdx) {
+  const role = typeof slot === 'string' ? slot : slot.role || 'Role';
+  const member = slot.member || null;
+  const endorsement = slot.endorsementRequired ? (slot.endorsementType || 'Endorsement Required') : null;
+  
+  return `<div class="admin-slot-item">
+    <div class="admin-slot-info">
+      <div class="admin-slot-role">${esc(role)}</div>
+      ${member ? `<div class="admin-slot-member">👤 ${esc(member)}</div>` : '<div class="admin-slot-member" style="color:var(--muted-2);">Available</div>'}
+      ${endorsement ? `<span class="admin-slot-endorsement">🔒 ${esc(endorsement)}</span>` : ''}
+    </div>
+    <button class="admin-mini-btn" onclick="editSlot('${sectionKey}', ${slotIdx})">Edit</button>
+    <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSlot('${sectionKey}', ${slotIdx})">Delete</button>
+  </div>`;
+}
+
+// Save operation settings
+$('#saveOpSettings').addEventListener('click', async () => {
+  if (!currentRoster) return;
+  
+  const countdownValue = $('#adminCountdown').value;
+  let countdownISO = '';
+  if (countdownValue) {
+    const dt = new Date(countdownValue);
+    countdownISO = dt.toISOString();
+  }
+  
+  currentRoster.operation = {
+    ...currentRoster.operation,
+    name: $('#adminOpName').value,
+    zeus: $('#adminZeus').value,
+    date: $('#adminDate').value,
+    countdownTo: countdownISO,
+    status: $('#adminStatus').value,
+    theme: $('#adminTheme').value
+  };
+  
+  await saveRoster();
+  showStatus('opSettingsStatus', 'Operation settings saved!', 'success');
+});
+
+// Add new section
+$('#addSectionBtn').addEventListener('click', () => {
+  const name = prompt('Enter section name (e.g., "Alpha", "Bravo"):');
+  if (!name) return;
+  
+  if (!currentRoster.sections) currentRoster.sections = [];
+  currentRoster.sections.push({
+    name,
+    roles: []
+  });
+  
+  saveRoster();
+  renderAdminSections();
+});
+
+// Edit section name
+window.editSectionName = (secIdx) => {
+  const section = currentRoster.sections[secIdx];
+  const newName = prompt('Enter new section name:', section.name);
+  if (!newName) return;
+  
+  section.name = newName;
+  saveRoster();
+  renderAdminSections();
+};
+
+// Delete section
+window.deleteSection = (secIdx) => {
+  if (!confirm('Delete this entire section? This cannot be undone.')) return;
+  currentRoster.sections.splice(secIdx, 1);
+  saveRoster();
+  renderAdminSections();
+};
+
+// Add slot to section
+window.addSlotToSection = (sectionKey) => {
+  const roleName = prompt('Enter role name (e.g., "Team Leader", "Rifleman"):');
+  if (!roleName) return;
+  
+  const needsEndorsement = confirm('Does this role require an endorsement (Medical, JTAC, Leadership)?');
+  let endorsementType = '';
+  
+  if (needsEndorsement) {
+    const options = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership', 'Custom'];
+    const choice = prompt(`Select endorsement type:\n1. Medical Endorsement\n2. JTAC Endorsement\n3. Junior Leadership\n4. Senior Leadership\n5. Custom\n\nEnter number (1-5):`);
+    
+    if (choice === '5') {
+      endorsementType = prompt('Enter custom endorsement name:') || 'Endorsement Required';
+    } else {
+      endorsementType = options[parseInt(choice) - 1] || 'Endorsement Required';
+    }
+  }
+  
+  const newSlot = {
+    role: roleName,
+    member: null,
+    endorsementRequired: needsEndorsement,
+    endorsementType: endorsementType || undefined
+  };
+  
+  if (sectionKey === '__command') {
+    if (!currentRoster.command) currentRoster.command = [];
+    currentRoster.command.push(newSlot);
+  } else {
+    const section = currentRoster.sections[sectionKey];
+    if (!section.roles) section.roles = [];
+    section.roles.push(newSlot);
+  }
+  
+  saveRoster();
+  renderAdminSections();
+};
+
+// Edit slot
+window.editSlot = (sectionKey, slotIdx) => {
+  let slot;
+  if (sectionKey === '__command') {
+    slot = currentRoster.command[slotIdx];
+  } else {
+    slot = currentRoster.sections[sectionKey].roles[slotIdx];
+  }
+  
+  const action = prompt(`Edit slot:\n1. Change role name\n2. Assign member\n3. Unassign member\n4. Toggle endorsement lock\n\nEnter number (1-4):`);
+  
+  if (action === '1') {
+    const newRole = prompt('Enter new role name:', slot.role);
+    if (newRole) slot.role = newRole;
+  } else if (action === '2') {
+    const memberList = Object.keys(MEMBERS).filter(k => !k.startsWith('_')).sort();
+    const memberName = prompt(`Enter member name:\n\nAvailable members:\n${memberList.join(', ')}`);
+    if (memberName && MEMBERS[memberName]) {
+      // Check endorsement
+      if (slot.endorsementRequired && slot.endorsementType) {
+        if (!memberHasEndorsement(memberName, slot.endorsementType)) {
+          const override = confirm(`${memberName} does not have ${slot.endorsementType}. Assign anyway?`);
+          if (!override) return;
+        }
+      }
+      slot.member = memberName;
+    } else if (memberName) {
+      alert('Member not found in roster. Please check spelling.');
+      return;
+    }
+  } else if (action === '3') {
+    slot.member = null;
+  } else if (action === '4') {
+    slot.endorsementRequired = !slot.endorsementRequired;
+    if (slot.endorsementRequired && !slot.endorsementType) {
+      const options = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership', 'Custom'];
+      const choice = prompt(`Select endorsement type:\n1. Medical Endorsement\n2. JTAC Endorsement\n3. Junior Leadership\n4. Senior Leadership\n5. Custom\n\nEnter number (1-5):`);
+      
+      if (choice === '5') {
+        slot.endorsementType = prompt('Enter custom endorsement name:') || 'Endorsement Required';
+      } else {
+        slot.endorsementType = options[parseInt(choice) - 1] || 'Endorsement Required';
+      }
+    }
+  }
+  
+  saveRoster();
+  renderAdminSections();
+};
+
+// Delete slot
+window.deleteSlot = (sectionKey, slotIdx) => {
+  if (!confirm('Delete this slot?')) return;
+  
+  if (sectionKey === '__command') {
+    currentRoster.command.splice(slotIdx, 1);
+  } else {
+    currentRoster.sections[sectionKey].roles.splice(slotIdx, 1);
+  }
+  
+  saveRoster();
+  renderAdminSections();
+};
+
+// Clear all assignments
+$('#clearAllAssignmentsBtn').addEventListener('click', () => {
+  if (!confirm('Clear ALL slot assignments? This will unassign everyone from their slots.')) return;
+  
+  // Clear command
+  if (currentRoster.command) {
+    currentRoster.command.forEach(slot => { slot.member = null; });
+  }
+  
+  // Clear sections
+  if (currentRoster.sections) {
+    currentRoster.sections.forEach(section => {
+      if (section.roles) {
+        section.roles.forEach(slot => { slot.member = null; });
+      }
+    });
+  }
+  
+  saveRoster();
+  renderAdminSections();
+  showStatus('quickActionsStatus', 'All assignments cleared!', 'success');
+});
+
+// Archive operation
+$('#archiveOperationBtn').addEventListener('click', () => {
+  alert('Archive feature coming soon! This will move the current operation to the "Previous Ops" tab.');
+});
+
+// Save roster to server
+async function saveRoster() {
+  try {
+    const token = localStorage.getItem('azo_token');
+    if (!token) throw new Error('Not authenticated');
+    
+    const response = await fetch(`${API_BASE}/api/admin/roster`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(currentRoster)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to save: ${response.status}`);
+    }
+    
+    // Reload roster in background
+    const reloadResponse = await fetch('roster.json', { cache: 'no-store' });
+    if (reloadResponse.ok) {
+      currentRoster = await reloadResponse.json();
+      render(currentRoster);
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Save error:', error);
+    alert('Failed to save roster: ' + error.message);
+    return false;
+  }
+}
+
+function showStatus(elementId, message, type) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.textContent = message;
+  el.className = `admin-status-msg show ${type}`;
+  setTimeout(() => {
+    el.classList.remove('show');
+  }, 4000);
+}
+
+// Admin panel events
+const adminPanelBtn = $('#adminPanelBtn');
+if (adminPanelBtn) adminPanelBtn.addEventListener('click', openAdminPanel);
+
+const adminCloseBtn = $('#adminCloseBtn');
+if (adminCloseBtn) adminCloseBtn.addEventListener('click', closeAdminPanel);
+
 
 
 /* ---------- helpers ---------- */
@@ -1449,6 +1912,7 @@ function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx){
 
 /* ---------- render ---------- */
 function render(roster){
+  currentRoster = roster; // Store for admin panel
   const op=roster.operation||{};
   document.documentElement.setAttribute('data-theme',op.theme||'tactical-blue');
   document.title=`AZO — ${op.name||'Role List'}`;
@@ -1935,5 +2399,86 @@ $('#claimInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitClaim()
   }
 })();
 </script>
+
+<!-- Admin Panel -->
+<div id="adminPanel">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>🛠️ Admin Roster Management</h1>
+      <button class="admin-close" id="adminCloseBtn">Close</button>
+    </div>
+
+    <!-- Operation Settings -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Operation Settings</h2>
+      <div class="admin-form">
+        <div class="admin-form-row">
+          <div class="admin-field">
+            <label>Operation Name</label>
+            <input type="text" id="adminOpName" placeholder="Operation Karoonda III">
+          </div>
+          <div class="admin-field">
+            <label>Zeus/Op Creator</label>
+            <input type="text" id="adminZeus" placeholder="Jag McMuffin">
+          </div>
+        </div>
+        <div class="admin-form-row">
+          <div class="admin-field">
+            <label>Date & Time</label>
+            <input type="text" id="adminDate" placeholder="Friday 11 July · 19:00 AEST">
+          </div>
+          <div class="admin-field">
+            <label>Countdown Target (ISO)</label>
+            <input type="datetime-local" id="adminCountdown">
+          </div>
+        </div>
+        <div class="admin-form-row">
+          <div class="admin-field">
+            <label>Status</label>
+            <select id="adminStatus">
+              <option value="upcoming">Upcoming</option>
+              <option value="live">Live</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>Theme</label>
+            <select id="adminTheme">
+              <option value="tactical-blue">Tactical Blue</option>
+              <option value="desert">Desert</option>
+              <option value="jungle">Jungle</option>
+              <option value="night">Night</option>
+              <option value="blood">Blood</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-btn-group">
+          <button class="admin-btn admin-btn-primary" id="saveOpSettings">Save Operation Settings</button>
+        </div>
+        <div id="opSettingsStatus" class="admin-status-msg"></div>
+      </div>
+    </div>
+
+    <!-- Roster Structure Editor -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Roster Structure</h2>
+      <div id="adminSectionsList" class="admin-section-list"></div>
+      <div class="admin-btn-group">
+        <button class="admin-btn admin-btn-secondary" id="addSectionBtn">+ Add Section</button>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Quick Actions</h2>
+      <div class="admin-btn-group">
+        <button class="admin-btn admin-btn-secondary" id="clearAllAssignmentsBtn">Clear All Slot Assignments</button>
+        <button class="admin-btn admin-btn-danger" id="archiveOperationBtn">Archive Operation to Previous Ops</button>
+      </div>
+      <div id="quickActionsStatus" class="admin-status-msg"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

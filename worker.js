@@ -141,6 +141,11 @@ export default {
       return handleClaimSlot(request, env, origin);
     }
     
+    // Route: Admin - Save roster (NEW)
+    if (url.pathname === '/api/admin/roster' && request.method === 'POST') {
+      return handleAdminSaveRoster(request, env, origin);
+    }
+    
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
@@ -233,8 +238,8 @@ async function handleCallback(request, env) {
       now + (30 * 24 * 60 * 60) // 30 days
     ).run();
     
-    // Redirect to SOP index with token
-    const redirectUrl = `https://andrew-ltu.github.io/AZO-Dynamic-Rolelist/sop/?token=${jwtToken}`;
+    // Redirect to main roster page with token
+    const redirectUrl = `https://andrew-ltu.github.io/AZO-Dynamic-Rolelist/?token=${jwtToken}`;
     return Response.redirect(redirectUrl, 302);
     
   } catch (error) {
@@ -404,4 +409,73 @@ async function handleClaimSlot(request, env, origin) {
   }
 
   return jsonResponse({ ok: true, message: `${name} assigned to ${slot.role}` }, 200, origin);
+}
+
+// Handler: Admin - Save entire roster
+async function handleAdminSaveRoster(request, env, origin) {
+  // Verify admin authentication
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  }
+  
+  const token = authHeader.substring(7);
+  const payload = await verifyToken(token, env.JWT_SECRET);
+  
+  if (!payload) {
+    return jsonResponse({ error: 'Invalid token' }, 401, origin);
+  }
+  
+  // Check if user is admin
+  const userResult = await env.DB.prepare(`
+    SELECT is_admin FROM users WHERE id = ?
+  `).bind(payload.sub).first();
+  
+  if (!userResult || userResult.is_admin !== 1) {
+    return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
+  }
+  
+  // Get new roster data
+  let newRoster;
+  try {
+    newRoster = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
+  }
+  
+  // Save to GitHub
+  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+  const headers = {
+    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
+    'Accept': 'application/vnd.github+json',
+    'User-Agent': 'AZO-Admin-Worker'
+  };
+  
+  // Fetch current roster to get SHA
+  const rosterRes = await fetch(`${baseRepoUrl}/roster.json`, { headers });
+  
+  if (!rosterRes.ok) {
+    return jsonResponse({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502, origin);
+  }
+  
+  const rosterMeta = await rosterRes.json();
+  const sha = rosterMeta.sha;
+  
+  // Write updated roster
+  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
+    method: 'PUT',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: 'Admin: Update roster structure',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(newRoster, null, 2)))),
+      sha
+    })
+  });
+  
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
+  }
+  
+  return jsonResponse({ ok: true, message: 'Roster saved successfully' }, 200, origin);
 }
