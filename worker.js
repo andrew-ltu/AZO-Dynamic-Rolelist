@@ -149,6 +149,11 @@ export default {
       return handleAdminSaveRoster(request, env, origin);
     }
     
+    // Route: Self-unassign from a role
+    if (url.pathname === '/api/unassign' && request.method === 'POST') {
+      return handleUnassignSlot(request, env, origin);
+    }
+    
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
@@ -631,4 +636,107 @@ async function handleAdminSaveRoster(request, env, origin) {
   }
   
   return jsonResponse({ ok: true, message: 'Roster saved successfully' }, 200, origin);
+}
+
+// Handler: Self-unassign from a role
+async function handleUnassignSlot(request, env, origin) {
+  // Verify authentication
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  }
+  const token = authHeader.substring(7);
+  const payload = await verifyToken(token, env.JWT_SECRET);
+  if (!payload) return jsonResponse({ error: 'Invalid token' }, 401, origin);
+
+  let body;
+  try { body = await request.json(); } catch {
+    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
+  }
+
+  const { sectionKey, roleIndex } = body;
+  if (!sectionKey || roleIndex === undefined) {
+    return jsonResponse({ error: 'Missing required fields' }, 400, origin);
+  }
+
+  // Get user info
+  const userResult = await env.DB.prepare(
+    `SELECT id, username, global_name FROM users WHERE id = ?`
+  ).bind(payload.sub).first();
+  if (!userResult) return jsonResponse({ error: 'User not found' }, 404, origin);
+
+  // Fetch roster and members
+  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+  const ghHeaders = {
+    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
+    'Accept': 'application/vnd.github+json',
+    'User-Agent': 'AZO-Unassign-Worker'
+  };
+
+  const [rosterRes, membersRes] = await Promise.all([
+    fetch(`${baseRepoUrl}/roster.json`, { headers: ghHeaders }),
+    fetch(`${baseRepoUrl}/members.json`, { headers: ghHeaders })
+  ]);
+  if (!rosterRes.ok) return jsonResponse({ error: 'Roster fetch failed' }, 502, origin);
+  if (!membersRes.ok) return jsonResponse({ error: 'Members fetch failed' }, 502, origin);
+
+  const rosterMeta = await rosterRes.json();
+  const membersMeta = await membersRes.json();
+  const sha = rosterMeta.sha;
+  const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
+  const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
+
+  // Find the slot
+  let slot = null;
+  try {
+    if (sectionKey === '__command') {
+      slot = roster.command?.[Number(roleIndex)];
+    } else if (sectionKey === '__attachment') {
+      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
+    } else {
+      const sec = roster.sections?.find(s => s.name === sectionKey);
+      if (sec) slot = sec.roles?.[Number(roleIndex)];
+    }
+  } catch (e) {
+    return jsonResponse({ error: 'Invalid role index' }, 400, origin);
+  }
+
+  if (!slot) return jsonResponse({ error: 'Role not found' }, 404, origin);
+  if (!slot.member) return jsonResponse({ error: 'Slot is not claimed' }, 400, origin);
+
+  // Resolve user's roster name
+  let userName = null;
+  for (const [n, d] of Object.entries(membersData)) {
+    if (d.discordId === userResult.id) { userName = n; break; }
+  }
+  if (!userName) {
+    const display = (userResult.global_name || userResult.username || '').toLowerCase();
+    for (const [n] of Object.entries(membersData)) {
+      if (n.toLowerCase() === display) { userName = n; break; }
+    }
+  }
+
+  // Verify the slot belongs to this user
+  if (!userName || slot.member.toLowerCase() !== userName.toLowerCase()) {
+    return jsonResponse({ error: 'You can only unassign yourself from your own slots' }, 403, origin);
+  }
+
+  // Clear the slot
+  slot.member = null;
+  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
+    method: 'PUT',
+    headers: { ...ghHeaders, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: `Unassign: ${userName} left ${slot.role}`,
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
+      sha
+    })
+  });
+
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
+  }
+
+  return jsonResponse({ ok: true, message: `Unassigned from ${slot.role}` }, 200, origin);
 }

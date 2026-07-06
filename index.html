@@ -229,7 +229,7 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .endorse-pill{display:inline-flex;align-items:center;justify-content:center;margin-left:6px;width:16px;height:16px;border-radius:50%;font-size:10px;font-weight:700;vertical-align:middle;background:rgba(240,180,41,.15);border:1px solid rgba(240,180,41,.5);color:#f0b429;cursor:help;}
 
 /* ======================== SLOTS ======================== */
-.slot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;transition:background .13s,border-color .13s,transform .1s;text-align:left;width:100%;background:transparent;color:inherit;font:inherit;}
+.slot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;transition:background .13s,border-color .13s,transform .1s;text-align:left;width:100%;background:transparent;color:inherit;font:inherit;position:relative;}
 .slot:hover{background:color-mix(in srgb,var(--primary) 11%,transparent);border-color:var(--line-strong);transform:translateX(2px);}
 .slot:focus-visible{outline:2px solid var(--primary-2);outline-offset:2px;}
 .slot .meta{min-width:0;flex:1;}
@@ -372,14 +372,8 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .promo-note{font-size:11px;color:var(--muted-2);margin-top:7px;}
 
 /* ======================== MUSIC ======================== */
-#music{position:fixed;right:20px;bottom:20px;z-index:40;display:flex;align-items:center;background:rgba(8,14,22,.95);border:1px solid var(--line-strong);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(54,208,122,.08);overflow:hidden;backdrop-filter:blur(10px);}
-#music button{background:transparent;border:0;color:var(--text);cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:10px;font:inherit;font-weight:700;font-size:14px;letter-spacing:.3px;}
-#music button:hover{color:#fff;}
-#music .eq{display:inline-flex;gap:3px;height:16px;align-items:flex-end;}
-#music .eq i{width:4px;background:var(--primary-2);border-radius:2px;height:6px;}
-#music.playing .eq i{animation:eq .9s ease-in-out infinite;}
-#music .eq i:nth-child(2){animation-delay:.15s;}#music .eq i:nth-child(3){animation-delay:.3s;}#music .eq i:nth-child(4){animation-delay:.45s;}
-@keyframes eq{0%,100%{height:4px;}50%{height:16px;}}
+
+
 
 /* ======================== COMING SOON OVERLAY ======================== */
 #comingSoon{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(180deg,rgba(5,8,14,.93),rgba(5,8,14,.98));backdrop-filter:blur(4px);}
@@ -522,6 +516,9 @@ footer b{color:var(--muted);}
 .admin-slot-info{display:flex;flex-direction:column;gap:4px;}
 .admin-slot-role{font-weight:600;font-size:14px;}
 .admin-slot-member{font-size:12px;color:var(--muted);}
+.slot-unassign{position:absolute;top:2px;right:2px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(200,64,58,.2);color:var(--red);font-size:11px;cursor:pointer;opacity:0;transition:opacity .15s;z-index:2;border:0;}
+.slot:hover .slot-unassign,.slot-unassign:hover{opacity:1;}
+.slot-unassign:hover{background:rgba(200,64,58,.4);}
 .admin-slot-endorsement{
   font-family:'Share Tech Mono',monospace;font-size:9px;
   color:#f0b429;background:rgba(240,180,41,.1);
@@ -1251,8 +1248,6 @@ footer b{color:var(--muted);}
       <div class="warn-box">
         <div class="warn-head"><span>⚠</span> Read before signing up</div>
         <ul>
-          <li>Once you lock in a slot, you remain locked in for this operation.</li>
-          <li>To be unassigned, a staff member must manually edit the roster.</li>
           <li>After signing up, the page takes <strong>1-2 minutes</strong> to update — this is normal.</li>
           <li>Only one person can hold each slot. First in wins.</li>
         </ul>
@@ -1300,18 +1295,7 @@ footer b{color:var(--muted);}
   </div>
 </div>
 
-<!-- Music player (hidden while no music set) -->
-<div id="music" hidden>
-  <button id="musicBtn" type="button">
-    <span class="eq"><i></i><i></i><i></i><i></i></span>
-    <span id="musicLbl">Play anthem</span>
-  </button>
-  <div id="anthemPicker" style="display:none">
-    <button type="button" id="anthem1Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:10px;font:inherit;font-size:12px;">A1</button>
-    <button type="button" id="anthem2Btn" style="background:transparent;border:0;color:var(--muted);cursor:pointer;padding:10px;font:inherit;font-size:12px;">A2</button>
-  </div>
-</div>
-<audio id="audio" loop></audio>
+
 
 <!-- AZO emblem -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1413,9 +1397,8 @@ function renderAuthUI() {
     $('#userAvatar').src = avatarUrl;
     $('#userName').textContent = currentUser.displayName;
     
-    let roleText = 'Member';
-    if (currentUser.isAdmin) roleText = 'Admin';
-    else if (currentUser.roles && currentUser.roles.length > 0) roleText = currentUser.roles.join(', ');
+    let roleText = currentUser.roles && currentUser.roles.length > 0 ? currentUser.roles.join(', ') : 'Member';
+    if (currentUser.isAdmin) roleText = 'Admin' + (roleText !== 'Member' ? ' | ' + roleText : '');
     
     $('#userRole').textContent = roleText;
     
@@ -1876,7 +1859,7 @@ function attendanceStrip(m){
 }
 
 /* ---------- slot HTML ---------- */
-function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx){
+function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx,currentUserName){
   const role=typeof roleObj==='string'?roleObj:roleObj.role;
   const endorseRequired=!locked&&roleObj.endorsementRequired;
   const endorseType=endorseRequired?(roleObj.endorsementType||'Endorsement Req.'):'';
@@ -1910,16 +1893,19 @@ function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx){
       ?`<span class="att-badge att-yes" title="Attended">✓</span>`
       :`<span class="att-badge att-no" title="Did not attend">✗</span>`)
     :'';
+  // Self-unassign button
+  const isSelf = currentUserName && name.toLowerCase() === currentUserName.toLowerCase();
+  const unassignHtml = isSelf ? `<span class="slot-unassign" data-unassign="${esc(JSON.stringify(claimCtx||{}))}" title="Unassign yourself">✕</span>` : '';
   if(isExternal){
     return `<div class="slot ${lvl}" style="cursor:default;">
       ${avatarHTML(m,av)}
       <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
-      ${badge}</div>`;
+      ${badge}${unassignHtml}</div>`;
   }
   return `<button class="slot ${lvl}" type="button" data-name="${esc(name)}">
     ${avatarHTML(m,av)}
     <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
-    ${badge}</button>`;
+    ${badge}${unassignHtml}</button>`;
 }
 
 /* ---------- render ---------- */
@@ -1941,12 +1927,13 @@ function render(roster){
   const showAtt=op.status==='complete';
   const attendedSet=new Set(roster.attended||[]);
 
-  const cmd=(roster.command||[]).map((r,i)=>slotHTML(r,r.member,false,attendedSet,showAtt,null,{sectionKey:'__command',roleIndex:i})).join('');
+  const uname = currentUser ? (currentUser.rosterName || currentUser.displayName) : null;
+  const cmd=(roster.command||[]).map((r,i)=>slotHTML(r,r.member,false,attendedSet,showAtt,null,{sectionKey:'__command',roleIndex:i},uname)).join('');
 
   const sections=(roster.sections||[]).map(sec=>{
     const roles=sec.roles||[];
     const filled=roles.filter(r=>r.member).length;
-    const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i})).join('');
+    const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
     const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
     return `<div class="sec ${sec.locked?'locked':''} bracketed">
@@ -1957,7 +1944,7 @@ function render(roster){
   const attachments=(roster.attachments||[]).map((att,attIdx)=>{
     const roles=att.roles||[];
     const filled=roles.filter(r=>r.member).length;
-    const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}})).join('');
+    const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}},uname)).join('');
     const headRight=att.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=att.locked&&att.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>`:'';
     return `<div class="sec ${att.locked?'locked':''} bracketed">
@@ -2013,7 +2000,7 @@ function render(roster){
     </footer>`;
 
   setupCountdown(op);
-  setupMusic(op);
+
   setupComingSoon(op);
   buildOperatorDropdown();
 }
@@ -2096,25 +2083,6 @@ function openRoster(){
   $('#rosterOverlay').classList.add('show');
 }
 function closeRoster(){$('#rosterOverlay').classList.remove('show');}
-
-/* ---------- music ---------- */
-function setupMusic(op){
-  const wrap=$('#music'),btn=$('#musicBtn'),lbl=$('#musicLbl'),audio=$('#audio');
-  const picker=$('#anthemPicker'),a1btn=$('#anthem1Btn'),a2btn=$('#anthem2Btn');
-  if(!op.music){wrap.hidden=true;return;}
-  wrap.hidden=false;
-  const anthems=[op.music];if(op.music2)anthems.push(op.music2);
-  let curIdx=anthems.length>1?Math.floor(Math.random()*anthems.length):0;
-  const updateBtns=()=>{if(anthems.length<2){picker.style.display='none';return;}picker.style.display='flex';a1btn.style.color=curIdx===0?'var(--primary-2)':'var(--muted)';a2btn.style.color=curIdx===1?'var(--primary-2)':'var(--muted)';};
-  const loadIdx=(idx)=>{const was=!audio.paused;curIdx=idx;audio.pause();audio.src=anthems[idx];audio.load();audio.volume=(typeof op.musicVolume==='number')?op.musicVolume:.15;updateBtns();if(was)audio.play().catch(()=>{});};
-  audio.volume=(typeof op.musicVolume==='number')?op.musicVolume:.15;loadIdx(curIdx);
-  const setUI=pl=>{wrap.classList.toggle('playing',pl);lbl.textContent=pl?'Pause anthem':'Play anthem';};
-  const start=()=>audio.play().then(()=>{setUI(true);return true;}).catch(()=>{setUI(false);return false;});
-  // Only play when user explicitly clicks — no autoplay
-  btn.onclick=()=>{if(audio.paused)start();else{audio.pause();setUI(false);}};
-  a1btn.onclick=()=>{loadIdx(0);start();};a2btn.onclick=()=>{loadIdx(1);start();};
-  updateBtns();
-}
 
 /* ---------- coming soon takeover ---------- */
 function setupComingSoon(op){
@@ -2283,6 +2251,18 @@ const spPrevOpsBack = $('#spPrevOpsBack'); if(spPrevOpsBack) spPrevOpsBack.oncli
 
 /* ---------- global click routing ---------- */
 document.addEventListener('click',e=>{
+  const unassignBtn=e.target.closest('[data-unassign]');
+  if(unassignBtn){
+    const ctx=JSON.parse(unassignBtn.dataset.unassign||'{}');
+    if(!ctx.sectionKey||ctx.roleIndex===undefined)return;
+    if(!confirm('Unassign yourself from this role?'))return;
+    const token=localStorage.getItem('azo_token');
+    if(!token){alert('You must be signed in.');return;}
+    fetch(CLAIM_ENDPOINT+'/api/unassign',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({sectionKey:ctx.sectionKey,roleIndex:ctx.roleIndex})})
+      .then(r=>r.json()).then(d=>{if(d.ok){location.reload();}else{alert(d.error||'Failed to unassign');}})
+      .catch(()=>alert('Network error'));
+    return;
+  }
   const claimBtn=e.target.closest('[data-claim]');
   if(claimBtn&&claimBtn.dataset.claim){
     try{const ctx=JSON.parse(claimBtn.dataset.claim);openClaim(ctx.sectionKey,ctx.roleIndex,claimBtn.dataset.roleLabel||'Role',claimBtn.dataset.endorseType||'');}catch(_){}
