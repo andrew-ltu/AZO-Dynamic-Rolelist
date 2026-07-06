@@ -164,7 +164,7 @@ async function handleLogin(env) {
     client_id: env.DISCORD_CLIENT_ID,
     redirect_uri: REDIRECT_URI,
     response_type: 'code',
-    scope: 'identify email guilds.members.read'
+    scope: 'identify email guilds guilds.members.read'
   });
   
   return Response.redirect(`${DISCORD_API}/oauth2/authorize?${params}`, 302);

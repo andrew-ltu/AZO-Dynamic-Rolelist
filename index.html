@@ -511,8 +511,9 @@ footer b{color:var(--muted);}
 .admin-slot-item{
   background:rgba(0,0,0,.3);border:1px solid var(--line);
   border-radius:8px;padding:12px 14px;
-  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
 }
+.admin-slot-actions{display:flex;flex-wrap:wrap;gap:6px;}
 .admin-slot-info{display:flex;flex-direction:column;gap:4px;}
 .admin-slot-role{font-weight:600;font-size:14px;}
 .admin-slot-member{font-size:12px;color:var(--muted);}
@@ -833,7 +834,7 @@ footer b{color:var(--muted);}
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/spacecat82.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Spacecat82</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/crallers.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Crallers</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
           </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op — Charlie</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op - Charlie</div>
           <div style="display:flex;flex-direction:column;">
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">SL</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Cmdr. Garuda XIII</div><span style="font-size:9px;color:var(--muted-2);">Section Leader</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">AS</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Cmmsr Tooko</div><span style="font-size:9px;color:var(--muted-2);">Asst. Section Leader</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
@@ -845,7 +846,7 @@ footer b{color:var(--muted);}
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">RF</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Snr Ctr. Boomer</div><span style="font-size:9px;color:var(--muted-2);">Rifleman</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
           </div>
 
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op — Blackjack</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op - Blackjack</div>
           <div style="display:flex;flex-direction:column;">
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">PT</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">1st Lt B. Hag</div><span style="font-size:9px;color:var(--muted-2);">Pilot</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
             <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">CP</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">2d Lt D. Mason</div><span style="font-size:9px;color:var(--muted-2);">Co-pilot</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
@@ -886,7 +887,7 @@ footer b{color:var(--muted);}
       <!-- MAY -->
       <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">May</div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Desert Mourning</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: —</div></div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Desert Mourning</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: -</div></div>
         <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
@@ -936,7 +937,7 @@ footer b{color:var(--muted);}
 
       <!-- Casualties -->
       <div class="map-intel-card" style="margin-bottom:16px;">
-        <div class="map-intel-title">Casualties — Campaign Total (K1 + K2)</div>
+        <div class="map-intel-title">Casualties - Campaign Total (K1 + K2)</div>
         <div class="cas-grid">
           <div class="cas-card aus" style="padding:10px 8px;">
             <div style="width:40px;height:24px;margin:0 auto 8px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#012169;position:relative;">
@@ -980,9 +981,9 @@ footer b{color:var(--muted);}
         </div>
       </div>
 
-      <!-- Top 10 Kills — Op Karoonda II -->
+      <!-- Top 10 Kills - Op Karoonda II -->
       <div class="map-intel-card" style="margin-bottom:16px;">
-        <div class="map-intel-title">Top 10 Kills — Op Karoonda II</div>
+        <div class="map-intel-title">Top 10 Kills - Op Karoonda II</div>
         <div id="killsLeaderboard" style="display:flex;flex-direction:column;gap:0;">
           <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
             <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:gold;min-width:22px;text-align:right;">1</span>
@@ -1248,7 +1249,7 @@ footer b{color:var(--muted);}
       <div class="warn-box">
         <div class="warn-head"><span>⚠</span> Read before signing up</div>
         <ul>
-          <li>After signing up, the page takes <strong>1-2 minutes</strong> to update — this is normal.</li>
+          <li>After signing up, the page takes <strong>1-2 minutes</strong> to update - this is normal.</li>
           <li>Only one person can hold each slot. First in wins.</li>
         </ul>
       </div>
@@ -1259,7 +1260,7 @@ footer b{color:var(--muted);}
       </div>
       <div class="cm-step1-actions">
         <button class="cm-btn cancel" id="claimCancelStep1" type="button">Cancel</button>
-        <button class="cm-btn confirm" id="claimProceed" type="button">I understand — proceed</button>
+        <button class="cm-btn confirm" id="claimProceed" type="button">I understand - proceed</button>
       </div>
     </div>
     <div id="claimStep2">
@@ -1397,8 +1398,17 @@ function renderAuthUI() {
     $('#userAvatar').src = avatarUrl;
     $('#userName').textContent = currentUser.displayName;
     
-    let roleText = currentUser.roles && currentUser.roles.length > 0 ? currentUser.roles.join(', ') : 'Member';
-    if (currentUser.isAdmin) roleText = 'Admin' + (roleText !== 'Member' ? ' | ' + roleText : '');
+    // Get rank from members.json via roster name, fall back to Discord API roles
+    const memberRank = currentUser.rosterName && MEMBERS[currentUser.rosterName]
+      ? MEMBERS[currentUser.rosterName].discordRank || ''
+      : '';
+    const discordRoles = currentUser.roles && currentUser.roles.length > 0
+      ? currentUser.roles.join(', ')
+      : '';
+    const rankText = memberRank || discordRoles || 'Member';
+    
+    let roleText = rankText;
+    if (currentUser.isAdmin) roleText = 'Admin' + (rankText !== 'Member' ? ' | ' + rankText : '');
     
     $('#userRole').textContent = roleText;
     
@@ -1529,8 +1539,13 @@ function renderAdminSlot(slot, sectionKey, slotIdx) {
       ${member ? `<div class="admin-slot-member">👤 ${esc(member)}</div>` : '<div class="admin-slot-member" style="color:var(--muted-2);">Available</div>'}
       ${endorsement ? `<span class="admin-slot-endorsement">🔒 ${esc(endorsement)}</span>` : ''}
     </div>
-    <button class="admin-mini-btn" onclick="editSlot('${sectionKey}', ${slotIdx})">Edit</button>
-    <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSlot('${sectionKey}', ${slotIdx})">Delete</button>
+    <div class="admin-slot-actions">
+      <button class="admin-mini-btn" onclick="editSlotRole('${sectionKey}', ${slotIdx})" title="Change role name">Role</button>
+      <button class="admin-mini-btn" onclick="editSlotAssign('${sectionKey}', ${slotIdx})" title="Assign a member">Assign</button>
+      ${member ? `<button class="admin-mini-btn" onclick="editSlotUnassign('${sectionKey}', ${slotIdx})" title="Remove member">Unassign</button>` : ''}
+      <button class="admin-mini-btn" onclick="editSlotEndorsement('${sectionKey}', ${slotIdx})" title="${slot.endorsementRequired ? 'Remove endorsement lock' : 'Add endorsement lock'}">${slot.endorsementRequired ? '🔓' : '🔒'}</button>
+      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSlot('${sectionKey}', ${slotIdx})">Delete</button>
+    </div>
   </div>`;
 }
 
@@ -1600,17 +1615,16 @@ window.addSlotToSection = (sectionKey) => {
   const roleName = prompt('Enter role name (e.g., "Team Leader", "Rifleman"):');
   if (!roleName) return;
   
-  const needsEndorsement = confirm('Does this role require an endorsement (Medical, JTAC, Leadership)?');
   let endorsementType = '';
+  const needsEndorsement = confirm('Does this role require an endorsement (Medical, JTAC, Leadership)?');
   
   if (needsEndorsement) {
-    const options = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership', 'Custom'];
-    const choice = prompt(`Select endorsement type:\n1. Medical Endorsement\n2. JTAC Endorsement\n3. Junior Leadership\n4. Senior Leadership\n5. Custom\n\nEnter number (1-5):`);
-    
+    const choice = prompt('Endorsement type:\n1. Medical\n2. JTAC\n3. Junior Leadership\n4. Senior Leadership\n5. Custom');
     if (choice === '5') {
-      endorsementType = prompt('Enter custom endorsement name:') || 'Endorsement Required';
+      endorsementType = prompt('Custom endorsement name:') || 'Endorsement Required';
     } else {
-      endorsementType = options[parseInt(choice) - 1] || 'Endorsement Required';
+      const map = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership'];
+      endorsementType = map[parseInt(choice) - 1] || 'Endorsement Required';
     }
   }
   
@@ -1634,52 +1648,56 @@ window.addSlotToSection = (sectionKey) => {
   renderAdminSections();
 };
 
-// Edit slot
-window.editSlot = (sectionKey, slotIdx) => {
-  let slot;
-  if (sectionKey === '__command') {
-    slot = currentRoster.command[slotIdx];
+function getSlot(sectionKey, slotIdx) {
+  if (sectionKey === '__command') return currentRoster.command[slotIdx];
+  return currentRoster.sections[sectionKey].roles[slotIdx];
+}
+
+// Edit slot role name
+window.editSlotRole = (sectionKey, slotIdx) => {
+  const slot = getSlot(sectionKey, slotIdx);
+  const newRole = prompt('Enter new role name:', slot.role);
+  if (newRole) { slot.role = newRole; saveRoster(); renderAdminSections(); }
+};
+
+// Assign member to slot
+window.editSlotAssign = (sectionKey, slotIdx) => {
+  const slot = getSlot(sectionKey, slotIdx);
+  const memberList = Object.keys(MEMBERS).filter(k => !k.startsWith('_')).sort();
+  const memberName = prompt(`Assign member:\n\nAvailable:\n${memberList.join(', ')}`);
+  if (!memberName) return;
+  if (MEMBERS[memberName]) {
+    if (slot.endorsementRequired && slot.endorsementType && !memberHasEndorsement(memberName, slot.endorsementType)) {
+      if (!confirm(`${memberName} does not have ${slot.endorsementType}. Assign anyway?`)) return;
+    }
+    slot.member = memberName;
+    saveRoster(); renderAdminSections();
   } else {
-    slot = currentRoster.sections[sectionKey].roles[slotIdx];
+    alert('Member not found in roster.');
   }
-  
-  const action = prompt(`Edit slot:\n1. Change role name\n2. Assign member\n3. Unassign member\n4. Toggle endorsement lock\n\nEnter number (1-4):`);
-  
-  if (action === '1') {
-    const newRole = prompt('Enter new role name:', slot.role);
-    if (newRole) slot.role = newRole;
-  } else if (action === '2') {
-    const memberList = Object.keys(MEMBERS).filter(k => !k.startsWith('_')).sort();
-    const memberName = prompt(`Enter member name:\n\nAvailable members:\n${memberList.join(', ')}`);
-    if (memberName && MEMBERS[memberName]) {
-      // Check endorsement
-      if (slot.endorsementRequired && slot.endorsementType) {
-        if (!memberHasEndorsement(memberName, slot.endorsementType)) {
-          const override = confirm(`${memberName} does not have ${slot.endorsementType}. Assign anyway?`);
-          if (!override) return;
-        }
-      }
-      slot.member = memberName;
-    } else if (memberName) {
-      alert('Member not found in roster. Please check spelling.');
-      return;
-    }
-  } else if (action === '3') {
-    slot.member = null;
-  } else if (action === '4') {
-    slot.endorsementRequired = !slot.endorsementRequired;
-    if (slot.endorsementRequired && !slot.endorsementType) {
-      const options = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership', 'Custom'];
-      const choice = prompt(`Select endorsement type:\n1. Medical Endorsement\n2. JTAC Endorsement\n3. Junior Leadership\n4. Senior Leadership\n5. Custom\n\nEnter number (1-5):`);
-      
-      if (choice === '5') {
-        slot.endorsementType = prompt('Enter custom endorsement name:') || 'Endorsement Required';
-      } else {
-        slot.endorsementType = options[parseInt(choice) - 1] || 'Endorsement Required';
-      }
+};
+
+// Unassign member from slot
+window.editSlotUnassign = (sectionKey, slotIdx) => {
+  const slot = getSlot(sectionKey, slotIdx);
+  slot.member = null;
+  saveRoster();
+  renderAdminSections();
+};
+
+// Toggle endorsement lock
+window.editSlotEndorsement = (sectionKey, slotIdx) => {
+  const slot = getSlot(sectionKey, slotIdx);
+  slot.endorsementRequired = !slot.endorsementRequired;
+  if (slot.endorsementRequired && !slot.endorsementType) {
+    const choice = prompt('Endorsement type:\n1. Medical\n2. JTAC\n3. Junior Leadership\n4. Senior Leadership\n5. Custom');
+    if (choice === '5') {
+      slot.endorsementType = prompt('Custom endorsement name:') || 'Endorsement Required';
+    } else {
+      const map = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership'];
+      slot.endorsementType = map[parseInt(choice) - 1] || 'Endorsement Required';
     }
   }
-  
   saveRoster();
   renderAdminSections();
 };
@@ -1887,7 +1905,7 @@ function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx,c
   const isExternal=!MEMBERS[name];
   const lvl=leaderLevel(role);
   const av=lvl==='lvl-command'?54:lvl==='lvl-section'?48:42;
-  // Only show attendance badge for AZO members in members.json — externals get nothing
+  // Only show attendance badge for AZO members in members.json - externals get nothing
   const badge=showAtt && !isExternal
     ?(attendedSet&&attendedSet.has(name)
       ?`<span class="att-badge att-yes" title="Attended">✓</span>`
@@ -1913,7 +1931,7 @@ function render(roster){
   currentRoster = roster; // Store for admin panel
   const op=roster.operation||{};
   document.documentElement.setAttribute('data-theme',op.theme||'tactical-blue');
-  document.title=`AZO — ${op.name||'Role List'}`;
+  document.title=`AZO - ${op.name||'Role List'}`;
 
   if(op.background){
     const tryLoad=(src,fb)=>{const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("${src}")`;};img.onerror=()=>{if(fb)tryLoad(fb,null);};img.src=src;};
@@ -2044,7 +2062,7 @@ function openProfile(name){
   if(p.kind==='command'){
     promoBlock=`<div class="promo-label"><span class="nxt">Command staff</span><span class="pct">SOCOMD</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Above the operator ladder.</div>`;
   } else if(p.kind==='max'){
-    promoBlock=`<div class="promo-label"><span class="nxt">Top of the ladder</span><span class="pct">MAX</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Senior Operator — fully promoted.</div>`;
+    promoBlock=`<div class="promo-label"><span class="nxt">Top of the ladder</span><span class="pct">MAX</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Senior Operator - fully promoted.</div>`;
   } else {
     promoBlock=`<div class="promo-label"><span class="nxt">Next: <b style="color:var(--text)">${esc(p.nextName)}</b></span><span class="pct">${p.progress}%</span></div><div class="promo-track"><div class="promo-fill" data-w="${p.progress}" style="width:0"></div></div><div class="promo-note">${p.remaining} more op${p.remaining===1?'':'s'} to reach ${esc(p.nextName)} (needs ${p.T} total).</div>`;
   }
@@ -2087,10 +2105,10 @@ function closeRoster(){$('#rosterOverlay').classList.remove('show');}
 /* ---------- coming soon takeover ---------- */
 function setupComingSoon(op){
   const cs=$('#comingSoon');
-  cs.classList.remove('show'); return; // overlay disabled — op shown normally
+  cs.classList.remove('show'); return; // overlay disabled - op shown normally
   $('#csTitle').textContent='Operation Complete';
   $('#csText').textContent=op.comingSoonText||'A new role list will be released soon. Stand by for the next operation.';
-  $('#csMeta').textContent=op.name?`Last deployment — ${op.name}`:'';
+  $('#csMeta').textContent=op.name?`Last deployment - ${op.name}`:'';
   const fb=$('#csFeedback');
   if(op.feedbackForm){fb.href=op.feedbackForm;fb.style.display='inline-block';}
   else{fb.style.display='none';}
@@ -2098,7 +2116,7 @@ function setupComingSoon(op){
   $('#csPeek').onclick=()=>cs.classList.remove('show');
 }
 
-/* Slider-driven before/after state — cumulative Karoonda I + II */
+/* Slider-driven before/after state - cumulative Karoonda I + II */
 const MAP_BEFORE = { ausCas:0, lufCas:0 };
 const MAP_AFTER  = { ausCas:30, lufCas:214 };
 
@@ -2308,7 +2326,7 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   const claimInput = $('#claimInput');
   
   if (currentUser) {
-    // User is logged in — show their name automatically
+    // User is logged in - show their name automatically
     const name = currentUser.rosterName || currentUser.displayName;
     $('#autoUserName').textContent = name;
     $('#autoUserAvatar').src = currentUser.avatar
@@ -2440,9 +2458,10 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('members.json',{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
     ]);
     MEMBERS=members||{};
+    renderAuthUI();
     render(roster);
   }catch(err){
-    $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first — e.g. double-click <code>serve.ps1</code> — then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
+    $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
     console.error(err);
   }
 })();
