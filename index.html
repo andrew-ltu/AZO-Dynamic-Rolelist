@@ -820,29 +820,28 @@ footer b{color:var(--muted);}
     </div>
     <div class="map-body">
 
-      <!-- Stats row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:start;">
-
-        <!-- Casualties -->
-        <div class="map-intel-card">
-          <div class="map-intel-title">Casualties — Campaign Total (K1 + K2)</div>
-          <div class="cas-grid">
-            <div class="cas-card aus" style="padding:10px 8px;">
-              <div class="cas-force aus">ADF</div>
-              <div class="cas-num aus" id="ausKia" style="font-size:28px;">0</div>
-              <div class="cas-label">KIA</div>
-            </div>
-            <div class="cas-card luf" style="padding:10px 8px;">
-              <div class="cas-force luf">LUF</div>
-              <div class="cas-num luf" id="lufKia" style="font-size:28px;">0</div>
-              <div class="cas-label">KIA</div>
-            </div>
+      <!-- Casualties -->
+      <div class="map-intel-card" style="margin-bottom:16px;">
+        <div class="map-intel-title">Casualties — Campaign Total (K1 + K2)</div>
+        <div class="cas-grid">
+          <div class="cas-card aus" style="padding:10px 8px;">
+            <div style="font-size:24px;margin-bottom:4px;">🇦🇺</div>
+            <div class="cas-force aus">ADF</div>
+            <div class="cas-num aus" id="ausKia" style="font-size:28px;">0</div>
+            <div class="cas-label">KIA</div>
+          </div>
+          <div class="cas-card luf" style="padding:10px 8px;">
+            <div style="font-size:24px;margin-bottom:4px;">🇸🇸</div>
+            <div class="cas-force luf">LUF</div>
+            <div class="cas-num luf" id="lufKia" style="font-size:28px;">0</div>
+            <div class="cas-label">KIA</div>
           </div>
         </div>
+      </div>
 
-        <!-- Top 10 Kills — Op Karoonda II -->
-        <div class="map-intel-card">
-          <div class="map-intel-title">Top 10 Kills — Op Karoonda II</div>
+      <!-- Top 10 Kills — Op Karoonda II -->
+      <div class="map-intel-card" style="margin-bottom:16px;">
+        <div class="map-intel-title">Top 10 Kills — Op Karoonda II</div>
         <div id="killsLeaderboard" style="display:flex;flex-direction:column;gap:0;">
           <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
             <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:gold;min-width:22px;text-align:right;">1</span>
@@ -896,7 +895,6 @@ footer b{color:var(--muted);}
           </div>
         </div>
       </div><!-- end Top 10 -->
-      </div><!-- end stats grid -->
 
       <!-- Interactive SVG Map -->
       <div style="position:relative;background:#1a2535;border-radius:12px;border:1px solid var(--line-strong);overflow:hidden;">
