@@ -12,6 +12,7 @@ const ALLOWED_ORIGINS = [
 const DISCORD_API = 'https://discord.com/api/v10';
 const DISCORD_GUILD_ID = '504188370507792384';
 const REDIRECT_URI = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/auth/callback';
+const ADMIN_IDS = ['203678139220623361', '207012290401271818'];
 
 // Helper: CORS headers
 function corsHeaders(origin) {
@@ -208,14 +209,14 @@ async function handleCallback(request, env) {
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(`
       INSERT INTO users (id, username, discriminator, global_name, avatar, email, created_at, last_login, is_admin)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         username = excluded.username,
         global_name = excluded.global_name,
         avatar = excluded.avatar,
         email = excluded.email,
         last_login = excluded.last_login
-    `).bind(
+    `    ).bind(
       user.id,
       user.username,
       user.discriminator || '',
@@ -223,7 +224,8 @@ async function handleCallback(request, env) {
       user.avatar || '',
       user.email || '',
       now,
-      now
+      now,
+      ADMIN_IDS.includes(user.id) ? 1 : 0
     ).run();
     
     // Fetch guild member info to get Discord roles
@@ -404,7 +406,7 @@ async function handleGetUser(request, env, origin) {
       displayName: userResult.global_name,
       avatar: userResult.avatar,
       email: userResult.email,
-      isAdmin: userResult.is_admin === 1,
+      isAdmin: userResult.is_admin === 1 || ADMIN_IDS.includes(userResult.id),
       roles,
       rosterName
     }
@@ -582,7 +584,7 @@ async function handleAdminSaveRoster(request, env, origin) {
     SELECT is_admin FROM users WHERE id = ?
   `).bind(payload.sub).first();
   
-  if (!userResult || userResult.is_admin !== 1) {
+  if (!userResult || (userResult.is_admin !== 1 && !ADMIN_IDS.includes(payload.sub))) {
     return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
   }
   
