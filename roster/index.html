@@ -1275,6 +1275,9 @@ footer b{color:var(--muted);}
           <img id="autoUserAvatar" style="width:28px;height:28px;border-radius:50%;border:1px solid rgba(88,101,242,.6);flex-shrink:0;" alt="">
           <strong id="autoUserName" style="color:#36d07a;font-size:15px;"></strong>
         </div>
+        <div id="reallocateSection" style="display:none;background:rgba(217,64,64,.1);border:1px solid rgba(217,64,64,.3);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#d94040;">
+          <span id="reallocateLabel"></span>
+        </div>
       </div>
       
       <!-- Manual name input for non-logged-in users -->
@@ -2350,6 +2353,27 @@ document.addEventListener('keydown',e=>{
 const CLAIM_ENDPOINT='https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
 let claimContext=null;
 
+function getCurrentUserSlot() {
+  if (!currentUser) return null;
+  const name = currentUser.rosterName || currentUser.displayName;
+  if (!name) return null;
+  const lower = name.toLowerCase();
+  for (const s of currentRoster.sections || []) {
+    for (let i = 0; i < (s.roles || []).length; i++) {
+      if (s.roles[i].member && s.roles[i].member.toLowerCase() === lower) return { sectionKey: s.name, roleIndex: i };
+    }
+  }
+  for (let i = 0; i < (currentRoster.command || []).length; i++) {
+    if (currentRoster.command[i].member && currentRoster.command[i].member.toLowerCase() === lower) return { sectionKey: '__command', roleIndex: i };
+  }
+  for (let ai = 0; ai < (currentRoster.attachments || []).length; ai++) {
+    for (let i = 0; i < (currentRoster.attachments[ai].roles || []).length; i++) {
+      if (currentRoster.attachments[ai].roles[i].member && currentRoster.attachments[ai].roles[i].member.toLowerCase() === lower) return { sectionKey: '__attachment', roleIndex: { attIdx: ai, roleIdx: i } };
+    }
+  }
+  return null;
+}
+
 function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   claimContext={sectionKey,roleIndex,roleLabel,endorseType};
   $('#claimRoleLabel').textContent=roleLabel;
@@ -2368,12 +2392,21 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   if (currentUser) {
     // User is logged in - show their name automatically
     const name = currentUser.rosterName || currentUser.displayName;
-    $('#autoUserName').textContent = name;
-    $('#autoUserAvatar').src = currentUser.avatar
-      ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
-      : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    $('#autoUserName').textContent = name || 'Unknown';
+    if (currentUser.avatar) {
+      $('#autoUserAvatar').src = `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
+    } else {
+      $('#autoUserAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+    }
     nameInputSection.style.display = 'none';
     autoNameSection.style.display = 'block';
+    
+    // Check if already assigned elsewhere — offer reallocate
+    const existing = getCurrentUserSlot();
+    $('#reallocateSection').style.display = existing ? 'block' : 'none';
+    if (existing) {
+      $('#reallocateLabel').textContent = `You are currently assigned to a different slot. Clicking "Claim Role" will move you here.`;
+    }
     
     // Check endorsement immediately
     if(endorseType){
@@ -2400,7 +2433,15 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   
   $('#claimStatus').textContent='';$('#claimStatus').className='';
   $('#claimConfirm').disabled=false;
-  $('#claimStep1').style.display='block';$('#claimStep2').classList.remove('active');
+  
+  // Skip Step 1 if logged in
+  if (currentUser) {
+    $('#claimStep1').style.display='none';
+    $('#claimStep2').classList.add('active');
+  } else {
+    $('#claimStep1').style.display='block';
+    $('#claimStep2').classList.remove('active');
+  }
   $('#claimBack').classList.add('show');
 }
 function closeClaim(){$('#claimBack').classList.remove('show');$('#operatorDropdown').style.display='none';claimContext=null;}
@@ -2443,10 +2484,12 @@ $('#claimInput').addEventListener('blur',()=>setTimeout(()=>{$('#operatorDropdow
 
 async function submitClaim(){
   let name;
+  let existing = null;
   
   // If user is logged in, use their roster name or display name
   if (currentUser) {
     name = currentUser.rosterName || currentUser.displayName;
+    existing = getCurrentUserSlot();
   } else {
     // Otherwise get from input
     name = $('#claimInput').value.trim();
@@ -2465,6 +2508,11 @@ async function submitClaim(){
     const token = localStorage.getItem('azo_token');
     const headers = {'Content-Type':'application/json'};
     if (token) headers['Authorization'] = `Bearer ${token}`;
+    
+    // If user has an existing assignment, unassign first (reallocate)
+    if (existing) {
+      await fetch(CLAIM_ENDPOINT+'/api/unassign',{method:'POST',headers,body:JSON.stringify({sectionKey:existing.sectionKey,roleIndex:existing.roleIndex})}).catch(()=>{});
+    }
     
     const res=await fetch(CLAIM_ENDPOINT,{method:'POST',headers,body:JSON.stringify({sectionKey:String(sectionKey),roleIndex,memberName:name})});
     const data=await res.json().catch(()=>({}));
