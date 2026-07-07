@@ -252,6 +252,7 @@ async function handleCallback(request, env) {
       user.avatar || '', user.email || '', now, now, ADMIN_IDS.includes(user.id) ? 1 : 0).run();
 
     let roleNames = [];
+    let isDiscordAdmin = false;
     try {
       const memberResponse = await fetch(
         `${DISCORD_API}/users/@me/guilds/${DISCORD_GUILD_ID}/member`,
@@ -265,6 +266,7 @@ async function handleCallback(request, env) {
         if (!roleNames.length && roleIds.length) {
           roleNames = roleIds.map(id => `_id:${id}`);
         }
+        isDiscordAdmin = roleNames.some(r => /admin|staff/i.test(r));
         await env.DB.prepare(`DELETE FROM user_roles WHERE user_id = ?`).bind(user.id).run();
         const stmt = `INSERT INTO user_roles (user_id, role_name, assigned_at, assigned_by) VALUES (?, ?, ?, ?)`;
         for (const roleName of roleNames) {
@@ -272,6 +274,11 @@ async function handleCallback(request, env) {
         }
       }
     } catch (e) { console.error('Failed to sync Discord roles:', e); }
+    if (isDiscordAdmin) {
+      await env.DB.prepare(`UPDATE users SET is_admin = 1 WHERE id = ?`).bind(user.id).run();
+    } else if (!ADMIN_IDS.includes(user.id)) {
+      await env.DB.prepare(`UPDATE users SET is_admin = 0 WHERE id = ?`).bind(user.id).run();
+    }
 
     const jwtToken = await generateToken(user.id, env.JWT_SECRET);
     await env.DB.prepare(`INSERT INTO sessions (id, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)`
@@ -328,7 +335,9 @@ async function handleGetUser(request, env, origin) {
             await env.DB.prepare(stmt).bind(userResult.id, roleName, now, 'discord-sync').run();
           }
           roles.push(...fetchedRoles);
-        }
+          if (fetchedRoles.some(r => /admin|staff/i.test(r))) {
+            await env.DB.prepare(`UPDATE users SET is_admin = 1 WHERE id = ?`).bind(userResult.id).run();
+          }
       }
     } catch (e) { console.error('On-demand role sync failed:', e); }
   }
