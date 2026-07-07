@@ -163,6 +163,10 @@ export default {
     if ((url.pathname === '/' || url.pathname === '/claim') && request.method === 'POST') return handleClaimSlot(request, env, origin);
     if (url.pathname === '/api/admin/roster' && request.method === 'POST') return handleAdminSaveRoster(request, env, origin);
     if (url.pathname === '/api/unassign' && request.method === 'POST') return handleUnassignSlot(request, env, origin);
+    if (url.pathname === '/api/admin/archive-op' && request.method === 'POST') return handleArchiveOp(request, env, origin);
+    if (url.pathname === '/api/admin/clear-assignments' && request.method === 'POST') return handleClearAssignments(request, env, origin);
+    if (url.pathname === '/api/admin/save-members' && request.method === 'POST') return handleAdminSaveMembers(request, env, origin);
+    if (url.pathname === '/api/previous-ops' && request.method === 'GET') return handleGetPreviousOps(request, env, origin);
 
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
@@ -493,4 +497,99 @@ async function handleUnassignSlot(request, env, origin) {
   slot.member = null;
   await saveRoster(env, roster);
   return jsonResponse({ ok: true, message: `Unassigned from ${slot.role}` }, 200, origin);
+}
+
+// POST /api/admin/archive-op - Archive current op and clear slots
+async function handleArchiveOp(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+
+  const roster = await getRoster(env);
+  if (!roster) return jsonResponse({ error: 'No roster to archive' }, 404, origin);
+
+  const op = roster.operation || {};
+  const timestamp = Math.floor(Date.now() / 1000);
+  const archiveEntry = {
+    id: timestamp,
+    name: op.name || 'Unknown Operation',
+    date: op.date || '',
+    zeus: op.zeus || '',
+    archivedAt: new Date().toISOString(),
+    roster: JSON.parse(JSON.stringify(roster))
+  };
+
+  // Get existing archive
+  let ops = [];
+  const existing = await env.DB.prepare(`SELECT data FROM members WHERE name = '_previous_ops'`).first();
+  if (existing) ops = JSON.parse(existing.data);
+  ops.push(archiveEntry);
+
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_previous_ops', ?, ?)`).bind(JSON.stringify(ops), now).run();
+
+  // Clear all slot assignments
+  for (const s of roster.sections || []) {
+    for (const r of s.roles || []) r.member = null;
+  }
+  for (const r of roster.command || []) r.member = null;
+  for (const a of roster.attachments || []) {
+    for (const r of a.roles || []) r.member = null;
+  }
+  roster.operation = roster.operation || {};
+  roster.operation.status = 'upcoming';
+  roster.operation.name = 'Next Operation';
+  await saveRoster(env, roster);
+
+  return jsonResponse({ ok: true, message: `Archived "${archiveEntry.name}" and cleared assignments` }, 200, origin);
+}
+
+// POST /api/admin/clear-assignments - Clear all slot assignments
+async function handleClearAssignments(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+
+  const roster = await getRoster(env);
+  if (!roster) return jsonResponse({ error: 'Roster not found' }, 404, origin);
+
+  for (const s of roster.sections || []) {
+    for (const r of s.roles || []) r.member = null;
+  }
+  for (const r of roster.command || []) r.member = null;
+  for (const a of roster.attachments || []) {
+    for (const r of a.roles || []) r.member = null;
+  }
+  await saveRoster(env, roster);
+  return jsonResponse({ ok: true, message: 'All slot assignments cleared' }, 200, origin);
+}
+
+// POST /api/admin/save-members - Update member data
+async function handleAdminSaveMembers(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+
+  let newData;
+  try { newData = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400, origin); }
+  if (!newData || typeof newData !== 'object') return jsonResponse({ error: 'Invalid data' }, 400, origin);
+
+  await saveMembers(env, newData);
+  return jsonResponse({ ok: true, message: 'Members saved' }, 200, origin);
+}
+
+// GET /api/previous-ops - Get archived operations
+async function handleGetPreviousOps(request, env, origin) {
+  const existing = await env.DB.prepare(`SELECT data FROM members WHERE name = '_previous_ops'`).first();
+  const ops = existing ? JSON.parse(existing.data) : [];
+  return jsonResponse(ops, 200, origin);
+}
+
+// Helper: verify admin from request
+async function verifyAdmin(request, env) {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.substring(7);
+  const payload = await verifyToken(token, env.JWT_SECRET);
+  if (!payload) return null;
+  const userResult = await env.DB.prepare(`SELECT is_admin FROM users WHERE id = ?`).bind(payload.sub).first();
+  if (!userResult || (userResult.is_admin !== 1 && !ADMIN_IDS.includes(payload.sub))) return null;
+  return payload;
 }

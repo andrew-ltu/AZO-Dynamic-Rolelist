@@ -218,62 +218,75 @@ nav{
 .roster-embed .btn{font-size:13px;padding:12px 28px;}
 
 /* ---------- OPERATORS ---------- */
-.op-grid{
+#operatorsList{display:flex;flex-direction:column;gap:0;}
+#operatorsList .op-grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:12px;margin-top:24px;
+  gap:12px;
 }
 .op-card{
   background:var(--panel);border:1px solid var(--line);
-  border-radius:10px;padding:16px;text-align:center;
-  cursor:pointer;transition:border-color .15s;
+  border-radius:12px;padding:20px 14px 14px;text-align:center;
+  cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s;
 }
-.op-card:hover{border-color:var(--line-strong);}
+.op-card:hover{transform:translateY(-3px);border-color:var(--line-strong);box-shadow:0 8px 28px rgba(0,0,0,.35);}
+.op-card:active{transform:translateY(-1px);}
 .op-card .op-avatar{
   width:56px;height:56px;border-radius:50%;object-fit:cover;
   margin:0 auto 10px;display:block;
-  border:2px solid var(--line-strong);
+  border:2px solid var(--line-strong);transition:transform .25s;
 }
+.op-card:hover .op-avatar{transform:scale(1.08);}
 .op-card .op-avatar-fallback{
   width:56px;height:56px;border-radius:50%;
   margin:0 auto 10px;display:flex;
   align-items:center;justify-content:center;
   background:var(--panel-solid);border:2px solid var(--line-strong);
   font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;
-  color:var(--muted-2);
+  color:var(--muted-2);transition:transform .25s;
 }
-.op-card .nm{font-weight:600;font-size:14px;color:#fff;}
+.op-card:hover .op-avatar-fallback{transform:scale(1.08);}
+.op-card .nm{font-weight:600;font-size:15px;color:#fff;margin-bottom:2px;}
 .op-card .rk{
   font-family:'Share Tech Mono',monospace;font-size:10px;
-  color:var(--primary-2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;
+  text-transform:uppercase;letter-spacing:1.5px;margin-top:3px;
 }
 .op-card .op-detail{
-  display:none;margin-top:12px;padding-top:12px;
-  border-top:1px solid var(--line);font-size:12px;color:var(--muted);
+  overflow:hidden;max-height:0;opacity:0;
+  transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .3s,margin .3s,border .3s;
+  margin-top:0;padding-top:0;border-top:0 solid var(--line);
+  font-size:12px;color:var(--muted);text-align:center;
 }
-.op-card .op-detail.open{display:block;}
+.op-card .op-detail.open{max-height:200px;opacity:1;margin-top:12px;padding-top:12px;border-top-width:1px;}
 .op-card .op-detail .ops-num{
-  font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;
+  font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;
   color:var(--gold);line-height:1;
 }
 .op-card .op-detail .ops-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);margin-bottom:8px;}
-.op-card .op-endorse{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(61,135,212,.1);color:var(--primary);border:1px solid rgba(61,135,212,.15);margin:2px;}
-.op-card .op-lead{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(240,180,41,.1);color:var(--gold);border:1px solid rgba(240,180,41,.15);margin-bottom:8px;}
+.op-card .op-endorse{display:inline-block;font-size:9px;padding:3px 9px;border-radius:999px;background:rgba(61,135,212,.12);color:var(--primary);border:1px solid rgba(61,135,212,.2);margin:2px;}
+.op-card .op-lead{display:inline-block;font-size:9px;padding:3px 9px;border-radius:999px;background:rgba(240,180,41,.12);color:var(--gold);border:1px solid rgba(240,180,41,.2);margin-bottom:8px;}
 .op-rank-hdr{
-  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
+  font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;
   text-transform:uppercase;letter-spacing:3px;
-  margin:32px 0 10px;padding-bottom:6px;
-  border-bottom:1px solid var(--line);
+  margin:40px 0 14px;padding:0 0 10px 14px;
+  border-left:3px solid;display:flex;align-items:center;gap:10px;
 }
-.op-rank-hdr:first-of-type{margin-top:0;}
+.op-rank-hdr:first-of-type{margin-top:6px;}
+.op-rank-hdr::after{content:'';flex:1;height:1px;background:var(--line);}
 
 /* ---------- ATTENDANCE ---------- */
 .att-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
 .att-placeholder .icon{font-size:48px;margin-bottom:16px;opacity:.5;}
+.att-stat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 10px;text-align:center;min-width:140px;}
+.att-stat-num{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;line-height:1;}
+.att-stat-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-top:4px;}
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px;}
+.att-op-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;}
+.att-op-name{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:2px;}
+.att-op-meta{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;color:var(--muted-2);margin-bottom:12px;}
+.att-op-attendees{display:flex;flex-wrap:wrap;gap:6px;}
+.att-name{font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(61,135,212,.1);border:1px solid rgba(61,135,212,.2);color:var(--primary-2);}
 
 /* ---------- FEEDBACK ---------- */
-.fb-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
-.fb-placeholder .icon{font-size:48px;margin-bottom:16px;opacity:.5;}
-
 /* ---------- COMING SOON OVERLAY ---------- */
 #comingSoonOverlay{
   position:fixed;inset:0;z-index:200;
@@ -344,8 +357,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       <a class="active" data-page="home" onclick="switchPage('home')">Home</a>
       <a data-page="roster" onclick="switchPage('roster')">Upcoming Op</a>
       <a data-page="operators" onclick="switchPage('operators')">Operators</a>
-      <a data-page="attendance" onclick="switchPage('attendance')">Attendance</a>
-      <a data-page="feedback" onclick="switchPage('feedback')">Op Feedback</a>
+      <a data-page="previous-ops" onclick="switchPage('previous-ops')">Previous Ops</a>
       <a onclick="openGallery()">Gallery <span class="pill">Soon</span></a>
     </div>
   </div>
@@ -417,8 +429,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     <a onclick="switchPage('home')">Home</a>
     <a onclick="switchPage('roster')">Roster</a>
     <a onclick="switchPage('operators')">Operators</a>
-    <a onclick="switchPage('attendance')">Attendance</a>
-    <a onclick="switchPage('feedback')">Op Feedback</a>
+    <a onclick="switchPage('previous-ops')">Previous Ops</a>
     <a onclick="openGallery()">Gallery</a>
   </div>
   <div class="footer-copy">&copy; 2026 AZO &mdash; ArmA 3 Semi-Casual Community<br><span>ArmA 3 is a trademark of Bohemia Interactive. AZO is an independent community.</span></div>
@@ -449,29 +460,17 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   </div>
 </div>
 
-<!-- ====== ATTENDANCE PAGE ====== -->
-<div class="page" id="page-attendance">
+<!-- ====== PREVIOUS OPS PAGE ====== -->
+<div class="page" id="page-previous-ops">
   <div style="padding:20px 0;">
-    <div class="section-sub" style="margin-bottom:4px;">Records</div>
-    <h2 class="section-title">Previous Op Attendance</h2>
-    <p class="section-desc">Track who attended which operations. Updated after each mission.</p>
-    <div class="att-placeholder">
-      <div class="icon">📜</div>
-      <p>Attendance records are displayed on the roster page after each operation is marked complete.</p>
-      <div style="margin-top:20px;"><a class="btn btn-outline" href="/roster/" target="_blank">View Roster</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== FEEDBACK PAGE ====== -->
-<div class="page" id="page-feedback">
-  <div style="padding:20px 0;">
-    <div class="section-sub" style="margin-bottom:4px;">After Action</div>
-    <h2 class="section-title">Op Feedback</h2>
-    <p class="section-desc">Rate the operation and your leadership after each mission.</p>
-    <div class="fb-placeholder">
-      <div class="icon">📝</div>
-      <p>Feedback forms are opened after each operation. Check back after the next mission.</p>
+    <div class="section-sub" style="margin-bottom:4px;">Operations</div>
+    <h2 class="section-title">Previous Operations</h2>
+    <p class="section-desc">Record of past operations and attendance.</p>
+    <div id="attendanceContent"></div>
+    <div id="previousOpsSection" style="margin-top:40px;display:none;">
+      <div class="section-sub" style="margin-bottom:4px;">Archive</div>
+      <h2 class="section-title">Archived Operations</h2>
+      <div id="previousOpsList"></div>
     </div>
   </div>
 </div>
@@ -530,6 +529,10 @@ const RANK_COLORS = {
   'SOCOMD':'#264d7a','Senior Operator':'#326ba8',
   'Operator':'#3d87d4','Junior Operator':'#5a9fe0','Recruit':'#6a7f98'
 };
+const ATT_MONTHS = [
+  {m:'Jun',done:1,up:0},{m:'Jul',done:1,up:0}
+];
+const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
 
 // Load operators list
 (async function() {
@@ -555,7 +558,9 @@ const RANK_COLORS = {
       if (!items.length) continue;
       const hdr = document.createElement('div');
       hdr.className = 'op-rank-hdr';
-      hdr.style.color = RANK_COLORS[rank] || '#6a7f98';
+      const rc = RANK_COLORS[rank] || '#6a7f98';
+      hdr.style.setProperty('color', rc);
+      hdr.style.setProperty('border-left-color', rc);
       hdr.textContent = rank;
       frag.appendChild(hdr);
       const grid = document.createElement('div');
@@ -635,9 +640,78 @@ const RANK_COLORS = {
       frag.appendChild(grid);
     }
     list.appendChild(frag);
+
+    // Build previous ops view
+    const attEl = document.getElementById('attendanceContent');
+    if (attEl) {
+      const k1 = {
+        name: 'Op Karoonda I', date: '20 JUNE 2026', zeus: 'Jag McMuffin', count: 17,
+        sections: [
+          { name: 'Command', members: ['Sir Danger','BadKarma','Zep'] },
+          { name: 'Alpha', members: ['Gunter','24pool1','Monke','AnimePanda','Kiren77','Spacecat82'] },
+          { name: 'Bravo', members: ['Malt','Vain','Misaka','HiveMynd','Orter','Velteck','GoGoBendy','sebs'] }
+        ]
+      };
+      const k2 = {
+        name: 'Op Karoonda II', date: '4 JULY 2026', zeus: 'Jag McMuffin', count: 31,
+        sections: [
+          { name: 'Command', members: ['Sir Danger','Jäger'] },
+          { name: 'Alpha', members: ['Vain','24pool1','Monke','AnimePanda','HiveMynd','The Raven','blueberet'] },
+          { name: 'Bravo', members: ['Gunter','Misaka','Jon Taiwan','Gill','Terack','Xeonovaes'] },
+          { name: 'Medical', members: ['Zep','GoGoBendy','Spacecat82','Crallers'] },
+          { name: 'Joint Op - Charlie', members: ['Cmdr. Garuda XIII','Cmmsr Tooko','Snr Ctr. Unphayzable','Lt. Fracture','SecOps. Dan','QM. DODO','Snr Ctr. Kenn','Snr Ctr. Boomer'] },
+          { name: 'Joint Op - Blackjack', members: ['1st Lt B. Hag','2d Lt D. Mason','TSgt C. Weeb','SSgt J. Jabbzo'] }
+        ]
+      };
+      const prevOps = [k1, k2];
+      const totalAtt = prevOps.reduce((s, o) => s + o.count, 0);
+      attEl.innerHTML = `
+        <div style="display:flex;gap:16px;margin:28px 0 24px;flex-wrap:wrap;">
+          <div class="att-stat"><div class="att-stat-num" style="color:var(--primary)">${prevOps.length}</div><div class="att-stat-lbl">Operations</div></div>
+          <div class="att-stat"><div class="att-stat-num" style="color:var(--gold)">${totalAtt}</div><div class="att-stat-lbl">Total Attendances</div></div>
+        </div>
+        <div class="att-grid">
+          ${prevOps.map(op => {
+            const total = op.sections.reduce((s, sec) => s + sec.members.length, 0);
+            return `<div class="att-op-card">
+              <div class="att-op-name">${esc(op.name)}</div>
+              <div class="att-op-meta">${op.date} · ${op.count} attended · Zeus: ${esc(op.zeus)}</div>
+              ${op.sections.map(sec => `
+                <div style="font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.5);margin:10px 0 4px;">${esc(sec.name)}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(n => `<span class="att-name">${esc(n)}</span>`).join('')}</div>
+              `).join('')}
+            </div>`;
+          }).join('')}
+        </div>`;
+    }
+  } catch(e) {console.error('Load error:', e);}
+
+  // Load archived ops
+  try {
+    const prevRes = await fetch(API_BASE + '/api/previous-ops');
+    if (prevRes.ok) {
+      const archivedOps = await prevRes.json();
+      if (archivedOps && archivedOps.length) {
+        const prevSection = document.getElementById('previousOpsSection');
+        const prevList = document.getElementById('previousOpsList');
+        if (prevSection && prevList) {
+          prevSection.style.display = 'block';
+          prevList.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px;">
+            ${archivedOps.slice().reverse().map(op => `
+              <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;">
+                <div style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:#fff;">${esc(op.name)}</div>
+                <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);margin:4px 0 8px;">${esc(op.date||'No date')} · Zeus: ${esc(op.zeus||'N/A')}</div>
+                <div style="font-size:12px;color:var(--muted);">Archived ${new Date(op.archivedAt).toLocaleDateString()}</div>
+              </div>
+            `).join('')}
+          </div>`;
+        }
+      }
+    }
   } catch(e) {}
 })();
 
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function toggleOp(el) {
   const detail = el.querySelector('.op-detail');
   if (detail) detail.classList.toggle('open');
