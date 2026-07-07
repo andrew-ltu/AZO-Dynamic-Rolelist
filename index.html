@@ -77,12 +77,11 @@ nav{
   position:relative;min-height:calc(100vh - var(--nav-h));
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  text-align:center;padding:60px 20px 40px;overflow:hidden;
+  text-align:center;padding:60px 20px 40px;
 }
 .hero::before{
   content:'';position:absolute;inset:0;z-index:0;
-  background:linear-gradient(180deg,rgba(5,8,14,.3) 0%,var(--bg) 100%),
-              radial-gradient(ellipse at 50% 30%,rgba(61,135,212,.06) 0%,transparent 60%);
+  background:radial-gradient(ellipse at 50% 30%,rgba(61,135,212,.06) 0%,transparent 60%);
 }
 .hero-slideshow{
   position:absolute;inset:0;z-index:0;
@@ -94,7 +93,7 @@ nav{
 .hero-slideshow img.active{opacity:1;}
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,rgba(5,8,14,.55) 0%,rgba(5,8,14,.75) 50%,var(--bg) 100%);
+  background:linear-gradient(180deg,rgba(5,8,14,.55) 0%,rgba(5,8,14,.75) 50%,#000 100%);
 }
 .hero-op-label{
   position:absolute;bottom:28px;left:28px;z-index:3;
