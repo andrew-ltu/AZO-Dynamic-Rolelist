@@ -1028,16 +1028,20 @@ $('#logoutBtn').addEventListener('click', async () => {
 let currentRoster = null;
 
 function openAdminPanel() {
-  if (!currentUser || !currentUser.isAdmin) {
-    const id = currentUser ? currentUser.id : '(not logged in)';
-    const roles = currentUser && currentUser.roles ? currentUser.roles.join(', ') : '(none)';
-    alert('Access denied: Admin privileges required\n\nYour Discord ID: ' + id + '\nYour roles: ' + roles + '\n\nContact the developer to add your ID to ADMIN_IDS in worker.js or grant you an "Admin"/"Staff" role on the Discord server.');
-    return;
-  }
-  loadAdminData();
-  loadMembers();
-  $('#adminPanel').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  try {
+    if (!currentUser || !currentUser.isAdmin) {
+      const id = currentUser ? currentUser.id : '(not logged in)';
+      const roles = currentUser && currentUser.roles ? currentUser.roles.join(', ') : '(none)';
+      alert('Access denied: Admin privileges required\n\nYour Discord ID: ' + id + '\nYour roles: ' + roles + '\n\nContact the developer to add your ID to ADMIN_IDS in worker.js or grant you an "Admin"/"Staff" role on the Discord server.');
+      return;
+    }
+    const panel = document.getElementById('adminPanel');
+    if (!panel) { console.error('adminPanel element not found'); alert('Admin panel element missing — contact dev'); return; }
+    loadAdminData();
+    loadMembers();
+    panel.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  } catch(e) { console.error('openAdminPanel error:', e); alert('Admin panel error: ' + e.message); }
 }
 
 function closeAdminPanel() {
