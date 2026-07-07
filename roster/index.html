@@ -1278,8 +1278,7 @@ footer b{color:var(--muted);}
         <div id="reallocateSection" style="display:none;background:rgba(217,64,64,.1);border:1px solid rgba(217,64,64,.3);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#d94040;">
           <span id="reallocateLabel"></span>
         </div>
-        <button id="claimManualToggle" type="button" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;padding:4px 0;text-decoration:underline;">Enter name manually</button>
-      </div>
+  </div>
       
       <!-- Manual name input for non-logged-in users -->
       <div id="nameInputSection">
@@ -2576,7 +2575,8 @@ function setClaimStatus(msg,cls){const el=$('#claimStatus');el.textContent=msg;e
 $('#claimBack').onclick=e=>{if(e.target===$('#claimBack'))closeClaim();};
 $('#claimCancelStep1').onclick=closeClaim;
 $('#claimProceed').onclick=goToStep2;
-$('#claimManualToggle').onclick=()=>{$('#autoNameSection').style.display='none';$('#nameInputSection').style.display='block';$('#claimInput').focus();};
+
+
 $('#claimBackStep').onclick=()=>{$('#claimStep2').classList.remove('active');$('#claimStep1').style.display='block';};
 $('#claimCancel').onclick=closeClaim;
 $('#claimConfirm').onclick=submitClaim;
