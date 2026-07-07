@@ -86,6 +86,30 @@ async function getMembers(env) {
   return data;
 }
 
+async function saveMembers(env, data) {
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_meta', ?, ?)`).bind(JSON.stringify(data), now).run();
+}
+
+async function addMember(env, name, discordId, displayName) {
+  const membersData = await getMembers(env);
+  if (membersData[name]) return name;
+  // Check if discordId already exists
+  for (const [n, d] of Object.entries(membersData)) {
+    if (d.discordId === discordId) return n;
+  }
+  membersData[name] = {
+    discordId,
+    discordRank: '',
+    avatar: '',
+    opsAttended: 0,
+    endorsements: [],
+    leadership: null
+  };
+  await saveMembers(env, membersData);
+  return name;
+}
+
 function findMemberName(membersData, discordId, displayName) {
   for (const [name, d] of Object.entries(membersData)) {
     if (d.discordId === discordId) return name;
@@ -93,6 +117,25 @@ function findMemberName(membersData, discordId, displayName) {
   const lower = displayName.toLowerCase();
   for (const [name] of Object.entries(membersData)) {
     if (name.toLowerCase() === lower) return name;
+  }
+  return null;
+}
+
+function findUserSlot(roster, userName) {
+  if (!roster || !userName) return null;
+  const lower = userName.toLowerCase();
+  for (const s of roster.sections || []) {
+    for (let i = 0; i < (s.roles || []).length; i++) {
+      if (s.roles[i].member && s.roles[i].member.toLowerCase() === lower) return { sectionKey: s.name, roleIndex: i };
+    }
+  }
+  for (let i = 0; i < (roster.command || []).length; i++) {
+    if (roster.command[i].member && roster.command[i].member.toLowerCase() === lower) return { sectionKey: '__command', roleIndex: i };
+  }
+  for (let ai = 0; ai < (roster.attachments || []).length; ai++) {
+    for (let i = 0; i < (roster.attachments[ai].roles || []).length; i++) {
+      if (roster.attachments[ai].roles[i].member && roster.attachments[ai].roles[i].member.toLowerCase() === lower) return { sectionKey: '__attachment', roleIndex: { attIdx: ai, roleIdx: i } };
+    }
   }
   return null;
 }
@@ -238,6 +281,10 @@ async function handleGetUser(request, env, origin) {
   try {
     const membersData = await getMembers(env);
     rosterName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
+    if (!rosterName) {
+      const newName = userResult.global_name || userResult.username;
+      rosterName = await addMember(env, newName, userResult.id, userResult.global_name || userResult.username);
+    }
   } catch (e) { console.error('Failed to find roster name:', e); }
 
   if (!roles.length && env.DISCORD_BOT_TOKEN) {
@@ -336,12 +383,30 @@ async function handleClaimSlot(request, env, origin) {
       ).bind(payload.sub).first();
       if (userResult) {
         const matchedName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
-        if (matchedName) name = matchedName;
+        if (matchedName) {
+          name = matchedName;
+        } else {
+          const newName = userResult.global_name || userResult.username;
+          name = await addMember(env, newName, userResult.id, userResult.global_name || userResult.username);
+          if (!membersData[name]) {
+            membersData[name] = { discordId: userResult.id, discordRank: '', avatar: '', opsAttended: 0, endorsements: [], leadership: null };
+          }
+        }
       }
     }
   }
 
   if (!name) return jsonResponse({ error: 'Missing member name' }, 400, origin);
+
+  const existingSlot = findUserSlot(roster, name);
+  if (existingSlot) {
+    if (existingSlot.sectionKey === sectionKey && JSON.stringify(existingSlot.roleIndex) === JSON.stringify(roleIndex)) {
+      return jsonResponse({ ok: true, message: `Already assigned to ${findSlot(roster, sectionKey, roleIndex)?.role || 'this role'}` }, 200, origin);
+    }
+    // Auto-reallocate: unassign from old slot
+    const oldSlot = findSlot(roster, existingSlot.sectionKey, existingSlot.roleIndex);
+    if (oldSlot) oldSlot.member = null;
+  }
 
   let slot = null;
   try { slot = findSlot(roster, sectionKey, roleIndex); } catch (e) { return jsonResponse({ error: 'Invalid role index' }, 400, origin); }
@@ -415,7 +480,12 @@ async function handleUnassignSlot(request, env, origin) {
   if (!slot) return jsonResponse({ error: 'Role not found' }, 404, origin);
   if (!slot.member) return jsonResponse({ error: 'Slot is not claimed' }, 400, origin);
 
-  const userName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
+  let userName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
+  if (!userName) {
+    const newName = userResult.global_name || userResult.username;
+    userName = await addMember(env, newName, userResult.id, userResult.global_name || userResult.username);
+    membersData[userName] = { discordId: userResult.id, discordRank: 'Recruit', avatar: '', opsAttended: 0, endorsements: [], leadership: null };
+  }
   if (!userName || slot.member.toLowerCase() !== userName.toLowerCase()) {
     return jsonResponse({ error: 'You can only unassign yourself from your own slots' }, 403, origin);
   }

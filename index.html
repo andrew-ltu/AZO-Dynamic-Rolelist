@@ -3,153 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AZO - ArmA 3 Milsim Unit</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>AZO - ArmA 3 Semi-Casual Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#06090f;
-  --bg-2:#0b101a;
-  --panel:rgba(255,255,255,.04);
-  --panel-solid:#0d121e;
+  --bg:#05080e;
+  --bg-2:#0a0f18;
+  --panel:rgba(255,255,255,.035);
+  --panel-solid:#0d131f;
   --text:#dce8f4;
-  --muted:#8899b0;
-  --muted-2:#5a6e8a;
+  --muted:#7a8fa8;
+  --muted-2:#4a6078;
   --primary:#3d87d4;
-  --primary-2:#2a6bb0;
-  --line:rgba(100,160,210,.12);
+  --primary-2:#5a9fe0;
+  --line:rgba(100,160,210,.1);
   --line-strong:rgba(100,160,210,.25);
   --gold:#f0b429;
+  --green:#36d07a;
   --red:#d94040;
+  --nav-h:54px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:system-ui,-apple-system,sans-serif;
-  line-height:1.6;
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.65;
   overflow-x:hidden;
+  padding-top:var(--nav-h);
 }
-/* Hero */
+
+/* ---------- NAV ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:var(--nav-h);
+  background:rgba(5,8,14,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line-strong);
+  display:flex;align-items:center;
+  padding:0 20px;
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Oswald',sans-serif;
+  text-transform:uppercase;letter-spacing:2px;
+  color:#fff;font-size:18px;text-decoration:none;
+}
+.nav-brand img{width:28px;height:28px;border-radius:50%;object-fit:cover;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10.5px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);
+  text-decoration:none;padding:7px 14px;
+  border-radius:6px;transition:all .12s;
+  cursor:pointer;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.04);}
+.nav-links a.active{color:var(--primary);}
+.nav-links .pill{
+  font-size:9px;padding:3px 8px;border-radius:4px;
+  background:rgba(240,180,41,.12);color:var(--gold);
+  border:1px solid rgba(240,180,41,.25);margin-left:4px;
+}
+
+/* ---------- HERO ---------- */
 .hero{
-  position:relative;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:40px 20px;
-  overflow:hidden;
+  position:relative;min-height:calc(100vh - var(--nav-h));
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:60px 20px 40px;overflow:hidden;
 }
 .hero::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg,#06090f 0%,rgba(13,18,30,.85) 50%,#06090f 100%),
-              radial-gradient(ellipse at 30% 40%,rgba(61,135,212,.08) 0%,transparent 60%),
-              radial-gradient(ellipse at 70% 60%,rgba(240,180,41,.05) 0%,transparent 50%);
-  z-index:0;
+  content:'';position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,rgba(5,8,14,.3) 0%,var(--bg) 100%),
+              radial-gradient(ellipse at 50% 30%,rgba(61,135,212,.06) 0%,transparent 60%);
 }
-.hero-bg-pattern{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  opacity:.035;
-  background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.3) 1px,transparent 1px);
+.hero-pattern{
+  position:absolute;inset:0;z-index:0;opacity:.025;
+  background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.4) 1px,transparent 1px);
   background-size:40px 40px;
-}
-.hero-lines{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  opacity:.08;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 120px,rgba(61,135,212,.4) 120px,rgba(61,135,212,.4) 121px);
 }
 .hero>*{position:relative;z-index:1;}
 .hero-logo{
-  width:88px;
-  height:88px;
-  margin-bottom:20px;
-  border-radius:50%;
+  width:96px;height:96px;border-radius:50%;
   border:2px solid var(--line-strong);
-  object-fit:cover;
+  object-fit:cover;margin-bottom:16px;
+  box-shadow:0 0 40px rgba(61,135,212,.15);
 }
 .hero h1{
-  font-family:'Oswald',sans-serif;
-  font-weight:700;
-  font-size:clamp(52px,10vw,110px);
-  text-transform:uppercase;
-  letter-spacing:6px;
-  line-height:1;
-  background:linear-gradient(180deg,#fff 20%,var(--primary) 160%);
-  -webkit-background-clip:text;
-  background-clip:text;
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:clamp(48px,9vw,96px);text-transform:uppercase;
+  letter-spacing:8px;line-height:1;
+  background:linear-gradient(180deg,#fff 15%,var(--primary-2) 150%);
+  -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
 .hero .tagline{
   font-family:'Share Tech Mono',monospace;
-  font-size:clamp(13px,2vw,18px);
-  letter-spacing:4px;
-  text-transform:uppercase;
-  color:var(--muted-2);
-  margin-bottom:40px;
+  font-size:clamp(12px,1.6vw,16px);letter-spacing:5px;
+  text-transform:uppercase;color:var(--muted-2);margin-bottom:32px;
 }
-.hero .sub{
-  font-size:clamp(15px,1.8vw,20px);
-  color:var(--muted);
-  max-width:600px;
-  margin-bottom:50px;
-  line-height:1.7;
+.hero .desc{
+  font-size:clamp(14px,1.5vw,17px);color:var(--muted);
+  max-width:580px;line-height:1.75;margin-bottom:40px;
 }
-.hero-btns{
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
 .btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:14px 36px;
-  border-radius:6px;
-  font-family:'Oswald',sans-serif;
-  font-weight:600;
-  font-size:16px;
-  text-transform:uppercase;
-  letter-spacing:2px;
-  cursor:pointer;
-  transition:all .15s;
-  text-decoration:none;
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 32px;border-radius:6px;
+  font-family:'Oswald',sans-serif;font-weight:600;
+  font-size:15px;text-transform:uppercase;letter-spacing:2px;
+  cursor:pointer;transition:all .15s;text-decoration:none;
 }
-.btn-primary{
-  background:var(--primary);
-  color:#fff;
-  border:1px solid var(--primary-2);
-}
+.btn-primary{background:var(--primary);color:#fff;border:1px solid var(--primary-2);}
 .btn-primary:hover{background:var(--primary-2);}
-.btn-outline{
-  background:transparent;
-  color:var(--text);
-  border:1px solid var(--line-strong);
-}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--line-strong);}
 .btn-outline:hover{background:var(--panel);border-color:var(--primary);}
-.btn-gold{
-  background:var(--gold);
-  color:#000;
-  border:1px solid #c89420;
-}
+.btn-gold{background:var(--gold);color:#000;border:1px solid #c89420;}
 .btn-gold:hover{background:#d4a020;}
 
-/* Stats bar */
+/* ---------- STATS BAR ---------- */
 .stats{
-  display:flex;
-  justify-content:center;
-  gap:60px;
-  padding:60px 20px;
-  flex-wrap:wrap;
+  display:flex;justify-content:center;gap:50px;
+  padding:50px 20px;flex-wrap:wrap;
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
   background:var(--bg-2);
@@ -157,340 +140,291 @@ body{
 .stat{text-align:center;}
 .stat-num{
   font-family:'Oswald',sans-serif;
-  font-size:42px;
-  font-weight:700;
-  color:var(--primary);
-  line-height:1;
-  margin-bottom:4px;
+  font-size:40px;font-weight:700;
+  color:var(--primary);line-height:1;margin-bottom:4px;
 }
 .stat-lbl{
   font-family:'Share Tech Mono',monospace;
-  font-size:11px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--muted-2);
+  font-size:10.5px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted-2);
 }
 
-/* Sections */
-.section{
-  padding:80px 20px;
-  max-width:1100px;
-  margin:0 auto;
-}
-.section-title{
-  font-family:'Oswald',sans-serif;
-  font-size:32px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:2px;
-  margin-bottom:10px;
-}
+/* ---------- PAGES ---------- */
+.page{display:none;padding:50px 20px 80px;max-width:1100px;margin:0 auto;}
+.page.active{display:block;}
+
+/* ---------- ABOUT (Home) ---------- */
 .section-sub{
   font-family:'Share Tech Mono',monospace;
-  font-size:11px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  color:var(--muted-2);
-  margin-bottom:40px;
+  font-size:11px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted-2);margin-bottom:6px;
 }
-.section-desc{
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.8;
-  max-width:700px;
+.section-title{
+  font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;
 }
+.section-desc{color:var(--muted);font-size:15px;line-height:1.8;max-width:700px;}
 .content-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:24px;
-  margin-top:30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;margin-top:30px;
 }
 .card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:28px;
-  transition:border-color .15s;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:26px;transition:border-color .15s;
 }
 .card:hover{border-color:var(--line-strong);}
+.card-icon{font-size:30px;margin-bottom:12px;display:block;}
 .card h3{
-  font-family:'Oswald',sans-serif;
-  font-size:18px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-bottom:10px;
+  font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;
   color:var(--primary);
 }
 .card p{color:var(--muted);font-size:14px;line-height:1.7;}
-.card-icon{font-size:32px;margin-bottom:14px;display:block;}
 
-/* Platoon Cards */
-.platoon-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
-  margin-top:30px;
+/* ---------- ROSTER ---------- */
+.roster-embed{text-align:center;padding:40px 0;}
+.roster-embed p{color:var(--muted);margin-bottom:24px;font-size:15px;}
+.roster-embed .btn{font-size:13px;padding:12px 28px;}
+
+/* ---------- OPERATORS ---------- */
+.op-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:14px;margin-top:24px;
 }
-.platoon-card{
-  position:relative;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid var(--line);
-  background:var(--bg-2);
+.op-card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:16px;text-align:center;
   transition:border-color .15s;
-  min-height:260px;
-  display:flex;
-  flex-direction:column;
 }
-.platoon-card:hover{border-color:var(--line-strong);}
-.platoon-card .top{
-  padding:28px 24px 16px;
-  flex:1;
-}
-.platoon-card .badge{
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;
-  letter-spacing:2px;
-  color:var(--gold);
-  text-transform:uppercase;
-  margin-bottom:10px;
-}
-.platoon-card h3{
-  font-family:'Oswald',sans-serif;
-  font-size:26px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:2px;
-  color:#fff;
-}
-.platoon-card .desc{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.7;
-  margin-top:10px;
-}
-.platoon-card .bottom{
-  padding:14px 24px;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.platoon-card .bottom span{font-size:11px;color:var(--muted-2);}
-.platoon-card .bottom a{
-  font-family:'Oswald',sans-serif;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  color:var(--primary);
-  text-decoration:none;
-}
-.platoon-card .bottom a:hover{color:var(--gold);}
+.op-card:hover{border-color:var(--line-strong);}
+.op-card .nm{font-weight:600;font-size:14px;color:#fff;}
+.op-card .rk{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
 
-/* CTA Banner */
+/* ---------- ATTENDANCE ---------- */
+.att-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
+.att-placeholder .icon{font-size:48px;margin-bottom:16px;opacity:.5;}
+
+/* ---------- FEEDBACK ---------- */
+.fb-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
+.fb-placeholder .icon{font-size:48px;margin-bottom:16px;opacity:.5;}
+
+/* ---------- COMING SOON OVERLAY ---------- */
+#comingSoonOverlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(3,6,11,.88);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+#comingSoonOverlay.show{display:flex;}
+.cs-modal{
+  max-width:400px;width:100%;background:var(--panel-solid);
+  border:1px solid var(--line-strong);border-radius:16px;
+  padding:40px 32px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.cs-modal .icon{font-size:48px;margin-bottom:16px;opacity:.6;}
+.cs-modal h2{font-family:'Oswald',sans-serif;font-size:22px;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:8px;}
+.cs-modal p{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:24px;}
+.cs-modal .btn{padding:10px 24px;font-size:13px;}
+
+/* ---------- CTA ---------- */
 .cta-banner{
-  text-align:center;
-  padding:80px 20px;
-  background:var(--bg-2);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
+  text-align:center;padding:70px 20px;
+  background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
-.cta-banner h2{
-  font-family:'Oswald',sans-serif;
-  font-size:36px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:2px;
-  margin-bottom:12px;
-}
-.cta-banner p{
-  color:var(--muted);
-  font-size:15px;
-  margin-bottom:30px;
-}
+.cta-banner h2{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.cta-banner p{color:var(--muted);font-size:15px;margin-bottom:28px;}
 
-/* Footer */
-footer{
-  padding:50px 20px 30px;
-  max-width:1100px;
-  margin:0 auto;
-  text-align:center;
-}
-.footer-links{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:12px 28px;
-  margin-bottom:40px;
-}
-.footer-links a{
-  color:var(--muted-2);
-  text-decoration:none;
-  font-family:'Share Tech Mono',monospace;
-  font-size:11px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  transition:color .15s;
-}
+/* ---------- FOOTER ---------- */
+footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 24px;margin-bottom:30px;}
+.footer-links a{color:var(--muted-2);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:color .15s;cursor:pointer;}
 .footer-links a:hover{color:var(--text);}
-.footer-copy{
-  font-size:11px;
-  color:var(--muted-2);
-  line-height:1.8;
-}
+.footer-copy{font-size:11px;color:var(--muted-2);line-height:1.8;}
 .footer-copy span{opacity:.5;}
+
+@media(max-width:640px){
+  :root{--nav-h:48px;}
+  nav{padding:0 12px;}
+  .nav-links a{padding:5px 9px;font-size:9.5px;letter-spacing:1px;}
+  .stats{gap:28px;padding:36px 16px;}
+  .stat-num{font-size:30px;}
+  .hero-logo{width:72px;height:72px;}
+  .platoon-grid{grid-template-columns:1fr;}
+  .content-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
-<!-- Hero -->
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="#" onclick="switchPage('home')">
+      <img src="/assets/logo.png" alt="" onerror="this.style.display='none'"> AZO
+    </a>
+    <div class="nav-links">
+      <a class="active" data-page="home" onclick="switchPage('home')">Home</a>
+      <a data-page="roster" onclick="switchPage('roster')">Upcoming Op</a>
+      <a data-page="operators" onclick="switchPage('operators')">Operators</a>
+      <a data-page="attendance" onclick="switchPage('attendance')">Attendance</a>
+      <a data-page="feedback" onclick="switchPage('feedback')">Op Feedback</a>
+      <a onclick="openGallery()">Gallery <span class="pill">Soon</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== HOME PAGE ====== -->
+<div class="page active" id="page-home">
+
 <section class="hero">
-  <div class="hero-bg-pattern"></div>
-  <div class="hero-lines"></div>
+  <div class="hero-pattern"></div>
   <img class="hero-logo" src="/assets/logo.png" alt="AZO" onerror="this.style.display='none'">
   <h1>AZO</h1>
-  <div class="tagline">ArmA 3 Milsim Unit</div>
-  <p class="sub">A dynamic Arma 3 semi-casual community focused on teamwork, realism, and a great operational experience. Deploy alongside fellow operators in large-scale combined arms operations.</p>
+  <div class="tagline">ArmA 3 Semi-Casual Community</div>
+  <p class="desc">A dynamic semi-casual Arma 3 community focused on teamwork, realism, and a great operational experience. Deploy alongside fellow operators in large-scale combined arms operations.</p>
   <div class="hero-btns">
-    <a class="btn btn-primary" href="/roster/">View Operation Roster</a>
+    <a class="btn btn-primary" onclick="switchPage('roster')">Upcoming Operation</a>
     <a class="btn btn-outline" href="https://discord.gg/azo" target="_blank">Join Discord</a>
   </div>
 </section>
 
-<!-- Stats -->
 <div class="stats">
-  <div class="stat"><div class="stat-num">41</div><div class="stat-lbl">Active Members</div></div>
-  <div class="stat"><div class="stat-num">2</div><div class="stat-lbl">Ops Per Week</div></div>
-  <div class="stat"><div class="stat-num">Oceania</div><div class="stat-lbl">Region</div></div>
-  <div class="stat"><div class="stat-num">2025</div><div class="stat-lbl">Established</div></div>
+  <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Active Members</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Years Active</div></div>
+  <div class="stat"><div class="stat-num">1</div><div class="stat-lbl">Op Per Fortnight</div></div>
+  <div class="stat"><div class="stat-num">2018</div><div class="stat-lbl">Founded</div></div>
 </div>
 
-<!-- About -->
-<div class="section">
-  <div class="section-sub">Field Notes</div>
-  <h2 class="section-title">About AZO</h2>
-  <p class="section-desc">AZO is an ArmA 3 milsim unit built around structured gameplay, professional leadership, and a focus on community. Our operations combine infantry manoeuvres, armour support, rotary-wing CAS, and medical logistics across dynamic mission sets.</p>
-  <div class="content-grid">
-    <div class="card">
-      <span class="card-icon">⚔️</span>
-      <h3>Combined Arms</h3>
-      <p>Every operation integrates infantry, armour, aviation, and support elements for a fully realised combined-arms experience.</p>
-    </div>
-    <div class="card">
-      <span class="card-icon">📋</span>
-      <h3>Structured Roster</h3>
-      <p>Role-based sign-ups with endorsement tracking for medical, JTAC, and leadership positions. Know your slot before you deploy.</p>
-    </div>
-    <div class="card">
-      <span class="card-icon">🎖️</span>
-      <h3>Promotion System</h3>
-      <p>Track your progression from Recruit through to SOCOMD. Promotions are based on attendance, aptitude, and leadership potential.</p>
-    </div>
-    <div class="card">
-      <span class="card-icon">🤝</span>
-      <h3>Community Focus</h3>
-      <p>Everyone has a voice. Feedback drives how we shape operations, SOPs, and the unit's direction. New ideas are always welcome.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Platoons -->
-<div class="section">
-  <div class="section-sub">Task Organisation</div>
-  <h2 class="section-title">Our Platoons</h2>
-  <p class="section-desc">AZO operates with three infantry platoons and dedicated support attachments, each with specialised roles and leadership structures.</p>
-  <div class="platoon-grid">
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Infantry</div>
-        <h3>Alpha</h3>
-        <p class="desc">Primary manoeuvre element. 10-man section with Section Leader, Grenadiers, LSW gunners, and Riflemen. The tip of the spear.</p>
-      </div>
-      <div class="bottom">
-        <span>10 slots per op</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Infantry</div>
-        <h3>Bravo</h3>
-        <p class="desc">Mirrors Alpha's structure. Section Leader, Anti-tank team, LSW gunners, and Riflemen providing flexible combat power.</p>
-      </div>
-      <div class="bottom">
-        <span>10 slots per op</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Infantry</div>
-        <h3>Charlie</h3>
-        <p class="desc">Third infantry section with a unique callsign structure. Adaptable to any mission requirement or attachment role.</p>
-      </div>
-      <div class="bottom">
-        <span>8 slots per op</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Support</div>
-        <h3>Medical Team</h3>
-        <p class="desc">Platoon Medic and medics providing battlefield trauma care. Medical endorsement required for all billets.</p>
-      </div>
-      <div class="bottom">
-        <span>4 slots</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Aviation</div>
-        <h3>Blackjack</h3>
-        <p class="desc">Rotary-wing air detachment providing CASEVAC, troop transport, and aerial fire support during operations.</p>
-      </div>
-      <div class="bottom">
-        <span>4 slots</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-    <div class="platoon-card">
-      <div class="top">
-        <div class="badge">Command</div>
-        <h3>Platoon HQ</h3>
-        <p class="desc">Overall command element including the Platoon Commander and JTAC. Responsible for mission planning and execution.</p>
-      </div>
-      <div class="bottom">
-        <span>2 slots</span>
-        <a href="/roster/">View Roster</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CTA -->
-<div class="cta-banner">
+<div class="cta-banner" style="margin-top:40px;">
   <h2>Ready to deploy?</h2>
   <p>Check the current operation roster, sign up for a slot, and join us on the battlefield.</p>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-    <a class="btn btn-primary" href="/roster/">View Operation Roster</a>
-    <a class="btn btn-gold" href="https://discord.gg/azo" target="_blank">Join Our Discord</a>
+    <a class="btn btn-primary" onclick="switchPage('roster')">Upcoming Operation</a>
+    <a class="btn btn-gold" href="https://discord.gg/azo" target="_blank">Join Discord</a>
   </div>
 </div>
 
-<!-- Footer -->
 <footer>
   <div class="footer-links">
-    <a href="/roster/">Operation Roster</a>
-    <a href="https://discord.gg/azo" target="_blank">Discord</a>
+    <a onclick="switchPage('home')">Home</a>
+    <a onclick="switchPage('roster')">Roster</a>
+    <a onclick="switchPage('operators')">Operators</a>
+    <a onclick="switchPage('attendance')">Attendance</a>
+    <a onclick="switchPage('feedback')">Op Feedback</a>
+    <a onclick="openGallery()">Gallery</a>
   </div>
-  <div class="footer-copy">
-    &copy; 2026 AZO ArmA 3 Milsim Unit<br>
-    <span>ArmA 3 is a trademark of Bohemia Interactive. AZO is an independent community and not affiliated with Bohemia Interactive or the Australian Defence Force.</span>
-  </div>
+  <div class="footer-copy">&copy; 2026 AZO &mdash; ArmA 3 Semi-Casual Community<br><span>ArmA 3 is a trademark of Bohemia Interactive. AZO is an independent community.</span></div>
 </footer>
+
+</div><!-- /page-home -->
+
+<!-- ====== ROSTER PAGE ====== -->
+<div class="page" id="page-roster">
+  <div style="padding:20px 0;">
+    <div class="section-sub" style="margin-bottom:4px;">Operation</div>
+    <h2 class="section-title">Upcoming Op Roster</h2>
+    <p class="section-desc">View available roles and sign up for the next operation. Login with Discord to claim your slot.</p>
+    <div class="roster-embed">
+      <p>The full interactive roster is available on the roster page.</p>
+      <a class="btn btn-primary" href="/roster/" target="_blank">Open Full Roster</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== OPERATORS PAGE ====== -->
+<div class="page" id="page-operators">
+  <div style="padding:20px 0;">
+    <div class="section-sub" style="margin-bottom:4px;">Personnel</div>
+    <h2 class="section-title">Active Operators</h2>
+    <p class="section-desc">Current roster of AZO operators and their ranks.</p>
+    <div id="operatorsList" class="op-grid"></div>
+  </div>
+</div>
+
+<!-- ====== ATTENDANCE PAGE ====== -->
+<div class="page" id="page-attendance">
+  <div style="padding:20px 0;">
+    <div class="section-sub" style="margin-bottom:4px;">Records</div>
+    <h2 class="section-title">Previous Op Attendance</h2>
+    <p class="section-desc">Track who attended which operations. Updated after each mission.</p>
+    <div class="att-placeholder">
+      <div class="icon">📜</div>
+      <p>Attendance records are displayed on the roster page after each operation is marked complete.</p>
+      <div style="margin-top:20px;"><a class="btn btn-outline" href="/roster/" target="_blank">View Roster</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== FEEDBACK PAGE ====== -->
+<div class="page" id="page-feedback">
+  <div style="padding:20px 0;">
+    <div class="section-sub" style="margin-bottom:4px;">After Action</div>
+    <h2 class="section-title">Op Feedback</h2>
+    <p class="section-desc">Rate the operation and your leadership after each mission.</p>
+    <div class="fb-placeholder">
+      <div class="icon">📝</div>
+      <p>Feedback forms are opened after each operation. Check back after the next mission.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Coming Soon Overlay -->
+<div id="comingSoonOverlay">
+  <div class="cs-modal">
+    <div class="icon">🖼️</div>
+    <h2>Gallery</h2>
+    <p>Screenshots and mission highlights from past operations. This section is coming soon.</p>
+    <button class="btn btn-outline" onclick="closeGallery()">Close</button>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
+
+function switchPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('[data-page]').forEach(a => a.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  const link = document.querySelector('[data-page="' + id + '"]');
+  if (link) link.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function openGallery() {
+  document.getElementById('comingSoonOverlay').classList.add('show');
+}
+function closeGallery() {
+  document.getElementById('comingSoonOverlay').classList.remove('show');
+}
+document.getElementById('comingSoonOverlay').onclick = function(e) {
+  if (e.target === this) closeGallery();
+};
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeGallery();
+});
+
+// Load operators list
+(async function() {
+  try {
+    const res = await fetch(API_BASE + '/api/members');
+    if (!res.ok) return;
+    const data = await res.json();
+    const list = document.getElementById('operatorsList');
+    if (!list) return;
+    const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
+    entries.sort((a, b) => (a[1].discordRank || 'Z').localeCompare(b[1].discordRank || 'Z'));
+    list.innerHTML = entries.map(([name, m]) =>
+      `<div class="op-card"><div class="nm">${esc(name)}</div><div class="rk">${esc(m.discordRank || 'Member')}</div></div>`
+    ).join('');
+  } catch(e) {}
+})();
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
 
 </body>
 </html>
