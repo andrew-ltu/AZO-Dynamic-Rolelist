@@ -2389,7 +2389,7 @@ async function tryFetchUser() {
   } catch { return null; }
 }
 
-function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
+async function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   claimContext={sectionKey,roleIndex,roleLabel,endorseType};
   $('#claimRoleLabel').textContent=roleLabel;
   $('#claimRoleLabel2').textContent=roleLabel;
