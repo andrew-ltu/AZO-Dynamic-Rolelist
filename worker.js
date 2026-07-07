@@ -75,6 +75,39 @@ async function saveRoster(env, data) {
   await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
 }
 
+async function getCachedGuildRoles(env, oauthToken) {
+  const cached = await env.DB.prepare(`SELECT data, updated_at FROM members WHERE name = '_guild_roles'`).first();
+  if (cached) {
+    const age = Math.floor(Date.now() / 1000) - cached.updated_at;
+    if (age < 3600) return JSON.parse(cached.data);
+  }
+  let guildRoles = [];
+  if (env.DISCORD_BOT_TOKEN) {
+    const resp = await fetch(`${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`, {
+      headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+    });
+    if (resp.ok) guildRoles = await resp.json();
+  }
+  if (!guildRoles.length && oauthToken) {
+    try {
+      const resp = await fetch(`${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`, {
+        headers: { Authorization: `Bearer ${oauthToken}` }
+      });
+      if (resp.ok) guildRoles = await resp.json();
+    } catch (_) {}
+  }
+  if (guildRoles.length) {
+    const roleMap = {};
+    guildRoles.forEach(r => { roleMap[r.id] = r.name; });
+    const now = Math.floor(Date.now() / 1000);
+    await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_guild_roles', ?, ?)`)
+      .bind(JSON.stringify(roleMap), now).run();
+    return roleMap;
+  }
+  if (cached) return JSON.parse(cached.data);
+  return {};
+}
+
 async function getMembers(env) {
   const row = await env.DB.prepare(`SELECT data FROM members WHERE name = '_meta'`).first();
   if (row) return JSON.parse(row.data);
@@ -227,26 +260,11 @@ async function handleCallback(request, env) {
       if (memberResponse.ok) {
         const memberData = await memberResponse.json();
         const roleIds = memberData.roles || [];
-        let guildRoles = [];
-        if (env.DISCORD_BOT_TOKEN) {
-          const rolesResponse = await fetch(
-            `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
-            { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } }
-          );
-          if (rolesResponse.ok) guildRoles = await rolesResponse.json();
-        }
-        if (!guildRoles.length) {
-          try {
-            const fallbackResp = await fetch(
-              `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
-              { headers: { Authorization: `Bearer ${tokenData.access_token}` } }
-            );
-            if (fallbackResp.ok) guildRoles = await fallbackResp.json();
-          } catch (_) {}
-        }
-        const roleMap = {};
-        guildRoles.forEach(r => { roleMap[r.id] = r.name; });
+        const roleMap = await getCachedGuildRoles(env, tokenData.access_token);
         roleNames = roleIds.map(id => roleMap[id]).filter(Boolean);
+        if (!roleNames.length && roleIds.length) {
+          roleNames = roleIds.map(id => `_id:${id}`);
+        }
         await env.DB.prepare(`DELETE FROM user_roles WHERE user_id = ?`).bind(user.id).run();
         const stmt = `INSERT INTO user_roles (user_id, role_name, assigned_at, assigned_by) VALUES (?, ?, ?, ?)`;
         for (const roleName of roleNames) {
@@ -300,13 +318,7 @@ async function handleGetUser(request, env, origin) {
       if (memberResp.ok) {
         const memberData = await memberResp.json();
         const roleIds = memberData.roles || [];
-        const rolesResp = await fetch(
-          `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
-          { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } }
-        );
-        const guildRoles = rolesResp.ok ? await rolesResp.json() : [];
-        const roleMap = {};
-        guildRoles.forEach(r => { roleMap[r.id] = r.name; });
+        const roleMap = await getCachedGuildRoles(env);
         const fetchedRoles = roleIds.map(id => roleMap[id]).filter(Boolean);
         if (fetchedRoles.length) {
           const now = Math.floor(Date.now() / 1000);
@@ -321,6 +333,10 @@ async function handleGetUser(request, env, origin) {
     } catch (e) { console.error('On-demand role sync failed:', e); }
   }
 
+  // Resolve any _id: prefixed roles using cached guild roles
+  const roleMap = await getCachedGuildRoles(env);
+  const resolvedRoles = roles.map(r => r.startsWith('_id:') ? (roleMap[r.slice(4)] || r) : r);
+
   return jsonResponse({
     user: {
       id: userResult.id,
@@ -328,8 +344,8 @@ async function handleGetUser(request, env, origin) {
       displayName: userResult.global_name,
       avatar: userResult.avatar,
       email: userResult.email,
-      isAdmin: userResult.is_admin === 1 || ADMIN_IDS.includes(userResult.id) || roles.some(r => /admin|staff/i.test(r)),
-      roles,
+      isAdmin: userResult.is_admin === 1 || ADMIN_IDS.includes(userResult.id) || resolvedRoles.some(r => /admin|staff/i.test(r)),
+      roles: resolvedRoles,
       rosterName
     }
   }, 200, origin);
@@ -473,7 +489,9 @@ async function handleAdminSaveRoster(request, env, origin) {
   if (userResult.is_admin === 1 || ADMIN_IDS.includes(payload.sub)) { /* admin ok */ }
   else {
     const roleRows = await env.DB.prepare(`SELECT role_name FROM user_roles WHERE user_id = ?`).bind(payload.sub).all();
-    const hasAdminRole = roleRows.results.some(r => /admin|staff/i.test(r.role_name));
+    const roleMap = await getCachedGuildRoles(env);
+    const resolved = roleRows.results.map(r => r.role_name.startsWith('_id:') ? (roleMap[r.role_name.slice(4)] || r.role_name) : r.role_name);
+    const hasAdminRole = resolved.some(r => /admin|staff/i.test(r));
     if (!hasAdminRole) return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
   }
 
@@ -621,6 +639,8 @@ async function verifyAdmin(request, env) {
   if (!userResult) return null;
   if (userResult.is_admin === 1 || ADMIN_IDS.includes(payload.sub)) return payload;
   const roleRows = await env.DB.prepare(`SELECT role_name FROM user_roles WHERE user_id = ?`).bind(payload.sub).all();
-  if (roleRows.results.some(r => /admin|staff/i.test(r.role_name))) return payload;
+  const roleMap = await getCachedGuildRoles(env);
+  const resolved = roleRows.results.map(r => r.role_name.startsWith('_id:') ? (roleMap[r.role_name.slice(4)] || r.role_name) : r.role_name);
+  if (resolved.some(r => /admin|staff/i.test(r))) return payload;
   return null;
 }
