@@ -285,6 +285,9 @@ nav{
 .att-op-meta{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;color:var(--muted-2);margin-bottom:12px;}
 .att-op-attendees{display:flex;flex-wrap:wrap;gap:6px;}
 .att-name{font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(61,135,212,.1);border:1px solid rgba(61,135,212,.2);color:var(--primary-2);}
+.att-row{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-size:11px;white-space:nowrap;}
+.att-av{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.06);color:var(--muted-2);border:1px solid rgba(255,255,255,.08);overflow:hidden;}
+.att-rank{font-size:8px;font-family:'Share Tech Mono',monospace;padding:1px 5px;border-radius:3px;letter-spacing:.5px;opacity:.85;}
 
 /* ---------- FEEDBACK ---------- */
 /* ---------- COMING SOON OVERLAY ---------- */
@@ -644,23 +647,62 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
     // Build previous ops view
     const attEl = document.getElementById('attendanceContent');
     if (attEl) {
+      function attRow(nm, rk) {
+        const m = data[nm];
+        const av = m && m.avatar ? m.avatar : '';
+        const initial = nm.charAt(0).toUpperCase();
+        const img = av ? `<img class="att-av" src="${esc(av)}" alt="" onerror="this.style.display='none'">` : '';
+        const fb = !av ? `<span class="att-av">${initial}</span>` : '';
+        const rc = RANK_COLORS[rk] || '#6a7f98';
+        const rkHtml = rk ? `<span class="att-rank" style="background:${rc}22;color:${rc};">${esc(rk)}</span>` : '';
+        return `<span class="att-row">${img}${fb}${esc(nm)}${rkHtml}</span>`;
+      }
       const k1 = {
         name: 'Op Karoonda I', date: '20 JUNE 2026', zeus: 'Jag McMuffin', count: 17,
         sections: [
-          { name: 'Command', members: ['Sir Danger','BadKarma','Zep'] },
-          { name: 'Alpha', members: ['Gunter','24pool1','Monke','AnimePanda','Kiren77','Spacecat82'] },
-          { name: 'Bravo', members: ['Malt','Vain','Misaka','HiveMynd','Orter','Velteck','GoGoBendy','sebs'] }
+          { name: 'Command', members: [
+            {n:'Sir Danger',r:'SOCOMD'},{n:'BadKarma',r:'Senior Operator'},{n:'Zep',r:'Operator'}
+          ]},
+          { name: 'Alpha', members: [
+            {n:'Gunter',r:'SOCOMD'},{n:'24pool1',r:'Junior Operator'},{n:'Monke',r:'Senior Operator'},
+            {n:'AnimePanda',r:'Operator'},{n:'Kiren77',r:'Junior Operator'},{n:'Spacecat82',r:'Junior Operator'}
+          ]},
+          { name: 'Bravo', members: [
+            {n:'Malt',r:'Operator'},{n:'Vain',r:'Junior Operator'},{n:'Misaka',r:'Junior Operator'},
+            {n:'HiveMynd',r:'Junior Operator'},{n:'Orter',r:'Junior Operator'},{n:'Velteck',r:'Junior Operator'},
+            {n:'GoGoBendy',r:'Operator'},{n:'sebs',r:'Junior Operator'}
+          ]}
         ]
       };
       const k2 = {
         name: 'Op Karoonda II', date: '4 JULY 2026', zeus: 'Jag McMuffin', count: 31,
         sections: [
-          { name: 'Command', members: ['Sir Danger','Jäger'] },
-          { name: 'Alpha', members: ['Vain','24pool1','Monke','AnimePanda','HiveMynd','The Raven','blueberet'] },
-          { name: 'Bravo', members: ['Gunter','Misaka','Jon Taiwan','Gill','Terack','Xeonovaes'] },
-          { name: 'Medical', members: ['Zep','GoGoBendy','Spacecat82','Crallers'] },
-          { name: 'Joint Op - Charlie', members: ['Cmdr. Garuda XIII','Cmmsr Tooko','Snr Ctr. Unphayzable','Lt. Fracture','SecOps. Dan','QM. DODO','Snr Ctr. Kenn','Snr Ctr. Boomer'] },
-          { name: 'Joint Op - Blackjack', members: ['1st Lt B. Hag','2d Lt D. Mason','TSgt C. Weeb','SSgt J. Jabbzo'] }
+          { name: 'Command', members: [
+            {n:'Sir Danger',r:'SOCOMD'},{n:'Jäger',r:'Junior Operator'}
+          ]},
+          { name: 'Alpha', members: [
+            {n:'Vain',r:'Junior Operator'},{n:'24pool1',r:'Junior Operator'},{n:'Monke',r:'Senior Operator'},
+            {n:'AnimePanda',r:'Operator'},{n:'HiveMynd',r:'Junior Operator'},{n:'The Raven',r:'Junior Operator'},
+            {n:'blueberet',r:'Junior Operator'}
+          ]},
+          { name: 'Bravo', members: [
+            {n:'Gunter',r:'SOCOMD'},{n:'Misaka',r:'Junior Operator'},{n:'Jon Taiwan',r:'Junior Operator'},
+            {n:'Gill',r:'Junior Operator'},{n:'Terack',r:'Junior Operator'},{n:'Xeonovaes',r:'Junior Operator'}
+          ]},
+          { name: 'Medical', members: [
+            {n:'Zep',r:'Operator'},{n:'GoGoBendy',r:'Operator'},{n:'Spacecat82',r:'Junior Operator'},
+            {n:'Crallers',r:'Junior Operator'}
+          ]},
+          { name: 'Joint Op - Charlie', members: [
+            {n:'Cmdr. Garuda XIII',r:'Section Leader'},{n:'Cmmsr Tooko',r:'Asst. Section Leader'},
+            {n:'Snr Ctr. Unphayzable',r:'Grenadier'},{n:'Lt. Fracture',r:'Grenadier'},
+            {n:'SecOps. Dan',r:'LSW'},{n:'QM. DODO',r:'LSW'},
+            {n:'Snr Ctr. Kenn',r:'Rifleman'},{n:'Snr Ctr. Boomer',r:'Rifleman'}
+          ]},
+          { name: 'Joint Op - Blackjack', members: [
+            {n:'1st Lt B. Hag',r:'Pilot'},{n:'2d Lt D. Mason',r:'Co-pilot'},
+            {n:'TSgt C. Weeb',r:'Crew Chief'},{n:'SSgt J. Jabbzo',r:'Gunner'}
+          ]}
         ]
       };
       const prevOps = [k1, k2];
@@ -672,13 +714,12 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
         </div>
         <div class="att-grid">
           ${prevOps.map(op => {
-            const total = op.sections.reduce((s, sec) => s + sec.members.length, 0);
             return `<div class="att-op-card">
               <div class="att-op-name">${esc(op.name)}</div>
               <div class="att-op-meta">${op.date} · ${op.count} attended · Zeus: ${esc(op.zeus)}</div>
               ${op.sections.map(sec => `
                 <div style="font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.5);margin:10px 0 4px;">${esc(sec.name)}</div>
-                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(n => `<span class="att-name">${esc(n)}</span>`).join('')}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(m => attRow(m.n, m.r)).join('')}</div>
               `).join('')}
             </div>`;
           }).join('')}
