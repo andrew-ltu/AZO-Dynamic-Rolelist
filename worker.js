@@ -117,7 +117,7 @@ export default {
     if (url.pathname === '/api/logout') return handleLogout(request, env, origin);
     if (url.pathname === '/api/roster') return handleGetRoster(request, env, origin);
     if (url.pathname === '/api/members') return handleGetMembers(request, env, origin);
-    if (url.pathname === '/claim' && request.method === 'POST') return handleClaimSlot(request, env, origin);
+    if ((url.pathname === '/' || url.pathname === '/claim') && request.method === 'POST') return handleClaimSlot(request, env, origin);
     if (url.pathname === '/api/admin/roster' && request.method === 'POST') return handleAdminSaveRoster(request, env, origin);
     if (url.pathname === '/api/unassign' && request.method === 'POST') return handleUnassignSlot(request, env, origin);
 

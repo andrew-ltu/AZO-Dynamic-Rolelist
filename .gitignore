@@ -1,0 +1,4 @@
+.wrangler/
+seed_data.sql
+seed_final.sql
+node_modules/
