@@ -648,7 +648,14 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
     const attEl = document.getElementById('attendanceContent');
     if (attEl) {
       function attRow(nm, rl) {
-        const m = data[nm];
+        let m = data[nm];
+        if (!m) {
+          const norm = nm.toLowerCase().replace(/[\s_.]/g,'');
+          for (const [k, v] of Object.entries(data)) {
+            if (k.startsWith('_')) continue;
+            if (k.toLowerCase().replace(/[\s_.]/g,'') === norm) { m = v; break; }
+          }
+        }
         const av = m && m.avatar ? m.avatar : '';
         const initial = nm.charAt(0).toUpperCase();
         const img = av ? `<img class="att-av" src="${esc(av)}" alt="" onerror="this.style.display='none'">` : '';
