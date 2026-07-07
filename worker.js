@@ -338,6 +338,7 @@ async function handleGetUser(request, env, origin) {
           if (fetchedRoles.some(r => /admin|staff/i.test(r))) {
             await env.DB.prepare(`UPDATE users SET is_admin = 1 WHERE id = ?`).bind(userResult.id).run();
           }
+        }
       }
     } catch (e) { console.error('On-demand role sync failed:', e); }
   }
