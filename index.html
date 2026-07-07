@@ -647,30 +647,29 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
     // Build previous ops view
     const attEl = document.getElementById('attendanceContent');
     if (attEl) {
-      function attRow(nm, rk) {
+      function attRow(nm, rl) {
         const m = data[nm];
         const av = m && m.avatar ? m.avatar : '';
         const initial = nm.charAt(0).toUpperCase();
         const img = av ? `<img class="att-av" src="${esc(av)}" alt="" onerror="this.style.display='none'">` : '';
         const fb = !av ? `<span class="att-av">${initial}</span>` : '';
-        const rc = RANK_COLORS[rk] || '#6a7f98';
-        const rkHtml = rk ? `<span class="att-rank" style="background:${rc}22;color:${rc};">${esc(rk)}</span>` : '';
-        return `<span class="att-row">${img}${fb}${esc(nm)}${rkHtml}</span>`;
+        const rlHtml = rl ? `<span class="att-rank" style="color:#36d07a;background:rgba(54,208,122,.12);">${esc(rl)}</span>` : '';
+        return `<span class="att-row">${img}${fb}${esc(nm)}${rlHtml}</span>`;
       }
       const k1 = {
         name: 'Op Karoonda I', date: '20 JUNE 2026', zeus: 'Jag McMuffin', count: 17,
         sections: [
           { name: 'Command', members: [
-            {n:'Sir Danger',r:'SOCOMD'},{n:'BadKarma',r:'Senior Operator'},{n:'Zep',r:'Operator'}
+            {n:'Sir Danger',p:'Operation Commander'},{n:'BadKarma',p:'Executive Officer'},{n:'Zep',p:'Medic'}
           ]},
           { name: 'Alpha', members: [
-            {n:'Gunter',r:'SOCOMD'},{n:'24pool1',r:'Junior Operator'},{n:'Monke',r:'Senior Operator'},
-            {n:'AnimePanda',r:'Operator'},{n:'Kiren77',r:'Junior Operator'},{n:'Spacecat82',r:'Junior Operator'}
+            {n:'Gunter',p:'Team Leader'},{n:'24pool1',p:'Operator'},{n:'Monke',p:'Operator'},
+            {n:'AnimePanda',p:'Operator'},{n:'Kiren77',p:'Operator'},{n:'Spacecat82',p:'Operator'}
           ]},
           { name: 'Bravo', members: [
-            {n:'Malt',r:'Operator'},{n:'Vain',r:'Junior Operator'},{n:'Misaka',r:'Junior Operator'},
-            {n:'HiveMynd',r:'Junior Operator'},{n:'Orter',r:'Junior Operator'},{n:'Velteck',r:'Junior Operator'},
-            {n:'GoGoBendy',r:'Operator'},{n:'sebs',r:'Junior Operator'}
+            {n:'Malt',p:'Operator'},{n:'Vain',p:'Operator'},{n:'Misaka',p:'Operator'},
+            {n:'HiveMynd',p:'Operator'},{n:'Orter',p:'Operator'},{n:'Velteck',p:'Operator'},
+            {n:'GoGoBendy',p:'Operator'},{n:'sebs',p:'Operator'}
           ]}
         ]
       };
@@ -678,30 +677,30 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
         name: 'Op Karoonda II', date: '4 JULY 2026', zeus: 'Jag McMuffin', count: 31,
         sections: [
           { name: 'Command', members: [
-            {n:'Sir Danger',r:'SOCOMD'},{n:'Jäger',r:'Junior Operator'}
+            {n:'Sir Danger',p:'Operation Commander'},{n:'Jäger',p:'Operator'}
           ]},
           { name: 'Alpha', members: [
-            {n:'Vain',r:'Junior Operator'},{n:'24pool1',r:'Junior Operator'},{n:'Monke',r:'Senior Operator'},
-            {n:'AnimePanda',r:'Operator'},{n:'HiveMynd',r:'Junior Operator'},{n:'The Raven',r:'Junior Operator'},
-            {n:'blueberet',r:'Junior Operator'}
+            {n:'Vain',p:'Operator'},{n:'24pool1',p:'Operator'},{n:'Monke',p:'Operator'},
+            {n:'AnimePanda',p:'Operator'},{n:'HiveMynd',p:'Operator'},{n:'The Raven',p:'Operator'},
+            {n:'blueberet',p:'Operator'}
           ]},
           { name: 'Bravo', members: [
-            {n:'Gunter',r:'SOCOMD'},{n:'Misaka',r:'Junior Operator'},{n:'Jon Taiwan',r:'Junior Operator'},
-            {n:'Gill',r:'Junior Operator'},{n:'Terack',r:'Junior Operator'},{n:'Xeonovaes',r:'Junior Operator'}
+            {n:'Gunter',p:'Team Leader'},{n:'Misaka',p:'Operator'},{n:'Jon Taiwan',p:'Operator'},
+            {n:'Gill',p:'Operator'},{n:'Terack',p:'Operator'},{n:'Xeonovaes',p:'Operator'}
           ]},
           { name: 'Medical', members: [
-            {n:'Zep',r:'Operator'},{n:'GoGoBendy',r:'Operator'},{n:'Spacecat82',r:'Junior Operator'},
-            {n:'Crallers',r:'Junior Operator'}
+            {n:'Zep',p:'Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},
+            {n:'Crallers',p:'Medic'}
           ]},
           { name: 'Joint Op - Charlie', members: [
-            {n:'Cmdr. Garuda XIII',r:'Section Leader'},{n:'Cmmsr Tooko',r:'Asst. Section Leader'},
-            {n:'Snr Ctr. Unphayzable',r:'Grenadier'},{n:'Lt. Fracture',r:'Grenadier'},
-            {n:'SecOps. Dan',r:'LSW'},{n:'QM. DODO',r:'LSW'},
-            {n:'Snr Ctr. Kenn',r:'Rifleman'},{n:'Snr Ctr. Boomer',r:'Rifleman'}
+            {n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},
+            {n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},
+            {n:'SecOps. Dan',p:'LSW'},{n:'QM. DODO',p:'LSW'},
+            {n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}
           ]},
           { name: 'Joint Op - Blackjack', members: [
-            {n:'1st Lt B. Hag',r:'Pilot'},{n:'2d Lt D. Mason',r:'Co-pilot'},
-            {n:'TSgt C. Weeb',r:'Crew Chief'},{n:'SSgt J. Jabbzo',r:'Gunner'}
+            {n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},
+            {n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}
           ]}
         ]
       };
@@ -719,7 +718,7 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
               <div class="att-op-meta">${op.date} · ${op.count} attended · Zeus: ${esc(op.zeus)}</div>
               ${op.sections.map(sec => `
                 <div style="font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.5);margin:10px 0 4px;">${esc(sec.name)}</div>
-                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(m => attRow(m.n, m.r)).join('')}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(m => attRow(m.n, m.p)).join('')}</div>
               `).join('')}
             </div>`;
           }).join('')}
