@@ -1398,7 +1398,7 @@ $('#clearAllAssignmentsBtn').addEventListener('click', async () => {
 // Member management
 let membersData = {};
 
-async function loadMembers() {
+window.loadMembers = async function() {
   try {
     const res = await fetch(`${API_BASE}/api/members`, { cache: 'no-store' });
     if (!res.ok) return;
@@ -1406,7 +1406,7 @@ async function loadMembers() {
     renderMembers();
     renderPreviousOps();
   } catch(e) {}
-}
+};
 
 function renderMembers() {
   const el = $('#adminMembersList');
