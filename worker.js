@@ -328,7 +328,7 @@ async function handleGetUser(request, env, origin) {
       displayName: userResult.global_name,
       avatar: userResult.avatar,
       email: userResult.email,
-      isAdmin: userResult.is_admin === 1 || ADMIN_IDS.includes(userResult.id),
+      isAdmin: userResult.is_admin === 1 || ADMIN_IDS.includes(userResult.id) || roles.some(r => /admin|staff/i.test(r)),
       roles,
       rosterName
     }
@@ -443,10 +443,13 @@ async function handleAdminSaveRoster(request, env, origin) {
   const payload = await verifyToken(token, env.JWT_SECRET);
   if (!payload) return jsonResponse({ error: 'Invalid token' }, 401, origin);
 
-  const userResult = await env.DB.prepare(`SELECT is_admin FROM users WHERE id = ?`
-  ).bind(payload.sub).first();
-  if (!userResult || (userResult.is_admin !== 1 && !ADMIN_IDS.includes(payload.sub))) {
-    return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
+  const userResult = await env.DB.prepare(`SELECT is_admin FROM users WHERE id = ?`).bind(payload.sub).first();
+  if (!userResult) return jsonResponse({ error: 'User not found' }, 404, origin);
+  if (userResult.is_admin === 1 || ADMIN_IDS.includes(payload.sub)) { /* admin ok */ }
+  else {
+    const roleRows = await env.DB.prepare(`SELECT role_name FROM user_roles WHERE user_id = ?`).bind(payload.sub).all();
+    const hasAdminRole = roleRows.results.some(r => /admin|staff/i.test(r.role_name));
+    if (!hasAdminRole) return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
   }
 
   let newRoster;
@@ -590,6 +593,9 @@ async function verifyAdmin(request, env) {
   const payload = await verifyToken(token, env.JWT_SECRET);
   if (!payload) return null;
   const userResult = await env.DB.prepare(`SELECT is_admin FROM users WHERE id = ?`).bind(payload.sub).first();
-  if (!userResult || (userResult.is_admin !== 1 && !ADMIN_IDS.includes(payload.sub))) return null;
-  return payload;
+  if (!userResult) return null;
+  if (userResult.is_admin === 1 || ADMIN_IDS.includes(payload.sub)) return payload;
+  const roleRows = await env.DB.prepare(`SELECT role_name FROM user_roles WHERE user_id = ?`).bind(payload.sub).all();
+  if (roleRows.results.some(r => /admin|staff/i.test(r.role_name))) return payload;
+  return null;
 }

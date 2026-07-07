@@ -489,6 +489,7 @@ footer b{color:var(--muted);}
   <div id="authLoggedIn" style="display:none;align-items:center;gap:12px;">
     <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
     <strong id="userName"></strong>
+    <span id="userIdDisplay" style="font-size:9px;color:var(--muted-2);font-family:'Share Tech Mono',monospace;" title="Your Discord ID — share this if admin access is missing"></span>
     <span class="ds-sep">|</span>
     <span id="userRole" style="color:#36d07a;"></span>
     <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
@@ -965,30 +966,32 @@ function renderAuthUI() {
   const loggedIn = $('#authLoggedIn');
   const adminBtn = $('#adminPanelBtn');
   
-  if (currentUser) {
-    notLoggedIn.style.display = 'none';
-    loggedIn.style.display = 'flex';
-    
-    const avatarUrl = currentUser.avatar 
-      ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
-      : 'https://cdn.discordapp.com/embed/avatars/0.png';
-    
-    $('#userAvatar').src = avatarUrl;
-    $('#userName').textContent = currentUser.displayName;
-    
-    // Get rank from members.json via roster name, fall back to Discord API roles
-    const memberRank = currentUser.rosterName && MEMBERS[currentUser.rosterName]
-      ? MEMBERS[currentUser.rosterName].discordRank || ''
-      : '';
-    const discordRoles = currentUser.roles && currentUser.roles.length > 0
-      ? currentUser.roles.join(', ')
-      : '';
-    const rankText = memberRank || discordRoles || 'Member';
-    
-    let roleText = rankText;
-    if (currentUser.isAdmin) roleText = 'Admin' + (rankText !== 'Member' ? ' | ' + rankText : '');
-    
-    $('#userRole').textContent = roleText;
+    if (currentUser) {
+      notLoggedIn.style.display = 'none';
+      loggedIn.style.display = 'flex';
+      
+      const avatarUrl = currentUser.avatar 
+        ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
+        : 'https://cdn.discordapp.com/embed/avatars/0.png';
+      
+      $('#userAvatar').src = avatarUrl;
+      $('#userName').textContent = currentUser.displayName;
+      // Show Discord ID for admin debugging
+      $('#userIdDisplay').textContent = currentUser.id;
+      
+      // Get rank from members.json via roster name, fall back to Discord API roles
+      const memberRank = currentUser.rosterName && MEMBERS[currentUser.rosterName]
+        ? MEMBERS[currentUser.rosterName].discordRank || ''
+        : '';
+      const discordRoles = currentUser.roles && currentUser.roles.length > 0
+        ? currentUser.roles.join(', ')
+        : '';
+      const rankText = memberRank || discordRoles || 'Member';
+      
+      let roleText = rankText;
+      if (currentUser.isAdmin) roleText = 'Admin' + (rankText !== 'Member' ? ' | ' + rankText : '');
+      
+      $('#userRole').textContent = roleText;
     
     // Show admin button if user is admin
     if (adminBtn) {
@@ -1026,7 +1029,9 @@ let currentRoster = null;
 
 function openAdminPanel() {
   if (!currentUser || !currentUser.isAdmin) {
-    alert('Access denied: Admin privileges required');
+    const id = currentUser ? currentUser.id : '(not logged in)';
+    const roles = currentUser && currentUser.roles ? currentUser.roles.join(', ') : '(none)';
+    alert('Access denied: Admin privileges required\n\nYour Discord ID: ' + id + '\nYour roles: ' + roles + '\n\nContact the developer to add your ID to ADMIN_IDS in worker.js or grant you an "Admin"/"Staff" role on the Discord server.');
     return;
   }
   loadAdminData();
