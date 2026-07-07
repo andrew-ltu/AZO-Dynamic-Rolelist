@@ -492,7 +492,7 @@ footer b{color:var(--muted);}
     <span id="userIdDisplay" style="font-size:9px;color:var(--muted-2);font-family:'Share Tech Mono',monospace;" title="Your Discord ID — share this if admin access is missing"></span>
     <span class="ds-sep">|</span>
     <span id="userRole" style="color:#36d07a;"></span>
-    <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
+    <button id="adminPanelBtn" onclick="openAdminPanel()" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
     <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;">Logout</button>
   </div>
 </div>
@@ -1528,10 +1528,6 @@ function showStatus(elementId, message, type) {
   }, 4000);
 }
 
-// Admin panel events
-const adminPanelBtn = $('#adminPanelBtn');
-if (adminPanelBtn) adminPanelBtn.addEventListener('click', openAdminPanel);
-
 const adminCloseBtn = $('#adminCloseBtn');
 if (adminCloseBtn) adminCloseBtn.addEventListener('click', closeAdminPanel);
 } // End initAdminPanel function
@@ -1550,7 +1546,15 @@ const rankClass=r=>'rank-'+r.toLowerCase().replace(/[^a-z0-9]+/g,'-');
 
 /* ---------- member ---------- */
 function member(name){
-  const m=MEMBERS[name]||{};
+  let m=MEMBERS[name];
+  if (!m) {
+    const norm=name.toLowerCase().replace(/[\s_.]/g,'');
+    for (const [k,v] of Object.entries(MEMBERS)) {
+      if (k.startsWith('_')) continue;
+      if (k.toLowerCase().replace(/[\s_.]/g,'')===norm) { m=v; break; }
+    }
+  }
+  m=m||{};
   const attendance=m.attendance||{};
   let opsAttended=0;
   ATT_MONTHS.forEach(mo=>{
