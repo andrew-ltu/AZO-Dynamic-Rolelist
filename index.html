@@ -258,6 +258,13 @@ nav{
 .op-card .op-detail .ops-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);margin-bottom:8px;}
 .op-card .op-endorse{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(61,135,212,.1);color:var(--primary);border:1px solid rgba(61,135,212,.15);margin:2px;}
 .op-card .op-lead{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(240,180,41,.1);color:var(--gold);border:1px solid rgba(240,180,41,.15);margin-bottom:8px;}
+.op-rank-hdr{
+  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
+  text-transform:uppercase;letter-spacing:3px;
+  margin:32px 0 10px;padding-bottom:6px;
+  border-bottom:1px solid var(--line);
+}
+.op-rank-hdr:first-of-type{margin-top:0;}
 
 /* ---------- ATTENDANCE ---------- */
 .att-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
@@ -516,9 +523,12 @@ document.addEventListener('keydown', function(e) {
   }, 5000);
 })();
 
-const RANK_ORDER = {
-  'SOCOMD':100,'Senior Operator':80,'Operator':60,
-  'Junior Operator':40,'Recruit':20
+const RANK_ORDER = [
+  'SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'
+];
+const RANK_COLORS = {
+  'SOCOMD':'#264d7a','Senior Operator':'#326ba8',
+  'Operator':'#3d87d4','Junior Operator':'#5a9fe0','Recruit':'#6a7f98'
 };
 
 // Load operators list
@@ -530,60 +540,101 @@ const RANK_ORDER = {
     const list = document.getElementById('operatorsList');
     if (!list) return;
     const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
-    entries.sort((a, b) => (RANK_ORDER[b[1].discordRank]||0) - (RANK_ORDER[a[1].discordRank]||0));
-    const cards = document.createDocumentFragment();
-    for (const [name, m] of entries) {
-      const card = document.createElement('div');
-      card.className = 'op-card';
-      card.onclick = function(){ toggleOp(this); };
-      const av = m.avatar;
-      const hasAvatar = av && av !== '';
-      const initial = name.charAt(0).toUpperCase();
-      if (hasAvatar) {
-        const img = document.createElement('img');
-        img.className = 'op-avatar'; img.alt = '';
-        img.src = av;
-        img.onerror = function(){ this.outerHTML = '<div class="op-avatar-fallback">' + initial + '</div>'; };
-        card.appendChild(img);
-      } else {
-        const fb = document.createElement('div');
-        fb.className = 'op-avatar-fallback';
-        fb.textContent = initial;
-        card.appendChild(fb);
-      }
-      const nm = document.createElement('div');
-      nm.className = 'nm'; nm.textContent = name;
-      card.appendChild(nm);
-      const rk = document.createElement('div');
-      rk.className = 'rk'; rk.textContent = m.discordRank || 'Member';
-      card.appendChild(rk);
-      const det = document.createElement('div');
-      det.className = 'op-detail';
-      const opsN = document.createElement('div');
-      opsN.className = 'ops-num'; opsN.textContent = m.opsAttended;
-      det.appendChild(opsN);
-      const opsL = document.createElement('div');
-      opsL.className = 'ops-lbl'; opsL.textContent = 'Ops Attended';
-      det.appendChild(opsL);
-      if (m.endorsements && m.endorsements.length) {
-        for (const e of m.endorsements) {
-          const sp = document.createElement('span');
-          sp.className = 'op-endorse'; sp.textContent = e;
-          det.appendChild(sp);
-        }
-      }
-      if (m.leadership) {
-        const lw = document.createElement('div');
-        lw.style.marginTop = '8px';
-        const sp = document.createElement('span');
-        sp.className = 'op-lead'; sp.textContent = m.leadership + ' leadership';
-        lw.appendChild(sp);
-        det.appendChild(lw);
-      }
-      card.appendChild(det);
-      cards.appendChild(card);
+    // Group by rank
+    const groups = {};
+    for (const rank of RANK_ORDER) groups[rank] = [];
+    const unknown = [];
+    for (const e of entries) {
+      const r = e[1].discordRank;
+      if (groups[r]) groups[r].push(e);
+      else unknown.push(e);
     }
-    list.appendChild(cards);
+    const frag = document.createDocumentFragment();
+    for (const rank of RANK_ORDER) {
+      const items = groups[rank];
+      if (!items.length) continue;
+      const hdr = document.createElement('div');
+      hdr.className = 'op-rank-hdr';
+      hdr.style.color = RANK_COLORS[rank] || '#6a7f98';
+      hdr.textContent = rank;
+      frag.appendChild(hdr);
+      const grid = document.createElement('div');
+      grid.className = 'op-grid';
+      for (const [name, m] of items) {
+        const card = document.createElement('div');
+        card.className = 'op-card';
+        card.onclick = function(){ toggleOp(this); };
+        const av = m.avatar;
+        const hasAvatar = av && av !== '';
+        const initial = name.charAt(0).toUpperCase();
+        if (hasAvatar) {
+          const img = document.createElement('img');
+          img.className = 'op-avatar'; img.alt = '';
+          img.src = av;
+          img.onerror = function(){ this.outerHTML = '<div class=\'op-avatar-fallback\'>' + initial + '</div>'; };
+          card.appendChild(img);
+        } else {
+          const fb = document.createElement('div');
+          fb.className = 'op-avatar-fallback';
+          fb.textContent = initial;
+          card.appendChild(fb);
+        }
+        const nm = document.createElement('div');
+        nm.className = 'nm'; nm.textContent = name;
+        card.appendChild(nm);
+        const rk = document.createElement('div');
+        rk.className = 'rk';
+        rk.style.color = RANK_COLORS[rank] || '#6a7f98';
+        rk.textContent = m.discordRank || 'Member';
+        card.appendChild(rk);
+        const det = document.createElement('div');
+        det.className = 'op-detail';
+        const opsN = document.createElement('div');
+        opsN.className = 'ops-num'; opsN.textContent = m.opsAttended;
+        det.appendChild(opsN);
+        const opsL = document.createElement('div');
+        opsL.className = 'ops-lbl'; opsL.textContent = 'Ops Attended';
+        det.appendChild(opsL);
+        if (m.endorsements && m.endorsements.length) {
+          for (const e of m.endorsements) {
+            const sp = document.createElement('span');
+            sp.className = 'op-endorse'; sp.textContent = e;
+            det.appendChild(sp);
+          }
+        }
+        if (m.leadership) {
+          const lw = document.createElement('div');
+          lw.style.marginTop = '8px';
+          const sp = document.createElement('span');
+          sp.className = 'op-lead'; sp.textContent = m.leadership + ' leadership';
+          lw.appendChild(sp);
+          det.appendChild(lw);
+        }
+        card.appendChild(det);
+        grid.appendChild(card);
+      }
+      frag.appendChild(grid);
+    }
+    if (unknown.length) {
+      const hdr = document.createElement('div');
+      hdr.className = 'op-rank-hdr';
+      hdr.style.color = '#6a7f98';
+      hdr.textContent = 'Other';
+      frag.appendChild(hdr);
+      const grid = document.createElement('div');
+      grid.className = 'op-grid';
+      for (const [name, m] of unknown) {
+        const card = document.createElement('div');
+        card.className = 'op-card';
+        card.onclick = function(){ toggleOp(this); };
+        const nm = document.createElement('div');
+        nm.className = 'nm'; nm.textContent = name;
+        card.appendChild(nm);
+        grid.appendChild(card);
+      }
+      frag.appendChild(grid);
+    }
+    list.appendChild(frag);
   } catch(e) {}
 })();
 
