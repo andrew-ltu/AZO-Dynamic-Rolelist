@@ -1278,6 +1278,7 @@ footer b{color:var(--muted);}
         <div id="reallocateSection" style="display:none;background:rgba(217,64,64,.1);border:1px solid rgba(217,64,64,.3);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#d94040;">
           <span id="reallocateLabel"></span>
         </div>
+        <button id="claimManualToggle" type="button" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;padding:4px 0;text-decoration:underline;">Enter name manually</button>
       </div>
       
       <!-- Manual name input for non-logged-in users -->
@@ -1336,7 +1337,8 @@ const $ = (s,el=document)=>el.querySelector(s);
 
 /* Helper function for checking endorsements - used by admin panel */
 function memberHasEndorsement(memberName,endorsementType){
-  const m=MEMBERS[memberName];
+  const key=Object.keys(MEMBERS).find(k=>k.toLowerCase()===memberName.toLowerCase());
+  const m=key?MEMBERS[key]:null;
   if(!m)return false;
   const arr=Array.isArray(m.endorsements)?m.endorsements:[];
   const needle=endorsementType.toLowerCase();
@@ -2374,6 +2376,19 @@ function getCurrentUserSlot() {
   return null;
 }
 
+async function tryFetchUser() {
+  const token = localStorage.getItem('azo_token');
+  if (!token) return null;
+  try {
+    const res = await fetch(`${API_BASE}/api/user`, { headers: { 'Authorization': `Bearer ${token}` } });
+    if (!res.ok) { localStorage.removeItem('azo_token'); return null; }
+    const data = await res.json();
+    currentUser = data.user;
+    renderAuthUI();
+    return currentUser;
+  } catch { return null; }
+}
+
 function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
   claimContext={sectionKey,roleIndex,roleLabel,endorseType};
   $('#claimRoleLabel').textContent=roleLabel;
@@ -2384,16 +2399,14 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
     eb.innerHTML=`<strong>⚠ Endorsement required: ${esc(endorseType)}</strong>This role requires a <b>${esc(endorseType)}</b>. If you don't have it your claim will be rejected. Contact staff if you believe this is incorrect.`;
   } else {eb.style.display='none';}
   
-  // If user is logged in, auto-fill their name and hide the input
   const nameInputSection = $('#nameInputSection');
   const autoNameSection = $('#autoNameSection');
   const claimInput = $('#claimInput');
+  const claimHint = $('#claimHint');
   
-  if (currentUser) {
-    // User is logged in - show their name automatically
-    const name = currentUser.rosterName || currentUser.displayName;
+  function showAuto(name) {
     $('#autoUserName').textContent = name || 'Unknown';
-    if (currentUser.avatar) {
+    if (currentUser && currentUser.avatar) {
       $('#autoUserAvatar').src = `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
     } else {
       $('#autoUserAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
@@ -2401,47 +2414,64 @@ function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
     nameInputSection.style.display = 'none';
     autoNameSection.style.display = 'block';
     
-    // Check if already assigned elsewhere — offer reallocate
     const existing = getCurrentUserSlot();
     $('#reallocateSection').style.display = existing ? 'block' : 'none';
     if (existing) {
-      $('#reallocateLabel').textContent = `You are currently assigned to a different slot. Clicking "Claim Role" will move you here.`;
+      $('#reallocateLabel').textContent = `You are already assigned to another slot. Claiming here will move you.`;
     }
     
-    // Check endorsement immediately
-    if(endorseType){
-      const has=memberHasEndorsement(name,endorseType);
-      if(!has){
-        $('#claimHint').style.color='#d94040';
-        $('#claimHint').textContent=`You do not have a ${endorseType} on record.`;
+    if (endorseType) {
+      const has = name ? memberHasEndorsement(name, endorseType) : false;
+      if (!has) {
+        claimHint.style.color = '#d94040';
+        claimHint.textContent = `You do not have a ${endorseType} on record.`;
       } else {
-        $('#claimHint').style.color='#36d07a';
-        $('#claimHint').textContent=`Endorsement confirmed.`;
+        claimHint.style.color = '#36d07a';
+        claimHint.textContent = `Endorsement confirmed.`;
       }
     } else {
-      $('#claimHint').style.color='#36d07a';
-      $('#claimHint').textContent='You are eligible for this role.';
+      claimHint.style.color = '#36d07a';
+      claimHint.textContent = 'You are eligible for this role.';
     }
-  } else {
-    // User not logged in - show name input
+  }
+  
+  function showSearch() {
     nameInputSection.style.display = 'block';
     autoNameSection.style.display = 'none';
-    claimInput.value='';
-    $('#claimHint').style.color='';
-    $('#claimHint').textContent='Your name must match the roster exactly. Case-sensitive.';
+    claimInput.value = '';
+    claimHint.style.color = '';
+    claimHint.textContent = 'Your name must match the roster exactly. Case-sensitive.';
+  }
+  
+  // Prioritize: logged in user → auto-fill, else try token → auto-fill, else search
+  if (currentUser) {
+    const name = currentUser.rosterName || currentUser.displayName;
+    showAuto(name);
+    $('#claimStep1').style.display = 'none';
+    $('#claimStep2').classList.add('active');
+  } else if (localStorage.getItem('azo_token')) {
+    // Token exists but currentUser not set — try to fetch
+    claimHint.textContent = 'Checking login...';
+    claimHint.style.color = '';
+    const user = await tryFetchUser();
+    if (user) {
+      const name = user.rosterName || user.displayName;
+      showAuto(name);
+      $('#claimStep1').style.display = 'none';
+      $('#claimStep2').classList.add('active');
+    } else {
+      showSearch();
+      $('#claimStep1').style.display = 'block';
+      $('#claimStep2').classList.remove('active');
+    }
+  } else {
+    showSearch();
+    $('#claimStep1').style.display = 'block';
+    $('#claimStep2').classList.remove('active');
   }
   
   $('#claimStatus').textContent='';$('#claimStatus').className='';
   $('#claimConfirm').disabled=false;
-  
-  // Skip Step 1 if logged in
-  if (currentUser) {
-    $('#claimStep1').style.display='none';
-    $('#claimStep2').classList.add('active');
-  } else {
-    $('#claimStep1').style.display='block';
-    $('#claimStep2').classList.remove('active');
-  }
   $('#claimBack').classList.add('show');
 }
 function closeClaim(){$('#claimBack').classList.remove('show');$('#operatorDropdown').style.display='none';claimContext=null;}
@@ -2525,6 +2555,7 @@ function setClaimStatus(msg,cls){const el=$('#claimStatus');el.textContent=msg;e
 $('#claimBack').onclick=e=>{if(e.target===$('#claimBack'))closeClaim();};
 $('#claimCancelStep1').onclick=closeClaim;
 $('#claimProceed').onclick=goToStep2;
+$('#claimManualToggle').onclick=()=>{$('#autoNameSection').style.display='none';$('#nameInputSection').style.display='block';$('#claimInput').focus();};
 $('#claimBackStep').onclick=()=>{$('#claimStep2').classList.remove('active');$('#claimStep1').style.display='block';};
 $('#claimCancel').onclick=closeClaim;
 $('#claimConfirm').onclick=submitClaim;
