@@ -45,6 +45,20 @@ CREATE TABLE IF NOT EXISTS sop_access_log (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Roster table - stores the full operation roster as JSON
+CREATE TABLE IF NOT EXISTS roster (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  data TEXT NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
+-- Members table - stores member directory data (discordRank, endorsements, etc.)
+CREATE TABLE IF NOT EXISTS members (
+  name TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);

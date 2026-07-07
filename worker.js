@@ -1,6 +1,3 @@
-// AZO Dynamic Rolelist - Enhanced Worker with Discord OAuth
-// Cloudflare Worker with D1 Database
-
 const GITHUB_OWNER = 'andrew-ltu';
 const GITHUB_REPO = 'AZO-Dynamic-Rolelist';
 const ALLOWED_ORIGINS = [
@@ -8,13 +5,13 @@ const ALLOWED_ORIGINS = [
   'https://azo-dynamic-rolelist.pages.dev',
   'http://localhost:8770'
 ];
+const PAGES_URL = 'https://azo-dynamic-rolelist.pages.dev';
 
 const DISCORD_API = 'https://discord.com/api/v10';
 const DISCORD_GUILD_ID = '504188370507792384';
 const REDIRECT_URI = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/auth/callback';
 const ADMIN_IDS = ['203678139220623361', '207012290401271818', '850370739998818335'];
 
-// Helper: CORS headers
 function corsHeaders(origin) {
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -25,140 +22,109 @@ function corsHeaders(origin) {
   };
 }
 
-// Helper: JSON response
 function jsonResponse(data, status = 200, origin = '') {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      'Content-Type': 'application/json',
-      ...corsHeaders(origin)
-    }
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) }
   });
 }
 
-// Helper: Generate JWT token
 async function generateToken(userId, secret) {
   const header = { alg: 'HS256', typ: 'JWT' };
-  const payload = {
-    sub: userId,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
-  };
-  
+  const payload = { sub: userId, iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) };
   const encodedHeader = btoa(JSON.stringify(header)).replace(/=/g, '');
   const encodedPayload = btoa(JSON.stringify(payload)).replace(/=/g, '');
   const message = `${encodedHeader}.${encodedPayload}`;
-  
   const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  
+  const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
-  const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature)))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-  
+  const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
   return `${message}.${encodedSignature}`;
 }
 
-// Helper: Verify JWT token
 async function verifyToken(token, secret) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    
     const [encodedHeader, encodedPayload, signature] = parts;
     const message = `${encodedHeader}.${encodedPayload}`;
-    
     const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      'raw',
-      encoder.encode(secret),
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['verify']
-    );
-    
-    const signatureBytes = Uint8Array.from(
-      atob(signature.replace(/-/g, '+').replace(/_/g, '/')),
-      c => c.charCodeAt(0)
-    );
-    
-    const valid = await crypto.subtle.verify(
-      'HMAC',
-      key,
-      signatureBytes,
-      encoder.encode(message)
-    );
-    
+    const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+    const signatureBytes = Uint8Array.from(atob(signature.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    const valid = await crypto.subtle.verify('HMAC', key, signatureBytes, encoder.encode(message));
     if (!valid) return null;
-    
     const payload = JSON.parse(atob(encodedPayload));
-    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-      return null; // Expired
-    }
-    
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;
     return payload;
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
 
-// Main router
+async function getRoster(env) {
+  const row = await env.DB.prepare(`SELECT data FROM roster WHERE id = 1`).first();
+  if (row) return JSON.parse(row.data);
+  const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
+  if (!res.ok) return null;
+  const data = await res.json();
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
+  return data;
+}
+
+async function saveRoster(env, data) {
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
+}
+
+async function getMembers(env) {
+  const row = await env.DB.prepare(`SELECT data FROM members WHERE name = '_meta'`).first();
+  if (row) return JSON.parse(row.data);
+  const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/members.json`);
+  if (!res.ok) return {};
+  const data = await res.json();
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_meta', ?, ?)`).bind(JSON.stringify(data), now).run();
+  return data;
+}
+
+function findMemberName(membersData, discordId, displayName) {
+  for (const [name, d] of Object.entries(membersData)) {
+    if (d.discordId === discordId) return name;
+  }
+  const lower = displayName.toLowerCase();
+  for (const [name] of Object.entries(membersData)) {
+    if (name.toLowerCase() === lower) return name;
+  }
+  return null;
+}
+
+function findSlot(roster, sectionKey, roleIndex) {
+  if (sectionKey === '__command') return roster.command?.[Number(roleIndex)];
+  if (sectionKey === '__attachment') return roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
+  const sec = roster.sections?.find(s => s.name === sectionKey);
+  return sec ? sec.roles?.[Number(roleIndex)] : null;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
-    
-    // CORS preflight
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders(origin) });
-    }
-    
-    // Route: Discord OAuth login
-    if (url.pathname === '/auth/login') {
-      return handleLogin(env);
-    }
-    
-    // Route: Discord OAuth callback
-    if (url.pathname === '/auth/callback') {
-      return handleCallback(request, env);
-    }
-    
-    // Route: Get current user
-    if (url.pathname === '/api/user') {
-      return handleGetUser(request, env, origin);
-    }
-    
-    // Route: Logout
-    if (url.pathname === '/api/logout') {
-      return handleLogout(request, env, origin);
-    }
-    
-    // Route: Claim slot (existing functionality)
-    if (url.pathname === '/claim' && request.method === 'POST') {
-      return handleClaimSlot(request, env, origin);
-    }
-    
-    // Route: Admin - Save roster (NEW)
-    if (url.pathname === '/api/admin/roster' && request.method === 'POST') {
-      return handleAdminSaveRoster(request, env, origin);
-    }
-    
-    // Route: Self-unassign from a role
-    if (url.pathname === '/api/unassign' && request.method === 'POST') {
-      return handleUnassignSlot(request, env, origin);
-    }
-    
+
+    if (request.method === 'OPTIONS') return new Response(null, { headers: corsHeaders(origin) });
+
+    if (url.pathname === '/auth/login') return handleLogin(env);
+    if (url.pathname === '/auth/callback') return handleCallback(request, env);
+    if (url.pathname === '/api/user') return handleGetUser(request, env, origin);
+    if (url.pathname === '/api/logout') return handleLogout(request, env, origin);
+    if (url.pathname === '/api/roster') return handleGetRoster(request, env, origin);
+    if (url.pathname === '/api/members') return handleGetMembers(request, env, origin);
+    if (url.pathname === '/claim' && request.method === 'POST') return handleClaimSlot(request, env, origin);
+    if (url.pathname === '/api/admin/roster' && request.method === 'POST') return handleAdminSaveRoster(request, env, origin);
+    if (url.pathname === '/api/unassign' && request.method === 'POST') return handleUnassignSlot(request, env, origin);
+
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
 
-// Handler: Discord login - redirect to Discord OAuth
 async function handleLogin(env) {
   const params = new URLSearchParams({
     client_id: env.DISCORD_CLIENT_ID,
@@ -166,21 +132,15 @@ async function handleLogin(env) {
     response_type: 'code',
     scope: 'identify email guilds guilds.members.read'
   });
-  
   return Response.redirect(`${DISCORD_API}/oauth2/authorize?${params}`, 302);
 }
 
-// Handler: Discord OAuth callback
 async function handleCallback(request, env) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
-  
-  if (!code) {
-    return new Response('Missing authorization code', { status: 400 });
-  }
-  
+  if (!code) return new Response('Missing authorization code', { status: 400 });
+
   try {
-    // Exchange code for access token
     const tokenResponse = await fetch(`${DISCORD_API}/oauth2/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -192,48 +152,25 @@ async function handleCallback(request, env) {
         redirect_uri: REDIRECT_URI
       })
     });
-    
-    if (!tokenResponse.ok) {
-      throw new Error('Failed to exchange code for token');
-    }
-    
+    if (!tokenResponse.ok) throw new Error('Failed to exchange code for token');
+
     const tokenData = await tokenResponse.json();
-    
-    // Get user info from Discord
     const userResponse = await fetch(`${DISCORD_API}/users/@me`, {
       headers: { Authorization: `Bearer ${tokenData.access_token}` }
     });
-    
-    if (!userResponse.ok) {
-      throw new Error('Failed to fetch user info');
-    }
-    
+    if (!userResponse.ok) throw new Error('Failed to fetch user info');
     const user = await userResponse.json();
-    
-    // Store user in database
+
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(`
       INSERT INTO users (id, username, discriminator, global_name, avatar, email, created_at, last_login, is_admin)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
-        username = excluded.username,
-        global_name = excluded.global_name,
-        avatar = excluded.avatar,
-        email = excluded.email,
-        last_login = excluded.last_login
-    `    ).bind(
-      user.id,
-      user.username,
-      user.discriminator || '',
-      user.global_name || user.username,
-      user.avatar || '',
-      user.email || '',
-      now,
-      now,
-      ADMIN_IDS.includes(user.id) ? 1 : 0
-    ).run();
-    
-    // Fetch guild member info to get Discord roles
+        username = excluded.username, global_name = excluded.global_name,
+        avatar = excluded.avatar, email = excluded.email, last_login = excluded.last_login
+    `).bind(user.id, user.username, user.discriminator || '', user.global_name || user.username,
+      user.avatar || '', user.email || '', now, now, ADMIN_IDS.includes(user.id) ? 1 : 0).run();
+
     let roleNames = [];
     try {
       const memberResponse = await fetch(
@@ -243,8 +180,6 @@ async function handleCallback(request, env) {
       if (memberResponse.ok) {
         const memberData = await memberResponse.json();
         const roleIds = memberData.roles || [];
-        
-        // Fetch guild roles to map IDs to names
         let guildRoles = [];
         if (env.DISCORD_BOT_TOKEN) {
           const rolesResponse = await fetch(
@@ -254,7 +189,6 @@ async function handleCallback(request, env) {
           if (rolesResponse.ok) guildRoles = await rolesResponse.json();
         }
         if (!guildRoles.length) {
-          // Fall back to OAuth token
           try {
             const fallbackResp = await fetch(
               `${DISCORD_API}/guilds/${DISCORD_GUILD_ID}/roles`,
@@ -263,115 +197,49 @@ async function handleCallback(request, env) {
             if (fallbackResp.ok) guildRoles = await fallbackResp.json();
           } catch (_) {}
         }
-        
         const roleMap = {};
         guildRoles.forEach(r => { roleMap[r.id] = r.name; });
         roleNames = roleIds.map(id => roleMap[id]).filter(Boolean);
-        
-        // Update user_roles in database
         await env.DB.prepare(`DELETE FROM user_roles WHERE user_id = ?`).bind(user.id).run();
         const stmt = `INSERT INTO user_roles (user_id, role_name, assigned_at, assigned_by) VALUES (?, ?, ?, ?)`;
         for (const roleName of roleNames) {
           await env.DB.prepare(stmt).bind(user.id, roleName, now, 'discord-sync').run();
         }
       }
-    } catch (e) {
-      console.error('Failed to sync Discord roles:', e);
-    }
-    
-    // Generate JWT token
+    } catch (e) { console.error('Failed to sync Discord roles:', e); }
+
     const jwtToken = await generateToken(user.id, env.JWT_SECRET);
-    
-    // Create session in database
-    await env.DB.prepare(`
-      INSERT INTO sessions (id, user_id, created_at, expires_at)
-      VALUES (?, ?, ?, ?)
-    `).bind(
-      jwtToken,
-      user.id,
-      now,
-      now + (30 * 24 * 60 * 60) // 30 days
-    ).run();
-    
-    // Redirect to main roster page with token
-    const redirectUrl = `https://andrew-ltu.github.io/AZO-Dynamic-Rolelist/?token=${jwtToken}`;
+    await env.DB.prepare(`INSERT INTO sessions (id, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)`
+    ).bind(jwtToken, user.id, now, now + (30 * 24 * 60 * 60)).run();
+
+    const redirectUrl = `${PAGES_URL}/roster/?token=${jwtToken}`;
     return Response.redirect(redirectUrl, 302);
-    
   } catch (error) {
     return new Response(`Authentication failed: ${error.message}`, { status: 500 });
   }
 }
 
-// Handler: Get current user
 async function handleGetUser(request, env, origin) {
   const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
-  }
-  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
   const token = authHeader.substring(7);
   const payload = await verifyToken(token, env.JWT_SECRET);
-  
-  if (!payload) {
-    return jsonResponse({ error: 'Invalid token' }, 401, origin);
-  }
-  
-  // Get user from database
-  const userResult = await env.DB.prepare(`
-    SELECT id, username, global_name, avatar, email, is_admin
-    FROM users WHERE id = ?
-  `).bind(payload.sub).first();
-  
-  if (!userResult) {
-    return jsonResponse({ error: 'User not found' }, 404, origin);
-  }
-  
-  // Get user roles
-  const rolesResult = await env.DB.prepare(`
-    SELECT role_name FROM user_roles WHERE user_id = ?
-  `).bind(payload.sub).all();
-  
+  if (!payload) return jsonResponse({ error: 'Invalid token' }, 401, origin);
+
+  const userResult = await env.DB.prepare(`SELECT id, username, global_name, avatar, email, is_admin FROM users WHERE id = ?`
+  ).bind(payload.sub).first();
+  if (!userResult) return jsonResponse({ error: 'User not found' }, 404, origin);
+
+  const rolesResult = await env.DB.prepare(`SELECT role_name FROM user_roles WHERE user_id = ?`
+  ).bind(payload.sub).all();
   const roles = rolesResult.results.map(r => r.role_name);
-  
-  // Try to find roster name from members.json by Discord ID or display name
+
   let rosterName = null;
   try {
-    const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-    const headers = {
-      'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github+json',
-      'User-Agent': 'AZO-Worker'
-    };
-    
-    const membersRes = await fetch(`${baseRepoUrl}/members.json`, { headers });
-    if (membersRes.ok) {
-      const membersMeta = await membersRes.json();
-      const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
-      
-      // Find member by Discord ID
-      for (const [name, data] of Object.entries(membersData)) {
-        if (data.discordId === userResult.id) {
-          rosterName = name;
-          break;
-        }
-      }
-      // Fallback: match by display name (case-insensitive)
-      if (!rosterName) {
-        const displayName = (userResult.global_name || userResult.username || '').toLowerCase();
-        for (const [name] of Object.entries(membersData)) {
-          if (name.toLowerCase() === displayName) {
-            rosterName = name;
-            break;
-          }
-        }
-      }
-    }
-  } catch (e) {
-    // If fetching members.json fails, just continue without roster name
-    console.error('Failed to fetch roster name:', e);
-  }
-  
-  // On-demand role sync if DB has no roles and bot token is available
+    const membersData = await getMembers(env);
+    rosterName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
+  } catch (e) { console.error('Failed to find roster name:', e); }
+
   if (!roles.length && env.DISCORD_BOT_TOKEN) {
     try {
       const memberResp = await fetch(
@@ -399,11 +267,9 @@ async function handleGetUser(request, env, origin) {
           roles.push(...fetchedRoles);
         }
       }
-    } catch (e) {
-      console.error('On-demand role sync failed:', e);
-    }
+    } catch (e) { console.error('On-demand role sync failed:', e); }
   }
-  
+
   return jsonResponse({
     user: {
       id: userResult.id,
@@ -418,325 +284,143 @@ async function handleGetUser(request, env, origin) {
   }, 200, origin);
 }
 
-// Handler: Logout
 async function handleLogout(request, env, origin) {
   const authHeader = request.headers.get('Authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.substring(7);
-    
-    // Delete session from database
-    await env.DB.prepare(`
-      DELETE FROM sessions WHERE id = ?
-    `).bind(token).run();
+    await env.DB.prepare(`DELETE FROM sessions WHERE id = ?`).bind(token).run();
   }
-  
   return jsonResponse({ ok: true }, 200, origin);
 }
 
-// Handler: Claim slot (existing functionality preserved)
+// GET /api/roster - returns full roster from D1 (auto-seeds from GitHub if empty)
+async function handleGetRoster(request, env, origin) {
+  try {
+    const roster = await getRoster(env);
+    if (!roster) return jsonResponse({ error: 'Roster not found' }, 404, origin);
+    return jsonResponse(roster, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: 'Failed to fetch roster' }, 500, origin);
+  }
+}
+
+// GET /api/members - returns full members data from D1
+async function handleGetMembers(request, env, origin) {
+  try {
+    const members = await getMembers(env);
+    return jsonResponse(members, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: 'Failed to fetch members' }, 500, origin);
+  }
+}
+
+// POST /claim - claim a slot (D1-based)
 async function handleClaimSlot(request, env, origin) {
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
-  }
+  try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400, origin); }
 
   const { sectionKey, roleIndex, memberName } = body;
-  if (!sectionKey || roleIndex === undefined) {
-    return jsonResponse({ error: 'Missing required fields' }, 400, origin);
-  }
+  if (!sectionKey || roleIndex === undefined) return jsonResponse({ error: 'Missing required fields' }, 400, origin);
 
   let name = (memberName || '').trim();
+  const roster = await getRoster(env);
+  if (!roster) return jsonResponse({ error: 'Roster not available' }, 502, origin);
 
-  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-  const headers = {
-    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-    'Accept': 'application/vnd.github+json',
-    'User-Agent': 'AZO-Claim-Worker'
-  };
+  const membersData = await getMembers(env);
 
-  // Fetch current roster AND members directory
-  const [rosterRes, membersRes] = await Promise.all([
-    fetch(`${baseRepoUrl}/roster.json`, { headers }),
-    fetch(`${baseRepoUrl}/members.json`, { headers })
-  ]);
-
-  if (!rosterRes.ok) {
-    return jsonResponse({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502, origin);
-  }
-  if (!membersRes.ok) {
-    return jsonResponse({ error: `GitHub members fetch failed: ${membersRes.status}` }, 502, origin);
-  }
-
-  const rosterMeta = await rosterRes.json();
-  const membersMeta = await membersRes.json();
-
-  const sha = rosterMeta.sha;
-  const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
-  const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
-
-  // If user sent a valid JWT, resolve their roster name by Discord ID or display name
   const authHeader = request.headers.get('Authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const payload = await verifyToken(authHeader.substring(7), env.JWT_SECRET);
     if (payload) {
-      const userResult = await env.DB.prepare(`
-        SELECT id, username, global_name FROM users WHERE id = ?
-      `).bind(payload.sub).first();
+      const userResult = await env.DB.prepare(`SELECT id, username, global_name FROM users WHERE id = ?`
+      ).bind(payload.sub).first();
       if (userResult) {
-        let matchedName = null;
-        // Try by Discord ID
-        for (const [n, d] of Object.entries(membersData)) {
-          if (d.discordId === userResult.id) { matchedName = n; break; }
-        }
-        // Fallback by display name (case-insensitive)
-        if (!matchedName) {
-          const display = (userResult.global_name || userResult.username || '').toLowerCase();
-          for (const [n] of Object.entries(membersData)) {
-            if (n.toLowerCase() === display) { matchedName = n; break; }
-          }
-        }
+        const matchedName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
         if (matchedName) name = matchedName;
       }
     }
   }
 
-  if (!name) {
-    return jsonResponse({ error: 'Missing member name' }, 400, origin);
-  }
+  if (!name) return jsonResponse({ error: 'Missing member name' }, 400, origin);
 
-  // Find the slot
   let slot = null;
-  try {
-    if (sectionKey === '__command') {
-      slot = roster.command?.[Number(roleIndex)];
-    } else if (sectionKey === '__attachment') {
-      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
-    } else {
-      const sec = roster.sections?.find(s => s.name === sectionKey);
-      if (sec) slot = sec.roles?.[Number(roleIndex)];
-    }
-  } catch (e) {
-    return jsonResponse({ error: 'Invalid role index' }, 400, origin);
-  }
-
-  if (!slot) return jsonResponse({ error: 'Role not found — refresh and try again' }, 404, origin);
+  try { slot = findSlot(roster, sectionKey, roleIndex); } catch (e) { return jsonResponse({ error: 'Invalid role index' }, 400, origin); }
+  if (!slot) return jsonResponse({ error: 'Role not found - refresh and try again' }, 404, origin);
   if (slot.member) return jsonResponse({ error: `Already claimed by ${slot.member}` }, 409, origin);
 
-  // Validation: Check if user is certified for this slot
   if (slot.endorsementRequired && slot.endorsementType) {
     const memberKey = Object.keys(membersData).find(k => k.toLowerCase() === name.toLowerCase());
     const member = memberKey ? membersData[memberKey] : null;
-
-    if (!member) {
-      return jsonResponse({ error: `Access Denied: "${name}" is not a registered member in the directory.` }, 403, origin);
-    }
-
+    if (!member) return jsonResponse({ error: `Access Denied: "${name}" is not a registered member.` }, 403, origin);
     if (slot.endorsementType === "Leadership Endorsement") {
-      if (!member.leadership) {
-        return jsonResponse({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403, origin);
-      }
+      if (!member.leadership) return jsonResponse({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403, origin);
     } else {
       const requiredEndorsement = slot.endorsementType.replace(" Endorsement", "");
-      const hasEndorsement = member.endorsements && member.endorsements.some(
-        e => e.toLowerCase() === requiredEndorsement.toLowerCase()
-      );
-
-      if (!hasEndorsement) {
-        return jsonResponse({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403, origin);
-      }
+      const hasEndorsement = member.endorsements && member.endorsements.some(e => e.toLowerCase() === requiredEndorsement.toLowerCase());
+      if (!hasEndorsement) return jsonResponse({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403, origin);
     }
   }
 
-  // Assign and write back
   slot.member = name;
-  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
-    method: 'PUT',
-    headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: `Sign-up: ${name} → ${slot.role}`,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
-      sha
-    })
-  });
-
-  if (!putRes.ok) {
-    const err = await putRes.json().catch(() => ({}));
-    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
-  }
-
+  await saveRoster(env, roster);
   return jsonResponse({ ok: true, message: `${name} assigned to ${slot.role}` }, 200, origin);
 }
 
-// Handler: Admin - Save entire roster
+// POST /api/admin/roster - admin save roster to D1
 async function handleAdminSaveRoster(request, env, origin) {
-  // Verify admin authentication
   const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
-  }
-  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
   const token = authHeader.substring(7);
   const payload = await verifyToken(token, env.JWT_SECRET);
-  
-  if (!payload) {
-    return jsonResponse({ error: 'Invalid token' }, 401, origin);
-  }
-  
-  // Check if user is admin
-  const userResult = await env.DB.prepare(`
-    SELECT is_admin FROM users WHERE id = ?
-  `).bind(payload.sub).first();
-  
+  if (!payload) return jsonResponse({ error: 'Invalid token' }, 401, origin);
+
+  const userResult = await env.DB.prepare(`SELECT is_admin FROM users WHERE id = ?`
+  ).bind(payload.sub).first();
   if (!userResult || (userResult.is_admin !== 1 && !ADMIN_IDS.includes(payload.sub))) {
     return jsonResponse({ error: 'Access denied: Admin privileges required' }, 403, origin);
   }
-  
-  // Get new roster data
+
   let newRoster;
-  try {
-    newRoster = await request.json();
-  } catch {
-    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
-  }
-  
-  // Save to GitHub
-  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-  const headers = {
-    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-    'Accept': 'application/vnd.github+json',
-    'User-Agent': 'AZO-Admin-Worker'
-  };
-  
-  // Fetch current roster to get SHA
-  const rosterRes = await fetch(`${baseRepoUrl}/roster.json`, { headers });
-  
-  if (!rosterRes.ok) {
-    return jsonResponse({ error: `GitHub roster fetch failed: ${rosterRes.status}` }, 502, origin);
-  }
-  
-  const rosterMeta = await rosterRes.json();
-  const sha = rosterMeta.sha;
-  
-  // Write updated roster
-  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
-    method: 'PUT',
-    headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: 'Admin: Update roster structure',
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(newRoster, null, 2)))),
-      sha
-    })
-  });
-  
-  if (!putRes.ok) {
-    const err = await putRes.json().catch(() => ({}));
-    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
-  }
-  
+  try { newRoster = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400, origin); }
+
+  await saveRoster(env, newRoster);
   return jsonResponse({ ok: true, message: 'Roster saved successfully' }, 200, origin);
 }
 
-// Handler: Self-unassign from a role
+// POST /api/unassign - self-unassign from a slot (D1-based)
 async function handleUnassignSlot(request, env, origin) {
-  // Verify authentication
   const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
-  }
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
   const token = authHeader.substring(7);
   const payload = await verifyToken(token, env.JWT_SECRET);
   if (!payload) return jsonResponse({ error: 'Invalid token' }, 401, origin);
 
   let body;
-  try { body = await request.json(); } catch {
-    return jsonResponse({ error: 'Invalid JSON' }, 400, origin);
-  }
+  try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400, origin); }
 
   const { sectionKey, roleIndex } = body;
-  if (!sectionKey || roleIndex === undefined) {
-    return jsonResponse({ error: 'Missing required fields' }, 400, origin);
-  }
+  if (!sectionKey || roleIndex === undefined) return jsonResponse({ error: 'Missing required fields' }, 400, origin);
 
-  // Get user info
-  const userResult = await env.DB.prepare(
-    `SELECT id, username, global_name FROM users WHERE id = ?`
+  const userResult = await env.DB.prepare(`SELECT id, username, global_name FROM users WHERE id = ?`
   ).bind(payload.sub).first();
   if (!userResult) return jsonResponse({ error: 'User not found' }, 404, origin);
 
-  // Fetch roster and members
-  const baseRepoUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-  const ghHeaders = {
-    'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-    'Accept': 'application/vnd.github+json',
-    'User-Agent': 'AZO-Unassign-Worker'
-  };
+  const roster = await getRoster(env);
+  if (!roster) return jsonResponse({ error: 'Roster not available' }, 502, origin);
 
-  const [rosterRes, membersRes] = await Promise.all([
-    fetch(`${baseRepoUrl}/roster.json`, { headers: ghHeaders }),
-    fetch(`${baseRepoUrl}/members.json`, { headers: ghHeaders })
-  ]);
-  if (!rosterRes.ok) return jsonResponse({ error: 'Roster fetch failed' }, 502, origin);
-  if (!membersRes.ok) return jsonResponse({ error: 'Members fetch failed' }, 502, origin);
+  const membersData = await getMembers(env);
 
-  const rosterMeta = await rosterRes.json();
-  const membersMeta = await membersRes.json();
-  const sha = rosterMeta.sha;
-  const roster = JSON.parse(atob(rosterMeta.content.replace(/\n/g, '')));
-  const membersData = JSON.parse(atob(membersMeta.content.replace(/\n/g, '')));
-
-  // Find the slot
   let slot = null;
-  try {
-    if (sectionKey === '__command') {
-      slot = roster.command?.[Number(roleIndex)];
-    } else if (sectionKey === '__attachment') {
-      slot = roster.attachments?.[roleIndex.attIdx]?.roles?.[roleIndex.roleIdx];
-    } else {
-      const sec = roster.sections?.find(s => s.name === sectionKey);
-      if (sec) slot = sec.roles?.[Number(roleIndex)];
-    }
-  } catch (e) {
-    return jsonResponse({ error: 'Invalid role index' }, 400, origin);
-  }
-
+  try { slot = findSlot(roster, sectionKey, roleIndex); } catch (e) { return jsonResponse({ error: 'Invalid role index' }, 400, origin); }
   if (!slot) return jsonResponse({ error: 'Role not found' }, 404, origin);
   if (!slot.member) return jsonResponse({ error: 'Slot is not claimed' }, 400, origin);
 
-  // Resolve user's roster name
-  let userName = null;
-  for (const [n, d] of Object.entries(membersData)) {
-    if (d.discordId === userResult.id) { userName = n; break; }
-  }
-  if (!userName) {
-    const display = (userResult.global_name || userResult.username || '').toLowerCase();
-    for (const [n] of Object.entries(membersData)) {
-      if (n.toLowerCase() === display) { userName = n; break; }
-    }
-  }
-
-  // Verify the slot belongs to this user
+  const userName = findMemberName(membersData, userResult.id, userResult.global_name || userResult.username);
   if (!userName || slot.member.toLowerCase() !== userName.toLowerCase()) {
     return jsonResponse({ error: 'You can only unassign yourself from your own slots' }, 403, origin);
   }
 
-  // Clear the slot
   slot.member = null;
-  const putRes = await fetch(`${baseRepoUrl}/roster.json`, {
-    method: 'PUT',
-    headers: { ...ghHeaders, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: `Unassign: ${userName} left ${slot.role}`,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
-      sha
-    })
-  });
-
-  if (!putRes.ok) {
-    const err = await putRes.json().catch(() => ({}));
-    return jsonResponse({ error: err.message || `GitHub write failed: ${putRes.status}` }, 502, origin);
-  }
-
+  await saveRoster(env, roster);
   return jsonResponse({ ok: true, message: `Unassigned from ${slot.role}` }, 200, origin);
 }

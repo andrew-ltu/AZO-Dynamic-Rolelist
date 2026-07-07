@@ -1,2551 +1,496 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="tactical-blue">
+<html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>AZO Operation Role List</title>
-<link rel="icon" type="image/png" href="assets/logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AZO - ArmA 3 Milsim Unit</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-/* ======================== THEMES ======================== */
 :root{
-  --bg:#07090d; --panel:rgba(12,18,26,0.9); --panel-solid:#0b1119;
-  --line:rgba(100,160,210,0.13); --line-strong:rgba(100,160,210,0.32);
-  --text:#d8e8f4; --muted:#6a8aa4; --muted-2:#3e5770;
-  --green:#36d07a; --amber:#f0b429; --red:#d94040;
-  --shadow:0 16px 48px rgba(0,0,0,0.7); --radius:12px;
-  --sp-w:272px; --banner-h:34px;
+  --bg:#06090f;
+  --bg-2:#0b101a;
+  --panel:rgba(255,255,255,.04);
+  --panel-solid:#0d121e;
+  --text:#dce8f4;
+  --muted:#8899b0;
+  --muted-2:#5a6e8a;
+  --primary:#3d87d4;
+  --primary-2:#2a6bb0;
+  --line:rgba(100,160,210,.12);
+  --line-strong:rgba(100,160,210,.25);
+  --gold:#f0b429;
+  --red:#d94040;
 }
-[data-theme="tactical-blue"]{--primary:#3d87d4;--primary-2:#6aaad8;--accent:#90ccff;}
-[data-theme="desert"]{--primary:#d4962a;--primary-2:#e8bf6a;--accent:#ffe2a6;--line:rgba(212,150,42,.18);--line-strong:rgba(212,150,42,.44);}
-[data-theme="jungle"]{--primary:#4fa644;--primary-2:#78c46a;--accent:#bef0b0;--line:rgba(79,166,68,.18);--line-strong:rgba(79,166,68,.44);}
-[data-theme="night"]{--primary:#7a72f8;--primary-2:#a499ff;--accent:#d4d0ff;--line:rgba(122,114,248,.2);--line-strong:rgba(122,114,248,.44);}
-[data-theme="blood"]{--primary:#c8403a;--primary-2:#e06e6a;--accent:#ffafab;--line:rgba(200,64,58,.2);--line-strong:rgba(200,64,58,.44);}
-
-/* ======================== BASE ======================== */
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);min-height:100vh;overflow-x:hidden;}
-#bgLayer{position:fixed;inset:0;z-index:-2;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0.35;filter:blur(8px) saturate(0.85) brightness(0.8);transform:scale(1.08);transition:opacity .6s;}
-#bgOverlay{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(5,8,14,.55) 0%,rgba(5,8,14,.78) 50%,var(--bg) 100%);}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.22;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.009) 0 1px,transparent 1px 3px);}
-a{color:var(--primary-2);}
-::selection{background:var(--primary);color:#fff;}
-.mono{font-family:'Share Tech Mono','Courier New',monospace;}
-
-/* ======================== DISCORD BANNER ======================== */
-#discordBanner{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  height:var(--banner-h);
-  background:linear-gradient(90deg,rgba(88,101,242,.18),rgba(88,101,242,.10),rgba(88,101,242,.18));
-  border-bottom:1px solid rgba(88,101,242,.28);
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  font-family:'Share Tech Mono',monospace;font-size:11.5px;color:var(--muted);
-  letter-spacing:.4px;
-  padding:0 16px;
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
 }
-#discordBanner .ds-icon{color:rgba(88,101,242,.9);font-size:14px;}
-#discordBanner strong{color:#7a8fff;}
-#discordBanner .ds-sep{opacity:.4;margin:0 4px;}
-
-/* ======================== LAYOUT ======================== */
-.wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px;padding-top:calc(var(--banner-h) + 4px);}
-.sp-body-open .wrap{padding-right:calc(var(--sp-w) + 20px);}
-
-/* ======================== SIDE PANEL ======================== */
-#sidePanel{
-  position:fixed;top:var(--banner-h);left:0;width:var(--sp-w);
-  height:calc(100vh - var(--banner-h));
-  background:rgba(5,8,13,.98);
-  border-right:1px solid rgba(54,208,122,.18);
-  backdrop-filter:blur(20px);
-  z-index:60;display:flex;flex-direction:column;
-  transform:translateX(-100%);
-  transition:transform .28s cubic-bezier(.4,0,.2,1);
-  box-shadow:16px 0 60px rgba(0,0,0,.75);
+/* Hero */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 20px;
   overflow:hidden;
 }
-#sidePanel.open{transform:translateX(0);}
-#spToggle{
-  position:fixed;left:0;top:calc(50% + 40px);transform:translateY(-50%);z-index:61;
-  width:40px;height:160px;
-  background:linear-gradient(180deg,rgba(5,10,18,.97),rgba(10,22,38,.97));
-  border:1px solid rgba(54,208,122,.5);border-left:none;
-  border-radius:0 10px 10px 0;
-  cursor:pointer;color:#36d07a;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  transition:left .28s cubic-bezier(.4,0,.2,1),color .15s,background .15s,border-color .15s;
-  padding:0;
-  box-shadow:4px 0 20px rgba(54,208,122,.22),0 0 40px rgba(54,208,122,.08);
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#06090f 0%,rgba(13,18,30,.85) 50%,#06090f 100%),
+              radial-gradient(ellipse at 30% 40%,rgba(61,135,212,.08) 0%,transparent 60%),
+              radial-gradient(ellipse at 70% 60%,rgba(240,180,41,.05) 0%,transparent 50%);
+  z-index:0;
 }
-#spToggle:hover{background:linear-gradient(180deg,rgba(10,28,48,.97),rgba(18,40,62,.97));color:#fff;border-color:#36d07a;animation:none;box-shadow:4px 0 32px rgba(54,208,122,.6),0 0 60px rgba(54,208,122,.28);}
-body.sp-open #spToggle{left:var(--sp-w);color:#36d07a;border-color:rgba(54,208,122,.55);animation:none;}
-.sp-toggle-arrow{font-size:13px;line-height:1;}
-.sp-toggle-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;writing-mode:vertical-rl;color:inherit;text-transform:uppercase;}
-@keyframes sp-glow{
-  0%,100%{box-shadow:4px 0 20px rgba(54,208,122,.18),0 0 30px rgba(54,208,122,.06);border-color:rgba(54,208,122,.45);}
-  50%{box-shadow:4px 0 28px rgba(54,208,122,.5),0 0 50px rgba(54,208,122,.22),0 0 8px rgba(54,208,122,.4);border-color:rgba(54,208,122,.88);}
+.hero-bg-pattern{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:.035;
+  background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.3) 1px,transparent 1px);
+  background-size:40px 40px;
 }
-#spToggle{animation:sp-glow 2.8s ease-in-out infinite;}
-body.sp-open #spToggle{animation:none;}
-.sp-new-badge{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;writing-mode:vertical-rl;color:#36d07a;text-transform:uppercase;background:rgba(54,208,122,.18);border:1px solid rgba(54,208,122,.5);border-radius:3px;padding:4px 2px;line-height:1;}
-
-/* Panel header */
-.sp-head{
-  padding:14px 16px 12px;
-  border-bottom:1px solid rgba(54,208,122,.1);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+.hero-lines{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:.08;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 120px,rgba(61,135,212,.4) 120px,rgba(61,135,212,.4) 121px);
 }
-.sp-head-logo{display:flex;align-items:center;gap:10px;}
-.sp-head-dot{width:8px;height:8px;border-radius:50%;background:#36d07a;box-shadow:0 0 8px rgba(54,208,122,.6);flex-shrink:0;}
-.sp-head-title{font-family:'Share Tech Mono',monospace;letter-spacing:3px;font-size:12px;text-transform:uppercase;color:#36d07a;}
-.sp-close-btn{background:transparent;border:1px solid rgba(100,160,210,.2);color:var(--muted);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;}
-.sp-close-btn:hover{color:#fff;border-color:rgba(100,160,210,.5);}
-
-/* Panel scroll body */
-.sp-scroll{flex:1;overflow-y:auto;padding:8px 0 20px;}
-.sp-scroll::-webkit-scrollbar{width:3px;}
-.sp-scroll::-webkit-scrollbar-track{background:transparent;}
-.sp-scroll::-webkit-scrollbar-thumb{background:rgba(54,208,122,.2);border-radius:99px;}
-
-/* Section labels */
-.sp-sec-label{
-  font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;
-  text-transform:uppercase;color:rgba(54,208,122,.45);
-  padding:12px 16px 5px;
+.hero>*{position:relative;z-index:1;}
+.hero-logo{
+  width:88px;
+  height:88px;
+  margin-bottom:20px;
+  border-radius:50%;
+  border:2px solid var(--line-strong);
+  object-fit:cover;
 }
-
-/* Nav buttons */
-.sp-nav-btn{
-  width:100%;display:flex;align-items:center;gap:10px;
-  padding:9px 16px;background:transparent;border:0;
-  color:var(--muted);font:inherit;font-size:13px;font-weight:500;
-  cursor:pointer;text-align:left;
-  transition:background .12s,color .12s;
-  position:relative;
+.hero h1{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(52px,10vw,110px);
+  text-transform:uppercase;
+  letter-spacing:6px;
+  line-height:1;
+  background:linear-gradient(180deg,#fff 20%,var(--primary) 160%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:8px;
 }
-.sp-nav-btn::before{content:"";position:absolute;left:0;top:20%;bottom:20%;width:2px;border-radius:0 2px 2px 0;background:transparent;transition:background .15s;}
-.sp-nav-btn:hover{background:rgba(54,208,122,.06);color:var(--text);}
-.sp-nav-btn:hover::before{background:rgba(54,208,122,.4);}
-.sp-nav-btn.sp-active{background:rgba(54,208,122,.09);color:#36d07a;}
-.sp-nav-btn.sp-active::before{background:#36d07a;}
-.sp-nb-icon{width:20px;font-size:15px;flex-shrink:0;text-align:center;opacity:.7;}
-.sp-nb-label{flex:1;letter-spacing:.2px;}
-.sp-nb-live{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#36d07a;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.25);border-radius:4px;padding:2px 6px;}
-.sp-live-dot{width:5px;height:5px;border-radius:50%;background:#36d07a;animation:livepulse 1.8s infinite;}
-@keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
-.sp-nb-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--primary-2);background:rgba(61,135,212,.12);border:1px solid rgba(61,135,212,.25);border-radius:4px;padding:2px 6px;min-width:28px;text-align:center;}
-.sp-soon-badge{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.28);border-radius:4px;padding:2px 6px;}
-
-/* Divider */
-.sp-divider{height:1px;background:rgba(100,160,210,.1);margin:8px 16px;}
-
-/* Campaign status widget */
-.sp-campaign-widget{margin:8px 10px 4px;background:rgba(8,13,20,.6);border:1px solid rgba(54,208,122,.1);border-radius:10px;padding:12px 14px;}
-.sp-cw-op{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.sp-cw-op-name{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
-.sp-cw-op-status{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
-.sp-cw-op-status.complete{color:#36d07a;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.25);}
-.sp-cw-op-status.upcoming{color:var(--amber);background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);}
-.sp-cw-row{display:flex;align-items:center;gap:8px;}
-.sp-cw-force{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;width:26px;flex-shrink:0;}
-.sp-cw-force.aus{color:#3d87d4;}
-.sp-cw-force.luf{color:#d94040;}
-.sp-cw-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;}
-.sp-cw-bar{height:100%;border-radius:99px;background:var(--col,#3d87d4);width:var(--pct,0);transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
-.sp-cw-pct{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);min-width:70px;text-align:right;}
-.sp-cw-delta{font-size:8px;}
-.sp-cw-delta.down{color:#d94040;}
-
-/* Coming soon panel (slides over scroll body) */
-#spComingSoonPanel{
-  position:absolute;top:0;bottom:0;left:0;right:0;
-  background:rgba(5,8,13,.98);
-  display:flex;flex-direction:column;
-  transform:translateX(100%);
-  transition:transform .22s cubic-bezier(.4,0,.2,1);
-  z-index:5;
+.hero .tagline{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(13px,2vw,18px);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--muted-2);
+  margin-bottom:40px;
 }
-#spComingSoonPanel.active{transform:translateX(0);}
-.sp-cs-back{background:transparent;border:0;color:var(--muted);font:inherit;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;padding:18px 16px 10px;display:flex;align-items:center;gap:6px;text-transform:uppercase;}
-.sp-cs-back:hover{color:var(--text);}
-.sp-cs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
-.sp-cs-icon{font-size:40px;opacity:.3;margin-bottom:18px;}
-.sp-cs-label{font-family:'Oswald';text-transform:uppercase;letter-spacing:3px;font-size:16px;color:var(--muted);margin-bottom:10px;}
-.sp-cs-desc{font-size:12.5px;color:var(--muted-2);line-height:1.7;max-width:210px;}
+.hero .sub{
+  font-size:clamp(15px,1.8vw,20px);
+  color:var(--muted);
+  max-width:600px;
+  margin-bottom:50px;
+  line-height:1.7;
+}
+.hero-btns{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 36px;
+  border-radius:6px;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:16px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  cursor:pointer;
+  transition:all .15s;
+  text-decoration:none;
+}
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+  border:1px solid var(--primary-2);
+}
+.btn-primary:hover{background:var(--primary-2);}
+.btn-outline{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--line-strong);
+}
+.btn-outline:hover{background:var(--panel);border-color:var(--primary);}
+.btn-gold{
+  background:var(--gold);
+  color:#000;
+  border:1px solid #c89420;
+}
+.btn-gold:hover{background:#d4a020;}
 
-/* Panel footer */
-.sp-foot{padding:12px 16px;border-top:1px solid rgba(54,208,122,.08);flex-shrink:0;}
-.sp-foot-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.25);text-align:center;}
-
-/* ======================== HEADER ======================== */
-header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
-.brand{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
-.logo{position:relative;display:inline-grid;width:var(--ls,60px);height:var(--ls,60px);flex:0 0 auto;}
-.logo-svg,.logo-img{grid-area:1/1;width:100%;height:100%;}
-.logo-svg{filter:drop-shadow(0 3px 10px rgba(0,0,0,.55));}
-.logo-img{object-fit:contain;border-radius:50%;}
-.wordmark{font-family:'Share Tech Mono',monospace;font-weight:400;letter-spacing:3px;font-size:13px;color:var(--muted);text-transform:uppercase;}
-.wordmark b{color:var(--primary-2);}
-.op-title{font-family:'Oswald';font-weight:700;text-transform:uppercase;font-size:clamp(32px,5.5vw,62px);line-height:1.02;letter-spacing:1px;margin:4px 0 6px;background:linear-gradient(180deg,#fff 20%,var(--primary-2) 150%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-.op-meta{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;align-items:center;margin-top:10px;font-size:13.5px;}
-.op-meta .pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(12,18,26,.6);font-weight:600;letter-spacing:.4px;backdrop-filter:blur(4px);}
-.op-meta .pill .k{color:var(--muted-2);font-family:'Share Tech Mono',monospace;text-transform:uppercase;font-size:10px;letter-spacing:1.5px;}
-.op-meta .pill .v{color:var(--text);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--primary-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);}
-.status-live .status-dot,.pill-live .status-dot{background:#36d07a;box-shadow:0 0 0 3px rgba(54,208,122,.2);animation:pulse 1.8s infinite;}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.28);opacity:.7;}}
-
-/* Countdown */
-.countdown{margin:22px auto 0;}
-.cd-label{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:3px;font-size:11px;color:var(--muted);margin-bottom:10px;}
-.cd-units{display:flex;justify-content:center;gap:8px;}
-.cd-unit{min-width:72px;background:var(--panel);border:1px solid var(--line-strong);border-radius:11px;padding:12px 6px 9px;box-shadow:var(--shadow);}
-.cd-num{font-family:'Share Tech Mono',monospace;font-weight:400;font-size:clamp(24px,4.5vw,34px);line-height:1;color:#fff;display:block;font-variant-numeric:tabular-nums;}
-.cd-u{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-top:6px;display:block;}
-.cd-target{margin-top:12px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;font-size:11px;color:var(--primary-2);}
-.cd-live{font-family:'Oswald';text-transform:uppercase;letter-spacing:2px;font-size:clamp(16px,4vw,22px);color:#36d07a;padding:14px;}
-.divider{height:1px;max-width:720px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--line-strong),transparent);}
-
-/* ======================== COMMAND ======================== */
-.command{margin:30px auto 8px;max-width:640px;text-align:center;background:var(--panel);border:1px solid var(--line-strong);border-radius:var(--radius);padding:20px 20px 24px;box-shadow:var(--shadow);position:relative;}
-.section-tag{display:inline-block;font-family:'Share Tech Mono',monospace;letter-spacing:3px;text-transform:uppercase;font-size:11px;color:#fff;background:var(--primary);padding:5px 14px;border-radius:6px;margin-bottom:6px;}
-.command .hq-grid{display:grid;gap:5px;margin-top:12px;}
-.bracketed::before,.bracketed::after{content:"";position:absolute;width:14px;height:14px;border:1.5px solid var(--line-strong);}
-.bracketed::before{left:-1px;top:-1px;border-right:0;border-bottom:0;border-top-left-radius:5px;}
-.bracketed::after{right:-1px;bottom:-1px;border-left:0;border-top:0;border-bottom-right-radius:5px;}
-
-/* ======================== SECTIONS ======================== */
-.sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;margin-top:28px;}
-.sec{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;}
-.sec-head{font-family:'Oswald';font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:19px;padding:12px 16px;color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--primary) 28%,transparent),transparent),var(--panel-solid);border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;align-items:center;gap:8px;}
-.sec-head .count{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:1px;}
-.sec-head .lock{font-size:14px;}
-.sec.locked .sec-head{background:linear-gradient(180deg,rgba(100,115,130,.15),transparent),var(--panel-solid);color:var(--muted);}
-.sec-body{padding:6px;display:flex;flex-direction:column;gap:4px;}
-.lock-note{padding:10px 14px;font-size:11px;color:var(--muted-2);border-top:1px dashed var(--line);background:rgba(0,0,0,.15);display:flex;gap:7px;align-items:center;}
-.endorse-pill{display:inline-flex;align-items:center;justify-content:center;margin-left:6px;width:16px;height:16px;border-radius:50%;font-size:10px;font-weight:700;vertical-align:middle;background:rgba(240,180,41,.15);border:1px solid rgba(240,180,41,.5);color:#f0b429;cursor:help;}
-
-/* ======================== SLOTS ======================== */
-.slot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;transition:background .13s,border-color .13s,transform .1s;text-align:left;width:100%;background:transparent;color:inherit;font:inherit;position:relative;}
-.slot:hover{background:color-mix(in srgb,var(--primary) 11%,transparent);border-color:var(--line-strong);transform:translateX(2px);}
-.slot:focus-visible{outline:2px solid var(--primary-2);outline-offset:2px;}
-.slot .meta{min-width:0;flex:1;}
-.slot .nm{font-weight:700;font-size:14.5px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.slot .rl{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:1.2px;font-size:9.5px;color:var(--muted);margin-top:2px;}
-.slot.lvl-section,.slot.lvl-command{background:color-mix(in srgb,var(--primary) 8%,transparent);border-color:var(--line);}
-.slot.lvl-section{padding:12px 12px;}
-.slot.lvl-section .nm{font-size:21px;}
-.slot.lvl-section .rl{font-size:11px;color:var(--primary-2);}
-.slot.lvl-command{padding:13px 12px;}
-.slot.lvl-command .nm{font-size:22px;}
-.slot.lvl-command .rl{font-size:11px;color:var(--primary-2);}
-.command .slot.lvl-command .nm{font-size:24px;}
-.slot.is-open{opacity:.7;}
-.slot.is-open .nm{color:var(--muted);font-style:italic;font-weight:600;}
-.slot.is-open:hover{opacity:1;}
-.slot.is-locked{opacity:.56;cursor:not-allowed;}
-.slot.is-locked:hover{transform:none;background:transparent;border-color:transparent;}
-.slot.is-locked .nm{color:var(--muted);font-weight:600;font-style:normal;}
-.slot.is-open.needs-endorse{cursor:pointer;}
-.att-badge{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-left:6px;}
-.att-badge.att-yes{background:rgba(54,208,122,.14);color:#36d07a;border:1px solid rgba(54,208,122,.38);}
-.att-badge.att-no{background:rgba(200,64,58,.12);color:#d94040;border:1px solid rgba(200,64,58,.38);}
-
-/* ======================== AVATAR ======================== */
-.avatar{--s:42px;width:var(--s);height:var(--s);flex:0 0 auto;position:relative;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-family:'Oswald';font-weight:600;color:#fff;font-size:calc(var(--s)*0.38);background:hsl(var(--h,200),42%,22%);border:2px solid color-mix(in srgb,hsl(var(--h,200),42%,38%) 60%,transparent);}
-.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.avatar.empty{background:rgba(255,255,255,.04);color:var(--muted-2);border-style:dashed;border-color:var(--line-strong);}
-.avatar.empty::before{content:"+";font-size:calc(var(--s)*.55);color:var(--muted-2);}
-
-/* ======================== ATTENDANCE DOTS ======================== */
-.attend{margin-top:18px;}
-.attend .block-title{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-.attend .block-title .cnt{color:var(--primary-2);}
-.att-grid{display:flex;gap:5px;align-items:flex-end;}
-.att-col{flex:1 1 0;min-width:0;text-align:center;}
-.att-dots{display:flex;gap:3px;justify-content:center;align-items:center;min-height:13px;margin-bottom:5px;}
-.att-m{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}
-.att-empty .att-m{color:var(--muted-2);opacity:.6;}
-.opdot{width:12px;height:12px;border-radius:50%;background:var(--bad,#0a0f16);border:1px solid var(--line);}
-.opdot.yes{background:var(--primary-2);border-color:var(--primary);box-shadow:0 0 5px color-mix(in srgb,var(--primary) 50%,transparent);}
-.opdot.no{background:#0b0f15;border-color:rgba(200,64,58,.45);}
-.opdot.up{background:transparent;border-style:dashed;border-color:var(--line-strong);opacity:.6;}
-.ops-legend{display:flex;gap:12px;margin-top:10px;font-size:10px;color:var(--muted-2);flex-wrap:wrap;}
-.ops-legend span{display:inline-flex;align-items:center;gap:5px;}
-.ops-legend .opdot{width:10px;height:10px;}
-
-/* ======================== ROSTER (OPERATORS) ======================== */
-.roster-overlay{position:fixed;inset:0;z-index:56;display:none;padding:20px;background:rgba(3,6,11,.84);backdrop-filter:blur(8px);overflow-y:auto;}
-.roster-overlay.show{display:block;}
-.ro-panel{max-width:1060px;margin:0 auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
-.ro-head{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--line-strong);position:sticky;top:0;background:var(--panel-solid);z-index:2;}
-.ro-h-title{font-family:'Oswald';letter-spacing:4px;font-weight:700;font-size:20px;border-left:3px solid var(--primary);padding-left:12px;}
-.ro-h-sub{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:4px;padding-left:15px;text-transform:uppercase;}
-.ro-body{padding:16px 22px 28px;}
-.ro-group{margin-top:22px;}
-.ro-group:first-child{margin-top:4px;}
-.ro-group-h{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.ro-group-h b{color:var(--primary-2);}
-.ro-group-h::after{content:"";flex:1;height:1px;background:var(--line);}
-.ro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:9px;}
-.ro-card{display:flex;align-items:center;gap:11px;padding:11px;border-radius:11px;background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--primary);cursor:pointer;color:inherit;font:inherit;text-align:left;transition:transform .1s,border-color .13s;}
-.ro-card:hover{transform:translateY(-2px);border-color:var(--line-strong);}
-.ro-card .nm{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ro-card .rl2{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
-.ro-card .ops{margin-left:auto;text-align:center;flex:0 0 auto;}
-.ro-card .ops b{font-family:'Oswald';font-size:17px;color:var(--primary-2);display:block;line-height:1;}
-.ro-card .ops i{font-style:normal;font-size:8px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.5px;}
-
-/* ======================== MAP OVERLAY ======================== */
-.map-overlay{position:fixed;inset:0;z-index:58;display:none;padding:20px;background:rgba(3,6,11,.88);backdrop-filter:blur(7px);overflow-y:auto;}
-.map-overlay.show{display:block;}
-.map-panel{max-width:900px;margin:0 auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
-.map-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line-strong);position:sticky;top:0;background:var(--panel-solid);z-index:2;}
-.map-title{font-family:'Oswald';letter-spacing:2px;text-transform:uppercase;font-size:17px;color:#fff;display:flex;align-items:center;gap:10px;}
-.map-title .map-live-pill{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#36d07a;background:rgba(54,208,122,.1);border:1px solid rgba(54,208,122,.25);border-radius:4px;padding:3px 7px;}
-.map-title .map-live-dot{width:5px;height:5px;border-radius:50%;background:#36d07a;animation:pulse 1.8s infinite;flex-shrink:0;}
-.map-body{padding:16px 16px 22px;}
-.map-fig{margin:0;}
-.map-fig figcaption{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:9.5px;color:var(--muted);margin-bottom:8px;padding-left:2px;}
-.map-fig figcaption b{color:var(--text);}
-.map-img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line-strong);box-shadow:0 8px 30px rgba(0,0,0,.55);}
-
-
-.map-intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
-.map-intel-card{background:rgba(8,14,22,.7);border:1px solid var(--line);border-radius:11px;padding:14px 16px;}
-.map-intel-card.span2{grid-column:span 2;}
-.map-intel-title{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:9.5px;color:rgba(54,208,122,.6);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.map-intel-title::after{content:"";flex:1;height:1px;background:rgba(54,208,122,.12);}
-
-
-#mapSlider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(100,160,210,.6);cursor:pointer;box-shadow:0 0 6px rgba(0,0,0,.5);}
-#mapSlider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid rgba(100,160,210,.6);cursor:pointer;}
-
-/* Casualty counters */
-.cas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.cas-card{background:rgba(6,10,16,.8);border-radius:9px;padding:14px 12px;text-align:center;border:1px solid rgba(100,160,210,.1);}
-.cas-card.aus{border-top:2px solid #3d87d4;}
-.cas-card.luf{border-top:2px solid #d94040;}
-.cas-force{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
-.cas-force.aus{color:#3d87d4;}
-.cas-force.luf{color:#d94040;}
-.cas-num{font-family:'Oswald';font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;}
-.cas-num.aus{color:#3d87d4;}
-.cas-num.luf{color:#d94040;}
-.cas-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);margin-top:6px;}
-
-/* ======================== PROFILE MODAL ======================== */
-.modal-back{position:fixed;inset:0;z-index:70;background:rgba(3,6,11,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .2s;}
-.modal-back.show{display:flex;opacity:1;}
-.modal{width:min(430px,100%);background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:18px;box-shadow:var(--shadow);position:relative;overflow:hidden;transform:translateY(8px) scale(.98);transition:transform .22s;max-height:90vh;overflow-y:auto;}
-.modal-back.show .modal{transform:none;}
-.modal-banner{height:82px;background:linear-gradient(120deg,color-mix(in srgb,var(--primary) 52%,#000),color-mix(in srgb,var(--primary-2) 38%,#000));position:relative;}
-.modal-banner::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 7px,transparent 7px 14px);}
-.modal .x{position:absolute;top:11px;right:11px;z-index:3;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:17px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;}
-.modal .x:hover{background:var(--primary);}
-.modal-body{padding:0 22px 22px;margin-top:-42px;position:relative;}
-.modal .avatar{--s:84px;border-width:3px;box-shadow:0 6px 22px rgba(0,0,0,.55);}
-.modal h2{font-family:'Oswald';font-size:24px;margin:12px 0 2px;letter-spacing:.4px;}
-.rank-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-family:'Oswald';letter-spacing:1.5px;text-transform:uppercase;font-size:11.5px;font-weight:600;color:#fff;background:var(--primary);border:1px solid var(--line-strong);}
-.rank-socomd{background:linear-gradient(135deg,#1b2a46,#2e4c88);}
-.rank-senior-operator{background:linear-gradient(135deg,#1b4a80,#2b6aaa);}
-.rank-operator{background:linear-gradient(135deg,#27639c,#4488d8);}
-.rank-junior-operator{background:linear-gradient(135deg,#395872,#628aaf);}
-.rank-recruit{background:#2f3e50;}
-.badges{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;font-size:11.5px;font-weight:600;background:rgba(54,193,114,.13);border:1px solid rgba(54,193,114,.45);color:#6ed89a;}
-.badge.lead-senior{background:rgba(190,148,28,.16);border-color:rgba(210,168,48,.58);color:#d4a82c;}
-.badge.lead-junior{background:rgba(250,215,65,.14);border-color:rgba(250,215,65,.55);color:#f0d44a;}
-.stat-row{display:flex;gap:9px;margin:14px 0;}
-.stat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 7px;text-align:center;}
-.stat .big{font-family:'Oswald';font-size:22px;font-weight:700;color:#fff;}
-.stat .lbl{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-top:2px;}
-.promo-label{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin:16px 0 6px;}
-.promo-label .nxt{color:var(--muted);}
-.promo-label .pct{font-family:'Share Tech Mono',monospace;color:var(--primary-2);font-weight:600;}
-.promo-track{height:8px;border-radius:999px;background:rgba(8,14,22,.9);overflow:hidden;border:1px solid var(--line);}
-.promo-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary-2));width:0;transition:width .8s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 10px color-mix(in srgb,var(--primary) 55%,transparent);}
-.promo-fill.maxed{background:linear-gradient(90deg,#ffce4d,#ffe08a);box-shadow:0 0 10px rgba(255,206,77,.45);}
-.promo-note{font-size:11px;color:var(--muted-2);margin-top:7px;}
-
-/* ======================== MUSIC ======================== */
-
-
-
-/* ======================== COMING SOON OVERLAY ======================== */
-#comingSoon{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(180deg,rgba(5,8,14,.93),rgba(5,8,14,.98));backdrop-filter:blur(4px);}
-#comingSoon.show{display:flex;}
-#comingSoon .logo{margin-bottom:16px;animation:float 4s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-#comingSoon h1{font-family:'Oswald';text-transform:uppercase;letter-spacing:3px;font-size:clamp(24px,5vw,44px);margin:0 0 10px;}
-#comingSoon p{color:var(--muted);max-width:500px;font-size:14.5px;line-height:1.6;}
-#comingSoon .next-meta{margin-top:16px;color:var(--primary-2);font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;font-size:12px;}
-#comingSoon .peek{margin-top:26px;background:transparent;border:1px solid var(--line-strong);color:var(--muted);padding:10px 20px;border-radius:10px;cursor:pointer;font:inherit;font-weight:600;letter-spacing:.5px;}
-#comingSoon .peek:hover{color:#fff;border-color:var(--primary);}
-
-/* ======================== CLAIM MODAL ======================== */
-#claimBack{position:fixed;inset:0;z-index:75;background:rgba(3,6,11,.8);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;}
-#claimBack.show{display:flex;}
-#claimModal{width:min(410px,100%);background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;max-height:90vh;overflow-y:auto;}
-#claimStep1{padding:22px 20px 20px;}
-.cm-step-tag{font-family:'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:2px;font-size:9.5px;color:var(--muted-2);margin-bottom:9px;}
-.cm-role-title{font-family:'Oswald';font-size:21px;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.2;}
-.warn-box{border-radius:9px;padding:12px 15px;background:rgba(200,64,58,.1);border:1px solid rgba(200,64,58,.35);}
-.warn-box .warn-head{display:flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;font-weight:400;font-size:11px;color:#ff7070;text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;}
-.warn-box ul{margin:0;padding:0 0 0 16px;font-size:12.5px;color:rgba(216,232,244,.8);line-height:1.7;}
-.warn-box ul li{margin-bottom:1px;}
-.endorse-block{margin-top:12px;border-radius:9px;padding:12px 15px;background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.34);font-size:12.5px;color:rgba(216,232,244,.8);line-height:1.6;}
-.endorse-block strong{display:block;color:#f0b429;font-size:13px;margin-bottom:5px;}
-.discord-soon{margin-top:12px;display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:8px;background:rgba(88,101,242,.11);border:1px solid rgba(88,101,242,.34);font-size:12px;color:var(--muted);line-height:1.5;}
-.discord-soon .ds-icon{font-size:15px;flex-shrink:0;}
-.discord-soon strong{color:#8a9fff;}
-.cm-step1-actions{display:flex;gap:9px;margin-top:16px;}
-#claimStep2{padding:0 20px 20px;display:none;}
-#claimStep2.active{display:block;}
-#claimStep2 .cm-back{background:none;border:none;color:var(--muted);font:inherit;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;padding:14px 0 9px;display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:1px;}
-#claimStep2 .cm-back:hover{color:var(--text);}
-#claimStep2 label{display:block;font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:400;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px;}
-#claimInput{width:100%;background:#06090f;border:1px solid var(--line-strong);border-radius:9px;padding:10px 13px;color:var(--text);font:inherit;font-size:14.5px;font-weight:600;outline:none;transition:border-color .15s;}
-#claimInput:focus{border-color:var(--primary);}
-#claimInput::placeholder{color:var(--muted-2);font-weight:400;}
-.dropdown-container{position:relative;width:100%;}
-.op-dropdown-list{position:absolute;top:100%;left:0;right:0;max-height:185px;overflow-y:auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:9px;z-index:99;margin-top:4px;box-shadow:var(--shadow);display:none;}
-.op-dropdown-item{padding:9px 13px;cursor:pointer;border-bottom:1px solid var(--line);font-weight:600;color:var(--text);font-size:13.5px;transition:background .1s;}
-.op-dropdown-item:hover{background:color-mix(in srgb,var(--primary) 14%,transparent);}
-.op-dropdown-item:last-child{border-bottom:none;}
-.cm-hint{font-size:11px;color:var(--muted-2);margin-top:7px;line-height:1.5;}
-.cm-actions{display:flex;gap:9px;margin-top:14px;}
-.cm-btn{flex:1;padding:10px;border-radius:9px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid var(--line-strong);transition:background .14s,border-color .14s;}
-.cm-btn.confirm{background:var(--primary);border-color:var(--primary);color:#fff;}
-.cm-btn.confirm:hover{background:color-mix(in srgb,var(--primary) 80%,#fff);}
-.cm-btn.confirm:disabled{opacity:.5;cursor:not-allowed;}
-.cm-btn.cancel{background:transparent;color:var(--muted);}
-.cm-btn.cancel:hover{background:rgba(255,255,255,.05);color:var(--text);}
-#claimStatus{font-size:12px;margin-top:10px;min-height:16px;}
-#claimStatus.err{color:#d94040;}
-#claimStatus.ok{color:#36d07a;}
-
-footer{text-align:center;color:var(--muted-2);font-family:'Share Tech Mono',monospace;font-size:10.5px;letter-spacing:1px;margin-top:56px;padding-top:22px;border-top:1px solid var(--line);}
-footer b{color:var(--muted);}
-.load-err{max-width:600px;margin:60px auto;padding:22px;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel);color:var(--muted);line-height:1.6;}
-.load-err code{background:#000;padding:2px 6px;border-radius:5px;color:var(--accent);}
-
-@media(max-width:600px){
-  .op-meta{font-size:12px;}
-  .cd-unit{min-width:0;flex:1;}
-  .map-intel-grid{grid-template-columns:1fr;}
-  .map-intel-card.span2{grid-column:span 1;}
-  .sp-campaign-widget{display:none;}
+/* Stats bar */
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:60px;
+  padding:60px 20px;
+  flex-wrap:wrap;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--bg-2);
+}
+.stat{text-align:center;}
+.stat-num{
+  font-family:'Oswald',sans-serif;
+  font-size:42px;
+  font-weight:700;
+  color:var(--primary);
+  line-height:1;
+  margin-bottom:4px;
+}
+.stat-lbl{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted-2);
 }
 
-/* ======================== ADMIN PANEL ======================== */
-#adminPanel{
-  position:fixed;inset:0;z-index:200;
-  background:var(--bg);
-  overflow-y:auto;display:none;
-  padding:var(--banner-h) 0 40px;
+/* Sections */
+.section{
+  padding:80px 20px;
+  max-width:1100px;
+  margin:0 auto;
 }
-#adminPanel.show{display:block;}
-.admin-wrap{max-width:1200px;margin:0 auto;padding:20px;}
-.admin-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:16px 0 20px;border-bottom:2px solid var(--line-strong);
-  margin-bottom:24px;
+.section-title{
+  font-family:'Oswald',sans-serif;
+  font-size:32px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:10px;
 }
-.admin-header h1{
-  font-family:'Oswald';font-size:28px;letter-spacing:2px;
-  text-transform:uppercase;margin:0;color:var(--primary-2);
+.section-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted-2);
+  margin-bottom:40px;
 }
-.admin-close{
-  background:var(--panel);border:1px solid var(--line-strong);
-  color:var(--text);padding:8px 18px;border-radius:8px;
-  cursor:pointer;font:inherit;font-weight:600;
-  transition:background .15s;
+.section-desc{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.8;
+  max-width:700px;
 }
-.admin-close:hover{background:var(--primary);color:#fff;}
-
-.admin-section{
-  background:var(--panel);border:1px solid var(--line-strong);
-  border-radius:12px;padding:20px;margin-bottom:20px;
+.content-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  margin-top:30px;
 }
-.admin-section-title{
-  font-family:'Oswald';font-size:18px;letter-spacing:2px;
-  text-transform:uppercase;color:#fff;margin:0 0 16px;
-  padding-bottom:12px;border-bottom:1px solid var(--line);
-}
-.admin-form{display:grid;gap:16px;}
-.admin-form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
-.admin-field{display:flex;flex-direction:column;gap:6px;}
-.admin-field label{
-  font-family:'Share Tech Mono',monospace;font-size:10px;
-  text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
-}
-.admin-field input,.admin-field select,.admin-field textarea{
-  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
-  border-radius:6px;padding:10px 12px;color:var(--text);
-  font:inherit;font-size:14px;outline:none;
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:28px;
   transition:border-color .15s;
 }
-.admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{
-  border-color:var(--primary);
+.card:hover{border-color:var(--line-strong);}
+.card h3{
+  font-family:'Oswald',sans-serif;
+  font-size:18px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:10px;
+  color:var(--primary);
 }
-.admin-field textarea{min-height:80px;resize:vertical;}
+.card p{color:var(--muted);font-size:14px;line-height:1.7;}
+.card-icon{font-size:32px;margin-bottom:14px;display:block;}
 
-.admin-btn-group{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
-.admin-btn{
-  padding:10px 20px;border-radius:8px;font:inherit;
-  font-weight:600;cursor:pointer;border:1px solid var(--line-strong);
-  transition:all .15s;
+/* Platoon Cards */
+.platoon-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+  margin-top:30px;
 }
-.admin-btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);}
-.admin-btn-primary:hover{background:var(--primary-2);}
-.admin-btn-secondary{background:transparent;color:var(--text);}
-.admin-btn-secondary:hover{background:var(--panel-solid);}
-.admin-btn-danger{background:#d94040;color:#fff;border-color:#d94040;}
-.admin-btn-danger:hover{background:#c02020;}
+.platoon-card{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:var(--bg-2);
+  transition:border-color .15s;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+}
+.platoon-card:hover{border-color:var(--line-strong);}
+.platoon-card .top{
+  padding:28px 24px 16px;
+  flex:1;
+}
+.platoon-card .badge{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.platoon-card h3{
+  font-family:'Oswald',sans-serif;
+  font-size:26px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:#fff;
+}
+.platoon-card .desc{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.7;
+  margin-top:10px;
+}
+.platoon-card .bottom{
+  padding:14px 24px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.platoon-card .bottom span{font-size:11px;color:var(--muted-2);}
+.platoon-card .bottom a{
+  font-family:'Oswald',sans-serif;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--primary);
+  text-decoration:none;
+}
+.platoon-card .bottom a:hover{color:var(--gold);}
 
-.admin-slots-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-.admin-slot-item{
-  background:rgba(0,0,0,.3);border:1px solid var(--line);
-  border-radius:8px;padding:12px 14px;
-  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+/* CTA Banner */
+.cta-banner{
+  text-align:center;
+  padding:80px 20px;
+  background:var(--bg-2);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
-.admin-slot-actions{display:flex;flex-wrap:wrap;gap:6px;}
-.admin-slot-info{display:flex;flex-direction:column;gap:4px;}
-.admin-slot-role{font-weight:600;font-size:14px;}
-.admin-slot-member{font-size:12px;color:var(--muted);}
-.slot-unassign{position:absolute;top:2px;right:2px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(200,64,58,.2);color:var(--red);font-size:11px;cursor:pointer;opacity:0;transition:opacity .15s;z-index:2;border:0;}
-.slot:hover .slot-unassign,.slot-unassign:hover{opacity:1;}
-.slot-unassign:hover{background:rgba(200,64,58,.4);}
-.admin-slot-endorsement{
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:#f0b429;background:rgba(240,180,41,.1);
-  border:1px solid rgba(240,180,41,.3);
-  border-radius:4px;padding:2px 6px;margin-top:2px;display:inline-block;
-}
-
-.admin-section-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.admin-section-item{
-  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
-  border-radius:10px;padding:16px;
-}
-.admin-section-header{
-  display:flex;justify-content:space-between;align-items:center;
+.cta-banner h2{
+  font-family:'Oswald',sans-serif;
+  font-size:36px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
   margin-bottom:12px;
 }
-.admin-section-name{font-family:'Oswald';font-size:16px;color:#fff;}
-
-.admin-mini-btn{
-  padding:6px 12px;font-size:12px;border-radius:6px;
-  font-weight:600;cursor:pointer;border:1px solid var(--line);
-  background:transparent;color:var(--text);transition:all .15s;
+.cta-banner p{
+  color:var(--muted);
+  font-size:15px;
+  margin-bottom:30px;
 }
-.admin-mini-btn:hover{background:var(--panel);border-color:var(--primary);}
-.admin-mini-btn-danger{color:#ff6060;border-color:rgba(200,64,58,.4);}
-.admin-mini-btn-danger:hover{background:rgba(200,64,58,.15);border-color:#d94040;}
 
-.admin-status-msg{
-  padding:12px 16px;border-radius:8px;margin-top:16px;
-  font-size:13px;display:none;
+/* Footer */
+footer{
+  padding:50px 20px 30px;
+  max-width:1100px;
+  margin:0 auto;
+  text-align:center;
 }
-.admin-status-msg.show{display:block;}
-.admin-status-msg.success{background:rgba(54,208,122,.15);border:1px solid rgba(54,208,122,.4);color:#36d07a;}
-.admin-status-msg.error{background:rgba(200,64,58,.15);border:1px solid rgba(200,64,58,.4);color:#ff6060;}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px 28px;
+  margin-bottom:40px;
+}
+.footer-links a{
+  color:var(--muted-2);
+  text-decoration:none;
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  transition:color .15s;
+}
+.footer-links a:hover{color:var(--text);}
+.footer-copy{
+  font-size:11px;
+  color:var(--muted-2);
+  line-height:1.8;
+}
+.footer-copy span{opacity:.5;}
 </style>
 </head>
 <body>
 
-<!-- Discord Auth Banner -->
-<div id="discordBanner">
-  <div id="authNotLoggedIn" style="display:none;align-items:center;gap:12px;">
-    <span class="ds-icon">🔗</span>
-    <strong>Sign in with Discord to claim roles</strong>
-    <span class="ds-sep">|</span>
-    <button id="loginBtn" style="background:#5865F2;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Login with Discord</button>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-lines"></div>
+  <img class="hero-logo" src="/assets/logo.png" alt="AZO" onerror="this.style.display='none'">
+  <h1>AZO</h1>
+  <div class="tagline">ArmA 3 Milsim Unit</div>
+  <p class="sub">A dynamic Arma 3 milsim community focused on teamwork, realism, and a great operational experience. Deploy alongside fellow operators in large-scale combined arms operations.</p>
+  <div class="hero-btns">
+    <a class="btn btn-primary" href="/roster/">View Operation Roster</a>
+    <a class="btn btn-outline" href="https://discord.gg/azo" target="_blank">Join Discord</a>
   </div>
-  <div id="authLoggedIn" style="display:none;align-items:center;gap:12px;">
-    <img id="userAvatar" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(88,101,242,.6);" alt="">
-    <strong id="userName"></strong>
-    <span class="ds-sep">|</span>
-    <span id="userRole" style="color:#36d07a;"></span>
-    <button id="adminPanelBtn" style="background:#f0b429;color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;display:none;margin-left:8px;">Admin Panel</button>
-    <button id="logoutBtn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;">Logout</button>
-  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">41</div><div class="stat-lbl">Active Members</div></div>
+  <div class="stat"><div class="stat-num">2</div><div class="stat-lbl">Ops Per Week</div></div>
+  <div class="stat"><div class="stat-num">Oceania</div><div class="stat-lbl">Region</div></div>
+  <div class="stat"><div class="stat-num">2025</div><div class="stat-lbl">Established</div></div>
 </div>
 
-<!-- Side panel toggle -->
-<button id="spToggle" type="button" aria-label="Toggle command panel">
-  <span class="sp-toggle-arrow" id="spArrow">▶</span>
-  <span class="sp-new-badge">NEW</span>
-</button>
-
-<!-- Side panel -->
-<div id="sidePanel">
-  <div class="sp-head">
-    <div class="sp-head-logo">
-      <div class="sp-head-dot"></div>
-      <div class="sp-head-title">Command</div>
+<!-- About -->
+<div class="section">
+  <div class="section-sub">Field Notes</div>
+  <h2 class="section-title">About AZO</h2>
+  <p class="section-desc">AZO is an ArmA 3 milsim unit built around structured gameplay, professional leadership, and a focus on community. Our operations combine infantry manoeuvres, armour support, rotary-wing CAS, and medical logistics across dynamic mission sets.</p>
+  <div class="content-grid">
+    <div class="card">
+      <span class="card-icon">⚔️</span>
+      <h3>Combined Arms</h3>
+      <p>Every operation integrates infantry, armour, aviation, and support elements for a fully realised combined-arms experience.</p>
     </div>
-    <button class="sp-close-btn" id="spClose" aria-label="Close panel">✕</button>
-  </div>
-
-  <!-- Coming soon overlay within panel -->
-  <div id="spComingSoonPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:5;">
-    <button class="sp-cs-back" id="spComingSoonBack">← Back</button>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
-      <div style="font-size:42px;opacity:.25;margin-bottom:18px;">🔒</div>
-      <div style="font-family:'Oswald';text-transform:uppercase;letter-spacing:3px;font-size:15px;color:var(--muted);margin-bottom:10px;" id="spComingSoonLabel">Feature</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--muted-2);line-height:1.8;">This feature is currently<br>in development.<br><br>Check back soon.</div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <h3>Structured Roster</h3>
+      <p>Role-based sign-ups with endorsement tracking for medical, JTAC, and leadership positions. Know your slot before you deploy.</p>
     </div>
-  </div>
-
-  <div class="sp-scroll">
-    <!-- INTELLIGENCE -->
-    <div class="sp-sec-label">Intelligence</div>
-
-    <button class="sp-nav-btn" id="spMapBtn">
-      <span class="sp-nb-icon">🗺</span>
-      <span class="sp-nb-label">Campaign Map</span>
-      <span class="sp-nb-live"><span class="sp-live-dot"></span>LIVE</span>
-    </button>
-
-    <div class="sp-divider"></div>
-
-    <!-- PERSONNEL -->
-    <div class="sp-sec-label">Personnel</div>
-    <button class="sp-nav-btn" id="spRosterBtn">
-      <span class="sp-nb-icon">👥</span>
-      <span class="sp-nb-label">Operators</span>
-      <span class="sp-nb-count" id="spOperatorCount">--</span>
-    </button>
-
-    <div class="sp-divider"></div>
-
-
-    <!-- ARCHIVE -->
-    <div class="sp-sec-label">Archive</div>
-    <button class="sp-nav-btn" id="spPrevOpsBtn">
-      <span class="sp-nb-icon">📜</span>
-      <span class="sp-nb-label">Previous Ops Attendance</span>
-    </button>
-
-    <div class="sp-divider"></div>
-
-    <!-- FEEDBACK -->
-    <div class="sp-sec-label">Feedback</div>
-    <button class="sp-nav-btn" id="spFeedbackBtn">
-      <span class="sp-nb-icon">📝</span>
-      <span class="sp-nb-label">Op Feedback</span>
-    </button>
-  </div>
-
-  <!-- Op Ratings slide-in panel -->
-  <div id="spOpRatingsPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow-y:auto;overflow-x:hidden;">
-    <button class="sp-cs-back" id="spOpRatingsBack">← Back</button>
-    <div style="padding:16px;">
-      <div style="font-family:'Oswald';font-size:16px;letter-spacing:1px;color:#fff;margin-bottom:12px;border-left:3px solid var(--primary);padding-left:12px;">Op Ratings</div>
-      
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Karoonda II</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">JULY · JAG MCMUFFIN</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">8.3<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Karoonda I</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">JUNE · JAG MCMUFFIN</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">7.8<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Emerald Veil III</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">JUNE · JAG MCMUFFIN</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">8.8<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Desert Mourning</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">MAY</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">7.3<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Emerald Veil II</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">MAY · JAG MCMUFFIN</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">8.3<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Emerald Veil I</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">APRIL · JAG MCMUFFIN</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">6.7<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-
-        <div style="background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-family:'Oswald';font-size:14px;color:#fff;">Red Water</div>
-            <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;">MARCH · SIR DANGER</div>
-          </div>
-          <div style="font-family:'Oswald';font-size:16px;color:var(--primary-2);">7.0<span style="font-size:10px;color:var(--muted-2);">/10</span></div>
-        </div>
-      </div>
+    <div class="card">
+      <span class="card-icon">🎖️</span>
+      <h3>Promotion System</h3>
+      <p>Track your progression from Recruit through to SOCOMD. Promotions are based on attendance, aptitude, and leadership potential.</p>
     </div>
-  </div>
-
-  <!-- Feedback slide-in panel -->
-  <div id="spFeedbackPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
-    <button class="sp-cs-back" id="spFeedbackBack">← Back</button>
-    <div style="flex:1;overflow-y:auto;padding:16px;">
-      <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;margin-bottom:4px;">Op Feedback</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:18px;">Rate the op and your leadership after each operation.</div>
-      <a href="https://forms.gle/K4qAERXegng7jYiD6" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(74,144,217,.1);border:1px solid rgba(74,144,217,.3);border-radius:10px;text-decoration:none;color:var(--text);margin-bottom:10px;">
-        <span style="font-size:22px;">📝</span>
-        <div><div style="font-family:'Oswald';font-size:14px;color:#fff;">Op Creator Feedback</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rate the operation, mission design &amp; Zeus</div></div>
-        <span style="margin-left:auto;color:var(--primary-2);">↗</span>
-      </a>
-
-    </div>
-  </div>
-
-  <!-- Prev ops slide-in panel -->
-  <div id="spPrevOpsPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
-    <button class="sp-cs-back" id="spPrevOpsBack">← Back</button>
-    <div style="flex:1;overflow-y:auto;padding:0 0 20px;">
-
-      <!-- OP KAROONDA I ACCORDION -->
-      <div style="border-bottom:1px solid rgba(100,160,210,.1);">
-        <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.acc-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶':'▼';" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;text-align:left;">
-          <div>
-            <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;">Op Karoonda I</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:2px;">20 JUNE 2026 · 17 attended</div>
-          </div>
-          <span class="acc-arrow" style="font-size:11px;color:var(--muted);">▶</span>
-        </button>
-        <div style="display:none;padding:0 16px 14px;">
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:8px 0 6px;">Command</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/sirdanger.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Sir Danger</div><span style="font-size:9px;color:var(--muted-2);">SOCOMD</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/badkarma.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">BadKarma</div><span style="font-size:9px;color:var(--muted-2);">Senior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/zep.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Zep</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:14px 0 6px;">ALPHA</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/gunter.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Gunter</div><span style="font-size:9px;color:var(--muted-2);">SOCOMD</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/24pool1.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">24pool1</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/monke.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Monke</div><span style="font-size:9px;color:var(--muted-2);">Senior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a4a6a,#1a2f45);border:1px solid rgba(100,160,210,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">AH</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:var(--muted);">AbuHudhayfah</div></div><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/animepanda.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">AnimePanda</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/kiren77.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Kiren77</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/spacecat82.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Spacecat82</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a4a6a,#1a2f45);border:1px solid rgba(100,160,210,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">TR</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:var(--muted);">TheRandomHistorian</div></div><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/earthball.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;color:var(--muted);">Earthball</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#d94040;font-size:14px;font-weight:700;">✗</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:14px 0 6px;">BRAVO</div>
-        <div style="display:flex;flex-direction:column;">          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/malt.gif" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Malt</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/vain.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Vain</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/misaka.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Misaka</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/hivemynd.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">HiveMynd</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/orter.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Orter</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <img src="assets/avatars/velteck.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'">
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Velteck</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a4a6a,#1a2f45);border:1px solid rgba(100,160,210,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">GB</span>
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">GoGoBendy</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div>          <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-            <span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a4a6a,#1a2f45);border:1px solid rgba(100,160,210,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">S</span>
-            <div style="min-width:0;flex:1;"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">sebs</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div>
-            <span style="color:#36d07a;font-size:14px;font-weight:700;flex-shrink:0;">✓</span>
-          </div></div>
-        </div><!-- end K1 body -->
-      </div><!-- end K1 accordion -->
-
-      <!-- OP KAROONDA II ACCORDION -->
-      <div style="border-bottom:1px solid rgba(100,160,210,.1);">
-        <button onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.acc-arrow2').textContent=b.style.display==='none'?'▶':'▼';" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;text-align:left;">
-          <div>
-            <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;">Op Karoonda II</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:2px;">4 JULY 2026 · 32 attended (incl. joint units)</div>
-          </div>
-          <span class="acc-arrow2" style="font-size:11px;color:var(--muted);">▶</span>
-        </button>
-        <div style="display:none;padding:0 16px 14px;">
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:8px 0 6px;">Command</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/sirdanger.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Sir Danger</div><span style="font-size:9px;color:var(--muted-2);">SOCOMD</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/jger.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Jäger</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:14px 0 6px;">ALPHA</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/vain.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Vain</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/24pool1.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">24pool1</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/monke.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Monke</div><span style="font-size:9px;color:var(--muted-2);">Senior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/animepanda.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">AnimePanda</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/hivemynd.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">HiveMynd</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/theraven.gif" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">The Raven</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/blueberet.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">blueberet</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:14px 0 6px;">BRAVO</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/gunter.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Gunter</div><span style="font-size:9px;color:var(--muted-2);">SOCOMD</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/misaka.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Misaka</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/jontaiwan.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Jon Taiwan</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/gill.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Gill</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/terack.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Terack</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/xeonovaes.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Xeonovaes</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.5);text-transform:uppercase;margin:14px 0 6px;">Medical</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/zep.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Zep</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2a4a6a,#1a2f45);border:1px solid rgba(100,160,210,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">GB</span><div style="min-width:0;flex:1;"><div style="font-size:12px;">GoGoBendy</div><span style="font-size:9px;color:var(--muted-2);">Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><img src="assets/avatars/spacecat82.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Spacecat82</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><img src="assets/avatars/crallers.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(100,160,210,.3);flex-shrink:0;" onerror="this.style.display='none'"><div style="min-width:0;flex:1;"><div style="font-size:12px;">Crallers</div><span style="font-size:9px;color:var(--muted-2);">Junior Operator</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op - Charlie</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">SL</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Cmdr. Garuda XIII</div><span style="font-size:9px;color:var(--muted-2);">Section Leader</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">AS</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Cmmsr Tooko</div><span style="font-size:9px;color:var(--muted-2);">Asst. Section Leader</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">GR</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Snr Ctr. Unphayzable</div><span style="font-size:9px;color:var(--muted-2);">Grenadier</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">GR</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Lt. Fracture</div><span style="font-size:9px;color:var(--muted-2);">Grenadier</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">LW</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">SecOps. Dan</div><span style="font-size:9px;color:var(--muted-2);">LSW (Minimi)</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">LW</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">QM. DODO</div><span style="font-size:9px;color:var(--muted-2);">LSW (Minimi)</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">RF</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Snr Ctr. Kenn</div><span style="font-size:9px;color:var(--muted-2);">Rifleman</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">RF</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">Snr Ctr. Boomer</div><span style="font-size:9px;color:var(--muted-2);">Rifleman</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(74,144,217,.6);text-transform:uppercase;margin:14px 0 6px;">Joint Op - Blackjack</div>
-          <div style="display:flex;flex-direction:column;">
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">PT</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">1st Lt B. Hag</div><span style="font-size:9px;color:var(--muted-2);">Pilot</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">CP</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">2d Lt D. Mason</div><span style="font-size:9px;color:var(--muted-2);">Co-pilot</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(100,160,210,.06);"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">CC</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">TSgt C. Weeb</div><span style="font-size:9px;color:var(--muted-2);">Crew Chief</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-            <div style="display:flex;align-items:center;gap:9px;padding:6px 0;"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a3a5a,#2a5a8a);border:1px solid rgba(74,144,217,.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;color:#6aaad8;">GN</span><div style="min-width:0;flex:1;"><div style="font-size:12px;color:#6aaad8;">SSgt J. Jabbzo</div><span style="font-size:9px;color:var(--muted-2);">Gunner</span></div><span style="color:#36d07a;font-size:14px;font-weight:700;">✓</span></div>
-          </div>
-        </div><!-- end K2 body -->
-      </div><!-- end K2 accordion -->
-
-    </div><!-- end scroll -->
-  </div><!-- end prevOpsPanel -->
-
-  <!-- Op Ratings slide-in panel -->
-  <div id="spRatingsPanel" style="position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(5,8,13,.98);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:6;overflow:hidden;">
-    <button class="sp-cs-back" id="spRatingsBack">← Back</button>
-    <div style="flex:1;overflow-y:auto;padding:0 16px 20px;">
-      <div style="font-family:'Oswald';font-size:15px;letter-spacing:1px;color:#fff;margin-bottom:2px;">Op Ratings</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Community ratings per operation.</div>
-
-      <!-- JULY (most recent first) -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.7);text-transform:uppercase;margin:8px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(54,208,122,.18);display:flex;align-items:center;gap:6px;">July <span style="font-size:8px;background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.3);border-radius:3px;padding:1px 5px;color:#36d07a;letter-spacing:1px;">CURRENT</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- JUNE -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">June</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Op Karoonda I</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil III</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.8<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- MAY -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">May</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Desert Mourning</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: -</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil II</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#36d07a;">8.3<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- APRIL -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">April</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(100,160,210,.06);">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Emerald Veil I</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Jag McMuffin</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">6.7<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-
-      <!-- MARCH -->
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(54,208,122,.45);text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(100,160,210,.08);">March</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
-        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Red Water</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Zeus: Sir Danger</div></div>
-        <div style="text-align:right;"><div style="font-family:'Oswald';font-size:20px;color:#f0b429;">7.0<span style="font-size:11px;color:var(--muted-2);">/10</span></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sp-foot">
-    <div class="sp-foot-text">Australian Zeus Operations</div>
-  </div>
-</div>
-
-<!-- Background layers -->
-<div id="bgLayer"></div>
-<div id="bgOverlay"></div>
-
-<!-- Main content -->
-<div class="wrap" id="app"></div>
-
-<!-- Campaign map overlay (simplified - images only, no vectors) -->
-<div class="map-overlay" id="mapOverlay">
-  <div class="map-panel" style="max-width:980px;">
-    <div class="map-head">
-      <div class="map-title">
-        Campaign Map · Niakala AO
-        <span class="map-live-pill"><span class="map-live-dot"></span>LIVE</span>
-      </div>
-      <button class="x" id="mapClose" aria-label="Close" style="position:static;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div class="map-body">
-
-      <!-- Casualties -->
-      <div class="map-intel-card" style="margin-bottom:16px;">
-        <div class="map-intel-title">Casualties - Campaign Total (K1 + K2)</div>
-        <div class="cas-grid">
-          <div class="cas-card aus" style="padding:10px 8px;">
-            <div style="width:40px;height:24px;margin:0 auto 8px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#012169;position:relative;">
-              <svg viewBox="0 0 40 24" style="width:100%;height:100%;">
-                <rect width="40" height="24" fill="#012169"/>
-                <!-- Union Jack in canton (larger) -->
-                <g transform="scale(0.6)">
-                  <path d="M0,0 L24,14.4 M24,0 L0,14.4" stroke="#fff" stroke-width="2.5"/>
-                  <path d="M0,0 L24,14.4 M24,0 L0,14.4" stroke="#c8102e" stroke-width="1.5"/>
-                  <path d="M12,0 L12,14.4 M0,7.2 L24,7.2" stroke="#fff" stroke-width="4"/>
-                  <path d="M12,0 L12,14.4 M0,7.2 L24,7.2" stroke="#c8102e" stroke-width="2.4"/>
-                </g>
-                <!-- Commonwealth Star -->
-                <circle cx="31" cy="20" r="1.2" fill="#fff"/>
-                <!-- Southern Cross -->
-                <circle cx="28" cy="7" r="0.7" fill="#fff"/>
-                <circle cx="32" cy="5" r="0.7" fill="#fff"/>
-                <circle cx="34" cy="9" r="0.7" fill="#fff"/>
-                <circle cx="30" cy="12" r="0.7" fill="#fff"/>
-                <circle cx="35" cy="14" r="0.6" fill="#fff"/>
-              </svg>
-            </div>
-            <div class="cas-force aus">ADF</div>
-            <div class="cas-num aus" id="ausKia" style="font-size:28px;">0</div>
-            <div class="cas-label">KIA</div>
-          </div>
-          <div class="cas-card luf" style="padding:10px 8px;">
-            <div style="width:40px;height:24px;margin:0 auto 8px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.2);">
-              <svg viewBox="0 0 40 24" style="width:100%;height:100%;display:block;">
-                <rect width="40" height="4.8" y="0" fill="#000"/>
-                <rect width="40" height="4.8" y="4.8" fill="#fff"/>
-                <rect width="40" height="4.8" y="9.6" fill="#c8102e"/>
-                <rect width="40" height="4.8" y="14.4" fill="#fff"/>
-                <rect width="40" height="4.8" y="19.2" fill="#078930"/>
-              </svg>
-            </div>
-            <div class="cas-force luf">LUF</div>
-            <div class="cas-num luf" id="lufKia" style="font-size:28px;">0</div>
-            <div class="cas-label">KIA</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Top 10 Kills - Op Karoonda II -->
-      <div class="map-intel-card" style="margin-bottom:16px;">
-        <div class="map-intel-title">Top 10 Kills - Op Karoonda II</div>
-        <div id="killsLeaderboard" style="display:flex;flex-direction:column;gap:0;">
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:gold;min-width:22px;text-align:right;">1</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">1st Lt B. Hag</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#9b59b6;background:#9b59b61a;border:1px solid #9b59b644;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AFSOC</span></span>
-            <span class="kills-val" data-final="50" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:silver;min-width:22px;text-align:right;">2</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Boomer</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#e8a030;background:#e8a0301a;border:1px solid #e8a03044;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">13TH CD</span></span>
-            <span class="kills-val" data-final="27" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#cd7f32;min-width:22px;text-align:right;">3</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">BlueBeret</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · ALPHA</span></span>
-            <span class="kills-val" data-final="16" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">4</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Jon Taiwan</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · BRAVO</span></span>
-            <span class="kills-val" data-final="11" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">5</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">The Raven</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · ALPHA</span></span>
-            <span class="kills-val" data-final="11" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">6</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Astolfo</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · ALPHA</span></span>
-            <span class="kills-val" data-final="9" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">7</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Vain</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · ALPHA</span></span>
-            <span class="kills-val" data-final="9" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">8</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Mad Dan</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#e8a030;background:#e8a0301a;border:1px solid #e8a03044;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">13TH CD</span></span>
-            <span class="kills-val" data-final="7" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,160,210,.07);">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">9</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">A. Vostov</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#e8a030;background:#e8a0301a;border:1px solid #e8a03044;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">13TH CD</span></span>
-            <span class="kills-val" data-final="7" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
-            <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa;min-width:22px;text-align:right;">10</span>
-            <span style="flex:1;display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;"><span style="font-size:12.5px;font-weight:600;">Gunter</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.5px;color:#3d87d4;background:#3d87d41a;border:1px solid #3d87d444;border-radius:3px;padding:1px 4px;white-space:nowrap;flex-shrink:0;">AZO · BRAVO</span></span>
-            <span class="kills-val" data-final="6" style="font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:#3d87d4;">0</span>
-          </div>
-        </div>
-      </div><!-- end Top 10 -->
-
-      <!-- Interactive SVG Map -->
-      <div style="position:relative;background:#1a2535;border-radius:12px;border:1px solid var(--line-strong);overflow:hidden;">
-
-        <!-- Map legend -->
-        <div style="position:absolute;bottom:60px;right:10px;z-index:5;background:rgba(5,8,14,.88);border:1px solid rgba(100,160,210,.2);border-radius:8px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:9.5px;line-height:1;">
-          <div style="color:rgba(100,160,210,.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Control</div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#e8c84a;border:1.5px solid #b8960a;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">Regional capital</span></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#c0392b;border:1.5px solid #8b0000;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">LUF stronghold</span></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#e8a030;border:1.5px solid #a06010;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">Contested</span></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:11px;height:11px;border-radius:50%;background:#3a8c3a;border:1.5px solid #1a5c1a;display:inline-block;flex-shrink:0;"></span><span style="color:#ccc;">Govt / secure</span></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="width:14px;height:14px;background:#3a6abf;transform:rotate(45deg);display:inline-block;flex-shrink:0;border:1.5px solid #1a4a9f;"></span><span style="color:#ccc;">FOB / airfield</span></div>
-          <div style="height:1px;background:rgba(100,160,210,.15);margin:7px 0;"></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span style="display:inline-block;width:22px;height:2px;border-top:2px solid #6090cc;flex-shrink:0;"></span><span style="color:#ccc;">Main road (MSR)</span></div>
-          <div style="display:flex;align-items:center;gap:7px;"><span style="display:inline-block;width:22px;height:0;border-top:1.5px dashed #6090cc;flex-shrink:0;"></span><span style="color:#ccc;">FOB ground line</span></div>
-          <div style="height:1px;background:rgba(100,160,210,.15);margin:7px 0;"></div>
-          <div style="color:rgba(100,160,210,.5);font-size:8.5px;line-height:1.5;">Roads, river, FOB<br>lines are approximate</div>
-        </div>
-
-        <!-- Before/After slider -->
-        <div id="mapSliderWrap" style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:10px;background:rgba(5,8,14,.88);border:1px solid rgba(100,160,210,.25);border-radius:8px;padding:8px 14px;min-width:260px;">
-          <span id="sliderLabelBefore" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#36d07a;white-space:nowrap;flex-shrink:0;">Before</span>
-          <input id="mapSlider" type="range" min="0" max="1" step="0.01" value="0"
-            style="flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,rgba(54,208,122,.5),rgba(200,80,60,.5));outline:none;cursor:pointer;"
-          />
-          <span id="sliderLabelAfter" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(200,80,60,.6);white-space:nowrap;flex-shrink:0;">After</span>
-        </div>
-
-                <svg id="niakalaMap" viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:'Share Tech Mono',monospace;">
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-            <radialGradient id="terrainGrad" cx="40%" cy="45%" r="60%">
-              <stop offset="0%" stop-color="#243444"/>
-              <stop offset="100%" stop-color="#182230"/>
-            </radialGradient>
-          </defs>
-
-          <rect width="700" height="520" fill="url(#terrainGrad)"/>
-
-          <!-- RIVER -->
-          <path d="M 148,33 C 181,80 205,116 189,155 C 172,195 219,234 266,270 C 308,302 285,359 302,416 C 311,459 321,491 321,491"
-            stroke="#4a88c8" stroke-width="2.2" fill="none" opacity="0.5"/>
-
-          <!-- MAIN ROAD (MSR) -->
-          <path d="M 27,479 C 87,409 148,316 183,236 C 219,187 323,152 391,139 C 492,117 592,139 655,146"
-            stroke="#6090cc" stroke-width="2.5" fill="none" opacity="0.7"/>
-
-          <!-- FOB GROUND LINE (dashed) -->
-          <path d="M 110,401 C 191,446 285,452 360,458 C 426,463 464,463 497,461"
-            stroke="#6090cc" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.45"/>
-
-          <!-- SETTLEMENTS -->
-
-          <!-- REGIONAL CAPITAL: Shwasana -->
-          <circle id="circ_shwasana" cx="389" cy="136" r="9" fill="#e8c84a" stroke="#8b6900" stroke-width="2" style="transition:fill .8s,stroke .8s"/>
-          <text x="402" y="132" fill="#e8d870" font-size="10" font-weight="bold">Shwasana</text>
-          <text x="402" y="143" fill="#b0a040" font-size="7.5">Grower Company</text>
-
-          <!-- LUF Strongholds (red) -->
-          <circle cx="38" cy="67" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="52" cy="67" fill="#e08070" font-size="9"><tspan x="52" y="71">Wahala</tspan></text>
-
-          <circle cx="164" cy="120" r="5.5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="154" y="113" fill="#e08070" font-size="9" text-anchor="end">Scrapyard</text>
-
-          <circle cx="139" cy="146" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="129" y="139" fill="#e08070" font-size="9" text-anchor="end">Dehiba</text>
-
-          <circle cx="240" cy="186" r="5" fill="#c0392b" stroke="#8b0000" stroke-width="1.5"/>
-          <text x="228" y="197" fill="#e08070" font-size="9" text-anchor="end">Mike's Place</text>
-
-          <!-- Contested (orange/yellow) -->
-          <circle id="circ_sharecroppers" cx="125" cy="27" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_sharecroppers" x="138" y="31" fill="#f0c060" font-size="9" style="transition:fill .8s">Share-Croppers</text>
-
-          <circle id="circ_zavlofiti" cx="294" cy="37" r="6" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text x="305" y="33" fill="#e8d870" font-size="9.5" font-weight="bold">Zavlofiti</text>
-
-          <circle id="circ_savala" cx="434" cy="90" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_savala" x="447" y="94" fill="#f0c060" font-size="9" style="transition:fill .8s">Savala</text>
-
-          <circle id="circ_swop" cx="466" cy="143" r="5.5" fill="#e8c84a" stroke="#8b6900" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text x="478" y="147" fill="#f0c060" font-size="9">Swayly Town</text>
-
-          <circle id="circ_kahaki" cx="349" cy="195" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_kahaki" x="337" y="191" fill="#f0c060" font-size="9" text-anchor="end" style="transition:fill .8s">Kahaki</text>
-
-          <circle id="circ_freshfish" cx="266" cy="220" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_freshfish" x="256" y="213" fill="#f0c060" font-size="9" text-anchor="end" style="transition:fill .8s">Fresh-Fish</text>
-
-          <circle id="circ_pala" cx="183" cy="235" r="5.5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_pala" x="171" y="245" fill="#f0c060" font-size="9" text-anchor="end" style="transition:fill .8s">Pala</text>
-
-          <!-- Govt/Secure (green) -->
-          <circle id="circ_cattleranch" cx="651" cy="144" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_cattleranch" x="638" y="140" fill="#70c870" font-size="9" text-anchor="end" style="transition:fill .8s">Cattle Ranch</text>
-
-          <circle id="circ_duey" cx="683" cy="160" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_duey" x="671" y="155" fill="#70c870" font-size="9" text-anchor="end" style="transition:fill .8s">Duey</text>
-
-          <circle id="circ_fantasi" cx="353" cy="239" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_fantasi" x="365" y="243" fill="#f0c060" font-size="9" style="transition:fill .8s">Fantasi</text>
-
-          <circle id="circ_chihiti" cx="428" cy="255" r="5" fill="#e8a030" stroke="#a06010" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_chihiti" x="440" y="259" fill="#f0c060" font-size="9" style="transition:fill .8s">Chihiti</text>
-
-          <circle id="circ_binbi" cx="432" cy="292" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_binbi" x="444" y="296" fill="#70c870" font-size="9" style="transition:fill .8s">Binbi</text>
-
-          <circle id="circ_saheli" cx="126" cy="368" r="5.5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_saheli" x="138" y="372" fill="#70c870" font-size="9" style="transition:fill .8s">Saheli</text>
-
-          <circle id="circ_cockfights" cx="176" cy="383" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5" style="transition:fill .8s,stroke .8s"/>
-          <text id="text_cockfights" x="188" y="387" fill="#70c870" font-size="9" style="transition:fill .8s">Cock-Fights</text>
-
-          <circle cx="469" cy="395" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="481" y="399" fill="#70c870" font-size="9">Eladio</text>
-
-          <circle cx="478" cy="409" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="466" y="422" fill="#70c870" font-size="9" text-anchor="end">Tonny</text>
-
-          <circle cx="426" cy="415" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="414" y="425" fill="#70c870" font-size="9" text-anchor="end">Farmer-Market</text>
-
-          <circle cx="27" cy="478" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="39" y="482" fill="#70c870" font-size="9">Cordon</text>
-
-          <circle cx="375" cy="472" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="363" y="465" fill="#70c870" font-size="9" text-anchor="end">Shake-Shake</text>
-
-          <circle cx="195" cy="494" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="207" y="498" fill="#70c870" font-size="9">Noroti</text>
-
-          <circle cx="557" cy="489" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="545" y="482" fill="#70c870" font-size="9" text-anchor="end">Slaughter-House</text>
-
-          <circle cx="500" cy="511" r="5" fill="#3a8c3a" stroke="#1a5c1a" stroke-width="1.5"/>
-          <text x="512" y="515" fill="#70c870" font-size="9">Tiki</text>
-
-          <!-- FOB KAROONDA (diamond) -->
-          <rect x="489" y="447" width="16" height="16" rx="1" transform="rotate(45 497 455)"
-            fill="#3a6abf" stroke="#1a3a9f" stroke-width="2"/>
-          <text x="515" y="459" fill="#80a8ff" font-size="10" font-weight="bold">FOB Karoonda</text>
-
-          <!-- North arrow -->
-          <g transform="translate(670,490)">
-            <text x="0" y="-6" fill="rgba(200,220,240,.5)" font-size="10" text-anchor="middle">N</text>
-            <text x="0" y="4" fill="rgba(200,220,240,.4)" font-size="7" text-anchor="middle">↑</text>
-          </g>
-
-          <!-- Scale -->
-          <g transform="translate(30,505)">
-            <line x1="0" y1="0" x2="60" y2="0" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
-            <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
-            <line x1="60" y1="-4" x2="60" y2="4" stroke="rgba(200,220,240,.35)" stroke-width="1.5"/>
-            <text x="30" y="-8" fill="rgba(200,220,240,.45)" font-size="8" text-anchor="middle">~5 km</text>
-          </g>
-        </svg>
-
-      </div><!-- end map container -->
+    <div class="card">
+      <span class="card-icon">🤝</span>
+      <h3>Community Focus</h3>
+      <p>Everyone has a voice. Feedback drives how we shape operations, SOPs, and the unit's direction. New ideas are always welcome.</p>
     </div>
   </div>
 </div>
 
-<!-- Operators overlay (renamed from Roster) -->
-<div class="roster-overlay" id="rosterOverlay">
-  <div class="ro-panel">
-    <div class="ro-head">
-      <div>
-        <div class="ro-h-title">Operators</div>
-        <div class="ro-h-sub">All active operators · sorted by rank</div>
+<!-- Platoons -->
+<div class="section">
+  <div class="section-sub">Task Organisation</div>
+  <h2 class="section-title">Our Platoons</h2>
+  <p class="section-desc">AZO operates with three infantry platoons and dedicated support attachments, each with specialised roles and leadership structures.</p>
+  <div class="platoon-grid">
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Infantry</div>
+        <h3>Alpha</h3>
+        <p class="desc">Primary manoeuvre element. 10-man section with Section Leader, Grenadiers, LSW gunners, and Riflemen. The tip of the spear.</p>
       </div>
-      <button class="x" id="rosterClose" aria-label="Close" style="position:static;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div class="ro-body" id="rosterBody"></div>
-  </div>
-</div>
-
-<!-- Profile modal -->
-<div class="modal-back" id="modalBack">
-  <div class="modal bracketed" role="dialog" aria-modal="true">
-    <button class="x" id="modalClose" aria-label="Close">✕</button>
-    <div class="modal-banner"></div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
-</div>
-
-<!-- Coming-soon operation takeover -->
-<div id="comingSoon">
-  <span class="logo" style="--ls:100px">
-    <svg class="logo-svg" viewBox="0 0 100 100" aria-hidden="true"><use href="#azoEmblem"/></svg>
-    <img class="logo-img" src="assets/logo.png" alt="AZO" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">
-  </span>
-  <h1 id="csTitle">Stand By</h1>
-  <p id="csText"></p>
-  <div class="next-meta" id="csMeta"></div>
-  <a class="peek" id="csFeedback" href="" target="_blank" rel="noopener" style="display:none;text-decoration:none;margin-bottom:10px;">Give Feedback ↗</a>
-  <button class="peek" id="csPeek" type="button">View last role list ↓</button>
-</div>
-
-<!-- Claim modal -->
-<div id="claimBack">
-  <div id="claimModal" role="dialog" aria-modal="true">
-    <div id="claimStep1">
-      <div class="cm-step-tag">Sign Up · Step 1 of 2</div>
-      <div class="cm-role-title" id="claimRoleLabel"></div>
-      <div class="warn-box">
-        <div class="warn-head"><span>⚠</span> Read before signing up</div>
-        <ul>
-          <li>After signing up, the page takes <strong>1-2 minutes</strong> to update - this is normal.</li>
-          <li>Only one person can hold each slot. First in wins.</li>
-        </ul>
-      </div>
-      <div class="endorse-block" id="endorseBlock" style="display:none"></div>
-      <div class="discord-soon">
-        <span class="ds-icon">🔗</span>
-        <span><strong>Sign in with Discord</strong> in the top banner to automatically claim roles with your roster name.</span>
-      </div>
-      <div class="cm-step1-actions">
-        <button class="cm-btn cancel" id="claimCancelStep1" type="button">Cancel</button>
-        <button class="cm-btn confirm" id="claimProceed" type="button">I understand - proceed</button>
+      <div class="bottom">
+        <span>10 slots per op</span>
+        <a href="/roster/">View Roster</a>
       </div>
     </div>
-    <div id="claimStep2">
-      <button class="cm-back" id="claimBackStep" type="button">← Back</button>
-      <div class="cm-step-tag">Sign Up · Step 2 of 2</div>
-      <div class="cm-role-title" id="claimRoleLabel2"></div>
-      
-      <!-- Auto name display for logged-in users -->
-      <div id="autoNameSection" style="display:none;">
-        <label>Signing up as:</label>
-        <div style="background:rgba(54,208,122,.1);border:1px solid rgba(54,208,122,.3);border-radius:8px;padding:12px 16px;margin:12px 0;display:flex;align-items:center;gap:10px;">
-          <img id="autoUserAvatar" style="width:28px;height:28px;border-radius:50%;border:1px solid rgba(88,101,242,.6);flex-shrink:0;" alt="">
-          <strong id="autoUserName" style="color:#36d07a;font-size:15px;"></strong>
-        </div>
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Infantry</div>
+        <h3>Bravo</h3>
+        <p class="desc">Mirrors Alpha's structure. Section Leader, Anti-tank team, LSW gunners, and Riflemen providing flexible combat power.</p>
       </div>
-      
-      <!-- Manual name input for non-logged-in users -->
-      <div id="nameInputSection">
-        <label for="claimInput">Your name (exactly as on the roster)</label>
-        <div class="dropdown-container">
-          <input id="claimInput" type="text" placeholder="Enter your name" autocomplete="off" maxlength="48"/>
-          <div id="operatorDropdown" class="op-dropdown-list"></div>
-        </div>
+      <div class="bottom">
+        <span>10 slots per op</span>
+        <a href="/roster/">View Roster</a>
       </div>
-      
-      <div class="cm-hint" id="claimHint">Your name must match the roster exactly. Case-sensitive.</div>
-      <div class="cm-actions">
-        <button class="cm-btn cancel" id="claimCancel" type="button">Cancel</button>
-        <button class="cm-btn confirm" id="claimConfirm" type="button">Claim Role</button>
+    </div>
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Infantry</div>
+        <h3>Charlie</h3>
+        <p class="desc">Third infantry section with a unique callsign structure. Adaptable to any mission requirement or attachment role.</p>
       </div>
-      <div id="claimStatus"></div>
+      <div class="bottom">
+        <span>8 slots per op</span>
+        <a href="/roster/">View Roster</a>
+      </div>
+    </div>
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Support</div>
+        <h3>Medical Team</h3>
+        <p class="desc">Platoon Medic and medics providing battlefield trauma care. Medical endorsement required for all billets.</p>
+      </div>
+      <div class="bottom">
+        <span>4 slots</span>
+        <a href="/roster/">View Roster</a>
+      </div>
+    </div>
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Aviation</div>
+        <h3>Blackjack</h3>
+        <p class="desc">Rotary-wing air detachment providing CASEVAC, troop transport, and aerial fire support during operations.</p>
+      </div>
+      <div class="bottom">
+        <span>4 slots</span>
+        <a href="/roster/">View Roster</a>
+      </div>
+    </div>
+    <div class="platoon-card">
+      <div class="top">
+        <div class="badge">Command</div>
+        <h3>Platoon HQ</h3>
+        <p class="desc">Overall command element including the Platoon Commander and JTAC. Responsible for mission planning and execution.</p>
+      </div>
+      <div class="bottom">
+        <span>2 slots</span>
+        <a href="/roster/">View Roster</a>
+      </div>
     </div>
   </div>
 </div>
 
-
-
-<!-- AZO emblem -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="azoEmblem" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="47" fill="#0c2747" stroke="#e8b53a" stroke-width="2.5"/>
-    <circle cx="50" cy="50" r="38" fill="#1f4f8f"/>
-    <g fill="#ffffff"><circle cx="27" cy="35" r="1.7"/><circle cx="71" cy="30" r="2"/><circle cx="75" cy="57" r="1.5"/><circle cx="31" cy="63" r="1.7"/><circle cx="50" cy="23" r="1.4"/></g>
-    <path d="M61 26 L39 54 L51 54 L42 77 L67 46 L55 46 Z" fill="#f2c230" stroke="#b8860b" stroke-width="1" stroke-linejoin="round"/>
-    <text x="50" y="90" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="12" fill="#e8b53a" letter-spacing="1.5">AZO</text>
-  </symbol>
-</svg>
-
-<script>
-/* ============================================================
-   AZO Dynamic Role List
-   ============================================================ */
-
-const RANK_LADDER    = ['Recruit','Junior Operator','Operator','Senior Operator'];
-const RANK_THRESHOLD = {'Junior Operator':1,'Operator':6,'Senior Operator':14};
-const RANK_SORT      = {'SOCOMD':0,'Senior Operator':1,'Operator':2,'Junior Operator':3,'Recruit':4};
-
-const ATT_MONTHS = [
-  {m:'Apr',done:1,up:0},{m:'May',done:1,up:0},{m:'Jun',done:2,up:0},
-  {m:'Jul',done:1,up:0},{m:'Aug',done:0,up:0},{m:'Sep',done:0,up:0},
-  {m:'Oct',done:0,up:0},{m:'Nov',done:0,up:0},{m:'Dec',done:0,up:0}
-];
-const OPS_SO_FAR = ATT_MONTHS.reduce((n,mo)=>n+mo.done,0);
-const OP_NAME_BY_INDEX = {0:'Emerald Veil pt 1',3:'Karoonda I',4:'Karoonda I (2nd)',5:'Karoonda II'};
-
-
-let MEMBERS = {};
-let countdownTimer = null;
-const $ = (s,el=document)=>el.querySelector(s);
-
-/* Helper function for checking endorsements - used by admin panel */
-function memberHasEndorsement(memberName,endorsementType){
-  const m=MEMBERS[memberName];
-  if(!m)return false;
-  const arr=Array.isArray(m.endorsements)?m.endorsements:[];
-  const needle=endorsementType.toLowerCase();
-  return arr.some(e=>e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
-}
-
-/* ============================================================
-   DISCORD AUTHENTICATION
-   ============================================================ */
-const API_BASE = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
-let currentUser = null;
-
-async function initAuth() {
-  // Check for token in URL or localStorage
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token') || localStorage.getItem('azo_token');
-  
-  if (token) {
-    localStorage.setItem('azo_token', token);
-    // Remove token from URL
-    if (urlParams.has('token')) {
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-    
-    // Fetch user data
-    try {
-      const response = await fetch(`${API_BASE}/api/user`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        currentUser = data.user;
-        renderAuthUI();
-        return true;
-      } else {
-        localStorage.removeItem('azo_token');
-      }
-    } catch (error) {
-      console.error('Auth error:', error);
-      localStorage.removeItem('azo_token');
-    }
-  }
-  
-  renderAuthUI();
-  return false;
-}
-
-function renderAuthUI() {
-  const notLoggedIn = $('#authNotLoggedIn');
-  const loggedIn = $('#authLoggedIn');
-  const adminBtn = $('#adminPanelBtn');
-  
-  if (currentUser) {
-    notLoggedIn.style.display = 'none';
-    loggedIn.style.display = 'flex';
-    
-    const avatarUrl = currentUser.avatar 
-      ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
-      : 'https://cdn.discordapp.com/embed/avatars/0.png';
-    
-    $('#userAvatar').src = avatarUrl;
-    $('#userName').textContent = currentUser.displayName;
-    
-    // Get rank from members.json via roster name, fall back to Discord API roles
-    const memberRank = currentUser.rosterName && MEMBERS[currentUser.rosterName]
-      ? MEMBERS[currentUser.rosterName].discordRank || ''
-      : '';
-    const discordRoles = currentUser.roles && currentUser.roles.length > 0
-      ? currentUser.roles.join(', ')
-      : '';
-    const rankText = memberRank || discordRoles || 'Member';
-    
-    let roleText = rankText;
-    if (currentUser.isAdmin) roleText = 'Admin' + (rankText !== 'Member' ? ' | ' + rankText : '');
-    
-    $('#userRole').textContent = roleText;
-    
-    // Show admin button if user is admin
-    if (adminBtn) {
-      adminBtn.style.display = currentUser.isAdmin ? 'block' : 'none';
-    }
-  } else {
-    notLoggedIn.style.display = 'flex';
-    loggedIn.style.display = 'none';
-    if (adminBtn) adminBtn.style.display = 'none';
-  }
-}
-
-$('#loginBtn').addEventListener('click', () => {
-  window.location.href = `${API_BASE}/auth/login`;
-});
-
-$('#logoutBtn').addEventListener('click', async () => {
-  const token = localStorage.getItem('azo_token');
-  if (token) {
-    await fetch(`${API_BASE}/api/logout`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    localStorage.removeItem('azo_token');
-  }
-  currentUser = null;
-  renderAuthUI();
-  window.location.reload();
-});
-
-/* ============================================================
-   ADMIN PANEL
-   ============================================================ */
-let currentRoster = null;
-
-function openAdminPanel() {
-  if (!currentUser || !currentUser.isAdmin) {
-    alert('Access denied: Admin privileges required');
-    return;
-  }
-  loadAdminData();
-  $('#adminPanel').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeAdminPanel() {
-  $('#adminPanel').classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-function loadAdminData() {
-  if (!currentRoster) return;
-  
-  const op = currentRoster.operation || {};
-  $('#adminOpName').value = op.name || '';
-  $('#adminZeus').value = op.zeus || '';
-  $('#adminDate').value = op.date || '';
-  
-  // Convert ISO to datetime-local format
-  if (op.countdownTo) {
-    const dt = new Date(op.countdownTo);
-    const local = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000);
-    $('#adminCountdown').value = local.toISOString().slice(0, 16);
-  }
-  
-  $('#adminStatus').value = op.status || 'upcoming';
-  $('#adminTheme').value = op.theme || 'tactical-blue';
-  
-  renderAdminSections();
-}
-
-function renderAdminSections() {
-  const container = $('#adminSectionsList');
-  if (!container || !currentRoster) return;
-  
-  const sections = currentRoster.sections || [];
-  const command = currentRoster.command || [];
-  
-  let html = '';
-  
-  // Command section
-  if (command.length > 0) {
-    html += `<div class="admin-section-item">
-      <div class="admin-section-header">
-        <span class="admin-section-name">🎖️ Platoon HQ (Command)</span>
-      </div>
-      <div class="admin-slots-list">
-        ${command.map((slot, idx) => renderAdminSlot(slot, '__command', idx)).join('')}
-      </div>
-      <div class="admin-btn-group">
-        <button class="admin-mini-btn" onclick="addSlotToSection('__command')">+ Add Slot</button>
-      </div>
-    </div>`;
-  }
-  
-  // Regular sections
-  sections.forEach((section, secIdx) => {
-    html += `<div class="admin-section-item">
-      <div class="admin-section-header">
-        <span class="admin-section-name">${esc(section.name)}</span>
-        <div style="display:flex;gap:8px;">
-          <button class="admin-mini-btn" onclick="editSectionName('${secIdx}')">Edit Name</button>
-          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSection('${secIdx}')">Delete</button>
-        </div>
-      </div>
-      <div class="admin-slots-list">
-        ${(section.roles || []).map((slot, idx) => renderAdminSlot(slot, secIdx, idx)).join('')}
-      </div>
-      <div class="admin-btn-group">
-        <button class="admin-mini-btn" onclick="addSlotToSection('${secIdx}')">+ Add Slot</button>
-      </div>
-    </div>`;
-  });
-  
-  container.innerHTML = html;
-}
-
-function renderAdminSlot(slot, sectionKey, slotIdx) {
-  const role = typeof slot === 'string' ? slot : slot.role || 'Role';
-  const member = slot.member || null;
-  const endorsement = slot.endorsementRequired ? (slot.endorsementType || 'Endorsement Required') : null;
-  
-  return `<div class="admin-slot-item">
-    <div class="admin-slot-info">
-      <div class="admin-slot-role">${esc(role)}</div>
-      ${member ? `<div class="admin-slot-member">👤 ${esc(member)}</div>` : '<div class="admin-slot-member" style="color:var(--muted-2);">Available</div>'}
-      ${endorsement ? `<span class="admin-slot-endorsement">🔒 ${esc(endorsement)}</span>` : ''}
-    </div>
-    <div class="admin-slot-actions">
-      <button class="admin-mini-btn" onclick="editSlotRole('${sectionKey}', ${slotIdx})" title="Change role name">Role</button>
-      <button class="admin-mini-btn" onclick="editSlotAssign('${sectionKey}', ${slotIdx})" title="Assign a member">Assign</button>
-      ${member ? `<button class="admin-mini-btn" onclick="editSlotUnassign('${sectionKey}', ${slotIdx})" title="Remove member">Unassign</button>` : ''}
-      <button class="admin-mini-btn" onclick="editSlotEndorsement('${sectionKey}', ${slotIdx})" title="${slot.endorsementRequired ? 'Remove endorsement lock' : 'Add endorsement lock'}">${slot.endorsementRequired ? '🔓' : '🔒'}</button>
-      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSlot('${sectionKey}', ${slotIdx})">Delete</button>
-    </div>
-  </div>`;
-}
-
-// Admin panel initialization (wrapped to ensure DOM is ready)
-function initAdminPanel() {
-  // Save operation settings
-  $('#saveOpSettings').addEventListener('click', async () => {
-  if (!currentRoster) return;
-  
-  const countdownValue = $('#adminCountdown').value;
-  let countdownISO = '';
-  if (countdownValue) {
-    const dt = new Date(countdownValue);
-    countdownISO = dt.toISOString();
-  }
-  
-  currentRoster.operation = {
-    ...currentRoster.operation,
-    name: $('#adminOpName').value,
-    zeus: $('#adminZeus').value,
-    date: $('#adminDate').value,
-    countdownTo: countdownISO,
-    status: $('#adminStatus').value,
-    theme: $('#adminTheme').value
-  };
-  
-  await saveRoster();
-  showStatus('opSettingsStatus', 'Operation settings saved!', 'success');
-});
-
-// Add new section
-$('#addSectionBtn').addEventListener('click', () => {
-  const name = prompt('Enter section name (e.g., "Alpha", "Bravo"):');
-  if (!name) return;
-  
-  if (!currentRoster.sections) currentRoster.sections = [];
-  currentRoster.sections.push({
-    name,
-    roles: []
-  });
-  
-  saveRoster();
-  renderAdminSections();
-});
-
-// Edit section name
-window.editSectionName = (secIdx) => {
-  const section = currentRoster.sections[secIdx];
-  const newName = prompt('Enter new section name:', section.name);
-  if (!newName) return;
-  
-  section.name = newName;
-  saveRoster();
-  renderAdminSections();
-};
-
-// Delete section
-window.deleteSection = (secIdx) => {
-  if (!confirm('Delete this entire section? This cannot be undone.')) return;
-  currentRoster.sections.splice(secIdx, 1);
-  saveRoster();
-  renderAdminSections();
-};
-
-// Add slot to section
-window.addSlotToSection = (sectionKey) => {
-  const roleName = prompt('Enter role name (e.g., "Team Leader", "Rifleman"):');
-  if (!roleName) return;
-  
-  let endorsementType = '';
-  const needsEndorsement = confirm('Does this role require an endorsement (Medical, JTAC, Leadership)?');
-  
-  if (needsEndorsement) {
-    const choice = prompt('Endorsement type:\n1. Medical\n2. JTAC\n3. Junior Leadership\n4. Senior Leadership\n5. Custom');
-    if (choice === '5') {
-      endorsementType = prompt('Custom endorsement name:') || 'Endorsement Required';
-    } else {
-      const map = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership'];
-      endorsementType = map[parseInt(choice) - 1] || 'Endorsement Required';
-    }
-  }
-  
-  const newSlot = {
-    role: roleName,
-    member: null,
-    endorsementRequired: needsEndorsement,
-    endorsementType: endorsementType || undefined
-  };
-  
-  if (sectionKey === '__command') {
-    if (!currentRoster.command) currentRoster.command = [];
-    currentRoster.command.push(newSlot);
-  } else {
-    const section = currentRoster.sections[sectionKey];
-    if (!section.roles) section.roles = [];
-    section.roles.push(newSlot);
-  }
-  
-  saveRoster();
-  renderAdminSections();
-};
-
-function getSlot(sectionKey, slotIdx) {
-  if (sectionKey === '__command') return currentRoster.command[slotIdx];
-  return currentRoster.sections[sectionKey].roles[slotIdx];
-}
-
-// Edit slot role name
-window.editSlotRole = (sectionKey, slotIdx) => {
-  const slot = getSlot(sectionKey, slotIdx);
-  const newRole = prompt('Enter new role name:', slot.role);
-  if (newRole) { slot.role = newRole; saveRoster(); renderAdminSections(); }
-};
-
-// Assign member to slot
-window.editSlotAssign = (sectionKey, slotIdx) => {
-  const slot = getSlot(sectionKey, slotIdx);
-  const memberList = Object.keys(MEMBERS).filter(k => !k.startsWith('_')).sort();
-  const memberName = prompt(`Assign member:\n\nAvailable:\n${memberList.join(', ')}`);
-  if (!memberName) return;
-  if (MEMBERS[memberName]) {
-    if (slot.endorsementRequired && slot.endorsementType && !memberHasEndorsement(memberName, slot.endorsementType)) {
-      if (!confirm(`${memberName} does not have ${slot.endorsementType}. Assign anyway?`)) return;
-    }
-    slot.member = memberName;
-    saveRoster(); renderAdminSections();
-  } else {
-    alert('Member not found in roster.');
-  }
-};
-
-// Unassign member from slot
-window.editSlotUnassign = (sectionKey, slotIdx) => {
-  const slot = getSlot(sectionKey, slotIdx);
-  slot.member = null;
-  saveRoster();
-  renderAdminSections();
-};
-
-// Toggle endorsement lock
-window.editSlotEndorsement = (sectionKey, slotIdx) => {
-  const slot = getSlot(sectionKey, slotIdx);
-  slot.endorsementRequired = !slot.endorsementRequired;
-  if (slot.endorsementRequired && !slot.endorsementType) {
-    const choice = prompt('Endorsement type:\n1. Medical\n2. JTAC\n3. Junior Leadership\n4. Senior Leadership\n5. Custom');
-    if (choice === '5') {
-      slot.endorsementType = prompt('Custom endorsement name:') || 'Endorsement Required';
-    } else {
-      const map = ['Medical Endorsement', 'JTAC Endorsement', 'Junior Leadership', 'Senior Leadership'];
-      slot.endorsementType = map[parseInt(choice) - 1] || 'Endorsement Required';
-    }
-  }
-  saveRoster();
-  renderAdminSections();
-};
-
-// Delete slot
-window.deleteSlot = (sectionKey, slotIdx) => {
-  if (!confirm('Delete this slot?')) return;
-  
-  if (sectionKey === '__command') {
-    currentRoster.command.splice(slotIdx, 1);
-  } else {
-    currentRoster.sections[sectionKey].roles.splice(slotIdx, 1);
-  }
-  
-  saveRoster();
-  renderAdminSections();
-};
-
-// Clear all assignments
-$('#clearAllAssignmentsBtn').addEventListener('click', () => {
-  if (!confirm('Clear ALL slot assignments? This will unassign everyone from their slots.')) return;
-  
-  // Clear command
-  if (currentRoster.command) {
-    currentRoster.command.forEach(slot => { slot.member = null; });
-  }
-  
-  // Clear sections
-  if (currentRoster.sections) {
-    currentRoster.sections.forEach(section => {
-      if (section.roles) {
-        section.roles.forEach(slot => { slot.member = null; });
-      }
-    });
-  }
-  
-  saveRoster();
-  renderAdminSections();
-  showStatus('quickActionsStatus', 'All assignments cleared!', 'success');
-});
-
-// Archive operation
-$('#archiveOperationBtn').addEventListener('click', () => {
-  alert('Archive feature coming soon! This will move the current operation to the "Previous Ops" tab.');
-});
-
-// Save roster to server
-async function saveRoster() {
-  try {
-    const token = localStorage.getItem('azo_token');
-    if (!token) throw new Error('Not authenticated');
-    
-    const response = await fetch(`${API_BASE}/api/admin/roster`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(currentRoster)
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to save: ${response.status}`);
-    }
-    
-    // Reload roster in background
-    const reloadResponse = await fetch('roster.json', { cache: 'no-store' });
-    if (reloadResponse.ok) {
-      currentRoster = await reloadResponse.json();
-      render(currentRoster);
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('Save error:', error);
-    alert('Failed to save roster: ' + error.message);
-    return false;
-  }
-}
-
-function showStatus(elementId, message, type) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-  el.textContent = message;
-  el.className = `admin-status-msg show ${type}`;
-  setTimeout(() => {
-    el.classList.remove('show');
-  }, 4000);
-}
-
-// Admin panel events
-const adminPanelBtn = $('#adminPanelBtn');
-if (adminPanelBtn) adminPanelBtn.addEventListener('click', openAdminPanel);
-
-const adminCloseBtn = $('#adminCloseBtn');
-if (adminCloseBtn) adminCloseBtn.addEventListener('click', closeAdminPanel);
-} // End initAdminPanel function
-
-
-/* ---------- helpers ---------- */
-function hashHue(str){let h=0;for(let i=0;i<str.length;i++)h=(h*31+str.charCodeAt(i))>>>0;return h%360;}
-function initials(name){
-  const parts=name.replace(/[^A-Za-z0-9 _]/g,' ').split(/[\s_]+/).filter(Boolean);
-  if(!parts.length)return '?';
-  if(parts.length===1)return parts[0].slice(0,2).toUpperCase();
-  return(parts[0][0]+parts[1][0]).toUpperCase();
-}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-const rankClass=r=>'rank-'+r.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-
-/* ---------- member ---------- */
-function member(name){
-  const m=MEMBERS[name]||{};
-  const attendance=m.attendance||{};
-  let opsAttended=0;
-  ATT_MONTHS.forEach(mo=>{
-    const raw=attendance[mo.m];
-    const arr=Array.isArray(raw)?raw:(raw?[true]:[]);
-    for(let i=0;i<mo.done;i++){if(arr[i])opsAttended++;}
-  });
-  // fallback to stored value if attendance arrays not set
-  if(opsAttended===0 && m.opsAttended) opsAttended=Number(m.opsAttended)||0;
-  return{
-    name,avatar:m.avatar||'',opsAttended,
-    discordRank:m.discordRank||'Recruit',
-    attendance,
-    endorsements:Array.isArray(m.endorsements)?m.endorsements:[],
-    leadership:m.leadership||null
-  };
-}
-
-function promotion(rank,ops){
-  if(rank==='SOCOMD')return{kind:'command'};
-  const idx=RANK_LADDER.indexOf(rank);
-  if(idx===RANK_LADDER.length-1)return{kind:'max'};
-  const base=idx<0?0:idx;
-  const nextName=RANK_LADDER[base+1];
-  const T=RANK_THRESHOLD[nextName];
-  const progress=Math.max(0,Math.min(100,Math.round(ops/T*100)));
-  return{kind:'progress',nextName,T,progress,remaining:Math.max(0,T-ops)};
-}
-
-function avatarHTML(m,size,extra=''){
-  const hue=hashHue(m.name);
-  const img=m.avatar?`<img src="${esc(m.avatar)}" alt="" onerror="this.remove()">`:'';
-  return `<span class="avatar ${extra}" style="--s:${size}px;--h:${hue}">${esc(initials(m.name))}${img}</span>`;
-}
-
-function leaderLevel(role){
-  if(/asst|assistant/i.test(role))return '';
-  if(/platoon commander|^commander/i.test(role))return 'lvl-command';
-  if(/section leader/i.test(role))return 'lvl-section';
-  return '';
-}
-
-/* ---------- attendance strip ---------- */
-function attendanceStrip(m){
-  let attended=0;
-  let doneIdx=0;
-  const cols=ATT_MONTHS.map(mo=>{
-    const raw=m.attendance[mo.m];
-    const arr=Array.isArray(raw)?raw:(raw?[true]:[]);
-    let dots='';
-    for(let i=0;i<mo.done;i++){
-      const went=!!arr[i];
-      if(went)attended++;
-      const opName=OP_NAME_BY_INDEX[doneIdx];
-      const title=opName?` title="${esc(opName)}"` :'';
-      dots+=`<span class="opdot ${went?'yes':'no'}"${title}></span>`;
-      doneIdx++;
-    }
-    for(let i=0;i<mo.up;i++){dots+=`<span class="opdot up"></span>`;}
-    const empty=(mo.done+mo.up)===0;
-    return `<div class="att-col${empty?' att-empty':''}"><div class="att-dots">${dots}</div><div class="att-m">${mo.m}</div></div>`;
-  }).join('');
-  return{cols,attended};
-}
-
-/* ---------- slot HTML ---------- */
-function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx,currentUserName){
-  const role=typeof roleObj==='string'?roleObj:roleObj.role;
-  const endorseRequired=!locked&&roleObj.endorsementRequired;
-  const endorseType=endorseRequired?(roleObj.endorsementType||'Endorsement Req.'):'';
-  const endorsePill=endorseRequired?(()=>{
-  const sym = endorseType.toLowerCase().includes('jtac')?'✦':endorseType.toLowerCase().includes('medical')?'✚':'★';
-  return `<span class="endorse-pill" title="${esc(endorseType)}">${sym}</span>`;
-})():'';
-
-  if(locked){
-    const label=lockedLabel||'Reserved';
-    return `<div class="slot is-locked">
-      <span class="avatar locked" style="--s:42px">🔒</span>
-      <div class="meta"><div class="nm">${esc(label)}</div><div class="rl">${esc(role)}</div></div></div>`;
-  }
-  if(!name){
-    const ctxJson=claimCtx?esc(JSON.stringify(claimCtx)):'';
-    const endorseAttr=endorseRequired?`data-endorse-type="${esc(endorseType)}"`:'';
-    return `<button class="slot is-open${endorseRequired?' needs-endorse':''}" type="button"
-        data-claim="${ctxJson}" data-role-label="${esc(role)}" ${endorseAttr}>
-      <span class="avatar empty" style="--s:42px"></span>
-      <div class="meta"><div class="nm">Available</div><div class="rl">${esc(role)}${endorsePill}</div></div>
-    </button>`;
-  }
-  const m=member(name);
-  const isExternal=!MEMBERS[name];
-  const lvl=leaderLevel(role);
-  const av=lvl==='lvl-command'?54:lvl==='lvl-section'?48:42;
-  // Only show attendance badge for AZO members in members.json - externals get nothing
-  const badge=showAtt && !isExternal
-    ?(attendedSet&&attendedSet.has(name)
-      ?`<span class="att-badge att-yes" title="Attended">✓</span>`
-      :`<span class="att-badge att-no" title="Did not attend">✗</span>`)
-    :'';
-  // Self-unassign button
-  const isSelf = currentUserName && name.toLowerCase() === currentUserName.toLowerCase();
-  const unassignHtml = isSelf ? `<span class="slot-unassign" data-unassign="${esc(JSON.stringify(claimCtx||{}))}" title="Unassign yourself">✕</span>` : '';
-  if(isExternal){
-    return `<div class="slot ${lvl}" style="cursor:default;">
-      ${avatarHTML(m,av)}
-      <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
-      ${badge}${unassignHtml}</div>`;
-  }
-  return `<button class="slot ${lvl}" type="button" data-name="${esc(name)}">
-    ${avatarHTML(m,av)}
-    <div class="meta"><div class="nm">${esc(name)}</div><div class="rl">${esc(role)}${endorsePill}</div></div>
-    ${badge}${unassignHtml}</button>`;
-}
-
-/* ---------- render ---------- */
-function render(roster){
-  currentRoster = roster; // Store for admin panel
-  const op=roster.operation||{};
-  document.documentElement.setAttribute('data-theme',op.theme||'tactical-blue');
-  document.title=`AZO - ${op.name||'Role List'}`;
-
-  if(op.background){
-    const tryLoad=(src,fb)=>{const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("${src}")`;};img.onerror=()=>{if(fb)tryLoad(fb,null);};img.src=src;};
-    tryLoad(op.background,'assets/operation-bg.png');
-  } else {
-    const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("assets/operation-bg.png")`;};img.src='assets/operation-bg.png';
-  }
-
-  const statusMap={live:{cls:'status-live pill-live',txt:'Live'},upcoming:{cls:'',txt:'Upcoming'},complete:{cls:'',txt:'Complete'}};
-  const st=statusMap[op.status]||statusMap.upcoming;
-  const showAtt=op.status==='complete';
-  const attendedSet=new Set(roster.attended||[]);
-
-  const uname = currentUser ? (currentUser.rosterName || currentUser.displayName) : null;
-  const cmd=(roster.command||[]).map((r,i)=>slotHTML(r,r.member,false,attendedSet,showAtt,null,{sectionKey:'__command',roleIndex:i},uname)).join('');
-
-  const sections=(roster.sections||[]).map(sec=>{
-    const roles=sec.roles||[];
-    const filled=roles.filter(r=>r.member).length;
-    const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
-    const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
-    const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
-    return `<div class="sec ${sec.locked?'locked':''} bracketed">
-      <div class="sec-head">${esc(sec.name)} ${headRight}</div>
-      <div class="sec-body">${rows}</div>${note}</div>`;
-  }).join('');
-
-  const attachments=(roster.attachments||[]).map((att,attIdx)=>{
-    const roles=att.roles||[];
-    const filled=roles.filter(r=>r.member).length;
-    const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}},uname)).join('');
-    const headRight=att.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
-    const note=att.locked&&att.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>`:'';
-    return `<div class="sec ${att.locked?'locked':''} bracketed">
-      <div class="sec-head">${esc(att.name)} ${headRight}</div>
-      <div class="sec-body">${rows}</div>${note}</div>`;
-  }).join('');
-
-  const activeCount=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).length;
-
-  // Update side panel operator count
-  const countEl=$('#spOperatorCount');
-  if(countEl) countEl.textContent=activeCount;
-
-  $('#app').innerHTML=`
-    <header class="hero">
-      <div class="brand">
-        <span class="logo" style="--ls:60px">
-          <svg class="logo-svg" viewBox="0 0 100 100" aria-hidden="true"><use href="#azoEmblem"/></svg>
-          <img class="logo-img" src="assets/logo.png" alt="AZO" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">
-        </span>
-        <div class="wordmark">Australian <b>Zeus</b> Operations</div>
-      </div>
-      <div class="op-title">${esc(op.name||'Operation')}</div>
-      <div class="op-meta">
-        <span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>
-        ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
-        ${op.tier?`<span class="pill"><span class="k">Tier</span><span class="v">${esc(op.tier)}</span></span>`:''}
-      </div>
-      <div class="countdown" id="countdown">
-        <div class="cd-label">Operation begins in</div>
-        <div class="cd-units">
-          <div class="cd-unit"><span class="cd-num" data-cd="d">--</span><span class="cd-u">Days</span></div>
-          <div class="cd-unit"><span class="cd-num" data-cd="h">--</span><span class="cd-u">Hours</span></div>
-          <div class="cd-unit"><span class="cd-num" data-cd="m">--</span><span class="cd-u">Mins</span></div>
-          <div class="cd-unit"><span class="cd-num" data-cd="s">--</span><span class="cd-u">Secs</span></div>
-        </div>
-        ${op.date?`<div class="cd-target">${esc(op.date)}</div>`:''}
-      </div>
-      <div class="divider"></div>
-    </header>
-
-    <section class="command bracketed">
-      <span class="section-tag">Platoon HQ</span>
-      <div class="hq-grid">${cmd}</div>
-    </section>
-
-    <section class="sections">${sections}</section>
-    ${attachments?`<section class="sections">${attachments}</section>`:''}
-
-    <footer>
-      <b>Australian Zeus Operations</b> · Sorry Bad Nade<br>
-      Role list updates automatically from <code style="color:var(--muted)">roster.json</code>
-    </footer>`;
-
-  setupCountdown(op);
-
-  setupComingSoon(op);
-  buildOperatorDropdown();
-}
-
-/* ---------- countdown ---------- */
-const HARDCODED_COUNTDOWN='2026-07-04T09:00:00Z';
-function setupCountdown(op){
-  if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
-  const el=$('#countdown');
-  if(!el)return;
-  // Hide countdown entirely for completed operations
-  if(op.status==='complete'){el.style.display='none';return;}
-  const target=new Date(op.countdownTo||HARDCODED_COUNTDOWN).getTime();
-  if(isNaN(target)){el.style.display='none';return;}
-  const pad=n=>String(n).padStart(2,'0');
-  const tick=()=>{
-    const diff=target-Date.now();
-    if(diff<=0){
-      el.innerHTML=`<div class="cd-live">⚡ Operation underway</div>${op.date?`<div class="cd-target">${esc(op.date)}</div>`:''}`;
-      clearInterval(countdownTimer);countdownTimer=null;return;
-    }
-    const d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;
-    const set=(k,v)=>{const n=el.querySelector(`[data-cd="${k}"]`);if(n)n.textContent=v;};
-    set('d',d);set('h',pad(h));set('m',pad(m));set('s',pad(s));
-  };
-  tick();countdownTimer=setInterval(tick,1000);
-}
-
-/* ---------- profile modal ---------- */
-function openProfile(name){
-  const m=member(name);
-  const p=promotion(m.discordRank,m.opsAttended);
-  const leadBadge=m.leadership==='senior'
-    ?`<span class="badge lead-senior">★ Senior Leadership</span>`
-    :m.leadership==='junior'
-    ?`<span class="badge lead-junior">★ Junior Leadership</span>`:'';
-  const endorse=m.endorsements.length
-    ?m.endorsements.map(e=>`<span class="badge">${esc(e)}</span>`).join('')
-    :`<span class="badge" style="opacity:.55">No endorsements yet</span>`;
-  let promoBlock;
-  if(p.kind==='command'){
-    promoBlock=`<div class="promo-label"><span class="nxt">Command staff</span><span class="pct">SOCOMD</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Above the operator ladder.</div>`;
-  } else if(p.kind==='max'){
-    promoBlock=`<div class="promo-label"><span class="nxt">Top of the ladder</span><span class="pct">MAX</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Senior Operator - fully promoted.</div>`;
-  } else {
-    promoBlock=`<div class="promo-label"><span class="nxt">Next: <b style="color:var(--text)">${esc(p.nextName)}</b></span><span class="pct">${p.progress}%</span></div><div class="promo-track"><div class="promo-fill" data-w="${p.progress}" style="width:0"></div></div><div class="promo-note">${p.remaining} more op${p.remaining===1?'':'s'} to reach ${esc(p.nextName)} (needs ${p.T} total).</div>`;
-  }
-  const attData=attendanceStrip(m);
-  $('#modalBody').innerHTML=`
-    ${avatarHTML(m,84)}
-    <h2>${esc(m.name)}</h2>
-    <div><span class="rank-badge ${rankClass(m.discordRank)}">${esc(m.discordRank)}</span></div>
-    <div class="badges">${leadBadge}${endorse}</div>
-    <div class="stat-row">
-      <div class="stat"><div class="big">${m.opsAttended}</div><div class="lbl">Ops 2026</div></div>
-      <div class="stat"><div class="big">${m.endorsements.length}</div><div class="lbl">Endorsements</div></div>
-    </div>
-    ${promoBlock}`;
-  $('#modalBack').classList.add('show');
-  requestAnimationFrame(()=>{const f=$('.promo-fill[data-w]');if(f)f.style.width=f.dataset.w+'%';});
-}
-function closeModal(){$('#modalBack').classList.remove('show');}
-
-/* ---------- operators overlay ---------- */
-function openRoster(){
-  const members=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).map(member);
-  const groups={};
-  members.forEach(m=>{(groups[m.discordRank]=groups[m.discordRank]||[]).push(m);});
-  const order=Object.keys(groups).sort((a,b)=>(RANK_SORT[a]??9)-(RANK_SORT[b]??9)||a.localeCompare(b));
-  const html=order.map(rank=>{
-    const list=groups[rank].sort((a,b)=>b.opsAttended-a.opsAttended||a.name.localeCompare(b.name));
-    const cards=list.map(m=>`<button class="ro-card" type="button" data-name="${esc(m.name)}">
-      ${avatarHTML(m,40)}
-      <div style="min-width:0"><div class="nm">${esc(m.name)}</div><div class="rl2">${esc(m.discordRank)}</div></div>
-      <div class="ops"><b>${m.opsAttended}</b><i>ops</i></div>
-    </button>`).join('');
-    return `<div class="ro-group"><div class="ro-group-h">${esc(rank)} <b>${list.length}</b></div><div class="ro-grid">${cards}</div></div>`;
-  }).join('');
-  $('#rosterBody').innerHTML=html;
-  $('#rosterOverlay').classList.add('show');
-}
-function closeRoster(){$('#rosterOverlay').classList.remove('show');}
-
-/* ---------- coming soon takeover ---------- */
-function setupComingSoon(op){
-  const cs=$('#comingSoon');
-  cs.classList.remove('show'); return; // overlay disabled - op shown normally
-  $('#csTitle').textContent='Operation Complete';
-  $('#csText').textContent=op.comingSoonText||'A new role list will be released soon. Stand by for the next operation.';
-  $('#csMeta').textContent=op.name?`Last deployment - ${op.name}`:'';
-  const fb=$('#csFeedback');
-  if(op.feedbackForm){fb.href=op.feedbackForm;fb.style.display='inline-block';}
-  else{fb.style.display='none';}
-  cs.classList.add('show');
-  $('#csPeek').onclick=()=>cs.classList.remove('show');
-}
-
-/* Slider-driven before/after state - cumulative Karoonda I + II */
-const MAP_BEFORE = { ausCas:0, lufCas:0 };
-const MAP_AFTER  = { ausCas:30, lufCas:214 };
-
-function applyMapState(t){
-  const lerp=(a,b,x)=>Math.round(a+(b-a)*x);
-  const ausEl=$('#ausKia'), lufEl=$('#lufKia');
-  if(ausEl) ausEl.textContent = lerp(MAP_BEFORE.ausCas, MAP_AFTER.ausCas, t);
-  if(lufEl) lufEl.textContent = lerp(MAP_BEFORE.lufCas, MAP_AFTER.lufCas, t);
-  const ids=['circ_shwasana','circ_zavlofiti','circ_swop'];
-  ids.forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    if(t>=0.5){el.setAttribute('fill','#c0392b');el.setAttribute('stroke','#8b0000');}
-    else{el.setAttribute('fill','#e8c84a');el.setAttribute('stroke','#8b6900');}
-  });
-
-  const lufTransitions = [
-    { id: 'circ_sharecroppers', tId: 'text_sharecroppers', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_pala', tId: 'text_pala', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_freshfish', tId: 'text_freshfish', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_kahaki', tId: 'text_kahaki', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_savala', tId: 'text_savala', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_cattleranch', tId: 'text_cattleranch', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
-    { id: 'circ_duey', tId: 'text_duey', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
-    { id: 'circ_fantasi', tId: 'text_fantasi', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' },
-    { id: 'circ_chihiti', tId: 'text_chihiti', origFill: '#e8a030', origStroke: '#a06010', origText: '#f0c060' }
-  ];
-  const contestedTransitions = [
-    { id: 'circ_saheli', tId: 'text_saheli', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
-    { id: 'circ_cockfights', tId: 'text_cockfights', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' },
-    { id: 'circ_binbi', tId: 'text_binbi', origFill: '#3a8c3a', origStroke: '#1a5c1a', origText: '#70c870' }
-  ];
-
-  lufTransitions.forEach(x => {
-    const el = document.getElementById(x.id);
-    const txt = document.getElementById(x.tId);
-    if (el) {
-      if (t >= 0.5) {
-        el.setAttribute('fill', '#c0392b');
-        el.setAttribute('stroke', '#8b0000');
-      } else {
-        el.setAttribute('fill', x.origFill);
-        el.setAttribute('stroke', x.origStroke);
-      }
-    }
-    if (txt) {
-      txt.setAttribute('fill', t >= 0.5 ? '#e08070' : x.origText);
-    }
-  });
-
-  contestedTransitions.forEach(x => {
-    const el = document.getElementById(x.id);
-    const txt = document.getElementById(x.tId);
-    if (el) {
-      if (t >= 0.5) {
-        el.setAttribute('fill', '#e8a030');
-        el.setAttribute('stroke', '#a06010');
-      } else {
-        el.setAttribute('fill', x.origFill);
-        el.setAttribute('stroke', x.origStroke);
-      }
-    }
-    if (txt) {
-      txt.setAttribute('fill', t >= 0.5 ? '#f0c060' : x.origText);
-    }
-  });
-
-  const killEls = document.querySelectorAll('.tkill');
-  killEls.forEach(el => {
-    const target = parseInt(el.getAttribute('data-target'), 10) || 0;
-    el.textContent = Math.round(target * (t > 0.5 ? t : 0)); // Only show numbers when t is significantly greater than 0
-  });
-
-  const before=$('#sliderLabelBefore'), after=$('#sliderLabelAfter');
-  if(before) before.style.color = t<0.5 ? '#36d07a' : 'rgba(54,208,122,.35)';
-  if(after)  after.style.color  = t>=0.5 ? '#ff6060' : 'rgba(200,80,60,.35)';
-
-  // Ticker kills leaderboard proportionally with slider
-  document.querySelectorAll('.kills-val').forEach(el=>{
-    const final=parseInt(el.dataset.final,10)||0;
-    el.textContent=Math.round(final*t);
-  });
-}
-
-let sliderAnimFrame=null;
-function animateSliderTo(target, duration){
-  const slider=$('#mapSlider');
-  if(!slider) return;
-  const start=parseFloat(slider.value)||0;
-  const startTime=performance.now();
-  if(sliderAnimFrame) cancelAnimationFrame(sliderAnimFrame);
-  const step=(now)=>{
-    const p=Math.min((now-startTime)/duration,1);
-    const ease=1-Math.pow(1-p,3);
-    const val=start+(target-start)*ease;
-    slider.value=val;
-    applyMapState(val);
-    if(p<1) sliderAnimFrame=requestAnimationFrame(step);
-  };
-  sliderAnimFrame=requestAnimationFrame(step);
-}
-
-function openMap(){
-  $('#mapOverlay').classList.add('show');
-  const slider=$('#mapSlider');
-  if(slider){ slider.value=0; applyMapState(0); }
-  setTimeout(()=>animateSliderTo(1, 2200), 400);
-}
-
-(function(){
-  const slider=document.getElementById('mapSlider');
-  if(slider){
-    slider.addEventListener('input',()=>{
-      if(sliderAnimFrame){ cancelAnimationFrame(sliderAnimFrame); sliderAnimFrame=null; }
-      applyMapState(parseFloat(slider.value));
-    });
-  }
-})();
-function closeMap(){$('#mapOverlay').classList.remove('show');}
-
-/* ---------- side panel ---------- */
-function spOpen(){
-  $('#sidePanel').classList.add('open');
-  document.body.classList.add('sp-open');
-  $('#spArrow').textContent='◀';
-}
-function spClose(){
-  $('#sidePanel').classList.remove('open');
-  document.body.classList.remove('sp-open');
-  $('#spArrow').textContent='▶';
-}
-
-function showSpComingSoon(label){
-  const el=$('#spComingSoonPanel');
-  const lbl=$('#spComingSoonLabel');
-  if(lbl)lbl.textContent=label;
-  if(el)el.style.transform='translateX(0)';
-}
-
-const spToggle = $('#spToggle'); if(spToggle) spToggle.onclick=()=>$('#sidePanel').classList.contains('open')?spClose():spOpen();
-const spCloseBtn = $('#spClose'); if(spCloseBtn) spCloseBtn.onclick=spClose;
-const spMapBtn = $('#spMapBtn'); if(spMapBtn) spMapBtn.onclick=()=>{ spClose(); openMap(); };
-const spRosterBtn = $('#spRosterBtn'); if(spRosterBtn) spRosterBtn.onclick=()=>{ openRoster(); };
-// Op Ratings panel still accessible via direct panel (spRatingsPanel) if needed
-const spRatingsBack = $('#spRatingsBack'); if(spRatingsBack) spRatingsBack.onclick=()=>{ const el=$('#spRatingsPanel'); if(el) el.style.transform='translateX(100%)'; };
-const spFeedbackBtn = $('#spFeedbackBtn'); if(spFeedbackBtn) spFeedbackBtn.onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(0)'; };
-const spFeedbackBack = $('#spFeedbackBack'); if(spFeedbackBack) spFeedbackBack.onclick=()=>{ const el=$('#spFeedbackPanel'); if(el) el.style.transform='translateX(100%)'; };
-const spPrevOpsBtn = $('#spPrevOpsBtn'); if(spPrevOpsBtn) spPrevOpsBtn.onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(0)'; };
-const spPrevOpsBack = $('#spPrevOpsBack'); if(spPrevOpsBack) spPrevOpsBack.onclick=()=>{ const el=$('#spPrevOpsPanel'); if(el)el.style.transform='translateX(100%)'; };
-
-/* ---------- global click routing ---------- */
-document.addEventListener('click',e=>{
-  const unassignBtn=e.target.closest('[data-unassign]');
-  if(unassignBtn){
-    const ctx=JSON.parse(unassignBtn.dataset.unassign||'{}');
-    if(!ctx.sectionKey||ctx.roleIndex===undefined)return;
-    if(!confirm('Unassign yourself from this role?'))return;
-    const token=localStorage.getItem('azo_token');
-    if(!token){alert('You must be signed in.');return;}
-    fetch(CLAIM_ENDPOINT+'/api/unassign',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({sectionKey:ctx.sectionKey,roleIndex:ctx.roleIndex})})
-      .then(r=>r.json()).then(d=>{if(d.ok){location.reload();}else{alert(d.error||'Failed to unassign');}})
-      .catch(()=>alert('Network error'));
-    return;
-  }
-  const claimBtn=e.target.closest('[data-claim]');
-  if(claimBtn&&claimBtn.dataset.claim){
-    try{const ctx=JSON.parse(claimBtn.dataset.claim);openClaim(ctx.sectionKey,ctx.roleIndex,claimBtn.dataset.roleLabel||'Role',claimBtn.dataset.endorseType||'');}catch(_){}
-    return;
-  }
-  const t=e.target.closest('[data-name]');
-  if(t){openProfile(t.dataset.name);}
-});
-
-const modalClose = $('#modalClose'); if(modalClose) modalClose.onclick=closeModal;
-const modalBack = $('#modalBack'); if(modalBack) modalBack.onclick=e=>{if(e.target===$('#modalBack'))closeModal();};
-const rosterClose = $('#rosterClose'); if(rosterClose) rosterClose.onclick=closeRoster;
-const rosterOverlay = $('#rosterOverlay'); if(rosterOverlay) rosterOverlay.onclick=e=>{if(e.target===$('#rosterOverlay'))closeRoster();};
-const mapClose = $('#mapClose'); if(mapClose) mapClose.onclick=closeMap;
-const mapOverlay = $('#mapOverlay'); if(mapOverlay) mapOverlay.onclick=e=>{if(e.target===$('#mapOverlay'))closeMap();};
-
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Escape')return;
-  const cb=$('#claimBack');if(cb&&cb.classList.contains('show')){closeClaim();return;}
-  const mb=$('#modalBack');if(mb&&mb.classList.contains('show')){closeModal();return;}
-  const mo=$('#mapOverlay');if(mo&&mo.classList.contains('show')){closeMap();return;}
-  const ro=$('#rosterOverlay');if(ro&&ro.classList.contains('show')){closeRoster();return;}
-  if($('#sidePanel').classList.contains('open')){spClose();return;}
-});
-
-/* ---------- claim flow ---------- */
-const CLAIM_ENDPOINT='https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
-let claimContext=null;
-
-function openClaim(sectionKey,roleIndex,roleLabel,endorseType){
-  claimContext={sectionKey,roleIndex,roleLabel,endorseType};
-  $('#claimRoleLabel').textContent=roleLabel;
-  $('#claimRoleLabel2').textContent=roleLabel;
-  const eb=$('#endorseBlock');
-  if(endorseType){
-    eb.style.display='block';
-    eb.innerHTML=`<strong>⚠ Endorsement required: ${esc(endorseType)}</strong>This role requires a <b>${esc(endorseType)}</b>. If you don't have it your claim will be rejected. Contact staff if you believe this is incorrect.`;
-  } else {eb.style.display='none';}
-  
-  // If user is logged in, auto-fill their name and hide the input
-  const nameInputSection = $('#nameInputSection');
-  const autoNameSection = $('#autoNameSection');
-  const claimInput = $('#claimInput');
-  
-  if (currentUser) {
-    // User is logged in - show their name automatically
-    const name = currentUser.rosterName || currentUser.displayName;
-    $('#autoUserName').textContent = name;
-    $('#autoUserAvatar').src = currentUser.avatar
-      ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
-      : 'https://cdn.discordapp.com/embed/avatars/0.png';
-    nameInputSection.style.display = 'none';
-    autoNameSection.style.display = 'block';
-    
-    // Check endorsement immediately
-    if(endorseType){
-      const has=memberHasEndorsement(name,endorseType);
-      if(!has){
-        $('#claimHint').style.color='#d94040';
-        $('#claimHint').textContent=`You do not have a ${endorseType} on record.`;
-      } else {
-        $('#claimHint').style.color='#36d07a';
-        $('#claimHint').textContent=`Endorsement confirmed.`;
-      }
-    } else {
-      $('#claimHint').style.color='#36d07a';
-      $('#claimHint').textContent='You are eligible for this role.';
-    }
-  } else {
-    // User not logged in - show name input
-    nameInputSection.style.display = 'block';
-    autoNameSection.style.display = 'none';
-    claimInput.value='';
-    $('#claimHint').style.color='';
-    $('#claimHint').textContent='Your name must match the roster exactly. Case-sensitive.';
-  }
-  
-  $('#claimStatus').textContent='';$('#claimStatus').className='';
-  $('#claimConfirm').disabled=false;
-  $('#claimStep1').style.display='block';$('#claimStep2').classList.remove('active');
-  $('#claimBack').classList.add('show');
-}
-function closeClaim(){$('#claimBack').classList.remove('show');$('#operatorDropdown').style.display='none';claimContext=null;}
-function goToStep2(){$('#claimStep1').style.display='none';$('#claimStep2').classList.add('active');setTimeout(()=>$('#claimInput').focus(),80);}
-
-function buildOperatorDropdown(){
-  const container=$('#operatorDropdown');
-  if(!container)return;
-  const sortedNames=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).sort();
-  container.innerHTML=sortedNames.map(name=>`<div class="op-dropdown-item" data-value="${esc(name)}">${esc(name)}</div>`).join('');
-  container.querySelectorAll('.op-dropdown-item').forEach(item=>{
-    item.addEventListener('mousedown',e=>{e.preventDefault();const n=item.dataset.value;$('#claimInput').value=n;container.style.display='none';checkLiveEndorsement(n);});
-  });
-}
-
-function checkLiveEndorsement(name){
-  if(!claimContext)return;
-  const hint=$('#claimHint');
-  if(!name){hint.style.color='';hint.textContent='Your name must match the roster exactly. Case-sensitive.';return;}
-  if(!MEMBERS[name]){hint.style.color='#d94040';hint.textContent=`"${name}" is not found on the active operator roster.`;return;}
-  if(claimContext.endorseType){
-    const has=memberHasEndorsement(name,claimContext.endorseType);
-    if(!has){hint.style.color='#d94040';hint.textContent=`${name} does not have a ${claimContext.endorseType} on record.`;}
-    else{hint.style.color='#36d07a';hint.textContent=`Endorsement confirmed for ${name}.`;}
-  } else {hint.style.color='#36d07a';hint.textContent='Valid operator name selected.';}
-}
-
-$('#claimInput').addEventListener('input',()=>{
-  const val=$('#claimInput').value.trim();checkLiveEndorsement(val);
-  const container=$('#operatorDropdown');const items=container.querySelectorAll('.op-dropdown-item');let n=0;
-  items.forEach(item=>{const m=item.dataset.value.toLowerCase().includes(val.toLowerCase());item.style.display=m?'block':'none';if(m)n++;});
-  container.style.display=n>0?'block':'none';
-});
-$('#claimInput').addEventListener('focus',()=>{
-  const val=$('#claimInput').value.trim();const container=$('#operatorDropdown');const items=container.querySelectorAll('.op-dropdown-item');let n=0;
-  items.forEach(item=>{const m=item.dataset.value.toLowerCase().includes(val.toLowerCase());item.style.display=m?'block':'none';if(m)n++;});
-  container.style.display=n>0?'block':'none';
-});
-$('#claimInput').addEventListener('blur',()=>setTimeout(()=>{$('#operatorDropdown').style.display='none';},180));
-
-async function submitClaim(){
-  let name;
-  
-  // If user is logged in, use their roster name or display name
-  if (currentUser) {
-    name = currentUser.rosterName || currentUser.displayName;
-  } else {
-    // Otherwise get from input
-    name = $('#claimInput').value.trim();
-    if(!name){setClaimStatus('Enter your name first.','err');return;}
-    if(!MEMBERS[name]){setClaimStatus('Access Denied: Select a valid active operator name from the roster.','err');return;}
-  }
-  
-  if(claimContext.endorseType){
-    if(!name){setClaimStatus('Enter your name first.','err');return;}
-    if(!currentUser && !MEMBERS[name]){setClaimStatus(`Your name is not on the roster. Contact staff before signing up for a role that requires a ${claimContext.endorseType}.`,'err');return;}
-    if(!memberHasEndorsement(name,claimContext.endorseType)){setClaimStatus(`You do not have the required ${claimContext.endorseType}. Contact staff to be added to the endorsement list.`,'err');return;}
-  }
-  const{sectionKey,roleIndex}=claimContext;
-  const btn=$('#claimConfirm');btn.disabled=true;setClaimStatus('Submitting sign-up…','');
-  try{
-    const token = localStorage.getItem('azo_token');
-    const headers = {'Content-Type':'application/json'};
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    
-    const res=await fetch(CLAIM_ENDPOINT,{method:'POST',headers,body:JSON.stringify({sectionKey:String(sectionKey),roleIndex,memberName:name})});
-    const data=await res.json().catch(()=>({}));
-    if(res.ok){setClaimStatus(`Signed up! ${name} is on the roster. Refreshing…`,'ok');setTimeout(()=>{closeClaim();location.reload();},3500);}
-    else{throw new Error(data.error||`Failed (${res.status})`);}
-  }catch(e){setClaimStatus(e.message,'err');btn.disabled=false;}
-}
-function setClaimStatus(msg,cls){const el=$('#claimStatus');el.textContent=msg;el.className=cls;}
-
-$('#claimBack').onclick=e=>{if(e.target===$('#claimBack'))closeClaim();};
-$('#claimCancelStep1').onclick=closeClaim;
-$('#claimProceed').onclick=goToStep2;
-$('#claimBackStep').onclick=()=>{$('#claimStep2').classList.remove('active');$('#claimStep1').style.display='block';};
-$('#claimCancel').onclick=closeClaim;
-$('#claimConfirm').onclick=submitClaim;
-$('#claimInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitClaim();});
-
-/* ---------- boot ---------- */
-// Wait for DOM to be fully loaded before initializing admin panel
-document.addEventListener('DOMContentLoaded', () => {
-  initAdminPanel();
-});
-
-(async function(){
-  // Initialize Discord auth first
-  await initAuth();
-  
-  try{
-    const[roster,members]=await Promise.all([
-      fetch('roster.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('roster.json '+r.status);return r.json();}),
-      fetch('members.json',{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
-    ]);
-    MEMBERS=members||{};
-    renderAuthUI();
-    render(roster);
-  }catch(err){
-    $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
-    console.error(err);
-  }
-})();
-</script>
-
-<!-- Admin Panel -->
-<div id="adminPanel">
-  <div class="admin-wrap">
-    <div class="admin-header">
-      <h1>🛠️ Admin Roster Management</h1>
-      <button class="admin-close" id="adminCloseBtn">Close</button>
-    </div>
-
-    <!-- Operation Settings -->
-    <div class="admin-section">
-      <h2 class="admin-section-title">Operation Settings</h2>
-      <div class="admin-form">
-        <div class="admin-form-row">
-          <div class="admin-field">
-            <label>Operation Name</label>
-            <input type="text" id="adminOpName" placeholder="Operation Karoonda III">
-          </div>
-          <div class="admin-field">
-            <label>Zeus/Op Creator</label>
-            <input type="text" id="adminZeus" placeholder="Jag McMuffin">
-          </div>
-        </div>
-        <div class="admin-form-row">
-          <div class="admin-field">
-            <label>Date & Time</label>
-            <input type="text" id="adminDate" placeholder="Friday 11 July · 19:00 AEST">
-          </div>
-          <div class="admin-field">
-            <label>Countdown Target (ISO)</label>
-            <input type="datetime-local" id="adminCountdown">
-          </div>
-        </div>
-        <div class="admin-form-row">
-          <div class="admin-field">
-            <label>Status</label>
-            <select id="adminStatus">
-              <option value="upcoming">Upcoming</option>
-              <option value="live">Live</option>
-              <option value="complete">Complete</option>
-            </select>
-          </div>
-          <div class="admin-field">
-            <label>Theme</label>
-            <select id="adminTheme">
-              <option value="tactical-blue">Tactical Blue</option>
-              <option value="desert">Desert</option>
-              <option value="jungle">Jungle</option>
-              <option value="night">Night</option>
-              <option value="blood">Blood</option>
-            </select>
-          </div>
-        </div>
-        <div class="admin-btn-group">
-          <button class="admin-btn admin-btn-primary" id="saveOpSettings">Save Operation Settings</button>
-        </div>
-        <div id="opSettingsStatus" class="admin-status-msg"></div>
-      </div>
-    </div>
-
-    <!-- Roster Structure Editor -->
-    <div class="admin-section">
-      <h2 class="admin-section-title">Roster Structure</h2>
-      <div id="adminSectionsList" class="admin-section-list"></div>
-      <div class="admin-btn-group">
-        <button class="admin-btn admin-btn-secondary" id="addSectionBtn">+ Add Section</button>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="admin-section">
-      <h2 class="admin-section-title">Quick Actions</h2>
-      <div class="admin-btn-group">
-        <button class="admin-btn admin-btn-secondary" id="clearAllAssignmentsBtn">Clear All Slot Assignments</button>
-        <button class="admin-btn admin-btn-danger" id="archiveOperationBtn">Archive Operation to Previous Ops</button>
-      </div>
-      <div id="quickActionsStatus" class="admin-status-msg"></div>
-    </div>
+<!-- CTA -->
+<div class="cta-banner">
+  <h2>Ready to deploy?</h2>
+  <p>Check the current operation roster, sign up for a slot, and join us on the battlefield.</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a class="btn btn-primary" href="/roster/">View Operation Roster</a>
+    <a class="btn btn-gold" href="https://discord.gg/azo" target="_blank">Join Our Discord</a>
   </div>
 </div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-links">
+    <a href="/roster/">Operation Roster</a>
+    <a href="https://discord.gg/azo" target="_blank">Discord</a>
+  </div>
+  <div class="footer-copy">
+    &copy; 2026 AZO ArmA 3 Milsim Unit<br>
+    <span>ArmA 3 is a trademark of Bohemia Interactive. AZO is an independent community and not affiliated with Bohemia Interactive or the Australian Defence Force.</span>
+  </div>
+</footer>
 
 </body>
 </html>
