@@ -84,12 +84,30 @@ nav{
   background:linear-gradient(180deg,rgba(5,8,14,.3) 0%,var(--bg) 100%),
               radial-gradient(ellipse at 50% 30%,rgba(61,135,212,.06) 0%,transparent 60%);
 }
+.hero-slideshow{
+  position:absolute;inset:0;z-index:0;
+}
+.hero-slideshow img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.5s ease;
+}
+.hero-slideshow img.active{opacity:1;}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(5,8,14,.55) 0%,rgba(5,8,14,.75) 50%,var(--bg) 100%);
+}
+.hero-op-label{
+  position:absolute;bottom:24px;left:24px;z-index:2;
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.5);
+}
 .hero-pattern{
-  position:absolute;inset:0;z-index:0;opacity:.025;
+  position:absolute;inset:0;z-index:1;opacity:.025;
   background-image:radial-gradient(circle at 20px 20px,rgba(255,255,255,.4) 1px,transparent 1px);
   background-size:40px 40px;
 }
-.hero>*{position:relative;z-index:1;}
+.hero>*{position:relative;z-index:2;}
 .hero-logo{
   width:96px;height:96px;border-radius:50%;
   border:2px solid var(--line-strong);
@@ -276,6 +294,13 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <div class="page active" id="page-home">
 
 <section class="hero">
+  <div class="hero-slideshow">
+    <img src="/assets/slide1.jpg" class="active" alt="">
+    <img src="/assets/slide2.jpg" alt="">
+    <img src="/assets/slide3.jpg" alt="">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-op-label">Previous Operation: Karoonda II</div>
   <div class="hero-pattern"></div>
   <img class="hero-logo" src="/assets/logo.png" alt="AZO" onerror="this.style.display='none'">
   <h1>AZO</h1>
@@ -402,6 +427,17 @@ document.getElementById('comingSoonOverlay').onclick = function(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeGallery();
 });
+
+// Slideshow
+(function() {
+  const imgs = document.querySelectorAll('.hero-slideshow img');
+  let idx = 0;
+  setInterval(() => {
+    imgs[idx].classList.remove('active');
+    idx = (idx + 1) % imgs.length;
+    imgs[idx].classList.add('active');
+  }, 5000);
+})();
 
 // Load operators list
 (async function() {
