@@ -2332,7 +2332,28 @@ document.addEventListener('click',e=>{
     return;
   }
   const t=e.target.closest('[data-name]');
-  if(t){openProfile(t.dataset.name);}
+  if(t){
+    const name = t.dataset.name;
+    // If logged-in user clicks their own slot, ask if they want to unassign
+    if (currentUser) {
+      const userName = (currentUser.rosterName || currentUser.displayName || '').toLowerCase();
+      if (name.toLowerCase() === userName) {
+        if (confirm(`Unassign yourself from this role?`)) {
+          const token = localStorage.getItem('azo_token');
+          if (!token) { alert('You must be signed in.'); return; }
+          const ctxJson = t.querySelector('[data-unassign]');
+          const ctx = ctxJson ? JSON.parse(ctxJson.dataset.unassign||'{}') : null;
+          if (ctx && ctx.sectionKey && ctx.roleIndex !== undefined) {
+            fetch(CLAIM_ENDPOINT+'/api/unassign',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({sectionKey:ctx.sectionKey,roleIndex:ctx.roleIndex})})
+              .then(r=>r.json()).then(d=>{if(d.ok){location.reload();}else{alert(d.error||'Failed to unassign');}})
+              .catch(()=>alert('Network error'));
+            return;
+          }
+        }
+      }
+    }
+    openProfile(name);
+  }
 });
 
 const modalClose = $('#modalClose'); if(modalClose) modalClose.onclick=closeModal;
