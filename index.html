@@ -219,17 +219,45 @@ nav{
 
 /* ---------- OPERATORS ---------- */
 .op-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:14px;margin-top:24px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:12px;margin-top:24px;
 }
 .op-card{
   background:var(--panel);border:1px solid var(--line);
   border-radius:10px;padding:16px;text-align:center;
-  transition:border-color .15s;
+  cursor:pointer;transition:border-color .15s;
 }
 .op-card:hover{border-color:var(--line-strong);}
+.op-card .op-avatar{
+  width:56px;height:56px;border-radius:50%;object-fit:cover;
+  margin:0 auto 10px;display:block;
+  border:2px solid var(--line-strong);
+}
+.op-card .op-avatar-fallback{
+  width:56px;height:56px;border-radius:50%;
+  margin:0 auto 10px;display:flex;
+  align-items:center;justify-content:center;
+  background:var(--panel-solid);border:2px solid var(--line-strong);
+  font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;
+  color:var(--muted-2);
+}
 .op-card .nm{font-weight:600;font-size:14px;color:#fff;}
-.op-card .rk{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.op-card .rk{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--primary-2);text-transform:uppercase;letter-spacing:1px;margin-top:3px;
+}
+.op-card .op-detail{
+  display:none;margin-top:12px;padding-top:12px;
+  border-top:1px solid var(--line);font-size:12px;color:var(--muted);
+}
+.op-card .op-detail.open{display:block;}
+.op-card .op-detail .ops-num{
+  font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;
+  color:var(--gold);line-height:1;
+}
+.op-card .op-detail .ops-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);margin-bottom:8px;}
+.op-card .op-endorse{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(61,135,212,.1);color:var(--primary);border:1px solid rgba(61,135,212,.15);margin:2px;}
+.op-card .op-lead{display:inline-block;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(240,180,41,.1);color:var(--gold);border:1px solid rgba(240,180,41,.15);margin-bottom:8px;}
 
 /* ---------- ATTENDANCE ---------- */
 .att-placeholder{text-align:center;padding:60px 0;color:var(--muted-2);}
@@ -488,6 +516,11 @@ document.addEventListener('keydown', function(e) {
   }, 5000);
 })();
 
+const RANK_ORDER = {
+  'SOCOMD':100,'Senior Operator':80,'Operator':60,
+  'Junior Operator':40,'Recruit':20
+};
+
 // Load operators list
 (async function() {
   try {
@@ -497,17 +530,66 @@ document.addEventListener('keydown', function(e) {
     const list = document.getElementById('operatorsList');
     if (!list) return;
     const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
-    entries.sort((a, b) => (a[1].discordRank || 'Z').localeCompare(b[1].discordRank || 'Z'));
-    list.innerHTML = entries.map(([name, m]) =>
-      `<div class="op-card"><div class="nm">${esc(name)}</div><div class="rk">${esc(m.discordRank || 'Member')}</div></div>`
-    ).join('');
+    entries.sort((a, b) => (RANK_ORDER[b[1].discordRank]||0) - (RANK_ORDER[a[1].discordRank]||0));
+    const cards = document.createDocumentFragment();
+    for (const [name, m] of entries) {
+      const card = document.createElement('div');
+      card.className = 'op-card';
+      card.onclick = function(){ toggleOp(this); };
+      const av = m.avatar;
+      const hasAvatar = av && av !== '';
+      const initial = name.charAt(0).toUpperCase();
+      if (hasAvatar) {
+        const img = document.createElement('img');
+        img.className = 'op-avatar'; img.alt = '';
+        img.src = av;
+        img.onerror = function(){ this.outerHTML = '<div class="op-avatar-fallback">' + initial + '</div>'; };
+        card.appendChild(img);
+      } else {
+        const fb = document.createElement('div');
+        fb.className = 'op-avatar-fallback';
+        fb.textContent = initial;
+        card.appendChild(fb);
+      }
+      const nm = document.createElement('div');
+      nm.className = 'nm'; nm.textContent = name;
+      card.appendChild(nm);
+      const rk = document.createElement('div');
+      rk.className = 'rk'; rk.textContent = m.discordRank || 'Member';
+      card.appendChild(rk);
+      const det = document.createElement('div');
+      det.className = 'op-detail';
+      const opsN = document.createElement('div');
+      opsN.className = 'ops-num'; opsN.textContent = m.opsAttended;
+      det.appendChild(opsN);
+      const opsL = document.createElement('div');
+      opsL.className = 'ops-lbl'; opsL.textContent = 'Ops Attended';
+      det.appendChild(opsL);
+      if (m.endorsements && m.endorsements.length) {
+        for (const e of m.endorsements) {
+          const sp = document.createElement('span');
+          sp.className = 'op-endorse'; sp.textContent = e;
+          det.appendChild(sp);
+        }
+      }
+      if (m.leadership) {
+        const lw = document.createElement('div');
+        lw.style.marginTop = '8px';
+        const sp = document.createElement('span');
+        sp.className = 'op-lead'; sp.textContent = m.leadership + ' leadership';
+        lw.appendChild(sp);
+        det.appendChild(lw);
+      }
+      card.appendChild(det);
+      cards.appendChild(card);
+    }
+    list.appendChild(cards);
   } catch(e) {}
 })();
 
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
+function toggleOp(el) {
+  const detail = el.querySelector('.op-detail');
+  if (detail) detail.classList.toggle('open');
 }
 </script>
 
