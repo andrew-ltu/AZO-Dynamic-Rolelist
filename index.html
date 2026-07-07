@@ -255,6 +255,19 @@ nav{
 .cs-modal p{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:24px;}
 .cs-modal .btn{padding:10px 24px;font-size:13px;}
 
+/* ---------- ABOUT MINI ---------- */
+.about-mini{
+  display:flex;justify-content:center;gap:48px;
+  padding:56px 20px;flex-wrap:wrap;max-width:800px;margin:0 auto;
+}
+.about-item{
+  display:flex;align-items:flex-start;gap:14px;
+  max-width:360px;text-align:left;
+}
+.about-icon{font-size:28px;line-height:1.4;flex-shrink:0;}
+.about-h{font-weight:600;font-size:14px;color:#fff;margin-bottom:4px;}
+.about-p{font-size:13px;color:var(--muted);line-height:1.65;}
+
 /* ---------- CTA ---------- */
 .cta-banner{
   text-align:center;padding:70px 20px;
@@ -337,7 +350,24 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   <div class="stat"><div class="stat-num">2018</div><div class="stat-lbl">Founded</div></div>
 </div>
 
-<div class="cta-banner" style="margin-top:40px;">
+<div class="about-mini">
+  <div class="about-item">
+    <div class="about-icon">📅</div>
+    <div>
+      <div class="about-h">No Attendance Requirements</div>
+      <div class="about-p">Feel free to join in operations based on your schedule, no punishment for not being able to attend.</div>
+    </div>
+  </div>
+  <div class="about-item">
+    <div class="about-icon">🤝</div>
+    <div>
+      <div class="about-h">Dual Clanning</div>
+      <div class="about-p">Unlike other units, AZO does not enforce dual clanning rules. Feel free to join and partake in other units whilst being a part of AZO.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-banner">
   <h2>Ready to deploy?</h2>
   <p>Check the current operation roster, sign up for a slot, and join us on the battlefield.</p>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
