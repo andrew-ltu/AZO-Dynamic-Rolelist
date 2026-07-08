@@ -61,7 +61,22 @@ async function verifyToken(token, secret) {
 
 async function getRoster(env) {
   const row = await env.DB.prepare(`SELECT data FROM roster WHERE id = 1`).first();
-  if (row) return JSON.parse(row.data);
+  if (row) {
+    const data = JSON.parse(row.data);
+    const op = data.operation || {};
+    if (!op.zeus || !op.date) {
+      try {
+        const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
+        if (res.ok) {
+          const github = await res.json();
+          const gOp = github?.operation || {};
+          if (!op.zeus && gOp.zeus) op.zeus = gOp.zeus;
+          if (!op.date && gOp.date) op.date = gOp.date;
+        }
+      } catch {}
+    }
+    return data;
+  }
   const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
   if (!res.ok) return null;
   const data = await res.json();

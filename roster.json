@@ -1,9 +1,9 @@
 {
   "operation": {
     "name": "Operation Karoonda II",
-    "zeus": null,
+    "zeus": "Jag McMuffin",
     "tier": "Tier 2 Operation",
-    "date": null,
+    "date": "4 JULY 2026",
     "status": "upcoming",
     "theme": "tactical-blue",
     "background": "assets/backgrounds/operation-bg.png",

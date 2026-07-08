@@ -886,16 +886,10 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
           <span class="operators-stat-value" id="total-ops">0</span>
           <span class="operators-stat-label">ACTIVE</span>
         </div>
-        <div class="operators-stat-item">
-          <span class="operators-stat-value" id="command-leaves">0</span>
-          <span class="operators-stat-label">COMMAND</span>
-        </div>
-        <div class="operators-stat-item">
-          <span class="operators-stat-value" id="staff-leaves">0</span>
-          <span class="operators-stat-label">STAFF</span>
-        </div>
       </div>
     </div>
+    
+    <div id="operatorsList"></div>
     
     <div class="loading" id="loading" style="display: none;">
       <div class="loading-spinner"></div>
@@ -930,6 +924,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 
 <script>
 const API_BASE = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
+const ROSTER_JSON_URL = 'https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/roster.json';
 
 function switchPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -976,6 +971,119 @@ const ATT_MONTHS = [
   {m:'Jun',done:1,up:0},{m:'Jul',done:1,up:0}
 ];
 const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
+const RANK_HEADER_CLASS = {
+  'SOCOMD': 'rank-header-socomd',
+  'Senior Operator': 'rank-header-senior-operator',
+  'Operator': 'rank-header-operator',
+  'Junior Operator': 'rank-header-junior-operator',
+  'Recruit': 'rank-header-recruit'
+};
+const CARD_CLASS = {
+  'SOCOMD': 'command',
+  'Senior Operator': 'staff',
+  'Operator': 'field',
+  'Junior Operator': 'field',
+  'Recruit': 'field'
+};
+
+function formatOpDate(op) {
+  if (op.date) return op.date;
+  if (!op.countdownTo) return '—';
+  const d = new Date(op.countdownTo);
+  const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+function getRoleText(m) {
+  if (m.leadership === 'senior') return 'STAFF';
+  if (m.leadership === 'junior') return 'JUNIOR STAFF';
+  return 'OPERATOR';
+}
+
+function renderOperatorsList(list, data) {
+  const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
+  const totalEl = document.getElementById('total-ops');
+  if (totalEl) totalEl.textContent = entries.length;
+
+  const groups = {};
+  for (const rank of RANK_ORDER) groups[rank] = [];
+  const unknown = [];
+  for (const e of entries) {
+    const r = e[1].discordRank;
+    if (groups[r]) groups[r].push(e);
+    else unknown.push(e);
+  }
+
+  const frag = document.createDocumentFragment();
+  for (const rank of RANK_ORDER) {
+    const items = groups[rank].sort((a, b) => a[0].localeCompare(b[0]));
+    if (!items.length) continue;
+
+    const section = document.createElement('div');
+    section.className = 'rank-section';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'rank-header ' + (RANK_HEADER_CLASS[rank] || 'rank-header-operator');
+    hdr.innerHTML = `<div class="rank-icon">◆</div><div class="rank-title">${esc(rank)}</div>`;
+    section.appendChild(hdr);
+
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    for (const [name, m] of items) {
+      const card = document.createElement('div');
+      card.className = 'operator-card ' + (CARD_CLASS[rank] || 'field');
+      const av = m.avatar;
+      const hasAvatar = av && av !== '';
+      const initial = name.charAt(0).toUpperCase();
+      const avatarHtml = hasAvatar
+        ? `<img class="avatar-image" src="${esc(av)}" alt="" onerror="this.outerHTML='<div class=\\'avatar-fallback\\'>${esc(initial)}</div>'">`
+        : `<div class="avatar-fallback">${esc(initial)}</div>`;
+      const endorseHtml = (m.endorsements || []).slice(0, 3).map(e =>
+        `<span class="badge badge-endorsement">${esc(e)}</span>`
+      ).join('');
+      const leadHtml = m.leadership ? `<span class="badge badge-leadership">${esc(m.leadership)}</span>` : '';
+      card.innerHTML = `
+        <div class="card-body">
+          <div class="avatar-wrapper">${avatarHtml}</div>
+          <div class="operator-rank">${esc(m.discordRank || 'Member')}</div>
+          <div class="operator-name">${esc(name)}</div>
+          <div class="badges-container">${leadHtml}${endorseHtml}</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="operator-role">${getRoleText(m)}</div>
+        </div>
+        <div class="card-details">
+          <div class="detail-row">
+            <span class="detail-label">Ops Attended</span>
+            <span class="detail-value">${m.opsAttended ?? 0}</span>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    }
+    section.appendChild(grid);
+    frag.appendChild(section);
+  }
+
+  if (unknown.length) {
+    const section = document.createElement('div');
+    section.className = 'rank-section';
+    section.innerHTML = '<div class="rank-header rank-header-operator"><div class="rank-icon">◆</div><div class="rank-title">Other</div></div>';
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    for (const [name, m] of unknown) {
+      const card = document.createElement('div');
+      card.className = 'operator-card field';
+      card.innerHTML = `<div class="card-body"><div class="operator-name">${esc(name)}</div></div>`;
+      grid.appendChild(card);
+    }
+    section.appendChild(grid);
+    frag.appendChild(section);
+  }
+
+  list.innerHTML = '';
+  list.appendChild(frag);
+}
 
 // Load operators list & roster
 (async function() {
@@ -988,7 +1096,17 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
     
     // Render upcoming op from roster data
     if (rosterData && rosterData.operation) {
-      const op = rosterData.operation;
+      let op = rosterData.operation;
+      if (!op.zeus || !op.date) {
+        try {
+          const ghRes = await fetch(ROSTER_JSON_URL);
+          if (ghRes.ok) {
+            const gh = await ghRes.json();
+            const gOp = gh?.operation || {};
+            op = { ...op, zeus: op.zeus || gOp.zeus, date: op.date || gOp.date };
+          }
+        } catch {}
+      }
       const sections = rosterData.sections || [];
       const command = rosterData.command || [];
       let totalSlots = 0, filledSlots = 0;
@@ -1004,112 +1122,14 @@ const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
       document.getElementById('upcomingOpStatus').textContent = (op.status || 'upcoming').charAt(0).toUpperCase() + (op.status || 'upcoming').slice(1);
       document.getElementById('upcomingOpStatus').style.color = op.status === 'live' ? '#36d07a' : op.status === 'complete' ? '#6a7f98' : '#f0b429';
       document.getElementById('upcomingOpZeus').textContent = op.zeus || '—';
-      document.getElementById('upcomingOpDate').textContent = op.date || '—';
+      document.getElementById('upcomingOpDate').textContent = formatOpDate(op);
       document.getElementById('upcomingOpFilled').textContent = `${filledSlots} / ${totalSlots} filled`;
     } else {
       document.getElementById('upcomingOpTitle').textContent = 'Upcoming Operation';
       document.getElementById('upcomingOpDesc').textContent = 'View available roles and sign up for the next operation. Login with Discord to claim your slot.';
     }
     
-    if (!list) return;
-    const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
-    // Group by rank
-    const groups = {};
-    for (const rank of RANK_ORDER) groups[rank] = [];
-    const unknown = [];
-    for (const e of entries) {
-      const r = e[1].discordRank;
-      if (groups[r]) groups[r].push(e);
-      else unknown.push(e);
-    }
-    const frag = document.createDocumentFragment();
-    for (const rank of RANK_ORDER) {
-      const items = groups[rank];
-      if (!items.length) continue;
-      const hdr = document.createElement('div');
-      hdr.className = 'op-rank-hdr';
-      const rc = RANK_COLORS[rank] || '#6a7f98';
-      hdr.style.setProperty('color', rc);
-      hdr.style.setProperty('border-left-color', rc);
-      hdr.textContent = rank;
-      frag.appendChild(hdr);
-      const grid = document.createElement('div');
-      grid.className = 'op-grid';
-      for (const [name, m] of items) {
-        const card = document.createElement('div');
-        card.className = 'op-card';
-        card.onclick = function(){ toggleOp(this); };
-        const av = m.avatar;
-        const hasAvatar = av && av !== '';
-        const initial = name.charAt(0).toUpperCase();
-        if (hasAvatar) {
-          const img = document.createElement('img');
-          img.className = 'op-avatar'; img.alt = '';
-          img.src = av;
-          img.onerror = function(){ this.outerHTML = '<div class=\'op-avatar-fallback\'>' + initial + '</div>'; };
-          card.appendChild(img);
-        } else {
-          const fb = document.createElement('div');
-          fb.className = 'op-avatar-fallback';
-          fb.textContent = initial;
-          card.appendChild(fb);
-        }
-        const nm = document.createElement('div');
-        nm.className = 'nm'; nm.textContent = name;
-        card.appendChild(nm);
-        const rk = document.createElement('div');
-        rk.className = 'rk';
-        rk.style.color = RANK_COLORS[rank] || '#6a7f98';
-        rk.textContent = m.discordRank || 'Member';
-        card.appendChild(rk);
-        const det = document.createElement('div');
-        det.className = 'op-detail';
-        const opsN = document.createElement('div');
-        opsN.className = 'ops-num'; opsN.textContent = m.opsAttended;
-        det.appendChild(opsN);
-        const opsL = document.createElement('div');
-        opsL.className = 'ops-lbl'; opsL.textContent = 'Ops Attended';
-        det.appendChild(opsL);
-        if (m.endorsements && m.endorsements.length) {
-          for (const e of m.endorsements) {
-            const sp = document.createElement('span');
-            sp.className = 'op-endorse'; sp.textContent = e;
-            det.appendChild(sp);
-          }
-        }
-        if (m.leadership) {
-          const lw = document.createElement('div');
-          lw.style.marginTop = '8px';
-          const sp = document.createElement('span');
-          sp.className = 'op-lead'; sp.textContent = m.leadership + ' leadership';
-          lw.appendChild(sp);
-          det.appendChild(lw);
-        }
-        card.appendChild(det);
-        grid.appendChild(card);
-      }
-      frag.appendChild(grid);
-    }
-    if (unknown.length) {
-      const hdr = document.createElement('div');
-      hdr.className = 'op-rank-hdr';
-      hdr.style.color = '#6a7f98';
-      hdr.textContent = 'Other';
-      frag.appendChild(hdr);
-      const grid = document.createElement('div');
-      grid.className = 'op-grid';
-      for (const [name, m] of unknown) {
-        const card = document.createElement('div');
-        card.className = 'op-card';
-        card.onclick = function(){ toggleOp(this); };
-        const nm = document.createElement('div');
-        nm.className = 'nm'; nm.textContent = name;
-        card.appendChild(nm);
-        grid.appendChild(card);
-      }
-      frag.appendChild(grid);
-    }
-    list.appendChild(frag);
+    if (list) renderOperatorsList(list, data);
 
     // Build previous ops view
     const attEl = document.getElementById('attendanceContent');
