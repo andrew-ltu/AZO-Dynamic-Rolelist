@@ -444,11 +444,18 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <div class="page" id="page-roster">
   <div style="padding:20px 0;">
     <div class="section-sub" style="margin-bottom:4px;">Operation</div>
-    <h2 class="section-title">Upcoming Op Roster</h2>
-    <p class="section-desc">View available roles and sign up for the next operation. Login with Discord to claim your slot.</p>
-    <div class="roster-embed">
-      <p>The full interactive roster is available on the roster page.</p>
-      <a class="btn btn-primary" href="/roster/" target="_blank">Open Full Roster</a>
+    <h2 class="section-title" id="upcomingOpTitle">Loading operation...</h2>
+    <p class="section-desc" id="upcomingOpDesc">View available roles and sign up for the next operation.</p>
+    <div id="upcomingOpDetails" style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:16px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Status</div><div id="upcomingOpStatus" style="font-weight:600;color:#f0b429;margin-top:4px;">—</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Zeus</div><div id="upcomingOpZeus" style="font-weight:600;color:#fff;margin-top:4px;">—</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Date</div><div id="upcomingOpDate" style="font-weight:600;color:#fff;margin-top:4px;">—</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Slots Filled</div><div id="upcomingOpFilled" style="font-weight:600;color:#36d07a;margin-top:4px;">—</div></div>
+      </div>
+      <div style="margin-top:16px;text-align:center;">
+        <a class="btn btn-primary" href="/roster/" target="_blank">View Full Roster & Sign Up</a>
+      </div>
     </div>
   </div>
 </div>
@@ -459,7 +466,440 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     <div class="section-sub" style="margin-bottom:4px;">Personnel</div>
     <h2 class="section-title">Active Operators</h2>
     <p class="section-desc">Current roster of AZO operators and their ranks.</p>
-    <div id="operatorsList" class="op-grid"></div>
+    
+    <style>
+    /* Tactical Operators Page Styles */
+    .tactical-operators-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+    }
+    
+    .operators-header {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .operators-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-muted, #6a7f98);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .operators-title {
+      font-size: 42px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-primary, #ffffff);
+      margin-bottom: 12px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .operators-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: var(--accent-command, #ff1133);
+      border-radius: 1px;
+    }
+    
+    .operators-stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .operators-stat-item {
+      text-align: center;
+      padding: 12px 24px;
+      background: var(--panel, #1a1a1a);
+      border: 1px solid var(--line, rgba(255,255,255,0.08));
+      border-radius: 8px;
+      min-width: 140px;
+    }
+    
+    .operators-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary, #ffffff);
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .operators-stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted, rgba(255,255,255,0.5));
+    }
+    
+    .rank-section {
+      margin-bottom: 48px;
+      position: relative;
+    }
+    
+    .rank-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+    
+    .rank-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .rank-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+    }
+    
+    .rank-title::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 16px;
+      border-radius: 2px;
+    }
+    
+    /* Rank variant colors */
+    .rank-header-socomd .rank-title::before { background: var(--accent-command, #ff1133); }
+    .rank-header-socomd .rank-title { color: var(--accent-command, #ff1133); }
+    .rank-header-socomd .rank-icon { background: rgba(255,17,51,.12); }
+    
+    .rank-header-senior-operator .rank-title::before { background: var(--accent-staff, #00ff66); }
+    .rank-header-senior-operator .rank-title { color: var(--accent-staff, #00ff66); }
+    .rank-header-senior-operator .rank-icon { background: rgba(0,255,102,.12); }
+    
+    .rank-header-operator .rank-title::before { background: var(--accent-field, #00ccff); }
+    .rank-header-operator .rank-title { color: var(--accent-field, #00ccff); }
+    .rank-header-operator .rank-icon { background: rgba(0,204,255,.12); }
+    
+    .rank-header-junior-operator .rank-title::before { background: var(--accent-field, #00ccff); }
+    .rank-header-junior-operator .rank-title { color: var(--accent-field, #00ccff); }
+    .rank-header-junior-operator .rank-icon { background: rgba(0,204,255,.12); }
+    
+    .rank-header-recruit .rank-title::before { background: var(--accent-field, #00ccff); }
+    .rank-header-recruit .rank-title { color: var(--accent-field, #00ccff); }
+    .rank-header-recrut .rank-icon { background: rgba(0,204,255,.12); }
+    
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    
+    .operator-card {
+      background: var(--panel, #1a1a1a);
+      border-radius: 10px;
+      border: 1px solid var(--accent-muted, #6a7f98);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 40px -20px var(--accent-muted, #6a7f98);
+    }
+    
+    .operator-card.command { 
+      --card-accent: var(--accent-command, #ff1133); 
+      --glow-color: rgba(255, 17, 51, 0.4);
+    }
+    
+    .operator-card.staff { 
+      --card-accent: var(--accent-staff, #00ff66); 
+      --glow-color: rgba(0, 255, 102, 0.4);
+    }
+    
+    .operator-card.field { 
+      --card-accent: var(--accent-field, #00ccff); 
+      --glow-color: rgba(0, 204, 255, 0.4);
+    }
+    
+    .operator-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--card-accent);
+      box-shadow: 0 0 60px -10px var(--glow-color);
+    }
+    
+    .operator-card::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(circle at center, var(--glow-color), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      filter: blur(20px);
+      z-index: -1;
+    }
+    
+    .operator-card:hover::before {
+      opacity: 0.6;
+    }
+    
+    .card-body {
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      height: 75%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .avatar-wrapper {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--card-accent);
+      margin: 0 auto 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    
+    .operator-card:hover .avatar-wrapper {
+      transform: scale(1.05);
+    }
+    
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--card-accent);
+    }
+    
+    .operator-rank {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--card-accent);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    
+    .operator-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-primary, #ffffff);
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    
+    .badges-container {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .badge-endorsement {
+      background: rgba(61, 135, 212, 0.12);
+      color: #3d87d4;
+      border: 1px solid rgba(61, 135, 212, 0.2);
+    }
+    
+    .badge-leadership {
+      background: rgba(240, 180, 41, 0.12);
+      color: #f0b429;
+      border: 1px solid rgba(240, 180, 41, 0.2);
+    }
+    
+    .card-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line, rgba(255,255,255,0.08)), transparent);
+      margin: 0 12px;
+    }
+    
+    .card-footer {
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 25%;
+    }
+    
+    .operator-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted, rgba(255,255,255,0.5));
+      line-height: 1.3;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    
+    .card-details {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--panel, #1a1a1a);
+      border-top: 1px solid var(--card-accent);
+      padding: 12px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 10;
+      text-align: left;
+    }
+    
+    .operator-card:hover .card-details {
+      transform: translateY(0);
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+    
+    .detail-label {
+      color: var(--text-muted, rgba(255,255,255,0.5));
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .detail-value {
+      color: var(--text-primary, #ffffff);
+      font-weight: 600;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-top: 2px solid var(--accent-command, #ff1133);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      }
+      
+      .avatar-wrapper {
+        width: 48px;
+        height: 48px;
+      }
+      
+      .operator-name {
+        font-size: 16px;
+      }
+      
+      .operators-title {
+        font-size: 32px;
+      }
+    }
+    </style>
+    
+    <div class="operators-header">
+      <span class="operators-subtitle">TACTICAL OPERATIONS</span>
+      <h1 class="operators-title">ACTIVE OPERATORS</h1>
+      <div class="operators-stats-bar">
+        <div class="operators-stat-item">
+          <span class="operators-stat-value" id="total-ops">0</span>
+          <span class="operators-stat-label">ACTIVE</span>
+        </div>
+        <div class="operators-stat-item">
+          <span class="operators-stat-value" id="command-leaves">0</span>
+          <span class="operators-stat-label">COMMAND</span>
+        </div>
+        <div class="operators-stat-item">
+          <span class="operators-stat-value" id="staff-leaves">0</span>
+          <span class="operators-stat-label">STAFF</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="loading" id="loading" style="display: none;">
+      <div class="loading-spinner"></div>
+    </div>
   </div>
 </div>
 
@@ -537,13 +977,40 @@ const ATT_MONTHS = [
 ];
 const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
 
-// Load operators list
+// Load operators list & roster
 (async function() {
   try {
-    const res = await fetch(API_BASE + '/api/members');
-    if (!res.ok) return;
-    const data = await res.json();
+    const [data, rosterData] = await Promise.all([
+      fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+      fetch(API_BASE + '/api/roster').then(r => r.ok ? r.json() : null).catch(() => null)
+    ]);
     const list = document.getElementById('operatorsList');
+    
+    // Render upcoming op from roster data
+    if (rosterData && rosterData.operation) {
+      const op = rosterData.operation;
+      const sections = rosterData.sections || [];
+      const command = rosterData.command || [];
+      let totalSlots = 0, filledSlots = 0;
+      for (const s of sections) {
+        for (const r of (s.roles || [])) { totalSlots++; if (r.member) filledSlots++; }
+      }
+      for (const r of command) { totalSlots++; if (r.member) filledSlots++; }
+      for (const a of (rosterData.attachments || [])) {
+        for (const r of (a.roles || [])) { totalSlots++; if (r.member) filledSlots++; }
+      }
+      document.getElementById('upcomingOpTitle').textContent = op.name || 'Upcoming Operation';
+      document.getElementById('upcomingOpDesc').textContent = `View available roles and sign up for the next operation.`;
+      document.getElementById('upcomingOpStatus').textContent = (op.status || 'upcoming').charAt(0).toUpperCase() + (op.status || 'upcoming').slice(1);
+      document.getElementById('upcomingOpStatus').style.color = op.status === 'live' ? '#36d07a' : op.status === 'complete' ? '#6a7f98' : '#f0b429';
+      document.getElementById('upcomingOpZeus').textContent = op.zeus || '—';
+      document.getElementById('upcomingOpDate').textContent = op.date || '—';
+      document.getElementById('upcomingOpFilled').textContent = `${filledSlots} / ${totalSlots} filled`;
+    } else {
+      document.getElementById('upcomingOpTitle').textContent = 'Upcoming Operation';
+      document.getElementById('upcomingOpDesc').textContent = 'View available roles and sign up for the next operation. Login with Discord to claim your slot.';
+    }
+    
     if (!list) return;
     const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
     // Group by rank

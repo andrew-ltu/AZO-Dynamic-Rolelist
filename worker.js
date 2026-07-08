@@ -133,7 +133,7 @@ async function addMember(env, name, discordId, displayName) {
   }
   membersData[name] = {
     discordId,
-    discordRank: '',
+    discordRank: 'Recruit',
     avatar: '',
     opsAttended: 0,
     endorsements: [],
@@ -199,6 +199,7 @@ export default {
     if (url.pathname === '/api/admin/archive-op' && request.method === 'POST') return handleArchiveOp(request, env, origin);
     if (url.pathname === '/api/admin/clear-assignments' && request.method === 'POST') return handleClearAssignments(request, env, origin);
     if (url.pathname === '/api/admin/save-members' && request.method === 'POST') return handleAdminSaveMembers(request, env, origin);
+    if (url.pathname === '/api/admin/delete-archive' && request.method === 'POST') return handleDeleteArchive(request, env, origin);
     if (url.pathname === '/api/previous-ops' && request.method === 'GET') return handleGetPreviousOps(request, env, origin);
 
     return jsonResponse({ error: 'Not found' }, 404, origin);
@@ -636,6 +637,25 @@ async function handleGetPreviousOps(request, env, origin) {
   const existing = await env.DB.prepare(`SELECT data FROM members WHERE name = '_previous_ops'`).first();
   const ops = existing ? JSON.parse(existing.data) : [];
   return jsonResponse(ops, 200, origin);
+}
+
+// POST /api/admin/delete-archive - Delete an archived operation
+async function handleDeleteArchive(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+
+  let body;
+  try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400, origin); }
+  if (typeof body.index !== 'number') return jsonResponse({ error: 'Invalid index' }, 400, origin);
+
+  const existing = await env.DB.prepare(`SELECT data FROM members WHERE name = '_previous_ops'`).first();
+  let ops = existing ? JSON.parse(existing.data) : [];
+  if (body.index < 0 || body.index >= ops.length) return jsonResponse({ error: 'Index out of range' }, 400, origin);
+  
+  ops.splice(body.index, 1);
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_previous_ops', ?, ?)`).bind(JSON.stringify(ops), now).run();
+  return jsonResponse({ ok: true, message: 'Archived operation deleted' }, 200, origin);
 }
 
 // Helper: verify admin from request

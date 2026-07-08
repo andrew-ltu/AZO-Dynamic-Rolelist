@@ -188,40 +188,58 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
   letter-spacing:1px;opacity:.5;background:var(--panel);
   padding:2px 10px;border-radius:999px;border:1px solid var(--line);
 }
-.ro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+.ro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
 .ro-card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:20px 14px 14px;text-align:center;
-  cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s;
-  color:inherit;font:inherit;width:100%;position:relative;
+  background:#1a1a1a;border:1px solid var(--accent,#ff1133);
+  border-radius:10px;padding:0;cursor:pointer;
+  transition:all .3s ease;color:inherit;font:inherit;
+  width:100%;position:relative;overflow:hidden;
+  box-shadow:0 0 28px -14px var(--accent,#ff1133);
 }
-.ro-card:hover{transform:translateY(-3px);border-color:var(--line-strong);box-shadow:0 8px 28px rgba(0,0,0,.35);}
-.ro-card:active{transform:translateY(-1px);}
-.ro-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;border:2px solid var(--line-strong);transition:transform .25s;}
-.ro-card:hover .ro-avatar{transform:scale(1.08);}
-.ro-avatar-fb{
-  width:52px;height:52px;border-radius:50%;margin:0 auto 10px;
+.ro-card:hover{
+  box-shadow:0 0 48px -6px var(--accent,#ff1133);
+  border-color:var(--accent,#ff1133);transform:translateY(-2px);
+}
+.ro-body{padding:24px 16px 14px;text-align:center;}
+.ro-avatar-wrap{
+  width:56px;height:56px;border-radius:50%;
+  border:2px solid var(--accent,#ff1133);
+  margin:0 auto 10px;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
-  background:var(--panel-solid);border:2px solid var(--line-strong);
-  font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--muted-2);
-  transition:transform .25s;
+  background:rgba(255,255,255,.04);
+  transition:transform .3s ease;
 }
-.ro-card:hover .ro-avatar-fb{transform:scale(1.08);}
-.ro-card .nm{font-weight:600;font-size:15px;color:#fff;margin-bottom:2px;}
-.ro-card .rk{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;transition:opacity .25s;}
+.ro-card:hover .ro-avatar-wrap{transform:scale(1.06);}
+.ro-avatar{width:100%;height:100%;object-fit:cover;display:block;}
+.ro-avatar-fb{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--accent,#ff1133);}
+.ro-rank{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent,#ff1133);margin-bottom:3px;
+}
+.ro-name{font-weight:700;font-size:15px;color:#fff;text-transform:uppercase;letter-spacing:.5px;}
+.ro-footer{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:8px 12px;text-align:center;
+}
+.ro-role{
+  font-family:'Share Tech Mono',monospace;font-size:8.5px;
+  letter-spacing:2px;text-transform:uppercase;color:#666;
+}
 .ro-detail{
-  overflow:hidden;max-height:0;opacity:0;
-  transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .3s, margin .3s;
-  margin-top:0;padding-top:0;border-top:0 solid var(--line);
-  font-size:12px;color:var(--muted);text-align:center;
+  max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .3s;
+  font-size:11px;color:var(--muted);text-align:center;
 }
-.ro-detail.open{max-height:200px;opacity:1;margin-top:12px;padding-top:12px;border-top-width:1px;}
-.ro-detail .stat{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:6px;}
-.ro-detail .stat-num{font-family:'Oswald';font-size:20px;font-weight:700;color:var(--primary-2);line-height:1;}
-.ro-detail .stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);}
-.ro-badge{display:inline-block;font-size:9px;padding:3px 9px;border-radius:999px;margin:2px;}
-.ro-badge-endorse{background:rgba(61,135,212,.12);color:var(--primary);border:1px solid rgba(61,135,212,.2);}
-.ro-badge-lead{background:rgba(240,180,41,.12);color:#f0b429;border:1px solid rgba(240,180,41,.2);}
+.ro-detail.open{max-height:160px;opacity:1;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);margin-top:6px;}
+.ro-detail .ro-detail-inner{padding:6px 12px 10px;}
+.ro-detail .stat{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;}
+.ro-detail .stat-num{font-family:'Oswald';font-size:18px;font-weight:700;color:var(--accent,var(--primary-2));line-height:1;}
+.ro-detail .stat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#666;}
+.ro-detail .badges{margin-top:6px;display:flex;flex-wrap:wrap;justify-content:center;gap:3px;}
+.ro-detail .badge{display:inline-block;font-size:8px;padding:2px 7px;border-radius:999px;}
+.ro-detail .badge-endorse{background:rgba(61,135,212,.1);color:var(--primary);border:1px solid rgba(61,135,212,.18);}
+.ro-detail .badge-lead{background:rgba(240,180,41,.1);color:#f0b429;border:1px solid rgba(240,180,41,.18);}
 
 /* ======================== MAP OVERLAY ======================== */
 .map-overlay{position:fixed;inset:0;z-index:58;display:none;padding:20px;background:rgba(3,6,11,.88);backdrop-filter:blur(7px);overflow-y:auto;}
@@ -1128,7 +1146,7 @@ function renderAdminSlot(slot, sectionKey, slotIdx) {
       ${endorsement ? `<span class="admin-slot-endorsement">🔒 ${esc(endorsement)}</span>` : ''}
     </div>
     <div class="admin-slot-actions">
-      <button class="admin-mini-btn" onclick="editSlotRole('${sectionKey}', ${slotIdx})" title="Change role name">Role</button>
+      <button class="admin-mini-btn" onclick="editSlotRole('${sectionKey}', ${slotIdx})" title="Edit role name">Edit</button>
       <button class="admin-mini-btn" onclick="editSlotAssign('${sectionKey}', ${slotIdx})" title="Assign a member">Assign</button>
       ${member ? `<button class="admin-mini-btn" onclick="editSlotUnassign('${sectionKey}', ${slotIdx})" title="Remove member">Unassign</button>` : ''}
       <button class="admin-mini-btn" onclick="editSlotEndorsement('${sectionKey}', ${slotIdx})" title="${slot.endorsementRequired ? 'Remove endorsement lock' : 'Add endorsement lock'}">${slot.endorsementRequired ? '🔓' : '🔒'}</button>
@@ -1254,19 +1272,22 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
   const existing = document.querySelector('#adminAssignOverlay');
   if (existing) existing.remove();
 
+  const roleDisplay = typeof slot === 'string' ? slot : (slot.role || 'Role');
   const overlay = document.createElement('div');
   overlay.id = 'adminAssignOverlay';
   overlay.innerHTML = `
-    <div class="admin-assign-backdrop" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;">
-      <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:20px;width:360px;max-height:70vh;overflow:hidden;display:flex;flex-direction:column;">
-        <h3 style="margin:0 0 10px;font-family:Oswald;font-size:16px;">Assign to slot</h3>
-        <div style="position:relative;margin-bottom:8px;">
-          <input id="adminAssignInput" type="text" placeholder="Search members..." style="width:100%;padding:8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
-          <div id="adminAssignList" style="position:absolute;top:100%;left:0;right:0;max-height:300px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;margin-top:4px;display:none;z-index:10;"></div>
+    <div class="admin-assign-backdrop" onclick="if(event.target===this)document.getElementById('adminAssignOverlay').remove()" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:24px;width:min(520px,90vw);max-height:80vh;overflow:hidden;display:flex;flex-direction:column;gap:8px;">
+        <h3 style="margin:0;font-family:Oswald;font-size:17px;letter-spacing:1px;text-transform:uppercase;color:#fff;">Assign to slot</h3>
+        <div style="font-size:12px;color:var(--muted-2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;">${esc(roleDisplay)}</div>
+        <div style="position:relative;margin:4px 0;">
+          <input id="adminAssignInput" type="text" placeholder="Search members..." style="width:100%;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:14px;outline:none;">
+          <div id="adminAssignList" style="position:absolute;top:100%;left:0;right:0;max-height:320px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;margin-top:4px;display:none;z-index:10;box-shadow:0 8px 32px rgba(0,0,0,.4);"></div>
         </div>
-        <div id="adminAssignStatus" style="font-size:12px;color:var(--muted-2);margin-top:4px;"></div>
-        <div style="display:flex;gap:8px;margin-top:10px;">
+        <div id="adminAssignStatus" style="font-size:12px;color:var(--muted-2);"></div>
+        <div style="display:flex;gap:8px;margin-top:4px;">
           <button class="admin-mini-btn" onclick="document.getElementById('adminAssignOverlay').remove()">Cancel</button>
+          <button class="admin-mini-btn" onclick="clearAndFilter()" style="margin-left:auto;">Clear Assignments</button>
         </div>
       </div>
     </div>`;
@@ -1276,17 +1297,43 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
   const list = $('#adminAssignList');
   const status = $('#adminAssignStatus');
 
+  // Get assigned names with their slot info
+  function getAssignedMap() {
+    const assigned = {};
+    const ro = currentRoster;
+    if (!ro) return assigned;
+    for (const s of ro.sections || []) {
+      for (const r of (s.roles || [])) { if (r.member) assigned[r.member] = true; }
+    }
+    for (const r of ro.command || []) { if (r.member) assigned[r.member] = true; }
+    for (const a of ro.attachments || []) {
+      for (const r of (a.roles || [])) { if (r.member) assigned[r.member] = true; }
+    }
+    return assigned;
+  }
+
   const sortedNames = Object.keys(MEMBERS).filter(k => !k.startsWith('_')).sort();
 
   function renderList(q) {
     const filtered = q ? sortedNames.filter(n => n.toLowerCase().includes(q.toLowerCase())) : sortedNames;
     if (!filtered.length) { list.style.display = 'none'; return; }
-    list.innerHTML = filtered.map(n => `<div class="op-dropdown-item" data-value="${esc(n)}">${esc(n)}</div>`).join('');
+    const assigned = getAssignedMap();
+    list.innerHTML = filtered.map(n => {
+      const isAssigned = assigned[n] || false;
+      return `<div class="op-dropdown-item" data-value="${esc(n)}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${isAssigned?'opacity:.55;':''}">
+        <span style="flex:1;font-size:14px;font-weight:600;">${esc(n)}</span>
+        ${isAssigned?'<span style="font-size:10px;font-family:\'Share Tech Mono\',monospace;letter-spacing:1px;color:var(--muted-2);">ASSIGNED</span>':''}
+      </div>`;
+    }).join('');
     list.style.display = 'block';
     list.querySelectorAll('.op-dropdown-item').forEach(item => {
       item.addEventListener('mousedown', e => {
         e.preventDefault();
         const name = item.dataset.value;
+        const assignCheck = assigned[name];
+        if (assignCheck) {
+          if (!confirm(`${name} is already assigned to another slot. Reassign?`)) return;
+        }
         if (slot.endorsementRequired && slot.endorsementType && !memberHasEndorsement(name, slot.endorsementType)) {
           if (!confirm(`${name} does not have ${slot.endorsementType}. Assign anyway?`)) return;
         }
@@ -1301,6 +1348,21 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
   input.addEventListener('focus', () => renderList(input.value.trim()));
   input.addEventListener('blur', () => setTimeout(() => { list.style.display = 'none'; }, 200));
   input.focus();
+  
+  // Clear all button in dropdown
+  window.clearAndFilter = () => {
+    if (!confirm('Clear ALL slot assignments?')) return;
+    for (const s of currentRoster.sections || []) {
+      for (const r of s.roles || []) r.member = null;
+    }
+    for (const r of currentRoster.command || []) r.member = null;
+    for (const a of currentRoster.attachments || []) {
+      for (const r of a.roles || []) r.member = null;
+    }
+    overlay.remove();
+    delete window.clearAndFilter;
+    saveRoster(); renderAdminSections();
+  };
 };
 
 // Unassign member from slot
@@ -1413,13 +1475,15 @@ function renderMembers() {
   if (!el) return;
   const entries = Object.entries(membersData).filter(([k]) => !k.startsWith('_'));
   el.innerHTML = entries.map(([name, m]) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);gap:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);gap:6px;">
       <div style="flex:1;min-width:0;">
         <div style="font-weight:600;font-size:13px;color:#fff;">${esc(name)}</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${esc(m.discordRank||'No rank')} · ${m.opsAttended||0} ops</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${esc(m.discordRank||'No rank')} · ${m.opsAttended||0} ops · ${(m.endorsements||[]).length} endorsements</div>
       </div>
-      <button class="admin-mini-btn" onclick="editMemberRank('${esc(name)}')" style="flex-shrink:0;">Rank</button>
-      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteMember('${esc(name)}')" style="flex-shrink:0;">🗑</button>
+      <button class="admin-mini-btn" onclick="editMemberRank('${esc(name)}')" style="flex-shrink:0;" title="Change rank">Rank</button>
+      <button class="admin-mini-btn" onclick="editMemberEndorsements('${esc(name)}')" style="flex-shrink:0;" title="Edit endorsements">Endorse</button>
+      <button class="admin-mini-btn" onclick="editMemberLeadership('${esc(name)}')" style="flex-shrink:0;" title="Set leadership">Lead</button>
+      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteMember('${esc(name)}')" style="flex-shrink:0;" title="Remove member">🗑</button>
     </div>
   `).join('');
 }
@@ -1430,6 +1494,26 @@ window.editMemberRank = (name) => {
   const rank = prompt(`Rank for ${name}:`, m.discordRank || '');
   if (rank === null) return;
   m.discordRank = rank;
+  saveMembers();
+};
+
+window.editMemberEndorsements = (name) => {
+  const m = membersData[name];
+  if (!m) return;
+  const current = (m.endorsements || []).join(', ');
+  const input = prompt(`Endorsements for ${name} (comma-separated):\nOptions: Medical, Fixed Wing, Rotary, Demolition, JTAC, Radioman, Marksman, Crewman`, current);
+  if (input === null) return;
+  m.endorsements = input.split(',').map(s => s.trim()).filter(Boolean);
+  saveMembers();
+};
+
+window.editMemberLeadership = (name) => {
+  const m = membersData[name];
+  if (!m) return;
+  const current = m.leadership || 'none';
+  const input = prompt(`Leadership status for ${name}:\nEnter: senior, junior, or leave blank for none`, current === 'none' ? '' : current);
+  if (input === null) return;
+  m.leadership = input.trim() || null;
   saveMembers();
 };
 
@@ -1471,6 +1555,23 @@ $('#addMemberBtn').addEventListener('click', () => {
   saveMembers();
 });
 
+window.deleteArchivedOp = async (index) => {
+  if (!confirm('Delete this archived operation?')) return;
+  try {
+    const token = localStorage.getItem('azo_token');
+    if (!token) { alert('Not authenticated'); return; }
+    const res = await fetch(`${API_BASE}/api/admin/delete-archive`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ index })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Delete failed');
+    showStatus('quickActionsStatus', data.message, 'success');
+    renderPreviousOps();
+  } catch(e) { showStatus('quickActionsStatus', 'Error: ' + e.message, 'error'); }
+};
+
 async function renderPreviousOps() {
   const el = $('#previousOpsList');
   if (!el) return;
@@ -1479,10 +1580,16 @@ async function renderPreviousOps() {
     if (!res.ok) { el.innerHTML = '<span style="color:var(--muted-2);">No previous ops</span>'; return; }
     const ops = await res.json();
     if (!ops.length) { el.innerHTML = '<span style="color:var(--muted-2);">No archived operations yet</span>'; return; }
-    el.innerHTML = ops.slice().reverse().map(op => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);">
-        <div><strong style="color:#fff;">${esc(op.name)}</strong><br><span style="font-size:11px;color:var(--muted-2);">${esc(op.date||'No date')} · Zeus: ${esc(op.zeus||'N/A')}</span></div>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${new Date(op.archivedAt).toLocaleDateString()}</span>
+    el.innerHTML = ops.slice().reverse().map((op, i) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);gap:8px;">
+        <div style="flex:1;min-width:0;">
+          <strong style="color:#fff;">${esc(op.name)}</strong><br>
+          <span style="font-size:11px;color:var(--muted-2);">${esc(op.date||'No date')} · Zeus: ${esc(op.zeus||'N/A')}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${new Date(op.archivedAt).toLocaleDateString()}</span>
+          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteArchivedOp(${ops.length - 1 - i})" style="padding:4px 8px;font-size:10px;" title="Delete">✕</button>
+        </div>
       </div>
     `).join('');
   } catch(e) { el.innerHTML = '<span style="color:var(--muted-2);">Failed to load</span>'; }
@@ -1835,6 +1942,15 @@ function openProfile(name){
 function closeModal(){$('#modalBack').classList.remove('show');}
 
 /* ---------- operators overlay ---------- */
+const RANK_CARD_COLORS={
+  'SOCOMD':'#ff1133','Senior Operator':'#00ff66',
+  'Operator':'#00ccff','Junior Operator':'#00ccff','Recruit':'#00ccff'
+};
+function getRoleText(m){
+  if(m.leadership==='senior')return'STAFF';
+  if(m.leadership==='junior')return'JUNIOR STAFF';
+  return'OPERATOR';
+}
 function openRoster(){
   const members=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).map(member);
   const groups={};
@@ -1842,31 +1958,39 @@ function openRoster(){
   const order=Object.keys(groups).sort((a,b)=>(RANK_SORT[a]??9)-(RANK_SORT[b]??9)||a.localeCompare(b));
   const html=order.map(rank=>{
     const list=groups[rank].sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-    const color=RANK_COLORS[rank]||'#6a7f98';
+    const accent=RANK_CARD_COLORS[rank]||'#00ccff';
     const cards=list.map(m=>{
       const av=m.avatar;
       const hasAvatar=av&&av!=='';
       const initial=m.name.charAt(0).toUpperCase();
-      const avatarHtml=hasAvatar
-        ?`<img class="ro-avatar" src="${esc(av)}" alt="" onerror="this.outerHTML='<div class=\\'ro-avatar-fb\\'>${esc(initial)}</div>'">`
-        :`<div class="ro-avatar-fb">${esc(initial)}</div>`;
-      const endorseHtml=(m.endorsements||[]).map(e=>`<span class="ro-badge ro-badge-endorse">${esc(e)}</span>`).join('');
-      const leadHtml=m.leadership?`<span class="ro-badge ro-badge-lead">${esc(m.leadership)}</span>`:'';
+      const avatarInner=hasAvatar
+        ?`<img class="ro-avatar" src="${esc(av)}" alt="" onerror="this.outerHTML='<span class=\\'ro-avatar-fb\\'>${esc(initial)}</span>'">`
+        :`<span class="ro-avatar-fb">${esc(initial)}</span>`;
+      const roleText=getRoleText(m);
+      const endorseHtml=(m.endorsements||[]).map(e=>`<span class="badge badge-endorse">${esc(e)}</span>`).join('');
+      const leadHtml=m.leadership?`<span class="badge badge-lead">${esc(m.leadership)}</span>`:'';
       const badges=[leadHtml,endorseHtml].filter(Boolean).join('');
-      return `<button class="ro-card" type="button" onclick="this.querySelector('.ro-detail').classList.toggle('open')">
-        ${avatarHtml}
-        <div class="nm">${esc(m.name)}</div>
-        <div class="rk" style="color:${color}">${esc(m.discordRank)}</div>
-        <div class="ro-detail">
-          <div class="stat">
-            <span class="stat-num">${m.opsAttended}</span>
-            <span class="stat-lbl">Ops Attended</span>
+      return `<button class="ro-card" type="button" onclick="this.querySelector('.ro-detail').classList.toggle('open')" style="--accent:${accent}">
+        <div class="ro-body">
+          <div class="ro-avatar-wrap">${avatarInner}</div>
+          <div class="ro-rank">${esc(m.discordRank)}</div>
+          <div class="ro-name">${esc(m.name)}</div>
+        </div>
+        <div class="ro-footer">
+          <div class="ro-role">${roleText}</div>
+          <div class="ro-detail">
+            <div class="ro-detail-inner">
+              <div class="stat">
+                <span class="stat-num">${m.opsAttended}</span>
+                <span class="stat-lbl">Ops</span>
+              </div>
+              <div class="badges">${badges}</div>
+            </div>
           </div>
-          ${badges}
         </div>
       </button>`;
     }).join('');
-    return `<div class="ro-rank-hdr" style="color:${color};border-left-color:${color}">${esc(rank)}<span class="cnt">${list.length}</span></div><div class="ro-grid">${cards}</div>`;
+    return `<div class="ro-rank-hdr" style="color:${accent};border-left-color:${accent}"><span>${esc(rank)}</span><span class="cnt">${list.length}</span></div><div class="ro-grid">${cards}</div>`;
   }).join('');
   $('#rosterBody').innerHTML=html;
   $('#rosterOverlay').classList.add('show');
