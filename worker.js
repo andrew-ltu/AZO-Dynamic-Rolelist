@@ -216,6 +216,7 @@ export default {
     if (url.pathname === '/api/admin/save-members' && request.method === 'POST') return handleAdminSaveMembers(request, env, origin);
     if (url.pathname === '/api/admin/delete-archive' && request.method === 'POST') return handleDeleteArchive(request, env, origin);
     if (url.pathname === '/api/previous-ops' && request.method === 'GET') return handleGetPreviousOps(request, env, origin);
+    if (url.pathname === '/api/discord-stats' && request.method === 'GET') return handleDiscordStats(request, env, origin);
 
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
@@ -688,4 +689,20 @@ async function verifyAdmin(request, env) {
   const resolved = roleRows.results.map(r => r.role_name.startsWith('_id:') ? (roleMap[r.role_name.slice(4)] || r.role_name) : r.role_name);
   if (resolved.some(r => /admin|staff/i.test(r))) return payload;
   return null;
+}
+
+async function handleDiscordStats(request, env, origin) {
+  if (!env.DISCORD_BOT_TOKEN || !env.DISCORD_GUILD_ID) {
+    return jsonResponse({ error: 'Discord not configured' }, 500, origin);
+  }
+  try {
+    const res = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}`, {
+      headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+    });
+    if (!res.ok) throw new Error(`Discord API error: ${res.status}`);
+    const guild = await res.json();
+    return jsonResponse({ memberCount: guild.approximate_member_count || guild.member_count || 0 }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
 }

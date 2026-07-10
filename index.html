@@ -395,7 +395,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 </section>
 
 <div class="stats">
-  <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Active Members</div></div>
+  <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Average Op Attendance</div></div>
   <div class="stat"><div class="stat-num" id="discordMembers">—</div><div class="stat-lbl">Members in Discord</div></div>
   <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Years Mission Making Experience</div></div>
   <div class="stat"><div class="stat-num">1</div><div class="stat-lbl">Op Per Fortnight</div></div>
@@ -1245,12 +1245,11 @@ function renderOperatorsList(list, data) {
 
   // Fetch Discord member count
   try {
-    const membersRes = await fetch(API_BASE + '/api/members');
+    const membersRes = await fetch(API_BASE + '/api/discord-stats');
     if (membersRes.ok) {
-      const members = await membersRes.json();
-      const count = Object.keys(members).filter(k => !k.startsWith('_')).length;
+      const data = await membersRes.json();
       const el = document.getElementById('discordMembers');
-      if (el) el.textContent = count;
+      if (el) el.textContent = data.memberCount || '—';
     }
   } catch(e) {
     const el = document.getElementById('discordMembers');
