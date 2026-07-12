@@ -402,7 +402,21 @@ async function handleGetRoster(request, env, origin) {
 async function handleGetMembers(request, env, origin) {
   try {
     const members = await getMembers(env);
-    // Enrich with avatar URLs from users table
+    // Enrich with Discord CDN avatars for members without a local avatar file
+    const userResults = await env.DB.prepare(`SELECT id, username, global_name, avatar FROM users`).all();
+    for (const user of userResults.results) {
+      if (user.avatar) {
+        const displayName = user.global_name || user.username;
+        for (const [name, data] of Object.entries(members)) {
+          if (name.startsWith('_')) continue;
+          if (data.avatar && data.avatar.startsWith('/')) continue; // has local file, skip
+          if (data.discordId === user.id || name.toLowerCase() === displayName.toLowerCase()) {
+            data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
+            break;
+          }
+        }
+      }
+    }
     return jsonResponse(members, 200, origin);
   } catch (e) {
     return jsonResponse({ error: 'Failed to fetch members' }, 500, origin);
