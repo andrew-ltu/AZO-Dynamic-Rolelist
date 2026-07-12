@@ -87,6 +87,11 @@ async function getRoster(env) {
 
 async function saveRoster(env, data) {
   const now = Math.floor(Date.now() / 1000);
+  // Auto-backup previous state before saving
+  const prev = await env.DB.prepare(`SELECT data FROM roster WHERE id = 1`).first();
+  if (prev) {
+    await env.DB.prepare(`INSERT OR REPLACE INTO members (name, data, updated_at) VALUES ('_roster_snapshot', ?, ?)`).bind(prev.data, now).run();
+  }
   await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
 }
 
@@ -217,6 +222,8 @@ export default {
     if (url.pathname === '/api/admin/delete-archive' && request.method === 'POST') return handleDeleteArchive(request, env, origin);
     if (url.pathname === '/api/previous-ops' && request.method === 'GET') return handleGetPreviousOps(request, env, origin);
     if (url.pathname === '/api/discord-stats' && request.method === 'GET') return handleDiscordStats(request, env, origin);
+    if (url.pathname === '/api/admin/sync-github' && request.method === 'POST') return handleSyncFromGitHub(request, env, origin);
+    if (url.pathname === '/api/admin/restore-snapshot' && request.method === 'POST') return handleRestoreSnapshot(request, env, origin);
 
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
@@ -712,6 +719,35 @@ async function handleDiscordStats(request, env, origin) {
     if (!res.ok) throw new Error(`Discord API error: ${res.status}`);
     const guild = await res.json();
     return jsonResponse({ memberCount: guild.approximate_member_count || guild.member_count || 0 }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleSyncFromGitHub(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
+    if (!res.ok) return jsonResponse({ error: 'Failed to fetch from GitHub' }, 502, origin);
+    const data = await res.json();
+    await saveRoster(env, data);
+    return jsonResponse({ ok: true, message: 'Roster synced from GitHub' }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleRestoreSnapshot(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const row = await env.DB.prepare(`SELECT data FROM members WHERE name = '_roster_snapshot'`).first();
+    if (!row) return jsonResponse({ error: 'No backup snapshot found' }, 404, origin);
+    const data = JSON.parse(row.data);
+    const now = Math.floor(Date.now() / 1000);
+    await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
+    return jsonResponse({ ok: true, message: 'Restored from last snapshot' }, 200, origin);
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, origin);
   }

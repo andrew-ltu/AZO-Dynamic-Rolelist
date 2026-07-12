@@ -1424,6 +1424,45 @@ window.restoreLocalBackup = () => {
   }
 };
 
+window.syncFromGitHub = async () => {
+  if (!confirm('Sync roster from GitHub? This will replace current assignments with whatever is in the repo.')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return alert('Not authenticated');
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/sync-github`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Sync failed');
+    const roster = await fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json());
+    currentRoster = roster; render(roster);
+    document.getElementById('backupStatus').textContent = '✅ Synced from GitHub';
+    document.getElementById('backupStatus').style.color = '#36d07a';
+  } catch (err) {
+    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
+    document.getElementById('backupStatus').style.color = '#d94040';
+  }
+};
+window.restoreSnapshot = async () => {
+  if (!confirm('Restore from last auto-snapshot? This is taken every time the roster is saved via admin panel.')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return alert('Not authenticated');
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/restore-snapshot`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Restore failed');
+    const roster = await fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json());
+    currentRoster = roster; render(roster);
+    document.getElementById('backupStatus').textContent = '✅ Restored from auto-snapshot';
+    document.getElementById('backupStatus').style.color = '#36d07a';
+  } catch (err) {
+    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
+    document.getElementById('backupStatus').style.color = '#d94040';
+  }
+};
+
 // Unassign member from slot
 window.editSlotUnassign = (sectionKey, slotIdx) => {
   const slot = getSlot(sectionKey, slotIdx);
@@ -2435,6 +2474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render(roster);
     // Auto-backup roster to localStorage
     try{localStorage.setItem('azo_roster_backup',JSON.stringify(roster));localStorage.setItem('azo_backup_time',new Date().toISOString());}catch(e){}
+
   }catch(err){
     $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
     console.error(err);
@@ -2553,6 +2593,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="admin-btn admin-btn-secondary" onclick="document.getElementById('restoreFileInput').click()">⬆ Restore from Backup</button>
         <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="restoreFromBackup(event)">
         <button class="admin-btn admin-btn-secondary" onclick="restoreLocalBackup()">↩ Restore Local Backup</button>
+        <button class="admin-btn admin-btn-secondary" onclick="syncFromGitHub()">🔄 Sync from GitHub</button>
+        <button class="admin-btn admin-btn-secondary" onclick="restoreSnapshot()">⏪ Restore Auto-Snapshot</button>
       </div>
       <div id="backupStatus" class="admin-status-msg"></div>
     </div>
