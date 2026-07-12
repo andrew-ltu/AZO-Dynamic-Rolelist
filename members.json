@@ -26,7 +26,8 @@
       "Fixed Wing",
       "Rotary",
       "Marksman",
-      "Crewman"
+      "Crewman",
+      "Leadership"
     ],
     "leadership": null
   },
@@ -39,6 +40,7 @@
     "leadership": "junior"
   },
   "BadKarma": {
+    "discordId": "317887795131842571",
     "discordRank": "Senior Operator",
     "avatar": "assets/avatars/badkarma.png",
     "opsAttended": 4,
@@ -54,8 +56,7 @@
     "avatar": "assets/avatars/monke.png",
     "opsAttended": 4,
     "endorsements": [
-      "Demolition",
-      "Radioman"
+      "Demolition"
     ],
     "leadership": null
   },
@@ -85,6 +86,7 @@
     "leadership": "junior"
   },
   "Krill": {
+    "discordId": "429955381104607242",
     "discordRank": "Operator",
     "avatar": "assets/avatars/krill.png",
     "opsAttended": 2,
