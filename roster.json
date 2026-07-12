@@ -51,7 +51,7 @@
     },
     {
       "role": "Platoon Medic",
-      "member": null,
+      "member": "Zep",
       "endorsementRequired": true,
       "endorsementType": "Medical Endorsement"
     }
@@ -62,7 +62,7 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": null,
+          "member": "Malt",
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
