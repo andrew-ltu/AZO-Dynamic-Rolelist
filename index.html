@@ -394,6 +394,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   </div>
 </section>
 
+<div id="signupBanner" style="display:none;text-align:center;padding:12px 20px;background:linear-gradient(135deg,rgba(54,208,122,.12),rgba(61,135,212,.08));border-bottom:1px solid rgba(54,208,122,.2);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:1px;color:#36d07a;">
+  🚀 Taking Sign-Ups Now — Operation Karoonda III — 18 July @ 7pm AEST
+</div>
 <div class="stats">
   <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Average Op Attendance</div></div>
   <div class="stat"><div class="stat-num">112</div><div class="stat-lbl">Members in Discord</div></div>
@@ -1243,6 +1246,11 @@ function renderOperatorsList(list, data) {
       }
     }
   } catch(e) {}
+
+  // Live sign-up banner — visible until op starts (18 July 7pm AEST = 09:00 UTC)
+  const OP_START = new Date('2026-07-18T09:00:00Z');
+  const banner = document.getElementById('signupBanner');
+  if (banner && new Date() < OP_START) banner.style.display = 'block';
 
 })();
 
