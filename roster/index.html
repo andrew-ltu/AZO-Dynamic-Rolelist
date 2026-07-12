@@ -114,6 +114,8 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .sec-head .count{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:1px;}
 .sec-head .lock{font-size:14px;}
 .sec.locked .sec-head{background:linear-gradient(180deg,rgba(100,115,130,.15),transparent),var(--panel-solid);color:var(--muted);}
+.sec.joint{border-color:rgba(54,208,122,.35);}
+.sec.joint .sec-head{background:linear-gradient(180deg,rgba(54,208,122,.12),transparent),var(--panel-solid);color:#6ae0a0;}
 .sec-body{padding:6px;display:flex;flex-direction:column;gap:4px;}
 .lock-note{padding:10px 14px;font-size:11px;color:var(--muted-2);border-top:1px dashed var(--line);background:rgba(0,0,0,.15);display:flex;gap:7px;align-items:center;}
 .endorse-pill{display:inline;margin-left:4px;font-size:12px;font-weight:700;color:#f0b429;cursor:help;}
@@ -1907,7 +1909,8 @@ function render(roster){
     const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
     const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
-    return `<div class="sec ${sec.locked?'locked':''} bracketed">
+    const jointClass=sec.joint?'joint':'';
+    return `<div class="sec ${sec.locked?'locked':''} ${jointClass} bracketed">
       <div class="sec-head">${esc(sec.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
   }).join('');
@@ -1918,7 +1921,8 @@ function render(roster){
     const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}},uname)).join('');
     const headRight=att.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=att.locked&&att.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>`:'';
-    return `<div class="sec ${att.locked?'locked':''} bracketed">
+    const ajc=att.joint?'joint':'';
+    return `<div class="sec ${att.locked?'locked':''} ${ajc} bracketed">
       <div class="sec-head">${esc(att.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
   }).join('');

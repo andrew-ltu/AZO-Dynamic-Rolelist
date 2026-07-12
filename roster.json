@@ -24,7 +24,7 @@
                      "HiveMynd",
                      "Jag McMuffin",
                      "Jon Taiwan",
-                     "J+ñger",
+                     "J+ï¿½ger",
                      "Misaka",
                      "Monke",
                      "Sir Danger",
@@ -143,10 +143,11 @@
                                        }
                                    ]
                      },
-                     {
-                         "name":  "CHARLIE",
-                         "locked":  true,
-                         "lockedLabel":  "13th Crash Division",
+                        {
+                            "name":  "CHARLIE",
+                            "joint":  true,
+                            "locked":  true,
+                            "lockedLabel":  "13th Crash Division",
                          "roles":  [
                                        {
                                            "role":  "Section Leader",
@@ -190,28 +191,29 @@
                      }
                  ],
     "attachments":  [
-                        {
-                            "name":  "BLACKJACK",
-                            "locked":  false,
-                            "lockedLabel":  "AFSOC",
-                            "roles":  [
-                                          {
-                                              "role":  "Pilot",
-                                              "member":  "B. Hag"
-                                          },
-                                          {
-                                              "role":  "Co-pilot",
-                                              "member":  "D. Mason"
-                                          },
-                                          {
-                                              "role":  "Crew Chief",
-                                              "member":  "C. Weeb"
-                                          },
-                                          {
-                                              "role":  "Gunner",
-                                              "member":  "J. Jabbzo"
-                                          }
-                                      ]
-                        }
+                      {
+                          "name":  "BLACKJACK",
+                          "joint":  true,
+                          "locked":  false,
+                          "lockedLabel":  "AFSOC",
+                          "roles":  [
+                                        {
+                                            "role":  "Pilot",
+                                            "member":  "1st Lt B. Hag"
+                                        },
+                                        {
+                                            "role":  "Co-pilot",
+                                            "member":  "2d Lt D. Mason"
+                                        },
+                                        {
+                                            "role":  "Crew Chief",
+                                            "member":  "TSgt C. Weeb"
+                                        },
+                                        {
+                                            "role":  "Gunner",
+                                            "member":  "SSgt J. Jabbzo"
+                                        }
+                                    ]
+                      }
                     ]
 }
