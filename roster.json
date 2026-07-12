@@ -197,19 +197,19 @@
       "roles": [
         {
           "role": "Pilot",
-          "member": null
+          "member": "B. Hag"
         },
         {
           "role": "Co-pilot",
-          "member": null
+          "member": "D. Mason"
         },
         {
           "role": "Crew Chief",
-          "member": null
+          "member": "C. Weeb"
         },
         {
           "role": "Gunner",
-          "member": null
+          "member": "J. Jabbzo"
         }
       ]
     }
