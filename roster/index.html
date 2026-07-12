@@ -1855,7 +1855,6 @@ function render(roster){
       <div class="op-meta">
         <span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>
         ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
-        ${op.tier?`<span class="pill"><span class="k">Tier</span><span class="v">${esc(op.tier)}</span></span>`:''}
         <button type="button" onclick="openMap()" style="background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.3);border-radius:999px;padding:5px 13px;color:#36d07a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;">🗺 Campaign Map</button>
         <button type="button" onclick="openRoster()" style="background:rgba(61,135,212,.12);border:1px solid rgba(61,135,212,.3);border-radius:999px;padding:5px 13px;color:var(--primary-2);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;">👥 Operators · ${activeCount}</button>
       </div>
