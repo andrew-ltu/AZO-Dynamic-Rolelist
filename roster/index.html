@@ -934,6 +934,15 @@ function memberHasEndorsement(memberName,endorsementType){
   if(!m)return false;
   const arr=Array.isArray(m.endorsements)?m.endorsements:[];
   const needle=endorsementType.toLowerCase();
+  
+  // Special handling: Leadership Endorsement satisfied by Junior/Senior Leadership
+  if(needle.replace(/ endorsement$/i,'').trim()==='leadership'){
+    return arr.some(e=>{
+      const lower=e.toLowerCase();
+      return lower.includes('leadership');
+    });
+  }
+  
   return arr.some(e=>e.toLowerCase().includes(needle.replace(/ endorsement$/i,'').trim()));
 }
 
