@@ -39,13 +39,21 @@
   "command": [
     {
       "role": "Platoon Commander",
-      "member": "Sir Danger",
+      "member": null,
       "endorsementRequired": true,
       "endorsementType": "JTAC Endorsement"
     },
     {
       "role": "JTAC",
-      "member": "Jäger"
+      "member": null,
+      "endorsementRequired": true,
+      "endorsementType": "JTAC Endorsement"
+    },
+    {
+      "role": "Platoon Medic",
+      "member": null,
+      "endorsementRequired": true,
+      "endorsementType": "Medical Endorsement"
     }
   ],
   "sections": [
@@ -54,19 +62,19 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": "Vain",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Asst. Section Leader",
-          "member": "24pool1",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Grenadier",
-          "member": "Monke"
+          "member": null
         },
         {
           "role": "Grenadier",
@@ -74,27 +82,21 @@
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Mietsko"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "AnimePanda"
+          "member": null
         },
         {
           "role": "Rifleman",
           "member": null
         },
         {
-          "role": "Rifleman",
-          "member": "blueberet"
-        },
-        {
-          "role": "Rifleman",
-          "member": "HiveMynd"
-        },
-        {
-          "role": "Rifleman",
-          "member": "The Raven"
+          "role": "Medic",
+          "member": null,
+          "endorsementRequired": true,
+          "endorsementType": "Medical Endorsement"
         }
       ]
     },
@@ -103,136 +105,111 @@
       "roles": [
         {
           "role": "Section Leader",
-          "member": "Gunter",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Asst. Section Leader",
-          "member": "Misaka",
+          "member": null,
           "endorsementRequired": true,
           "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Anti-tank",
-          "member": "Jon Taiwan"
+          "member": null
         },
         {
           "role": "Asst. Anti-tank",
-          "member": "Orter"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Mitch"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "Gill"
-        },
-        {
-          "role": "Rifleman",
-          "member": "Earthball"
-        },
-        {
-          "role": "Rifleman",
-          "member": "Terack"
-        },
-        {
-          "role": "Rifleman",
-          "member": "Xeonovaes"
+          "member": null
         },
         {
           "role": "Rifleman",
           "member": null
+        },
+        {
+          "role": "Medic",
+          "member": null,
+          "endorsementRequired": true,
+          "endorsementType": "Medical Endorsement"
         }
       ]
     },
     {
       "name": "CHARLIE",
+      "locked": true,
+      "lockedLabel": "13th Crash Division",
       "roles": [
         {
           "role": "Section Leader",
-          "member": "Cmdr. Garuda XIII"
+          "member": null,
+          "endorsementRequired": true,
+          "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Asst. Section Leader",
-          "member": "Cmmsr Tooko"
+          "member": null,
+          "endorsementRequired": true,
+          "endorsementType": "Leadership Endorsement"
         },
         {
           "role": "Grenadier",
-          "member": "Snr Ctr. Unphayzable"
+          "member": null
         },
         {
           "role": "Grenadier",
-          "member": "Lt. Fracture"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "SecOps. Dan"
+          "member": null
         },
         {
           "role": "LSW (Minimi)",
-          "member": "QM. DODO"
+          "member": null
         },
         {
           "role": "Rifleman",
-          "member": "Snr Ctr. Kenn"
+          "member": null
         },
         {
-          "role": "Rifleman",
-          "member": "Snr Ctr. Boomer"
+          "role": "Medic",
+          "member": null,
+          "endorsementRequired": true,
+          "endorsementType": "Medical Endorsement"
         }
       ]
     }
   ],
   "attachments": [
     {
-      "name": "MEDICAL TEAM",
-      "roles": [
-        {
-          "role": "Platoon Medic",
-          "member": "Zep",
-          "endorsementRequired": true,
-          "endorsementType": "Medical Endorsement"
-        },
-        {
-          "role": "Medic",
-          "member": "GoGoBendy",
-          "endorsementRequired": true,
-          "endorsementType": "Medical Endorsement"
-        },
-        {
-          "role": "Medic",
-          "member": "Spacecat82",
-          "endorsementRequired": true,
-          "endorsementType": "Medical Endorsement"
-        },
-        {
-          "role": "Medic",
-          "member": "Crallers",
-          "endorsementRequired": true,
-          "endorsementType": "Medical Endorsement"
-        }
-      ]
-    },
-    {
       "name": "BLACKJACK",
+      "locked": true,
+      "lockedLabel": "AFSOC",
       "roles": [
         {
           "role": "Pilot",
-          "member": "1st Lt B. Hag"
+          "member": null
         },
         {
           "role": "Co-pilot",
-          "member": "2d Lt D. Mason"
+          "member": null
         },
         {
           "role": "Crew Chief",
-          "member": "TSgt C. Weeb"
+          "member": null
         },
         {
           "role": "Gunner",
-          "member": "SSgt J. Jabbzo"
+          "member": null
         }
       ]
     }
