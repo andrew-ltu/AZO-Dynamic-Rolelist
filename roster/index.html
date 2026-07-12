@@ -1373,6 +1373,57 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
   };
 };
 
+// Backup & Restore
+window.downloadBackup = () => {
+  if (!currentRoster) return alert('No roster loaded');
+  const blob = new Blob([JSON.stringify(currentRoster, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const opName = (currentRoster.operation && currentRoster.operation.name) || 'roster';
+  a.download = `${opName.replace(/\s+/g,'_')}_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+window.restoreFromBackup = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const token = localStorage.getItem('azo_token');
+      if (!token) return alert('Not authenticated');
+      const res = await fetch(`${API_BASE}/api/admin/roster`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+      currentRoster = data; render(data);
+      document.getElementById('backupStatus').textContent = '✅ Restored successfully';
+      document.getElementById('backupStatus').style.color = '#36d07a';
+    } catch(err) {
+      document.getElementById('backupStatus').textContent = '❌ ' + err.message;
+      document.getElementById('backupStatus').style.color = '#d94040';
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+};
+window.restoreLocalBackup = () => {
+  try {
+    const raw = localStorage.getItem('azo_roster_backup');
+    const time = localStorage.getItem('azo_backup_time');
+    if (!raw) return alert('No local backup found');
+    const data = JSON.parse(raw);
+    document.getElementById('backupStatus').textContent = `📋 Backup from ${time ? new Date(time).toLocaleString() : 'unknown date'} loaded. Click "Save" in Operation Settings to apply.`;
+    document.getElementById('backupStatus').style.color = '#f0b429';
+    currentRoster = data; render(data);
+  } catch(err) {
+    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
+    document.getElementById('backupStatus').style.color = '#d94040';
+  }
+};
+
 // Unassign member from slot
 window.editSlotUnassign = (sectionKey, slotIdx) => {
   const slot = getSlot(sectionKey, slotIdx);
@@ -2382,6 +2433,8 @@ document.addEventListener('DOMContentLoaded', () => {
     MEMBERS=members||{};
     renderAuthUI();
     render(roster);
+    // Auto-backup roster to localStorage
+    try{localStorage.setItem('azo_roster_backup',JSON.stringify(roster));localStorage.setItem('azo_backup_time',new Date().toISOString());}catch(e){}
   }catch(err){
     $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
     console.error(err);
@@ -2490,6 +2543,18 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="admin-btn admin-btn-danger" id="archiveOperationBtn">Archive Operation → Previous Ops</button>
       </div>
       <div id="quickActionsStatus" class="admin-status-msg"></div>
+    </div>
+
+    <!-- Backup & Restore -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Backup &amp; Restore</h2>
+      <div class="admin-btn-group">
+        <button class="admin-btn admin-btn-secondary" onclick="downloadBackup()">⬇ Download Backup</button>
+        <button class="admin-btn admin-btn-secondary" onclick="document.getElementById('restoreFileInput').click()">⬆ Restore from Backup</button>
+        <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="restoreFromBackup(event)">
+        <button class="admin-btn admin-btn-secondary" onclick="restoreLocalBackup()">↩ Restore Local Backup</button>
+      </div>
+      <div id="backupStatus" class="admin-status-msg"></div>
     </div>
   </div>
 </div>
