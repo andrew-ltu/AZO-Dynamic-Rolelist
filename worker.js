@@ -411,7 +411,7 @@ async function handleGetMembers(request, env, origin) {
         for (const [name, data] of Object.entries(members)) {
           if (name.startsWith('_')) continue;
           if (data.discordId === user.id) {
-            data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=32`;
+            data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
             matched = true;
             break;
           }
@@ -420,7 +420,7 @@ async function handleGetMembers(request, env, origin) {
           for (const [name, data] of Object.entries(members)) {
             if (name.startsWith('_')) continue;
             if (name.toLowerCase() === displayName.toLowerCase()) {
-              data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=32`;
+              data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
               break;
             }
           }
