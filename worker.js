@@ -468,8 +468,8 @@ async function handleClaimSlot(request, env, origin) {
     if (slot.endorsementType === "Leadership Endorsement") {
       if (!member.leadership) return jsonResponse({ error: `Access Denied: "${name}" does not have a Leadership qualification.` }, 403, origin);
     } else {
-      const requiredEndorsement = slot.endorsementType.replace(" Endorsement", "");
-      const hasEndorsement = member.endorsements && member.endorsements.some(e => e.toLowerCase() === requiredEndorsement.toLowerCase());
+      const requiredEndorsement = slot.endorsementType.replace(/ endorsement$/i,'').trim().toLowerCase();
+      const hasEndorsement = member.endorsements && member.endorsements.some(e => e.toLowerCase().includes(requiredEndorsement));
       if (!hasEndorsement) return jsonResponse({ error: `Access Denied: "${name}" lacks the required "${requiredEndorsement}" certification.` }, 403, origin);
     }
   }
