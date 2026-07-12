@@ -394,8 +394,8 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   </div>
 </section>
 
-<div id="signupBanner" style="display:none;text-align:center;padding:12px 20px;background:linear-gradient(135deg,rgba(54,208,122,.12),rgba(61,135,212,.08));border-bottom:1px solid rgba(54,208,122,.2);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:1px;color:#36d07a;">
-  🚀 Taking Sign-Ups Now — Operation Karoonda III — 18 July @ 7pm AEST
+<div id="signupBanner" style="display:none;text-align:center;padding:12px 20px;background:rgba(217,64,64,.1);border-bottom:1px solid rgba(217,64,64,.25);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:1px;color:#d94040;">
+  <span class="live-dot"></span> LIVE · Taking Sign-Ups Now — Operation Karoonda III — 18 July @ 7pm AEST
 </div>
 <div class="stats">
   <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Average Op Attendance</div></div>
@@ -883,6 +883,8 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
         font-size: 32px;
       }
     }
+    .live-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#d94040;animation:blink 1.2s ease-in-out infinite;vertical-align:middle;margin-right:6px;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
     </style>
     
     <div class="operators-header">
