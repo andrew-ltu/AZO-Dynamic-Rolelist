@@ -409,12 +409,32 @@ async function handleGetMembers(request, env, origin) {
         const displayName = user.global_name || user.username;
         for (const [name, data] of Object.entries(members)) {
           if (name.startsWith('_')) continue;
-          if (data.avatar && data.avatar.startsWith('/')) continue; // has local file, skip
+          if (data.avatar && data.avatar.startsWith('/')) continue;
           if (data.discordId === user.id || name.toLowerCase() === displayName.toLowerCase()) {
             data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
             break;
           }
         }
+      }
+    }
+    // Fallback: try Discord Bot API for members with discordId but still no avatar
+    if (env.DISCORD_BOT_TOKEN) {
+      const needAvatar = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId && (!d.avatar || d.avatar===''));
+      if (needAvatar.length > 0) {
+        try {
+          const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
+            headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+          });
+          if (guildRes.ok) {
+            const guildMembers = await guildRes.json();
+            for (const [name, data] of needAvatar) {
+              const gm = guildMembers.find(m => m.user && m.user.id === data.discordId);
+              if (gm && gm.user && gm.user.avatar) {
+                data.avatar = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+              }
+            }
+          }
+        } catch(e) {}
       }
     }
     return jsonResponse(members, 200, origin);
