@@ -192,7 +192,7 @@
   "attachments": [
     {
       "name": "BLACKJACK",
-      "locked": true,
+      "locked": false,
       "lockedLabel": "AFSOC",
       "roles": [
         {
