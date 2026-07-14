@@ -701,18 +701,19 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
     }
     
     .operator-card {
       background: var(--panel, #1a1a1a);
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid var(--accent-muted, #6a7f98);
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      transition: all 0.3s ease;
+      user-select:none;
+      transition: all 0.2s ease;
       box-shadow: 0 0 40px -20px var(--accent-muted, #6a7f98);
     }
     
@@ -732,7 +733,6 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     }
     
     .operator-card:hover {
-      transform: translateY(-3px);
       border-color: var(--card-accent);
       box-shadow: 0 0 60px -10px var(--glow-color);
     }
@@ -754,30 +754,24 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     }
     
     .card-body {
-      padding: 20px;
+      padding: 14px 12px 10px;
       text-align: center;
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
     }
     
     .avatar-wrapper {
-      width: 72px;
-      height: 72px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       border: 2px solid var(--card-accent);
-      margin: 0 auto 14px;
+      margin: 0 auto 8px;
       overflow: hidden;
       background: rgba(255,255,255,0.04);
       position: relative;
       flex-shrink: 0;
-      transition: transform 0.3s ease;
-    }
-    
-    .operator-card:hover .avatar-wrapper {
-      transform: scale(1.05);
     }
     
     .avatar-image {
@@ -819,20 +813,20 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     
     .operator-name {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px;
+      font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--text-primary, #ffffff);
       letter-spacing: 0.5px;
-      line-height: 1.2;
+      line-height: 1.15;
     }
     
     .badges-container {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 6px;
     }
     
     .badge {
@@ -886,21 +880,18 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     }
     
     .card-details {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--panel, #1a1a1a);
-      border-top: 1px solid var(--card-accent);
-      padding: 12px;
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-      z-index: 10;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
       text-align: left;
     }
-    
-    .operator-card:hover .card-details {
-      transform: translateY(0);
+    .card-details.show {
+      max-height: 80px;
+    }
+    .card-details-inner {
+      padding: 8px 12px 10px;
+      background: rgba(0,0,0,0.25);
+      border-top: 1px solid var(--card-accent);
     }
     
     .detail-row {
@@ -1234,22 +1225,25 @@ function renderOperatorsList(list, data) {
       const avatarHtml = hasAvatar
         ? `<img class="avatar-image" src="${esc(av)}" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><div class="avatar-fallback" style="display:none">${esc(initial)}</div>`
         : `<div class="avatar-fallback">${esc(initial)}</div>`;
-      const endorseHtml = (m.endorsements || []).slice(0, 3).map(e =>
+      const endorseHtml = (m.endorsements || []).slice(0, 2).map(e =>
         `<span class="badge badge-endorsement">${esc(e)}</span>`
       ).join('');
       const leadHtml = m.leadership ? `<span class="badge badge-leadership">${esc(m.leadership)}</span>` : '';
+      const endorseCount = (m.endorsements || []).length;
       card.innerHTML = `
-        <div class="card-body">
+        <div class="card-body" onclick="this.nextElementSibling.classList.toggle('show')">
           <div class="avatar-wrapper">${avatarHtml}</div>
           <div class="operator-rank">${esc(m.discordRank || 'Member')}</div>
           <div class="operator-name">${esc(name)}</div>
           <div class="badges-container">${leadHtml}${endorseHtml}</div>
         </div>
-<div class="card-divider"></div>
          <div class="card-details">
-          <div class="detail-row">
-            <span class="detail-label">Ops Attended</span>
-            <span class="detail-value">${m.opsAttended ?? 0}</span>
+          <div class="card-details-inner">
+            <div class="detail-row">
+              <span class="detail-label">Ops Attended</span>
+              <span class="detail-value">${m.opsAttended ?? 0}</span>
+            </div>
+            ${endorseCount > 3 ? `<div class="detail-row"><span class="detail-label">Endorsements</span><span class="detail-value">${endorseCount}</span></div>` : ''}
           </div>
         </div>`;
       grid.appendChild(card);
