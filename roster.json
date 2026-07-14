@@ -97,11 +97,15 @@
                                            "member":  null,
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
+                                       },
+                                       {
+                                           "role":  "Reservist (fills in if absent)",
+                                           "member":  "Earthball"
                                        }
                                    ]
-                     },
-                     {
-                         "name":  "BRAVO",
+                      },
+                      {
+                          "name":  "BRAVO",
                          "roles":  [
                                        {
                                            "role":  "Section Leader",

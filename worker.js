@@ -409,32 +409,31 @@ async function handleGetRoster(request, env, origin) {
 async function handleGetMembers(request, env, origin) {
   try {
     const members = await getMembers(env);
-    // Enrich with Discord CDN avatars for members without a local avatar file
+    // 1. Enrich from users table (cached OAuth) — only for members without discordId (local-name match)
     const userResults = await env.DB.prepare(`SELECT id, username, global_name, avatar FROM users`).all();
     for (const user of userResults.results) {
-      if (user.avatar) {
-        const displayName = user.global_name || user.username;
-        for (const [name, data] of Object.entries(members)) {
-          if (name.startsWith('_')) continue;
-          if (data.avatar && data.avatar.startsWith('/')) continue;
-          if (data.discordId === user.id || name.toLowerCase() === displayName.toLowerCase()) {
-            data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
-            break;
-          }
+      if (!user.avatar) continue;
+      for (const [name, data] of Object.entries(members)) {
+        if (name.startsWith('_')) continue;
+        if (data.avatar && data.avatar.startsWith('/')) continue;
+        if (data.discordId === user.id) break; // handled by Bot API below
+        if (name.toLowerCase() === (user.global_name || user.username).toLowerCase()) {
+          data.avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=256`;
+          break;
         }
       }
     }
-    // Fallback: try Discord Bot API for members with discordId but still no avatar
+    // 2. Bot API — always refreshes avatars for members with discordId (freshest source)
     if (env.DISCORD_BOT_TOKEN) {
-      const needAvatar = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId && (!d.avatar || d.avatar===''));
-      if (needAvatar.length > 0) {
+      const withDiscordId = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId);
+      if (withDiscordId.length > 0) {
         try {
           const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
             headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
           });
           if (guildRes.ok) {
             const guildMembers = await guildRes.json();
-            for (const [name, data] of needAvatar) {
+            for (const [name, data] of withDiscordId) {
               const gm = guildMembers.find(m => m.user && m.user.id === data.discordId);
               if (gm && gm.user && gm.user.avatar) {
                 data.avatar = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
