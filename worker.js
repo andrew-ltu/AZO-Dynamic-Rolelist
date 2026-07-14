@@ -423,8 +423,9 @@ async function handleGetMembers(request, env, origin) {
         }
       }
     }
-    // 2. Bot API — always refreshes avatars for members with discordId (freshest source)
+    // 2. Bot API — refreshes avatars AND syncs Discord ranks for members with discordId
     if (env.DISCORD_BOT_TOKEN) {
+      const RANK_PRIORITY = ['SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
       const withDiscordId = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId);
       if (withDiscordId.length > 0) {
         try {
@@ -432,15 +433,37 @@ async function handleGetMembers(request, env, origin) {
             headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
           });
           if (guildRes.ok) {
+            const roleMap = await getCachedGuildRoles(env);
             const guildMembers = await guildRes.json();
+            let changed = false;
             for (const [name, data] of withDiscordId) {
               const gm = guildMembers.find(m => m.user && m.user.id === data.discordId);
-              if (gm && gm.user && gm.user.avatar) {
-                data.avatar = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+              if (!gm) continue;
+              // Refresh avatar
+              if (gm.user && gm.user.avatar) {
+                const newAv = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+                if (data.avatar !== newAv) { data.avatar = newAv; changed = true; }
+              }
+              // Sync rank from Discord roles
+              const roleIds = gm.roles || [];
+              let matchedRank = null;
+              let matchedPrio = Infinity;
+              for (const rid of roleIds) {
+                const rName = roleMap[rid] || '';
+                const idx = RANK_PRIORITY.indexOf(rName);
+                if (idx !== -1 && idx < matchedPrio) {
+                  matchedRank = rName;
+                  matchedPrio = idx;
+                }
+              }
+              if (matchedRank && data.discordRank !== matchedRank) {
+                data.discordRank = matchedRank;
+                changed = true;
               }
             }
+            if (changed) await saveMembers(env, members);
           }
-        } catch(e) {}
+        } catch(e) { console.error('Bot sync failed:', e); }
       }
     }
     return jsonResponse(members, 200, origin);
