@@ -311,45 +311,60 @@ nav{
 /* ---------- ALTERNATING GRID ---------- */
 .alt-section{background:#0A0A0A;}
 .alt-row{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;gap:60px;
-  padding:80px 20px;
+  width:100%;display:flex;gap:0;
 }
 .alt-row.reverse{flex-direction:row-reverse;}
 .alt-text{
-  flex:1;max-width:480px;
+  width:50%;background:#0D0D0D;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 60px;min-height:420px;
 }
 .alt-label{
   font-family:'Share Tech Mono',monospace;
-  font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;color:#2563EB;margin-bottom:8px;
+  font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:#2563EB;margin-bottom:10px;
 }
 .alt-title{
   font-family:'Oswald',sans-serif;
   font-size:36px;font-weight:700;text-transform:uppercase;
-  letter-spacing:2px;color:#FFFFFF;margin-bottom:16px;
+  letter-spacing:2px;color:#FFFFFF;line-height:1.1;margin-bottom:14px;
+}
+.alt-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;letter-spacing:2px;
+  color:rgba(37,99,235,.7);margin-bottom:12px;
 }
 .alt-body{
   padding-left:16px;border-left:2px solid #2563EB;
   color:rgba(255,255,255,.7);font-size:15px;line-height:1.8;font-family:'Inter',sans-serif;
 }
 .alt-image{
-  flex:1;position:relative;overflow:hidden;border-radius:6px;
+  width:50%;position:relative;overflow:hidden;
 }
 .alt-image img{
-  width:100%;height:auto;display:block;
+  width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;
 }
 .alt-image::after{
   content:'';position:absolute;inset:0;pointer-events:none;
 }
 .alt-row:not(.reverse) .alt-image::after{
-  background:linear-gradient(270deg,transparent 60%,#0A0A0A 100%);
+  background:linear-gradient(270deg,transparent 55%,#0D0D0D 100%);
 }
 .alt-row.reverse .alt-image::after{
-  background:linear-gradient(90deg,transparent 60%,#0A0A0A 100%);
+  background:linear-gradient(90deg,transparent 55%,#0D0D0D 100%);
 }
+.alt-btn{
+  display:inline-flex;align-items:center;gap:8px;margin-top:24px;
+  padding:11px 28px;border-radius:4px;
+  font-family:'Oswald',sans-serif;font-weight:600;
+  font-size:13px;text-transform:uppercase;letter-spacing:2px;
+  cursor:pointer;transition:all .2s;text-decoration:none;
+  background:transparent;color:#fff;border:1.5px solid #2563EB;
+}
+.alt-btn:hover{background:#2563EB;}
 .alt-cta{
   text-align:center;padding:80px 20px;background:#0A0A0A;
+  border-top:1px solid rgba(255,255,255,.04);
 }
 .alt-cta h2{
   font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;
@@ -367,9 +382,12 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .footer-copy{font-size:11px;color:var(--muted-2);line-height:1.8;}
 .footer-copy span{opacity:.5;}
 
-@media(max-width:768px){
-  .alt-row{flex-direction:column!important;gap:30px;padding:50px 20px;}
-  .alt-text{max-width:100%;}
+@media(max-width:900px){
+  .alt-row,.alt-row.reverse{flex-direction:column!important;}
+  .alt-text,.alt-image{width:100%;min-height:auto;}
+  .alt-text{padding:50px 30px;}
+  .alt-image img{position:static;height:auto;}
+  .alt-image{min-height:260px;}
   .alt-title{font-size:28px;}
 }
 @media(max-width:640px){
@@ -446,45 +464,50 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 
   <div class="alt-row">
     <div class="alt-text">
-      <div class="alt-label">Section 01</div>
-      <h2 class="alt-title">No Attendance Requirements</h2>
+      <div class="alt-label">01 · Policy</div>
+      <h2 class="alt-title">No Attendance<br>Requirements</h2>
+      <div class="alt-sub">— field notes</div>
       <div class="alt-body">Feel free to join in operations based on your schedule, no punishment for not being able to attend.</div>
+      <a class="alt-btn" href="https://discord.gg/7CKJhBN5DF" target="_blank">About Us →</a>
     </div>
     <div class="alt-image">
-      <img src="/assets/image1.jpg" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+      <img src="/assets/image1.jpg" alt="">
     </div>
   </div>
 
   <div class="alt-row reverse">
     <div class="alt-text">
-      <div class="alt-label">Section 02</div>
+      <div class="alt-label">02 · Community</div>
       <h2 class="alt-title">Dual Clanning</h2>
+      <div class="alt-sub">— field notes</div>
       <div class="alt-body">Unlike other units, AZO does not enforce dual clanning rules. Feel free to join and partake in other units whilst being a part of AZO.</div>
     </div>
     <div class="alt-image">
-      <img src="/assets/image2.jpg" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+      <img src="/assets/image2.jpg" alt="">
     </div>
   </div>
 
   <div class="alt-row">
     <div class="alt-text">
-      <div class="alt-label">Section 03</div>
+      <div class="alt-label">03 · Training</div>
       <h2 class="alt-title">Beginner Friendly</h2>
+      <div class="alt-sub">— field notes</div>
       <div class="alt-body">Our staff make themselves available to set you up if you're new to Arma 3. There is no mandatory training to attend or forms/applications to fill out.</div>
     </div>
     <div class="alt-image">
-      <img src="/assets/image3.png" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+      <img src="/assets/image3.png" alt="">
     </div>
   </div>
 
   <div class="alt-row reverse">
     <div class="alt-text">
-      <div class="alt-label">Section 04</div>
+      <div class="alt-label">04 · Ranks</div>
       <h2 class="alt-title">Progression</h2>
+      <div class="alt-sub">— field notes</div>
       <div class="alt-body">AZO has endorsements where you can learn, develop, and specialise in a certain role or multiple. These include: Medic, Pilot (rotary, fixed-wing), JTAC, Armored Crewman, Demolition, Radioman, and Marksman. The more operations you attend, the higher classification of Operator you will receive.</div>
     </div>
     <div class="alt-image">
-      <img src="/assets/image4.png" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+      <img src="/assets/image4.png" alt="">
     </div>
   </div>
 
