@@ -1104,6 +1104,7 @@ function renderAdminSections() {
   
   const sections = currentRoster.sections || [];
   const command = currentRoster.command || [];
+  const attachments = currentRoster.attachments || [];
   
   let html = '';
   
@@ -1137,6 +1138,26 @@ function renderAdminSections() {
       </div>
       <div class="admin-btn-group">
         <button class="admin-mini-btn" onclick="addSlotToSection('${secIdx}')">+ Add Slot</button>
+      </div>
+    </div>`;
+  });
+  
+  // Attachments (e.g. BLACKJACK)
+  attachments.forEach((att, attIdx) => {
+    const attKey = '__attach_' + attIdx;
+    html += `<div class="admin-section-item">
+      <div class="admin-section-header">
+        <span class="admin-section-name">${esc(att.name || att.lockedLabel || 'Attachment')}</span>
+        <div style="display:flex;gap:8px;">
+          <button class="admin-mini-btn" onclick="editAttachmentName('${attIdx}')">Edit Name</button>
+          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteAttachment('${attIdx}')">Delete</button>
+        </div>
+      </div>
+      <div class="admin-slots-list">
+        ${(att.roles || []).map((slot, idx) => renderAdminSlot(slot, attKey, idx)).join('')}
+      </div>
+      <div class="admin-btn-group">
+        <button class="admin-mini-btn" onclick="addSlotToSection('${attKey}')">+ Add Slot</button>
       </div>
     </div>`;
   });
@@ -1226,6 +1247,19 @@ window.deleteSection = (secIdx) => {
   renderAdminSections();
 };
 
+window.editAttachmentName = (attIdx) => {
+  const att = currentRoster.attachments[attIdx];
+  const newName = prompt('Enter attachment section name:', att.name || att.lockedLabel || '');
+  if (newName) { att.name = newName; saveRoster(); renderAdminSections(); }
+};
+
+window.deleteAttachment = (attIdx) => {
+  if (!confirm('Delete this attachment section? This cannot be undone.')) return;
+  currentRoster.attachments.splice(attIdx, 1);
+  saveRoster();
+  renderAdminSections();
+};
+
 // Add slot to section
 window.addSlotToSection = (sectionKey) => {
   const roleName = prompt('Enter role name (e.g., "Team Leader", "Rifleman"):');
@@ -1248,17 +1282,21 @@ window.addSlotToSection = (sectionKey) => {
     role: roleName,
     member: null,
     endorsementRequired: needsEndorsement,
-    endorsementType: endorsementType || undefined
-  };
-  
-  if (sectionKey === '__command') {
-    if (!currentRoster.command) currentRoster.command = [];
-    currentRoster.command.push(newSlot);
-  } else {
-    const section = currentRoster.sections[sectionKey];
-    if (!section.roles) section.roles = [];
-    section.roles.push(newSlot);
-  }
+      endorsementType: endorsementType || undefined
+    };
+    
+    if (sectionKey === '__command') {
+      if (!currentRoster.command) currentRoster.command = [];
+      currentRoster.command.push(newSlot);
+    } else if (sectionKey.startsWith('__attach_')) {
+      const attIdx = parseInt(sectionKey.replace('__attach_', ''));
+      const att = currentRoster.attachments[attIdx];
+      if (att) { if (!att.roles) att.roles = []; att.roles.push(newSlot); }
+    } else {
+      const section = currentRoster.sections[sectionKey];
+      if (!section.roles) section.roles = [];
+      section.roles.push(newSlot);
+    }
   
   saveRoster();
   renderAdminSections();
@@ -1266,6 +1304,11 @@ window.addSlotToSection = (sectionKey) => {
 
 function getSlot(sectionKey, slotIdx) {
   if (sectionKey === '__command') return currentRoster.command[slotIdx];
+  if (sectionKey.startsWith('__attach_')) {
+    const attIdx = parseInt(sectionKey.replace('__attach_', ''));
+    const att = currentRoster.attachments[attIdx];
+    return att ? att.roles[slotIdx] : null;
+  }
   return currentRoster.sections[sectionKey].roles[slotIdx];
 }
 
@@ -1496,6 +1539,10 @@ window.deleteSlot = (sectionKey, slotIdx) => {
   
   if (sectionKey === '__command') {
     currentRoster.command.splice(slotIdx, 1);
+  } else if (sectionKey.startsWith('__attach_')) {
+    const attIdx = parseInt(sectionKey.replace('__attach_', ''));
+    const att = currentRoster.attachments[attIdx];
+    if (att) att.roles.splice(slotIdx, 1);
   } else {
     currentRoster.sections[sectionKey].roles.splice(slotIdx, 1);
   }
@@ -1518,6 +1565,15 @@ $('#clearAllAssignmentsBtn').addEventListener('click', () => {
     currentRoster.sections.forEach(section => {
       if (section.roles) {
         section.roles.forEach(slot => { slot.member = null; });
+      }
+    });
+  }
+  
+  // Clear attachments
+  if (currentRoster.attachments) {
+    currentRoster.attachments.forEach(att => {
+      if (att.roles) {
+        att.roles.forEach(slot => { slot.member = null; });
       }
     });
   }
