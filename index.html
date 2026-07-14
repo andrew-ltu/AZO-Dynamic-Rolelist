@@ -1225,17 +1225,15 @@ function renderOperatorsList(list, data) {
       const avatarHtml = hasAvatar
         ? `<img class="avatar-image" src="${esc(av)}" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><div class="avatar-fallback" style="display:none">${esc(initial)}</div>`
         : `<div class="avatar-fallback">${esc(initial)}</div>`;
-      const endorseHtml = (m.endorsements || []).slice(0, 2).map(e =>
+      const endorseHtml = (m.endorsements || []).map(e =>
         `<span class="badge badge-endorsement">${esc(e)}</span>`
       ).join('');
       const leadHtml = m.leadership ? `<span class="badge badge-leadership">${esc(m.leadership)}</span>` : '';
-      const endorseCount = (m.endorsements || []).length;
       card.innerHTML = `
         <div class="card-body" onclick="this.nextElementSibling.classList.toggle('show')">
           <div class="avatar-wrapper">${avatarHtml}</div>
           <div class="operator-rank">${esc(m.discordRank || 'Member')}</div>
           <div class="operator-name">${esc(name)}</div>
-          <div class="badges-container">${leadHtml}${endorseHtml}</div>
         </div>
          <div class="card-details">
           <div class="card-details-inner">
@@ -1243,7 +1241,8 @@ function renderOperatorsList(list, data) {
               <span class="detail-label">Ops Attended</span>
               <span class="detail-value">${m.opsAttended ?? 0}</span>
             </div>
-            ${endorseCount > 3 ? `<div class="detail-row"><span class="detail-label">Endorsements</span><span class="detail-value">${endorseCount}</span></div>` : ''}
+            ${leadHtml ? `<div class="detail-row"><span class="detail-label">Leadership</span><span class="detail-value">${leadHtml}</span></div>` : ''}
+            ${endorseHtml ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${endorseHtml}</div>` : ''}
           </div>
         </div>`;
       grid.appendChild(card);
