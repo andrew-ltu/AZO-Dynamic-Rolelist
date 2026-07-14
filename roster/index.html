@@ -169,79 +169,6 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .ops-legend span{display:inline-flex;align-items:center;gap:5px;}
 .ops-legend .opdot{width:10px;height:10px;}
 
-/* ======================== ROSTER (OPERATORS) ======================== */
-.roster-overlay{position:fixed;inset:0;z-index:56;padding:20px;background:rgba(3,6,11,.84);backdrop-filter:blur(8px);overflow-y:auto;visibility:hidden;opacity:0;transition:visibility .3s,opacity .3s;}
-.roster-overlay.show{visibility:visible;opacity:1;}
-.ro-panel{max-width:1060px;margin:0 auto;background:var(--panel-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;transform:translateY(12px) scale(.98);transition:transform .3s cubic-bezier(.22,1,.36,1);}
-.roster-overlay.show .ro-panel{transform:translateY(0) scale(1);}
-.ro-head{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;border-bottom:1px solid var(--line-strong);position:sticky;top:0;background:var(--panel-solid);z-index:2;}
-.ro-h-title{font-family:'Oswald';letter-spacing:4px;font-weight:700;font-size:22px;border-left:3px solid var(--primary);padding-left:14px;color:#fff;}
-.ro-h-sub{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:5px;padding-left:17px;text-transform:uppercase;}
-.ro-body{padding:20px 28px 32px;}
-.ro-rank-hdr{
-  font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;
-  text-transform:uppercase;letter-spacing:3px;
-  margin:40px 0 14px;padding:0 0 10px 14px;
-  border-left:3px solid;display:flex;align-items:center;gap:10px;
-}
-.ro-rank-hdr:first-of-type{margin-top:6px;}
-.ro-rank-hdr .cnt{
-  font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:400;
-  letter-spacing:1px;opacity:.5;background:var(--panel);
-  padding:2px 10px;border-radius:999px;border:1px solid var(--line);
-}
-.ro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-.ro-card{
-  background:#1a1a1a;border:1px solid var(--accent,#ff1133);
-  border-radius:10px;padding:0;cursor:pointer;
-  transition:all .3s ease;color:inherit;font:inherit;
-  width:100%;position:relative;overflow:hidden;
-  box-shadow:0 0 28px -14px var(--accent,#ff1133);
-}
-.ro-card:hover{
-  box-shadow:0 0 48px -6px var(--accent,#ff1133);
-  border-color:var(--accent,#ff1133);transform:translateY(-2px);
-}
-.ro-body{padding:24px 16px 14px;text-align:center;}
-.ro-avatar-wrap{
-  width:56px;height:56px;border-radius:50%;
-  border:2px solid var(--accent,#ff1133);
-  margin:0 auto 10px;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.04);
-  transition:transform .3s ease;
-}
-.ro-card:hover .ro-avatar-wrap{transform:scale(1.06);}
-.ro-avatar{width:100%;height:100%;object-fit:cover;display:block;}
-.ro-avatar-fb{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--accent,#ff1133);}
-.ro-rank{
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  letter-spacing:2.5px;text-transform:uppercase;
-  color:var(--accent,#ff1133);margin-bottom:3px;
-}
-.ro-name{font-weight:700;font-size:15px;color:#fff;text-transform:uppercase;letter-spacing:.5px;}
-.ro-footer{
-  border-top:1px solid rgba(255,255,255,.06);
-  padding:8px 12px;text-align:center;
-}
-.ro-role{
-  font-family:'Share Tech Mono',monospace;font-size:8.5px;
-  letter-spacing:2px;text-transform:uppercase;color:#666;
-}
-.ro-detail{
-  max-height:0;opacity:0;overflow:hidden;
-  transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .3s;
-  font-size:11px;color:var(--muted);text-align:center;
-}
-.ro-detail.open{max-height:160px;opacity:1;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);margin-top:6px;}
-.ro-detail .ro-detail-inner{padding:6px 12px 10px;}
-.ro-detail .stat{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;}
-.ro-detail .stat-num{font-family:'Oswald';font-size:18px;font-weight:700;color:var(--accent,var(--primary-2));line-height:1;}
-.ro-detail .stat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#666;}
-.ro-detail .badges{margin-top:6px;display:flex;flex-wrap:wrap;justify-content:center;gap:3px;}
-.ro-detail .badge{display:inline-block;font-size:8px;padding:2px 7px;border-radius:999px;}
-.ro-detail .badge-endorse{background:rgba(61,135,212,.1);color:var(--primary);border:1px solid rgba(61,135,212,.18);}
-.ro-detail .badge-lead{background:rgba(240,180,41,.1);color:#f0b429;border:1px solid rgba(240,180,41,.18);}
 
 /* ======================== MAP OVERLAY ======================== */
 .map-overlay{position:fixed;inset:0;z-index:58;display:none;padding:20px;background:rgba(3,6,11,.88);backdrop-filter:blur(7px);overflow-y:auto;}
@@ -804,20 +731,6 @@ footer b{color:var(--muted);}
 
       </div><!-- end map container -->
     </div>
-  </div>
-</div>
-
-<!-- Operators overlay (renamed from Roster) -->
-<div class="roster-overlay" id="rosterOverlay">
-  <div class="ro-panel">
-    <div class="ro-head">
-      <div>
-        <div class="ro-h-title">Operators</div>
-        <div class="ro-h-sub">All active operators · sorted by rank</div>
-      </div>
-      <button class="x" id="rosterClose" aria-label="Close" style="position:static;width:32px;height:32px;border-radius:8px;border:1px solid var(--line-strong);background:rgba(0,0,0,.35);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div class="ro-body" id="rosterBody"></div>
   </div>
 </div>
 
@@ -1983,7 +1896,6 @@ function render(roster){
       <div class="sec-body">${rows}</div>${note}</div>`;
   }).join('');
 
-  const activeCount=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).length;
 
 
 
@@ -2006,7 +1918,7 @@ function render(roster){
         <span class="pill ${st.cls}"><span class="status-dot"></span><span class="v">${st.txt}</span></span>
         ${op.zeus?`<span class="pill"><span class="k">Zeus</span><span class="v">${esc(op.zeus)}</span></span>`:''}
         <button type="button" onclick="openMap()" style="background:rgba(54,208,122,.12);border:1px solid rgba(54,208,122,.3);border-radius:999px;padding:5px 13px;color:#36d07a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;">🗺 Campaign Map</button>
-        <button type="button" onclick="openRoster()" style="background:rgba(61,135,212,.12);border:1px solid rgba(61,135,212,.3);border-radius:999px;padding:5px 13px;color:var(--primary-2);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;">👥 Operators · ${activeCount}</button>
+
       </div>
       <div class="countdown" id="countdown">
         <div class="cd-label">Operation begins in</div>
@@ -2098,61 +2010,7 @@ function openProfile(name){
 }
 function closeModal(){$('#modalBack').classList.remove('show');}
 
-/* ---------- operators overlay ---------- */
-const RANK_CARD_COLORS={
-  'SOCOMD':'#ff1133','Senior Operator':'#00ff66',
-  'Operator':'#00ccff','Junior Operator':'#00ccff','Recruit':'#00ccff'
-};
-function getRoleText(m){
-  if(m.leadership==='senior')return'STAFF';
-  if(m.leadership==='junior')return'JUNIOR STAFF';
-  return'OPERATOR';
-}
-function openRoster(){
-  const members=Object.keys(MEMBERS).filter(k=>!k.startsWith('_')).map(member);
-  const groups={};
-  members.forEach(m=>{(groups[m.discordRank]=groups[m.discordRank]||[]).push(m);});
-  const order=Object.keys(groups).sort((a,b)=>(RANK_SORT[a]??9)-(RANK_SORT[b]??9)||a.localeCompare(b));
-  const html=order.map(rank=>{
-    const list=groups[rank].sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-    const accent=RANK_CARD_COLORS[rank]||'#00ccff';
-    const cards=list.map(m=>{
-      const av=m.avatar;
-      const hasAvatar=av&&av!=='';
-      const initial=m.name.charAt(0).toUpperCase();
-      const avatarInner=hasAvatar
-        ?`<img class="ro-avatar" src="${esc(av)}" alt="" onerror="this.outerHTML='<span class=\\'ro-avatar-fb\\'>${esc(initial)}</span>'">`
-        :`<span class="ro-avatar-fb">${esc(initial)}</span>`;
-      const roleText=getRoleText(m);
-      const endorseHtml=(m.endorsements||[]).map(e=>`<span class="badge badge-endorse">${esc(e)}</span>`).join('');
-      const leadHtml=m.leadership?`<span class="badge badge-lead">${esc(m.leadership)}</span>`:'';
-      const badges=[leadHtml,endorseHtml].filter(Boolean).join('');
-      return `<button class="ro-card" type="button" onclick="this.querySelector('.ro-detail').classList.toggle('open')" style="--accent:${accent}">
-        <div class="ro-body">
-          <div class="ro-avatar-wrap">${avatarInner}</div>
-          <div class="ro-rank">${esc(m.discordRank)}</div>
-          <div class="ro-name">${esc(m.name)}</div>
-        </div>
-        <div class="ro-footer">
-          <div class="ro-role">${roleText}</div>
-          <div class="ro-detail">
-            <div class="ro-detail-inner">
-              <div class="stat">
-                <span class="stat-num">${m.opsAttended}</span>
-                <span class="stat-lbl">Ops</span>
-              </div>
-              <div class="badges">${badges}</div>
-            </div>
-          </div>
-        </div>
-      </button>`;
-    }).join('');
-    return `<div class="ro-rank-hdr" style="color:${accent};border-left-color:${accent}"><span>${esc(rank)}</span><span class="cnt">${list.length}</span></div><div class="ro-grid">${cards}</div>`;
-  }).join('');
-  $('#rosterBody').innerHTML=html;
-  $('#rosterOverlay').classList.add('show');
-}
-function closeRoster(){$('#rosterOverlay').classList.remove('show');}
+
 
 /* ---------- coming soon takeover ---------- */
 function setupComingSoon(op){
@@ -2318,8 +2176,7 @@ document.addEventListener('click',e=>{
 
 const modalClose = $('#modalClose'); if(modalClose) modalClose.onclick=closeModal;
 const modalBack = $('#modalBack'); if(modalBack) modalBack.onclick=e=>{if(e.target===$('#modalBack'))closeModal();};
-const rosterClose = $('#rosterClose'); if(rosterClose) rosterClose.onclick=closeRoster;
-const rosterOverlay = $('#rosterOverlay'); if(rosterOverlay) rosterOverlay.onclick=e=>{if(e.target===$('#rosterOverlay'))closeRoster();};
+
 const mapClose = $('#mapClose'); if(mapClose) mapClose.onclick=closeMap;
 const mapOverlay = $('#mapOverlay'); if(mapOverlay) mapOverlay.onclick=e=>{if(e.target===$('#mapOverlay'))closeMap();};
 
@@ -2328,7 +2185,6 @@ document.addEventListener('keydown',e=>{
   const cb=$('#claimBack');if(cb&&cb.classList.contains('show')){closeClaim();return;}
   const mb=$('#modalBack');if(mb&&mb.classList.contains('show')){closeModal();return;}
   const mo=$('#mapOverlay');if(mo&&mo.classList.contains('show')){closeMap();return;}
-  const ro=$('#rosterOverlay');if(ro&&ro.classList.contains('show')){closeRoster();return;}
 
 });
 
