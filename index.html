@@ -1423,8 +1423,9 @@ function buildOpsDashboard(data, rosterData) {
   }
 
   const totalAtt = OPS_DATA.reduce((s,o) => s + o.count, 0);
-  const badgeCls = s => s === 'live' ? 'live' : s === 'complete' ? 'complete' : 'upcoming';
-  const badgeTxt = s => s === 'live' ? 'ACTIVE' : s === 'complete' ? 'COMPLETED' : 'UPCOMING';
+  const isDone = s => s === 'complete' || s === 'completed';
+  const badgeCls = s => s === 'live' ? 'live' : isDone(s) ? 'complete' : 'upcoming';
+  const badgeTxt = s => s === 'live' ? 'ACTIVE' : isDone(s) ? 'COMPLETED' : 'UPCOMING';
 
   // Single campaign feed item with all ops nested inside
   const campaignOps = OPS_DATA.map(op => {
