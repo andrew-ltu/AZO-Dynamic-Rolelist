@@ -879,7 +879,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       text-align: left;
     }
     .card-details.show {
-      max-height: 80px;
+      max-height: 300px;
     }
     .card-details-inner {
       padding: 8px 12px 10px;
@@ -929,13 +929,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     }
     
     .ops-filter-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;margin-bottom:20px;flex-wrap:wrap;}
-    .ops-filter-bar select,.ops-filter-bar input{background:#0d0d0d;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:6px 10px;outline:none;}
-    .ops-filter-bar select:focus,.ops-filter-bar input:focus{border-color:var(--accent-field,#00ccff);}
-    .ops-filter-bar select option{background:#0d0d0d;color:#fff;}
-    .filter-divider{width:1px;height:20px;background:rgba(255,255,255,.1);}
+    .ops-filter-bar input{background:#0d0d0d;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:6px 10px;outline:none;width:60px;}
+    .ops-filter-bar input:focus{border-color:var(--accent-field,#00ccff);}
     .ops-filter-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.35);text-transform:uppercase;}
-    .ops-range-sep{font-family:'Share Tech Mono',monospace;font-size:14px;color:rgba(255,255,255,.25);}
-    .ops-filter-bar input{width:60px;}
     
     /* Mobile Responsive */
     @media (max-width: 768px) {
@@ -968,14 +964,8 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     </div>
     
     <div class="ops-filter-bar">
-      <select id="rankFilter" onchange="filterAndRender()">
-        <option value="">All Ranks</option>
-      </select>
-      <span class="filter-divider"></span>
-      <span class="ops-filter-label">OPS:</span>
-      <input type="number" id="minOps" min="0" value="" placeholder="Min" onchange="filterAndRender()">
-      <span class="ops-range-sep">—</span>
-      <input type="number" id="maxOps" min="0" value="" placeholder="Max" onchange="filterAndRender()">
+      <span class="ops-filter-label">MIN OPS:</span>
+      <input type="number" id="minOps" min="0" value="" placeholder="0" onchange="filterAndRender()">
     </div>
     <div id="operatorsList"></div>
     
@@ -1195,16 +1185,11 @@ function getRoleText(m) {
 
 // ---- filters ----
 let _allEntries = [];
-let _filterPopulated = false;
 function filterAndRender() {
-  const rankFilter = document.getElementById('rankFilter').value;
   const minOps = parseInt(document.getElementById('minOps').value) || -Infinity;
-  const maxOps = parseInt(document.getElementById('maxOps').value) || Infinity;
   const filtered = _allEntries.filter(([_, m]) => {
-    if (rankFilter && m.discordRank !== rankFilter) return false;
     const ops = m.opsAttended ?? 0;
     if (minOps > -Infinity && ops < minOps) return false;
-    if (maxOps < Infinity && ops > maxOps) return false;
     return true;
   });
   const data = Object.fromEntries(filtered);
@@ -1216,15 +1201,6 @@ function renderOperatorsList(list, data, skipStore) {
   const entries = Object.entries(data).filter(([k]) => !k.startsWith('_'));
   if (!skipStore) {
     _allEntries = [...entries];
-  }
-  const sel = document.getElementById('rankFilter');
-  if (sel && !_filterPopulated) {
-    _filterPopulated = true;
-    RANK_ORDER.forEach(r => {
-      const o = document.createElement('option');
-      o.value = r; o.textContent = r;
-      sel.appendChild(o);
-    });
   }
   const totalEl = document.getElementById('total-ops');
   if (totalEl) totalEl.textContent = entries.length;
