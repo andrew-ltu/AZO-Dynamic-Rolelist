@@ -411,7 +411,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <div class="page active" id="page-home">
 
 <div id="signupBanner" style="display:none;text-align:center;padding:10px 16px;background:rgba(217,64,64,.12);border-bottom:1px solid rgba(217,64,64,.3);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;color:#d94040;position:relative;z-index:100;">
-  <span class="live-dot"></span> LIVE · Taking Sign-Ups Now — Operation Karoonda III — 18 July @ 7pm AEST
+  <span class="live-dot"></span> LIVE · Taking Sign-Ups Now - Operation Karoonda III - 18 July @ 7pm AEST
 </div>
 
 <section class="hero">
@@ -497,7 +497,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     <div class="alt-text">
       <div class="alt-label">05 · Community</div>
       <h2 class="alt-title">Community First</h2>
-      <div class="alt-body">After every operation, AZO sends out a feedback survey to the community. That input shapes future missions — our dedicated mission makers use it to tailor each operation. It's a continuous improvement cycle, always striving for higher quality.</div>
+      <div class="alt-body">After every operation, AZO sends out a feedback survey to the community. That input shapes future missions - our dedicated mission makers use it to tailor each operation. It's a continuous improvement cycle, always striving for higher quality.</div>
     </div>
     <div class="alt-image">
       <img src="/assets/image5.jpg" alt="">
@@ -536,10 +536,10 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     <p class="section-desc" id="upcomingOpDesc">View available roles and sign up for the next operation.</p>
     <div id="upcomingOpDetails" style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:16px;">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
-        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Status</div><div id="upcomingOpStatus" style="font-weight:600;color:#f0b429;margin-top:4px;">—</div></div>
-        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Zeus</div><div id="upcomingOpZeus" style="font-weight:600;color:#fff;margin-top:4px;">—</div></div>
-        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Date</div><div id="upcomingOpDate" style="font-weight:600;color:#fff;margin-top:4px;">—</div></div>
-        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Slots Filled</div><div id="upcomingOpFilled" style="font-weight:600;color:#36d07a;margin-top:4px;">—</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Status</div><div id="upcomingOpStatus" style="font-weight:600;color:#f0b429;margin-top:4px;">-</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Zeus</div><div id="upcomingOpZeus" style="font-weight:600;color:#fff;margin-top:4px;">-</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Date</div><div id="upcomingOpDate" style="font-weight:600;color:#fff;margin-top:4px;">-</div></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-2);">Slots Filled</div><div id="upcomingOpFilled" style="font-weight:600;color:#36d07a;margin-top:4px;">-</div></div>
       </div>
       <div style="margin-top:16px;text-align:center;">
         <a class="btn btn-primary" href="/roster/" target="_blank">View Full Roster & Sign Up</a>
@@ -1173,7 +1173,7 @@ const CARD_CLASS = {
 
 function formatOpDate(op) {
   if (op.date) return op.date;
-  if (!op.countdownTo) return '—';
+  if (!op.countdownTo) return '-';
   const d = new Date(op.countdownTo);
   const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
   return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
@@ -1322,7 +1322,7 @@ function renderOperatorsList(list, data, skipStore) {
       document.getElementById('upcomingOpDesc').textContent = `View available roles and sign up for the next operation.`;
       document.getElementById('upcomingOpStatus').textContent = (op.status || 'upcoming').charAt(0).toUpperCase() + (op.status || 'upcoming').slice(1);
       document.getElementById('upcomingOpStatus').style.color = op.status === 'live' ? '#36d07a' : op.status === 'complete' ? '#6a7f98' : '#f0b429';
-      document.getElementById('upcomingOpZeus').textContent = op.zeus || '—';
+      document.getElementById('upcomingOpZeus').textContent = op.zeus || '-';
       document.getElementById('upcomingOpDate').textContent = formatOpDate(op);
       document.getElementById('upcomingOpFilled').textContent = `${filledSlots} / ${totalSlots} filled`;
     } else {
