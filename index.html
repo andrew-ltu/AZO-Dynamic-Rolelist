@@ -1036,6 +1036,19 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-feed-detail{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1);}
   .ops-feed-detail.open{max-height:2000px;}
   .ops-feed-detail-inner{padding:0 18px 16px;border-top:1px solid rgba(75,85,99,.15);margin-top:0;padding-top:14px;}
+  .ops-campaign-op{border-bottom:1px solid rgba(75,85,99,.08);}
+  .ops-campaign-op:last-child{border-bottom:none;}
+  .ops-campaign-op-main{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;transition:opacity .15s;}
+  .ops-campaign-op-main:hover{opacity:.8;}
+  .ops-campaign-op-name{flex:1;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.5px;line-height:1.2;}
+  .ops-campaign-op-date{font-size:11px;color:rgba(255,255,255,.35);white-space:nowrap;}
+  .ops-campaign-op-detail{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1);}
+  .ops-campaign-op-detail.open{max-height:2000px;}
+  .ops-campaign-op-detail-inner{padding:0 0 12px 0;}
+  .ops-campaign-op-detail-inner .sec-label{font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(37,99,235,.5);margin:8px 0 4px;}
+  .ops-campaign-op-detail-inner .att-row{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.2);font-size:11px;white-space:nowrap;margin:2px;}
+  .ops-campaign-op-detail-inner .att-av{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.08);overflow:hidden;}
+  .ops-campaign-op-detail-inner .att-rank{font-size:8px;font-family:'Share Tech Mono',monospace;padding:1px 5px;border-radius:3px;letter-spacing:.5px;opacity:.85;}
   .ops-feed-detail-inner .att-row{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.2);font-size:11px;white-space:nowrap;margin:2px;}
   .ops-feed-detail-inner .att-av{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.08);overflow:hidden;}
   .ops-feed-detail-inner .att-rank{font-size:8px;font-family:'Share Tech Mono',monospace;padding:1px 5px;border-radius:3px;letter-spacing:.5px;opacity:.85;}
@@ -1328,18 +1341,19 @@ function toggleOp(el) {
 
 // ------- Ops Dashboard -------
 const OPS_DATA = [
-  {name:'Op Karoonda I',date:'20 JUNE 2026',zeus:'Jag McMuffin',count:17,short:'SAT JUN 20 2026',sections:[
-    {name:'Platoon HQ',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}]},
-    {name:'Alpha',members:[{n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}]},
-    {name:'Bravo',members:[{n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},{n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}]}
-  ]},
-  {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',sections:[
+  {name:'Op Karoonda III',date:'18 JULY 2026',zeus:'Jag McMuffin',count:0,short:'SAT JUL 18 2026',status:'upcoming',sections:[]},
+  {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',status:'completed',sections:[
     {name:'Command',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'Jäger',p:'JTAC'}]},
     {name:'Alpha',members:[{n:'Vain',p:'Section Leader'},{n:'24pool1',p:'Asst. Section Leader'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW (Minimi)'},{n:'HiveMynd',p:'Rifleman'},{n:'The Raven',p:'Rifleman'},{n:'blueberet',p:'Rifleman'}]},
     {name:'Bravo',members:[{n:'Gunter',p:'Section Leader'},{n:'Misaka',p:'Asst. Section Leader'},{n:'Jon Taiwan',p:'Anti-tank'},{n:'Gill',p:'LSW (Minimi)'},{n:'Terack',p:'Rifleman'},{n:'Xeonovaes',p:'Rifleman'}]},
     {name:'Medical',members:[{n:'Zep',p:'Platoon Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},{n:'Crallers',p:'Medic'}]},
     {name:'Joint Op - Charlie',members:[{n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},{n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},{n:'SecOps. Dan',p:'LSW (Minimi)'},{n:'QM. DODO',p:'LSW (Minimi)'},{n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}]},
     {name:'Joint Op - Blackjack',members:[{n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},{n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}]}
+  ]},
+  {name:'Op Karoonda I',date:'20 JUNE 2026',zeus:'Jag McMuffin',count:17,short:'SAT JUN 20 2026',status:'completed',sections:[
+    {name:'Platoon HQ',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}]},
+    {name:'Alpha',members:[{n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}]},
+    {name:'Bravo',members:[{n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},{n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}]}
   ]}
 ];
 const OPS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -1397,84 +1411,60 @@ function nextOpsYear() {
 function buildOpsDashboard(data, rosterData) {
   const feed = document.getElementById('opsFeed');
   if (!feed) return;
-  let html = '';
 
-  // Upcoming/active op as first feed item
+  // Update Karoonda III info from live roster data if available
   if (rosterData && rosterData.operation) {
-    let op = rosterData.operation;
+    const op = rosterData.operation;
     const st = (op.status || 'upcoming').toLowerCase();
-    const badgeCls = st === 'live' ? 'live' : st === 'complete' ? 'complete' : 'upcoming';
-    const badgeTxt = st === 'live' ? 'ACTIVE' : st === 'complete' ? 'COMPLETED' : 'UPCOMING';
-    const opDate = op.date || formatOpDate(op) || '—';
-    html += `<div class="ops-feed-item" style="border-color:rgba(37,99,235,.35);">
-      <div class="ops-feed-item-main" onclick="this.nextElementSibling.classList.toggle('open')">
-        <div class="ops-feed-left">
-          <div class="ops-feed-icon campaign" style="background:rgba(37,99,235,.18);">★</div>
-          <div class="ops-feed-text">
-            <div class="ops-feed-name">${esc(op.name||'Operation')}</div>
-            <div class="ops-feed-sub">
-              <span class="ops-feed-badge ${badgeCls}">${badgeTxt}</span>
-              <span>${esc(opDate)}</span>
-            </div>
-          </div>
-        </div>
-        <div class="ops-feed-right">
-          <span style="color:rgba(255,255,255,.25);font-size:11px;">${op.zeus ? 'Zeus: '+esc(op.zeus) : ''}</span>
+    OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
+    OPS_DATA[0].date = op.date || OPS_DATA[0].date;
+    OPS_DATA[0].name = op.name || OPS_DATA[0].name;
+    OPS_DATA[0].status = st;
+  }
+
+  const totalAtt = OPS_DATA.reduce((s,o) => s + o.count, 0);
+  const badgeCls = s => s === 'live' ? 'live' : s === 'complete' ? 'complete' : 'upcoming';
+  const badgeTxt = s => s === 'live' ? 'ACTIVE' : s === 'complete' ? 'COMPLETED' : 'UPCOMING';
+
+  // Single campaign feed item with all ops nested inside
+  const campaignOps = OPS_DATA.map(op => {
+    const sectionsHtml = op.sections.length
+      ? op.sections.map(sec =>
+          `<div class="sec-label">${esc(sec.name)}</div>
+          <div>${sec.members.map(m => attRowHtml(m.n, m.p, data)).join('')}</div>`
+        ).join('')
+      : '<div style="font-size:11px;color:rgba(255,255,255,.35);padding:8px 0;">No attendance data yet</div>';
+
+    return `<div class="ops-campaign-op">
+      <div class="ops-campaign-op-main" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span class="ops-feed-badge ${badgeCls(op.status)}">${badgeTxt(op.status)}</span>
+        <span class="ops-campaign-op-name">${esc(op.name)}</span>
+        <span class="ops-campaign-op-date">${op.short||op.date}</span>
+      </div>
+      <div class="ops-campaign-op-detail">
+        <div class="ops-campaign-op-detail-inner">
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:6px;">Zeus: ${esc(op.zeus)}${op.count ? ' · '+op.count+' attendees' : ''}</div>
+          ${sectionsHtml}
         </div>
       </div>
     </div>`;
-  }
+  }).join('');
 
-  // Campaign header
-  html += `<div class="ops-feed-item">
+  feed.innerHTML = `<div class="ops-feed-item">
     <div class="ops-feed-item-main" onclick="this.nextElementSibling.classList.toggle('open')">
       <div class="ops-feed-left">
         <div class="ops-feed-icon campaign">▶</div>
         <div class="ops-feed-text">
           <div class="ops-feed-name campaign">OPERATION KAROONDA</div>
-          <div class="ops-feed-sub">CAMPAIGN · ${OPS_DATA.length} missions · ${OPS_DATA.reduce((s,o)=>s+o.count,0)} attendances</div>
+          <div class="ops-feed-sub">CAMPAIGN · ${OPS_DATA.length} missions · ${totalAtt} attendances</div>
         </div>
       </div>
     </div>
     <div class="ops-feed-detail">
-      <div class="ops-feed-detail-inner">
-        ${OPS_DATA.map(op => `<div style="font-size:11px;color:rgba(255,255,255,.5);padding:4px 0;">${esc(op.name)} — ${esc(op.date)}</div>`).join('')}
-      </div>
+      <div class="ops-feed-detail-inner">${campaignOps}</div>
     </div>
   </div>`;
 
-  // Individual ops
-  OPS_DATA.forEach((op) => {
-    const sectionsHtml = op.sections.map(sec =>
-      `<div class="sec-label">${esc(sec.name)}</div>
-      <div>${sec.members.map(m => attRowHtml(m.n, m.p, data)).join('')}</div>`
-    ).join('');
-    html += `<div class="ops-feed-item">
-      <div class="ops-feed-item-main">
-        <div class="ops-feed-left" onclick="this.closest('.ops-feed-item').querySelector('.ops-feed-detail').classList.toggle('open')">
-          <div class="ops-feed-icon completed">●</div>
-          <div class="ops-feed-text">
-            <div class="ops-feed-name">${esc(op.name)} — SAT</div>
-            <div class="ops-feed-sub">
-              <span class="ops-feed-badge completed">COMPLETED</span>
-              <span>${op.short||op.date}</span>
-            </div>
-          </div>
-        </div>
-        <div class="ops-feed-right">
-          <button class="ops-btn-view" onclick="this.closest('.ops-feed-item').querySelector('.ops-feed-detail').classList.toggle('open')">VIEW &gt;</button>
-        </div>
-      </div>
-      <div class="ops-feed-detail">
-        <div class="ops-feed-detail-inner">
-          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:8px;">Zeus: ${esc(op.zeus)} · ${op.count} attendees</div>
-          ${sectionsHtml}
-        </div>
-      </div>
-    </div>`;
-  });
-
-  feed.innerHTML = html;
   renderMonthGrid();
 }
 </script>
