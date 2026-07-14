@@ -24,7 +24,7 @@
                      "HiveMynd",
                      "Jag McMuffin",
                      "Jon Taiwan",
-                     "J+�ger",
+                     "J+n++ger",
                      "Misaka",
                      "Monke",
                      "Sir Danger",
@@ -78,7 +78,7 @@
                                        },
                                        {
                                            "role":  "Grenadier",
-                                           "member":  null
+                                           "member":  "blueberet"
                                        },
                                        {
                                            "role":  "LSW (Minimi)",
@@ -94,7 +94,7 @@
                                        },
                                        {
                                            "role":  "Medic",
-                                           "member":  null,
+                                           "member":  "Spacecat82",
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
                                        },
@@ -125,7 +125,7 @@
                                        },
                                        {
                                            "role":  "Asst. Anti-tank",
-                                           "member":  null
+                                           "member":  "Orter"
                                        },
                                        {
                                            "role":  "LSW (Minimi)",
@@ -133,25 +133,25 @@
                                        },
                                        {
                                            "role":  "LSW (Minimi)",
-                                           "member":  null
+                                           "member":  "Gill"
                                        },
                                        {
                                            "role":  "Rifleman",
-                                           "member":  null
+                                           "member":  "Xeonovaes"
                                        },
                                        {
                                            "role":  "Medic",
-                                           "member":  null,
+                                           "member":  "GoGoBendy",
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
                                        }
                                    ]
                      },
-                        {
-                            "name":  "CHARLIE",
-                            "joint":  true,
-                            "locked":  true,
-                            "lockedLabel":  "13th Crash Division",
+                     {
+                         "name":  "CHARLIE",
+                         "joint":  true,
+                         "locked":  true,
+                         "lockedLabel":  "13th Crash Division",
                          "roles":  [
                                        {
                                            "role":  "Section Leader",
@@ -195,29 +195,29 @@
                      }
                  ],
     "attachments":  [
-                      {
-                          "name":  "BLACKJACK",
-                          "joint":  true,
-                          "locked":  false,
-                          "lockedLabel":  "AFSOC",
-                          "roles":  [
-                                        {
-                                            "role":  "Pilot",
-                                            "member":  "1st Lt B. Hag"
-                                        },
-                                        {
-                                            "role":  "Co-pilot",
-                                            "member":  "2d Lt D. Mason"
-                                        },
-                                        {
-                                            "role":  "Crew Chief",
-                                            "member":  "TSgt C. Weeb"
-                                        },
-                                        {
-                                            "role":  "Gunner",
-                                            "member":  "SSgt J. Jabbzo"
-                                        }
-                                    ]
-                      }
+                        {
+                            "name":  "BLACKJACK",
+                            "joint":  true,
+                            "locked":  false,
+                            "lockedLabel":  "AFSOC",
+                            "roles":  [
+                                          {
+                                              "role":  "Pilot",
+                                              "member":  "1st Lt B. Hag"
+                                          },
+                                          {
+                                              "role":  "Co-pilot",
+                                              "member":  "2d Lt D. Mason"
+                                          },
+                                          {
+                                              "role":  "Crew Chief",
+                                              "member":  "TSgt C. Weeb"
+                                          },
+                                          {
+                                              "role":  "Gunner",
+                                              "member":  "SSgt J. Jabbzo"
+                                          }
+                                      ]
+                        }
                     ]
 }
