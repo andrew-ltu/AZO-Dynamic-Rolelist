@@ -308,25 +308,56 @@ nav{
 .cs-modal .btn{padding:10px 24px;font-size:13px;}
 
 /* ---------- ABOUT MINI ---------- */
-.about-mini{
-  display:flex;justify-content:center;gap:48px;
-  padding:56px 20px;flex-wrap:wrap;max-width:800px;margin:0 auto;
+/* ---------- ALTERNATING GRID ---------- */
+.alt-section{background:#0A0A0A;}
+.alt-row{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;gap:60px;
+  padding:80px 20px;
 }
-.about-item{
-  display:flex;align-items:flex-start;gap:14px;
-  max-width:360px;text-align:left;
+.alt-row.reverse{flex-direction:row-reverse;}
+.alt-text{
+  flex:1;max-width:480px;
 }
-.about-icon{font-size:28px;line-height:1.4;flex-shrink:0;}
-.about-h{font-weight:600;font-size:14px;color:#fff;margin-bottom:4px;}
-.about-p{font-size:13px;color:var(--muted);line-height:1.65;}
-
-/* ---------- CTA ---------- */
-.cta-banner{
-  text-align:center;padding:70px 20px;
-  background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+.alt-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;letter-spacing:3px;
+  text-transform:uppercase;color:#2563EB;margin-bottom:8px;
 }
-.cta-banner h2{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
-.cta-banner p{color:var(--muted);font-size:15px;margin-bottom:28px;}
+.alt-title{
+  font-family:'Oswald',sans-serif;
+  font-size:36px;font-weight:700;text-transform:uppercase;
+  letter-spacing:2px;color:#FFFFFF;margin-bottom:16px;
+}
+.alt-body{
+  padding-left:16px;border-left:2px solid #2563EB;
+  color:rgba(255,255,255,.7);font-size:15px;line-height:1.8;font-family:'Inter',sans-serif;
+}
+.alt-image{
+  flex:1;position:relative;overflow:hidden;border-radius:6px;
+}
+.alt-image img{
+  width:100%;height:auto;display:block;
+}
+.alt-image::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+}
+.alt-row:not(.reverse) .alt-image::after{
+  background:linear-gradient(270deg,transparent 60%,#0A0A0A 100%);
+}
+.alt-row.reverse .alt-image::after{
+  background:linear-gradient(90deg,transparent 60%,#0A0A0A 100%);
+}
+.alt-cta{
+  text-align:center;padding:80px 20px;background:#0A0A0A;
+}
+.alt-cta h2{
+  font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:10px;
+}
+.alt-cta p{color:rgba(255,255,255,.6);font-size:15px;margin-bottom:28px;}
+.btn-blue{background:#2563EB;color:#fff;border:1px solid #3b82f6;}
+.btn-blue:hover{background:#3b82f6;}
 
 /* ---------- FOOTER ---------- */
 footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
@@ -336,6 +367,11 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .footer-copy{font-size:11px;color:var(--muted-2);line-height:1.8;}
 .footer-copy span{opacity:.5;}
 
+@media(max-width:768px){
+  .alt-row{flex-direction:column!important;gap:30px;padding:50px 20px;}
+  .alt-text{max-width:100%;}
+  .alt-title{font-size:28px;}
+}
 @media(max-width:640px){
   :root{--nav-h:48px;}
   nav{padding:0 12px;}
@@ -406,29 +442,60 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   <div class="stat"><div class="stat-num">2018</div><div class="stat-lbl">Founded</div></div>
 </div>
 
-<div class="about-mini">
-  <div class="about-item">
-    <div class="about-icon">📅</div>
-    <div>
-      <div class="about-h">No Attendance Requirements</div>
-      <div class="about-p">Feel free to join in operations based on your schedule, no punishment for not being able to attend.</div>
+<div class="alt-section">
+
+  <div class="alt-row">
+    <div class="alt-text">
+      <div class="alt-label">Section 01</div>
+      <h2 class="alt-title">No Attendance Requirements</h2>
+      <div class="alt-body">Feel free to join in operations based on your schedule, no punishment for not being able to attend.</div>
+    </div>
+    <div class="alt-image">
+      <img src="/assets/image1.jpg" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
     </div>
   </div>
-  <div class="about-item">
-    <div class="about-icon">🤝</div>
-    <div>
-      <div class="about-h">Dual Clanning</div>
-      <div class="about-p">Unlike other units, AZO does not enforce dual clanning rules. Feel free to join and partake in other units whilst being a part of AZO.</div>
+
+  <div class="alt-row reverse">
+    <div class="alt-text">
+      <div class="alt-label">Section 02</div>
+      <h2 class="alt-title">Dual Clanning</h2>
+      <div class="alt-body">Unlike other units, AZO does not enforce dual clanning rules. Feel free to join and partake in other units whilst being a part of AZO.</div>
+    </div>
+    <div class="alt-image">
+      <img src="/assets/image2.jpg" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
     </div>
   </div>
+
+  <div class="alt-row">
+    <div class="alt-text">
+      <div class="alt-label">Section 03</div>
+      <h2 class="alt-title">Beginner Friendly</h2>
+      <div class="alt-body">Our staff make themselves available to set you up if you're new to Arma 3. There is no mandatory training to attend or forms/applications to fill out.</div>
+    </div>
+    <div class="alt-image">
+      <img src="/assets/image3.png" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+    </div>
+  </div>
+
+  <div class="alt-row reverse">
+    <div class="alt-text">
+      <div class="alt-label">Section 04</div>
+      <h2 class="alt-title">Progression</h2>
+      <div class="alt-body">AZO has endorsements where you can learn, develop, and specialise in a certain role or multiple. These include: Medic, Pilot (rotary, fixed-wing), JTAC, Armored Crewman, Demolition, Radioman, and Marksman. The more operations you attend, the higher classification of Operator you will receive.</div>
+    </div>
+    <div class="alt-image">
+      <img src="/assets/image4.png" alt="" onerror="this.style.background='#111';this.style.minHeight='320px'">
+    </div>
+  </div>
+
 </div>
 
-<div class="cta-banner">
+<div class="alt-cta">
   <h2>Ready to deploy?</h2>
   <p>Check the current operation roster, sign up for a slot, and join us on the battlefield.</p>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-    <a class="btn btn-primary" onclick="switchPage('roster')">Upcoming Operation</a>
-    <a class="btn btn-gold" href="https://discord.gg/7CKJhBN5DF" target="_blank">Join Discord</a>
+    <a class="btn btn-blue" onclick="switchPage('roster')">Upcoming Operation</a>
+    <a class="btn btn-outline" href="https://discord.gg/7CKJhBN5DF" target="_blank">Join Discord</a>
   </div>
 </div>
 
