@@ -1338,6 +1338,7 @@ function renderOperatorsList(list, data) {
     // Build ops dashboard
     const opsMounted = document.getElementById('opsFeed');
     if (opsMounted) buildOpsDashboard(data, rosterData);
+  } catch(e) {console.error('Load error:', e);}
 
   // Live sign-up banner — visible until op starts (18 July 7pm AEST = 09:00 UTC)
   const OP_START = new Date('2026-07-18T09:00:00Z');
