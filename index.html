@@ -353,15 +353,7 @@ nav{
 .alt-row.reverse .alt-image::after{
   background:linear-gradient(90deg,transparent 55%,#0D0D0D 100%);
 }
-.alt-btn{
-  display:inline-flex;align-items:center;gap:8px;margin-top:24px;
-  padding:11px 28px;border-radius:4px;
-  font-family:'Oswald',sans-serif;font-weight:600;
-  font-size:13px;text-transform:uppercase;letter-spacing:2px;
-  cursor:pointer;transition:all .2s;text-decoration:none;
-  background:transparent;color:#fff;border:1.5px solid #2563EB;
-}
-.alt-btn:hover{background:#2563EB;}
+
 .alt-cta{
   text-align:center;padding:80px 20px;background:#0A0A0A;
   border-top:1px solid rgba(255,255,255,.04);
@@ -468,7 +460,6 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       <h2 class="alt-title">No Attendance<br>Requirements</h2>
       <div class="alt-sub">— field notes</div>
       <div class="alt-body">Feel free to join in operations based on your schedule, no punishment for not being able to attend.</div>
-      <a class="alt-btn" href="https://discord.gg/7CKJhBN5DF" target="_blank">About Us →</a>
     </div>
     <div class="alt-image">
       <img src="/assets/image1.jpg" alt="">
@@ -999,15 +990,131 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 
 <!-- ====== PREVIOUS OPS PAGE ====== -->
 <div class="page" id="page-previous-ops">
-  <div style="padding:20px 0;">
-    <div class="section-sub" style="margin-bottom:4px;">Operations</div>
-    <h2 class="section-title">Previous Operations</h2>
-    <p class="section-desc">Record of past operations and attendance.</p>
-    <div id="attendanceContent"></div>
-    <div id="previousOpsSection" style="margin-top:40px;display:none;">
-      <div class="section-sub" style="margin-bottom:4px;">Archive</div>
-      <h2 class="section-title">Archived Operations</h2>
-      <div id="previousOpsList"></div>
+  <style>
+  /* ---------- TACTICAL OPERATIONS BOARD ---------- */
+  .ops-board{background:#050505;min-height:100vh;font-family:'Inter',sans-serif;padding-bottom:60px;}
+  .ops-header-bar{display:flex;align-items:flex-end;justify-content:space-between;padding:40px 40px 30px;border-bottom:1px solid rgba(75,85,99,.3);flex-wrap:wrap;gap:20px;}
+  .ops-header-left{display:flex;flex-direction:column;}
+  .ops-sublabel{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(37,99,235,.7);margin-bottom:2px;}
+  .ops-title{font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#fff;line-height:1.1;}
+  .ops-search-wrap{position:relative;}
+  .ops-search-wrap input{
+    background:#0F0F0F;border:1px solid rgba(75,85,99,.4);border-radius:6px;padding:10px 14px 10px 36px;
+    color:#fff;font-family:'Inter',sans-serif;font-size:13px;width:260px;outline:none;transition:border-color .2s;
+  }
+  .ops-search-wrap input:focus{border-color:#2563EB;}
+  .ops-search-wrap input::placeholder{color:rgba(255,255,255,.25);}
+  .ops-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.25);font-size:14px;pointer-events:none;}
+  .ops-body{display:flex;padding:30px 40px;gap:0;}
+  .ops-col{display:flex;flex-direction:column;}
+  .ops-col-1{width:27%;padding-right:30px;border-right:1px solid rgba(75,85,99,.2);}
+  .ops-col-2{width:46%;padding:0 30px;}
+  .ops-col-3{width:27%;padding-left:30px;border-left:1px solid rgba(75,85,99,.2);}
+  .ops-col-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:18px;}
+  .ops-col-title b{color:#2563EB;}
+
+  /* Col 1 - Active Card */
+  .ops-active-card{background:#0F0F0F;border:1px solid rgba(37,99,235,.25);border-radius:8px;overflow:hidden;}
+  .ops-active-media{position:relative;background:#0a0a0a;height:160px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .ops-active-media .grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.04) 1px,transparent 1px);background-size:20px 20px;pointer-events:none;}
+  .ops-active-badge{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:999px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;z-index:2;}
+  .ops-active-badge.upcoming{background:rgba(37,99,235,.2);color:#60a5fa;border:1px solid rgba(37,99,235,.4);}
+  .ops-active-badge.live{background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.4);}
+  .ops-active-badge.complete{background:rgba(75,85,99,.2);color:#9ca3af;border:1px solid rgba(75,85,99,.4);}
+  .ops-active-info{padding:16px;}
+  .ops-active-info .ops-ao-name{font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:1px;margin-bottom:4px;}
+  .ops-active-info .ops-ao-meta{font-size:12px;color:rgba(255,255,255,.4);}
+  .ops-active-info .ops-ao-meta span{color:rgba(37,99,235,.7);}
+
+  /* Col 2 - Operations Feed */
+  .ops-feed{display:flex;flex-direction:column;gap:2px;}
+  .ops-feed-item{background:#0F0F0F;border:1px solid rgba(75,85,99,.2);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+  .ops-feed-item:hover{border-color:rgba(37,99,235,.3);}
+  .ops-feed-item-main{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;gap:16px;cursor:pointer;}
+  .ops-feed-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0;}
+  .ops-feed-icon{width:28px;height:28px;border-radius:50%;background:rgba(37,99,235,.12);display:flex;align-items:center;justify-content:center;color:#2563EB;font-size:12px;flex-shrink:0;}
+  .ops-feed-icon.campaign{background:rgba(37,99,235,.15);}
+  .ops-feed-icon.completed{background:rgba(75,85,99,.12);color:#9ca3af;}
+  .ops-feed-text{flex:1;min-width:0;}
+  .ops-feed-name{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:1px;line-height:1.2;}
+  .ops-feed-name.campaign{color:#2563EB;}
+  .ops-feed-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .ops-feed-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:999px;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+  .ops-feed-badge.completed{background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.2);}
+  .ops-feed-badge.hq{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+  .ops-feed-right{flex-shrink:0;}
+  .ops-btn-view{background:transparent;border:1px solid rgba(37,99,235,.4);border-radius:4px;padding:6px 16px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .ops-btn-view:hover{background:#2563EB;color:#fff;border-color:#2563EB;}
+  .ops-feed-detail{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1);}
+  .ops-feed-detail.open{max-height:2000px;}
+  .ops-feed-detail-inner{padding:0 18px 16px;border-top:1px solid rgba(75,85,99,.15);margin-top:0;padding-top:14px;}
+  .ops-feed-detail-inner .att-row{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.2);font-size:11px;white-space:nowrap;margin:2px;}
+  .ops-feed-detail-inner .att-av{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.08);overflow:hidden;}
+  .ops-feed-detail-inner .att-rank{font-size:8px;font-family:'Share Tech Mono',monospace;padding:1px 5px;border-radius:3px;letter-spacing:.5px;opacity:.85;}
+  .ops-feed-detail-inner .sec-label{font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(37,99,235,.5);margin:10px 0 4px;}
+
+  /* Col 3 - Month Grid */
+  .ops-month-year{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;}
+  .ops-month-arrow{background:none;border:1px solid rgba(75,85,99,.4);color:rgba(255,255,255,.4);width:32px;height:32px;border-radius:4px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Share Tech Mono',monospace;}
+  .ops-month-arrow:hover{border-color:#2563EB;color:#60a5fa;}
+  .ops-month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .ops-month-cell{padding:10px 0;text-align:center;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.2);color:rgba(255,255,255,.2);cursor:default;transition:all .2s;}
+  .ops-month-cell.has-ops{color:rgba(255,255,255,.7);border-color:rgba(37,99,235,.3);background:rgba(37,99,235,.06);cursor:pointer;}
+  .ops-month-cell.has-ops:hover{border-color:#2563EB;color:#fff;background:rgba(37,99,235,.12);}
+
+  /* Responsive */
+  @media(max-width:1024px){
+    .ops-body{flex-direction:column;padding:20px;}
+    .ops-col-1,.ops-col-2,.ops-col-3{width:100%;padding:0;border:none;margin-bottom:30px;}
+    .ops-header-bar{padding:30px 20px 20px;}
+    .ops-search-wrap input{width:100%;}
+  }
+  </style>
+
+  <div class="ops-board">
+    <div class="ops-header-bar">
+      <div class="ops-header-left">
+        <div class="ops-sublabel">AZO TASKFORCE</div>
+        <div class="ops-title">Operations Board</div>
+      </div>
+      <div class="ops-search-wrap">
+        <span class="ops-search-icon">🔍</span>
+        <input type="text" id="opsSearch" placeholder="Search operations..." oninput="filterOpsFeed()">
+      </div>
+    </div>
+
+    <div class="ops-body">
+      <!-- COLUMN 1: ACTIVE & UPCOMING -->
+      <div class="ops-col ops-col-1">
+        <div class="ops-col-title">Active &amp; Upcoming</div>
+        <div id="opsActiveCard" class="ops-active-card">
+          <div class="ops-active-media">
+            <div class="grid-overlay"></div>
+            <div id="opsActiveBadge" class="ops-active-badge upcoming">UPCOMING</div>
+          </div>
+          <div class="ops-active-info">
+            <div class="ops-ao-name" id="opsActiveName">Loading...</div>
+            <div class="ops-ao-meta" id="opsActiveMeta"><span>1-0 HQ</span> · <span id="opsActiveDate">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 2: PAST OPERATIONS -->
+      <div class="ops-col ops-col-2">
+        <div class="ops-col-title">Operations <b>2026</b></div>
+        <div class="ops-feed" id="opsFeed"></div>
+      </div>
+
+      <!-- COLUMN 3: BROWSE BY MONTH -->
+      <div class="ops-col ops-col-3">
+        <div class="ops-col-title">Browse by Month</div>
+        <div class="ops-month-year">
+          <button class="ops-month-arrow" onclick="prevOpsYear()">‹</button>
+          <span id="opsYearDisplay">2026</span>
+          <button class="ops-month-arrow" onclick="nextOpsYear()">›</button>
+        </div>
+        <div class="ops-month-grid" id="opsMonthGrid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1228,117 +1335,9 @@ function renderOperatorsList(list, data) {
     
     if (list) renderOperatorsList(list, data);
 
-    // Build previous ops view
-    const attEl = document.getElementById('attendanceContent');
-    if (attEl) {
-      function attRow(nm, rl) {
-        let m = data[nm];
-        if (!m) {
-          const norm = nm.toLowerCase().replace(/[\s_.]/g,'');
-          for (const [k, v] of Object.entries(data)) {
-            if (k.startsWith('_')) continue;
-            if (k.toLowerCase().replace(/[\s_.]/g,'') === norm) { m = v; break; }
-          }
-        }
-        const av = m && m.avatar ? m.avatar : '';
-        const initial = nm.charAt(0).toUpperCase();
-        const img = av ? `<img class="att-av" src="${esc(av)}" alt="" onerror="this.style.display='none'">` : '';
-        const fb = !av ? `<span class="att-av">${initial}</span>` : '';
-        const rlHtml = rl ? `<span class="att-rank" style="color:#36d07a;background:rgba(54,208,122,.12);">${esc(rl)}</span>` : '';
-        return `<span class="att-row">${img}${fb}${esc(nm)}${rlHtml}</span>`;
-      }
-      const k1 = {
-        name: 'Op Karoonda I', date: '20 JUNE 2026', zeus: 'Jag McMuffin', count: 17,
-        sections: [
-          { name: 'Platoon HQ', members: [
-            {n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}
-          ]},
-          { name: 'Alpha', members: [
-            {n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},
-            {n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}
-          ]},
-          { name: 'Bravo', members: [
-            {n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},
-            {n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}
-          ]}
-        ]
-      };
-      const k2 = {
-        name: 'Op Karoonda II', date: '4 JULY 2026', zeus: 'Jag McMuffin', count: 31,
-        sections: [
-          { name: 'Command', members: [
-            {n:'Sir Danger',p:'Platoon Commander'},{n:'Jäger',p:'JTAC'}
-          ]},
-          { name: 'Alpha', members: [
-            {n:'Vain',p:'Section Leader'},{n:'24pool1',p:'Asst. Section Leader'},{n:'Monke',p:'Grenadier'},
-            {n:'AnimePanda',p:'LSW (Minimi)'},{n:'HiveMynd',p:'Rifleman'},{n:'The Raven',p:'Rifleman'},
-            {n:'blueberet',p:'Rifleman'}
-          ]},
-          { name: 'Bravo', members: [
-            {n:'Gunter',p:'Section Leader'},{n:'Misaka',p:'Asst. Section Leader'},{n:'Jon Taiwan',p:'Anti-tank'},
-            {n:'Gill',p:'LSW (Minimi)'},{n:'Terack',p:'Rifleman'},{n:'Xeonovaes',p:'Rifleman'}
-          ]},
-          { name: 'Medical', members: [
-            {n:'Zep',p:'Platoon Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},
-            {n:'Crallers',p:'Medic'}
-          ]},
-          { name: 'Joint Op - Charlie', members: [
-            {n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},
-            {n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},
-            {n:'SecOps. Dan',p:'LSW (Minimi)'},{n:'QM. DODO',p:'LSW (Minimi)'},
-            {n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}
-          ]},
-          { name: 'Joint Op - Blackjack', members: [
-            {n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},
-            {n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}
-          ]}
-        ]
-      };
-      const prevOps = [k1, k2];
-      const totalAtt = prevOps.reduce((s, o) => s + o.count, 0);
-      attEl.innerHTML = `
-        <div style="display:flex;gap:16px;margin:28px 0 24px;flex-wrap:wrap;">
-          <div class="att-stat"><div class="att-stat-num" style="color:var(--primary)">${prevOps.length}</div><div class="att-stat-lbl">Operations</div></div>
-          <div class="att-stat"><div class="att-stat-num" style="color:var(--gold)">${totalAtt}</div><div class="att-stat-lbl">Total Attendances</div></div>
-        </div>
-        <div class="att-grid">
-          ${prevOps.map(op => {
-            return `<div class="att-op-card">
-              <div class="att-op-name">${esc(op.name)}</div>
-              <div class="att-op-meta">${op.date} · ${op.count} attended · Zeus: ${esc(op.zeus)}</div>
-              ${op.sections.map(sec => `
-                <div style="font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(54,208,122,.5);margin:10px 0 4px;">${esc(sec.name)}</div>
-                <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(m => attRow(m.n, m.p)).join('')}</div>
-              `).join('')}
-            </div>`;
-          }).join('')}
-        </div>`;
-    }
-  } catch(e) {console.error('Load error:', e);}
-
-  // Load archived ops
-  try {
-    const prevRes = await fetch(API_BASE + '/api/previous-ops');
-    if (prevRes.ok) {
-      const archivedOps = await prevRes.json();
-      if (archivedOps && archivedOps.length) {
-        const prevSection = document.getElementById('previousOpsSection');
-        const prevList = document.getElementById('previousOpsList');
-        if (prevSection && prevList) {
-          prevSection.style.display = 'block';
-          prevList.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px;">
-            ${archivedOps.slice().reverse().map(op => `
-              <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;">
-                <div style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:#fff;">${esc(op.name)}</div>
-                <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);margin:4px 0 8px;">${esc(op.date||'No date')} · Zeus: ${esc(op.zeus||'N/A')}</div>
-                <div style="font-size:12px;color:var(--muted);">Archived ${new Date(op.archivedAt).toLocaleDateString()}</div>
-              </div>
-            `).join('')}
-          </div>`;
-        }
-      }
-    }
-  } catch(e) {}
+    // Build ops dashboard
+    const opsMounted = document.getElementById('opsFeed');
+    if (opsMounted) buildOpsDashboard(data, rosterData);
 
   // Live sign-up banner — visible until op starts (18 July 7pm AEST = 09:00 UTC)
   const OP_START = new Date('2026-07-18T09:00:00Z');
@@ -1351,6 +1350,156 @@ function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
 function toggleOp(el) {
   const detail = el.querySelector('.op-detail');
   if (detail) detail.classList.toggle('open');
+}
+
+// ------- Ops Dashboard -------
+const OPS_DATA = [
+  {name:'Op Karoonda I',date:'20 JUNE 2026',zeus:'Jag McMuffin',count:17,short:'SAT JUN 20 2026',sections:[
+    {name:'Platoon HQ',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}]},
+    {name:'Alpha',members:[{n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}]},
+    {name:'Bravo',members:[{n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},{n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}]}
+  ]},
+  {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',sections:[
+    {name:'Command',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'Jäger',p:'JTAC'}]},
+    {name:'Alpha',members:[{n:'Vain',p:'Section Leader'},{n:'24pool1',p:'Asst. Section Leader'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW (Minimi)'},{n:'HiveMynd',p:'Rifleman'},{n:'The Raven',p:'Rifleman'},{n:'blueberet',p:'Rifleman'}]},
+    {name:'Bravo',members:[{n:'Gunter',p:'Section Leader'},{n:'Misaka',p:'Asst. Section Leader'},{n:'Jon Taiwan',p:'Anti-tank'},{n:'Gill',p:'LSW (Minimi)'},{n:'Terack',p:'Rifleman'},{n:'Xeonovaes',p:'Rifleman'}]},
+    {name:'Medical',members:[{n:'Zep',p:'Platoon Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},{n:'Crallers',p:'Medic'}]},
+    {name:'Joint Op - Charlie',members:[{n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},{n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},{n:'SecOps. Dan',p:'LSW (Minimi)'},{n:'QM. DODO',p:'LSW (Minimi)'},{n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}]},
+    {name:'Joint Op - Blackjack',members:[{n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},{n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}]}
+  ]}
+];
+const OPS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+let opsYear = 2026;
+
+function attRowHtml(nm, rl, data) {
+  let m = data ? data[nm] : null;
+  if (!m && data) {
+    const norm = nm.toLowerCase().replace(/[\s_.]/g,'');
+    for (const [k, v] of Object.entries(data)) {
+      if (k.startsWith('_')) continue;
+      if (k.toLowerCase().replace(/[\s_.]/g,'') === norm) { m = v; break; }
+    }
+  }
+  const av = m && m.avatar ? m.avatar : '';
+  const initial = nm.charAt(0).toUpperCase();
+  const img = av ? `<img class="att-av" src="${esc(av)}" alt="" onerror="this.style.display='none'">` : '';
+  const fb = !av ? `<span class="att-av">${initial}</span>` : '';
+  const rlHtml = rl ? `<span class="att-rank" style="color:#60a5fa;background:rgba(37,99,235,.12);">${esc(rl)}</span>` : '';
+  return `<span class="att-row">${img}${fb}${esc(nm)}${rlHtml}</span>`;
+}
+
+function toggleOpDetail(el) {
+  const detail = el.nextElementSibling;
+  if (detail) detail.classList.toggle('open');
+}
+
+function filterOpsFeed() {
+  const q = (document.getElementById('opsSearch').value || '').toLowerCase();
+  document.querySelectorAll('.ops-feed-item').forEach(item => {
+    const txt = item.textContent.toLowerCase();
+    item.style.display = txt.includes(q) ? '' : 'none';
+  });
+}
+
+function renderMonthGrid() {
+  const grid = document.getElementById('opsMonthGrid');
+  if (!grid) return;
+  const hasOps = {5:true,6:true}; // JUN 5, JUL 6 (0-indexed)
+  grid.innerHTML = OPS_MONTHS.map((m,i) =>
+    `<div class="ops-month-cell${hasOps[i]?' has-ops':''}">${m}</div>`
+  ).join('');
+}
+
+function prevOpsYear() {
+  opsYear--;
+  document.getElementById('opsYearDisplay').textContent = opsYear;
+}
+
+function nextOpsYear() {
+  opsYear++;
+  document.getElementById('opsYearDisplay').textContent = opsYear;
+}
+
+function buildOpsDashboard(data, rosterData) {
+  // Column 1: Active & Upcoming
+  if (rosterData && rosterData.operation) {
+    let op = rosterData.operation;
+    if (!op.zeus || !op.date) {
+      fetch(ROSTER_JSON_URL).then(r=>r.ok&&r.json()).then(gh=>{if(gh&&gh.operation){op={...op,zeus:op.zeus||gh.operation.zeus,date:op.date||gh.operation.date};applyActiveOp(op);}}).catch(()=>{});
+    }
+    applyActiveOp(op);
+  }
+  function applyActiveOp(op) {
+    const badge = document.getElementById('opsActiveBadge');
+    const nameEl = document.getElementById('opsActiveName');
+    const dateEl = document.getElementById('opsActiveDate');
+    if (!nameEl) return;
+    const st = (op.status || 'upcoming').toLowerCase();
+    badge.textContent = st === 'live' ? 'ACTIVE' : st === 'complete' ? 'COMPLETED' : 'UPCOMING';
+    badge.className = 'ops-active-badge ' + (st === 'live' ? 'live' : st === 'complete' ? 'complete' : 'upcoming');
+    nameEl.textContent = op.name || 'Operation';
+    dateEl.textContent = op.date || formatOpDate(op) || '—';
+  }
+
+  // Column 2: Operations Feed
+  const feed = document.getElementById('opsFeed');
+  if (!feed) return;
+  let html = '';
+
+  // Campaign header
+  html += `<div class="ops-feed-item">
+    <div class="ops-feed-item-main" onclick="toggleOpDetail(this)">
+      <div class="ops-feed-left">
+        <div class="ops-feed-icon campaign">▶</div>
+        <div class="ops-feed-text">
+          <div class="ops-feed-name campaign">OPERATION KAROONDA</div>
+          <div class="ops-feed-sub">CAMPAIGN · ${OPS_DATA.length} missions · ${OPS_DATA.reduce((s,o)=>s+o.count,0)} attendances</div>
+        </div>
+      </div>
+    </div>
+    <div class="ops-feed-detail">
+      <div class="ops-feed-detail-inner">
+        ${OPS_DATA.map(op => `<div style="font-size:11px;color:rgba(255,255,255,.5);padding:4px 0;">${esc(op.name)} — ${esc(op.date)}</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  // Individual ops
+  OPS_DATA.forEach((op, idx) => {
+    const sectionsHtml = op.sections.map(sec =>
+      `<div class="sec-label">${esc(sec.name)}</div>
+      <div>${sec.members.map(m => attRowHtml(m.n, m.p, data)).join('')}</div>`
+    ).join('');
+    html += `<div class="ops-feed-item">
+      <div class="ops-feed-item-main" onclick="toggleOpDetail(this)">
+        <div class="ops-feed-left">
+          <div class="ops-feed-icon completed">●</div>
+          <div class="ops-feed-text">
+            <div class="ops-feed-name">${esc(op.name)} — SAT</div>
+            <div class="ops-feed-sub">
+              <span class="ops-feed-badge completed">COMPLETED</span>
+              <span class="ops-feed-badge hq">1-0</span>
+              <span>${op.short||op.date}</span>
+            </div>
+          </div>
+        </div>
+        <div class="ops-feed-right">
+          <button class="ops-btn-view" onclick="event.stopPropagation();toggleOpDetail(this.parentElement.parentElement)">VIEW →</button>
+        </div>
+      </div>
+      <div class="ops-feed-detail">
+        <div class="ops-feed-detail-inner">
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:8px;">Zeus: ${esc(op.zeus)} · ${op.count} attendees</div>
+          ${sectionsHtml}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  feed.innerHTML = html;
+
+  // Column 3: Month grid
+  renderMonthGrid();
 }
 </script>
 
