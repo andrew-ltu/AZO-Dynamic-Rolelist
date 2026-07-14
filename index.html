@@ -1038,8 +1038,11 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-feed-detail-inner{padding:0 18px 16px;border-top:1px solid rgba(75,85,99,.15);margin-top:0;padding-top:14px;}
   .ops-campaign-op{border-bottom:1px solid rgba(75,85,99,.08);}
   .ops-campaign-op:last-child{border-bottom:none;}
-  .ops-campaign-op-main{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;transition:opacity .15s;}
-  .ops-campaign-op-main:hover{opacity:.8;}
+  .ops-campaign-op-main{display:flex;align-items:center;gap:10px;padding:10px 0;}
+  .ops-campaign-op-name{cursor:pointer;flex:1;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.5px;line-height:1.2;transition:opacity .15s;}
+  .ops-campaign-op-name:hover{opacity:.7;}
+  .ops-campaign-view{background:none;border:1px solid rgba(37,99,235,.3);border-radius:3px;padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(96,165,250,.7);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+  .ops-campaign-view:hover{background:rgba(37,99,235,.15);border-color:rgba(37,99,235,.5);color:#60a5fa;}
   .ops-campaign-op-name{flex:1;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.5px;line-height:1.2;}
   .ops-campaign-op-date{font-size:11px;color:rgba(255,255,255,.35);white-space:nowrap;}
   .ops-campaign-op-detail{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1);}
@@ -1437,10 +1440,11 @@ function buildOpsDashboard(data, rosterData) {
       : '<div style="font-size:11px;color:rgba(255,255,255,.35);padding:8px 0;">No attendance data yet</div>';
 
     return `<div class="ops-campaign-op">
-      <div class="ops-campaign-op-main" onclick="this.nextElementSibling.classList.toggle('open')">
-        <span class="ops-feed-badge ${badgeCls(op.status)}">${badgeTxt(op.status)}</span>
-        <span class="ops-campaign-op-name">${esc(op.name)}</span>
+      <div class="ops-campaign-op-main">
+        <span class="ops-feed-badge ${badgeCls(op.status)}" onclick="this.parentElement.nextElementSibling.classList.toggle('open')">${badgeTxt(op.status)}</span>
+        <span class="ops-campaign-op-name" onclick="this.parentElement.nextElementSibling.classList.toggle('open')">${esc(op.name)}</span>
         <span class="ops-campaign-op-date">${op.short||op.date}</span>
+        <button class="ops-campaign-view" onclick="this.closest('.ops-campaign-op').querySelector('.ops-campaign-op-detail').classList.toggle('open')">VIEW</button>
       </div>
       <div class="ops-campaign-op-detail">
         <div class="ops-campaign-op-detail-inner">
