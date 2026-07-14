@@ -1007,24 +1007,10 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.25);font-size:14px;pointer-events:none;}
   .ops-body{display:flex;padding:30px 40px;gap:0;}
   .ops-col{display:flex;flex-direction:column;}
-  .ops-col-1{width:27%;padding-right:30px;border-right:1px solid rgba(75,85,99,.2);}
-  .ops-col-2{width:46%;padding:0 30px;}
-  .ops-col-3{width:27%;padding-left:30px;border-left:1px solid rgba(75,85,99,.2);}
+  .ops-col-feed{width:65%;padding-right:30px;border-right:1px solid rgba(75,85,99,.2);}
+  .ops-col-month{width:35%;padding-left:30px;}
   .ops-col-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:18px;}
   .ops-col-title b{color:#2563EB;}
-
-  /* Col 1 - Active Card */
-  .ops-active-card{background:#0F0F0F;border:1px solid rgba(37,99,235,.25);border-radius:8px;overflow:hidden;}
-  .ops-active-media{position:relative;background:#0a0a0a;height:160px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-  .ops-active-media .grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.04) 1px,transparent 1px);background-size:20px 20px;pointer-events:none;}
-  .ops-active-badge{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:999px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;z-index:2;}
-  .ops-active-badge.upcoming{background:rgba(37,99,235,.2);color:#60a5fa;border:1px solid rgba(37,99,235,.4);}
-  .ops-active-badge.live{background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.4);}
-  .ops-active-badge.complete{background:rgba(75,85,99,.2);color:#9ca3af;border:1px solid rgba(75,85,99,.4);}
-  .ops-active-info{padding:16px;}
-  .ops-active-info .ops-ao-name{font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:1px;margin-bottom:4px;}
-  .ops-active-info .ops-ao-meta{font-size:12px;color:rgba(255,255,255,.4);}
-  .ops-active-info .ops-ao-meta span{color:rgba(37,99,235,.7);}
 
   /* Col 2 - Operations Feed */
   .ops-feed{display:flex;flex-direction:column;gap:2px;}
@@ -1041,7 +1027,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-feed-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .ops-feed-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:999px;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
   .ops-feed-badge.completed{background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.2);}
-  .ops-feed-badge.hq{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+  .ops-feed-badge.upcoming{background:rgba(37,99,235,.2);color:#60a5fa;border:1px solid rgba(37,99,235,.4);}
+  .ops-feed-badge.live{background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.4);}
+  .ops-feed-badge.complete{background:rgba(75,85,99,.2);color:#9ca3af;border:1px solid rgba(75,85,99,.4);}
   .ops-feed-right{flex-shrink:0;}
   .ops-btn-view{background:transparent;border:1px solid rgba(37,99,235,.4);border-radius:4px;padding:6px 16px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;cursor:pointer;transition:all .2s;white-space:nowrap;}
   .ops-btn-view:hover{background:#2563EB;color:#fff;border-color:#2563EB;}
@@ -1063,9 +1051,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-month-cell.has-ops:hover{border-color:#2563EB;color:#fff;background:rgba(37,99,235,.12);}
 
   /* Responsive */
-  @media(max-width:1024px){
+  @media(max-width:900px){
     .ops-body{flex-direction:column;padding:20px;}
-    .ops-col-1,.ops-col-2,.ops-col-3{width:100%;padding:0;border:none;margin-bottom:30px;}
+    .ops-col-feed,.ops-col-month{width:100%;padding:0;border:none;margin-bottom:30px;}
     .ops-header-bar{padding:30px 20px 20px;}
     .ops-search-wrap input{width:100%;}
   }
@@ -1084,29 +1072,14 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     </div>
 
     <div class="ops-body">
-      <!-- COLUMN 1: ACTIVE & UPCOMING -->
-      <div class="ops-col ops-col-1">
-        <div class="ops-col-title">Active &amp; Upcoming</div>
-        <div id="opsActiveCard" class="ops-active-card">
-          <div class="ops-active-media">
-            <div class="grid-overlay"></div>
-            <div id="opsActiveBadge" class="ops-active-badge upcoming">UPCOMING</div>
-          </div>
-          <div class="ops-active-info">
-            <div class="ops-ao-name" id="opsActiveName">Loading...</div>
-            <div class="ops-ao-meta" id="opsActiveMeta"><span>1-0 HQ</span> · <span id="opsActiveDate">—</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- COLUMN 2: PAST OPERATIONS -->
-      <div class="ops-col ops-col-2">
+      <!-- COLUMN 1: OPERATIONS FEED -->
+      <div class="ops-col ops-col-feed">
         <div class="ops-col-title">Operations <b>2026</b></div>
         <div class="ops-feed" id="opsFeed"></div>
       </div>
 
-      <!-- COLUMN 3: BROWSE BY MONTH -->
-      <div class="ops-col ops-col-3">
+      <!-- COLUMN 2: BROWSE BY MONTH -->
+      <div class="ops-col ops-col-month">
         <div class="ops-col-title">Browse by Month</div>
         <div class="ops-month-year">
           <button class="ops-month-arrow" onclick="prevOpsYear()">‹</button>
@@ -1422,34 +1395,39 @@ function nextOpsYear() {
 }
 
 function buildOpsDashboard(data, rosterData) {
-  // Column 1: Active & Upcoming
-  if (rosterData && rosterData.operation) {
-    let op = rosterData.operation;
-    if (!op.zeus || !op.date) {
-      fetch(ROSTER_JSON_URL).then(r=>r.ok&&r.json()).then(gh=>{if(gh&&gh.operation){op={...op,zeus:op.zeus||gh.operation.zeus,date:op.date||gh.operation.date};applyActiveOp(op);}}).catch(()=>{});
-    }
-    applyActiveOp(op);
-  }
-  function applyActiveOp(op) {
-    const badge = document.getElementById('opsActiveBadge');
-    const nameEl = document.getElementById('opsActiveName');
-    const dateEl = document.getElementById('opsActiveDate');
-    if (!nameEl) return;
-    const st = (op.status || 'upcoming').toLowerCase();
-    badge.textContent = st === 'live' ? 'ACTIVE' : st === 'complete' ? 'COMPLETED' : 'UPCOMING';
-    badge.className = 'ops-active-badge ' + (st === 'live' ? 'live' : st === 'complete' ? 'complete' : 'upcoming');
-    nameEl.textContent = op.name || 'Operation';
-    dateEl.textContent = op.date || formatOpDate(op) || '—';
-  }
-
-  // Column 2: Operations Feed
   const feed = document.getElementById('opsFeed');
   if (!feed) return;
   let html = '';
 
+  // Upcoming/active op as first feed item
+  if (rosterData && rosterData.operation) {
+    let op = rosterData.operation;
+    const st = (op.status || 'upcoming').toLowerCase();
+    const badgeCls = st === 'live' ? 'live' : st === 'complete' ? 'complete' : 'upcoming';
+    const badgeTxt = st === 'live' ? 'ACTIVE' : st === 'complete' ? 'COMPLETED' : 'UPCOMING';
+    const opDate = op.date || formatOpDate(op) || '—';
+    html += `<div class="ops-feed-item" style="border-color:rgba(37,99,235,.35);">
+      <div class="ops-feed-item-main" onclick="this.nextElementSibling.classList.toggle('open')">
+        <div class="ops-feed-left">
+          <div class="ops-feed-icon campaign" style="background:rgba(37,99,235,.18);">★</div>
+          <div class="ops-feed-text">
+            <div class="ops-feed-name">${esc(op.name||'Operation')}</div>
+            <div class="ops-feed-sub">
+              <span class="ops-feed-badge ${badgeCls}">${badgeTxt}</span>
+              <span>${esc(opDate)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="ops-feed-right">
+          <span style="color:rgba(255,255,255,.25);font-size:11px;">${op.zeus ? 'Zeus: '+esc(op.zeus) : ''}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
   // Campaign header
   html += `<div class="ops-feed-item">
-    <div class="ops-feed-item-main" onclick="toggleOpDetail(this)">
+    <div class="ops-feed-item-main" onclick="this.nextElementSibling.classList.toggle('open')">
       <div class="ops-feed-left">
         <div class="ops-feed-icon campaign">▶</div>
         <div class="ops-feed-text">
@@ -1466,26 +1444,25 @@ function buildOpsDashboard(data, rosterData) {
   </div>`;
 
   // Individual ops
-  OPS_DATA.forEach((op, idx) => {
+  OPS_DATA.forEach((op) => {
     const sectionsHtml = op.sections.map(sec =>
       `<div class="sec-label">${esc(sec.name)}</div>
       <div>${sec.members.map(m => attRowHtml(m.n, m.p, data)).join('')}</div>`
     ).join('');
     html += `<div class="ops-feed-item">
-      <div class="ops-feed-item-main" onclick="toggleOpDetail(this)">
-        <div class="ops-feed-left">
+      <div class="ops-feed-item-main">
+        <div class="ops-feed-left" onclick="this.closest('.ops-feed-item').querySelector('.ops-feed-detail').classList.toggle('open')">
           <div class="ops-feed-icon completed">●</div>
           <div class="ops-feed-text">
             <div class="ops-feed-name">${esc(op.name)} — SAT</div>
             <div class="ops-feed-sub">
               <span class="ops-feed-badge completed">COMPLETED</span>
-              <span class="ops-feed-badge hq">1-0</span>
               <span>${op.short||op.date}</span>
             </div>
           </div>
         </div>
         <div class="ops-feed-right">
-          <button class="ops-btn-view" onclick="event.stopPropagation();toggleOpDetail(this.parentElement.parentElement)">VIEW &gt;</button>
+          <button class="ops-btn-view" onclick="this.closest('.ops-feed-item').querySelector('.ops-feed-detail').classList.toggle('open')">VIEW &gt;</button>
         </div>
       </div>
       <div class="ops-feed-detail">
@@ -1498,8 +1475,6 @@ function buildOpsDashboard(data, rosterData) {
   });
 
   feed.innerHTML = html;
-
-  // Column 3: Month grid
   renderMonthGrid();
 }
 </script>
