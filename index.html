@@ -1216,7 +1216,7 @@ function renderOperatorsList(list, data, skipStore) {
 
   const frag = document.createDocumentFragment();
   for (const rank of RANK_ORDER) {
-    const items = groups[rank].sort((a, b) => a[0].localeCompare(b[0]));
+    const items = groups[rank].sort((a, b) => (b[1].opsAttended ?? 0) - (a[1].opsAttended ?? 0) || a[0].localeCompare(b[0]));
     if (!items.length) continue;
 
     const section = document.createElement('div');
