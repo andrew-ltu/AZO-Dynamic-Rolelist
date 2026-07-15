@@ -1191,9 +1191,6 @@ window.toggleSectionLock = (secIdx) => {
       const name = prompt('Enter the unit name this section is reserved for (e.g. "13th Crash Division", "AFSOC"):');
       if (name) section.lockedLabel = name;
     }
-  } else {
-    section.joint = false;
-    section.lockedLabel = '';
   }
   saveRoster();
   renderAdminSections();
@@ -1214,9 +1211,6 @@ window.toggleAttachmentLock = (attIdx) => {
       const name = prompt('Enter the unit name this section is reserved for (e.g. "13th Crash Division", "AFSOC"):');
       if (name) att.lockedLabel = name;
     }
-  } else {
-    att.joint = false;
-    att.lockedLabel = '';
   }
   saveRoster();
   renderAdminSections();

@@ -198,7 +198,7 @@
                         {
                             "name":  "BLACKJACK",
                             "joint":  true,
-                            "locked":  false,
+                            "locked":  true,
                             "lockedLabel":  "AFSOC",
                             "roles":  [
                                           {
