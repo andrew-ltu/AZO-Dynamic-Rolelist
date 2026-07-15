@@ -1038,11 +1038,22 @@ function renderAdminSections() {
   
   // Regular sections
   sections.forEach((section, secIdx) => {
+    const locked = section.locked;
+    const unitLabel = section.lockedLabel || '';
+    const lockBtn = locked
+      ? `<button class="admin-mini-btn" onclick="toggleSectionLock(${secIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);">🔓 Unlock</button>`
+      : `<button class="admin-mini-btn" onclick="toggleSectionLock(${secIdx})" style="color:var(--red);border-color:rgba(200,64,58,.3);">🔒 Lock</button>`;
+    const unitBtn = locked
+      ? `<button class="admin-mini-btn" onclick="setSectionUnitName(${secIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);" title="Change reserved unit name">🏷 ${esc(unitLabel) || 'Set Unit'}</button>`
+      : '';
     html += `<div class="admin-section-item">
       <div class="admin-section-header">
         <span class="admin-section-name">${esc(section.name)}</span>
-        <div style="display:flex;gap:8px;">
-          <button class="admin-mini-btn" onclick="editSectionName('${secIdx}')">Edit Name</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;background:${locked?'rgba(54,208,122,.12)':'rgba(61,135,212,.12)'};color:${locked?'#36d07a':'var(--primary-2)'};border:1px solid ${locked?'rgba(54,208,122,.2)':'rgba(61,135,212,.2)'};">${locked ? 'RESERVED' : 'AZO'}</span>
+          ${lockBtn}
+          ${unitBtn}
+          <button class="admin-mini-btn" onclick="editSectionName('${secIdx}')">Edit</button>
           <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteSection('${secIdx}')">Delete</button>
         </div>
       </div>
@@ -1058,11 +1069,22 @@ function renderAdminSections() {
   // Attachments (e.g. BLACKJACK)
   attachments.forEach((att, attIdx) => {
     const attKey = '__attach_' + attIdx;
+    const locked = att.locked;
+    const unitLabel = att.lockedLabel || '';
+    const lockBtn = locked
+      ? `<button class="admin-mini-btn" onclick="toggleAttachmentLock(${attIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);">🔓 Unlock</button>`
+      : `<button class="admin-mini-btn" onclick="toggleAttachmentLock(${attIdx})" style="color:var(--red);border-color:rgba(200,64,58,.3);">🔒 Lock</button>`;
+    const unitBtn = locked
+      ? `<button class="admin-mini-btn" onclick="setAttachmentUnitName(${attIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);" title="Change reserved unit name">🏷 ${esc(unitLabel) || 'Set Unit'}</button>`
+      : '';
     html += `<div class="admin-section-item">
       <div class="admin-section-header">
         <span class="admin-section-name">${esc(att.name || att.lockedLabel || 'Attachment')}</span>
-        <div style="display:flex;gap:8px;">
-          <button class="admin-mini-btn" onclick="editAttachmentName('${attIdx}')">Edit Name</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;background:${locked?'rgba(54,208,122,.12)':'rgba(61,135,212,.12)'};color:${locked?'#36d07a':'var(--primary-2)'};border:1px solid ${locked?'rgba(54,208,122,.2)':'rgba(61,135,212,.2)'};">${locked ? 'RESERVED' : 'AZO'}</span>
+          ${lockBtn}
+          ${unitBtn}
+          <button class="admin-mini-btn" onclick="editAttachmentName('${attIdx}')">Edit</button>
           <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteAttachment('${attIdx}')">Delete</button>
         </div>
       </div>
@@ -1158,6 +1180,52 @@ window.deleteSection = (secIdx) => {
   currentRoster.sections.splice(secIdx, 1);
   saveRoster();
   renderAdminSections();
+};
+
+window.toggleSectionLock = (secIdx) => {
+  const section = currentRoster.sections[secIdx];
+  section.locked = !section.locked;
+  if (section.locked) {
+    section.joint = true;
+    if (!section.lockedLabel) {
+      const name = prompt('Enter the unit name this section is reserved for (e.g. "13th Crash Division", "AFSOC"):');
+      if (name) section.lockedLabel = name;
+    }
+  } else {
+    section.joint = false;
+    section.lockedLabel = '';
+  }
+  saveRoster();
+  renderAdminSections();
+};
+
+window.setSectionUnitName = (secIdx) => {
+  const section = currentRoster.sections[secIdx];
+  const name = prompt('Enter the unit name this section is reserved for:', section.lockedLabel || '');
+  if (name) { section.lockedLabel = name; saveRoster(); renderAdminSections(); }
+};
+
+window.toggleAttachmentLock = (attIdx) => {
+  const att = currentRoster.attachments[attIdx];
+  att.locked = !att.locked;
+  if (att.locked) {
+    att.joint = true;
+    if (!att.lockedLabel) {
+      const name = prompt('Enter the unit name this section is reserved for (e.g. "13th Crash Division", "AFSOC"):');
+      if (name) att.lockedLabel = name;
+    }
+  } else {
+    att.joint = false;
+    att.lockedLabel = '';
+  }
+  saveRoster();
+  renderAdminSections();
+};
+
+window.setAttachmentUnitName = (attIdx) => {
+  const att = currentRoster.attachments[attIdx];
+  const name = prompt('Enter the unit name this section is reserved for:', att.lockedLabel || '');
+  if (name) { att.lockedLabel = name; saveRoster(); renderAdminSections(); }
 };
 
 window.editAttachmentName = (attIdx) => {
