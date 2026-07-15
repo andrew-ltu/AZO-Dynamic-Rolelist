@@ -58,51 +58,47 @@
                 ],
     "sections":  [
                      {
-                         "name":  "ALPHA",
-                         "roles":  [
-                                       {
-                                           "role":  "Section Leader",
-                                           "member":  "Malt",
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Leadership Endorsement"
-                                       },
-                                       {
-                                           "role":  "Asst. Section Leader",
-                                           "member":  "Jon Taiwan",
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Leadership Endorsement"
-                                       },
-                                       {
-                                           "role":  "Grenadier",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "Grenadier",
-                                           "member":  "blueberet"
-                                       },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  "Kiren77"
-                                       },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "Rifleman",
-                                           "member":  "Gunter"
-                                       },
-                                       {
-                                           "role":  "Medic",
-                                           "member":  "Spacecat82",
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Medical Endorsement"
-                                       },
-                                       {
-                                           "role":  "Reservist (fills in if absent)",
-                                           "member":  "Earthball"
-                                       }
-                                   ]
+                          "name":  "ALPHA",
+                          "roles":  [
+                                        {
+                                            "role":  "Section Leader",
+                                            "member":  "Malt",
+                                            "endorsementRequired":  true,
+                                            "endorsementType":  "Leadership Endorsement"
+                                        },
+                                        {
+                                            "role":  "Asst. Section Leader",
+                                            "member":  "Jon Taiwan",
+                                            "endorsementRequired":  true,
+                                            "endorsementType":  "Leadership Endorsement"
+                                        },
+                                        {
+                                            "role":  "Grenadier",
+                                            "member":  "Earthball"
+                                        },
+                                        {
+                                            "role":  "Grenadier",
+                                            "member":  "blueberet"
+                                        },
+                                        {
+                                            "role":  "LSW (Minimi)",
+                                            "member":  "Kiren77"
+                                        },
+                                        {
+                                            "role":  "LSW (Minimi)",
+                                            "member":  "Velteck"
+                                        },
+                                        {
+                                            "role":  "Rifleman",
+                                            "member":  "Gunter"
+                                        },
+                                        {
+                                            "role":  "Medic",
+                                            "member":  "Spacecat82",
+                                            "endorsementRequired":  true,
+                                            "endorsementType":  "Medical Endorsement"
+                                        }
+                                    ]
                       },
                       {
                           "name":  "BRAVO",
