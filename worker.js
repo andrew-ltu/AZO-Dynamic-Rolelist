@@ -799,6 +799,13 @@ async function handleGalleryUpload(request, env, origin) {
     const ext = file.name.split('.').pop().toLowerCase();
     const allowed = ['jpg','jpeg','png','gif','webp'];
     if (!allowed.includes(ext)) return jsonResponse({ error: 'Invalid file type. Allowed: ' + allowed.join(', ') }, 400, origin);
+    // Hard cap at 9 GB to stay within free tier
+    const maxBytes = 9 * 1024 * 1024 * 1024;
+    const sizeRow = await env.DB.prepare('SELECT COALESCE(SUM(size), 0) AS total FROM gallery_images').first();
+    const currentTotal = sizeRow ? Number(sizeRow.total) : 0;
+    if (currentTotal + file.size > maxBytes) {
+      return jsonResponse({ error: 'Storage limit reached (9 GB). Delete existing images before uploading more.' }, 413, origin);
+    }
     const id = crypto.randomUUID();
     const slug = opName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'unknown';
     const r2Key = 'gallery/' + slug + '/' + id + '.' + ext;
@@ -806,8 +813,8 @@ async function handleGalleryUpload(request, env, origin) {
     await env.GALLERY.put(r2Key, buffer, { httpMetadata: { contentType: file.type || 'image/jpeg' } });
     const now = Math.floor(Date.now() / 1000);
     const username = auth.username || 'staff';
-    await env.DB.prepare('INSERT INTO gallery_images (id, op_name, filename, r2_key, content_type, uploaded_by, uploaded_by_name, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-      .bind(id, opName, file.name, r2Key, file.type || 'image/jpeg', auth.sub, username, now).run();
+    await env.DB.prepare('INSERT INTO gallery_images (id, op_name, filename, r2_key, content_type, size, uploaded_by, uploaded_by_name, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(id, opName, file.name, r2Key, file.type || 'image/jpeg', file.size, auth.sub, username, now).run();
     return jsonResponse({ ok: true, id, opName, filename: file.name }, 200, origin);
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, origin);

@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS gallery_images (
   filename TEXT NOT NULL,
   r2_key TEXT NOT NULL,
   content_type TEXT DEFAULT 'image/jpeg',
+  size INTEGER DEFAULT 0,
   uploaded_by TEXT NOT NULL,
   uploaded_by_name TEXT NOT NULL,
   uploaded_at INTEGER NOT NULL
