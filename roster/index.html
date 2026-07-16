@@ -116,6 +116,16 @@ header.hero{text-align:center;padding:38px 16px 20px;position:relative;}
 .sec.locked .sec-head{background:linear-gradient(180deg,rgba(100,115,130,.15),transparent),var(--panel-solid);color:var(--muted);}
 .sec.joint{border-color:rgba(54,208,122,.35);}
 .sec.joint .sec-head{background:linear-gradient(180deg,rgba(54,208,122,.12),transparent),var(--panel-solid);color:#fff;}
+.sec-color-green{border-color:rgba(54,208,122,.35);}
+.sec-color-green .sec-head{background:linear-gradient(180deg,rgba(54,208,122,.12),transparent),var(--panel-solid);color:#fff;}
+.sec-color-yellow{border-color:rgba(240,180,41,.35);}
+.sec-color-yellow .sec-head{background:linear-gradient(180deg,rgba(240,180,41,.12),transparent),var(--panel-solid);color:#fff;}
+.sec-color-red{border-color:rgba(217,64,64,.35);}
+.sec-color-red .sec-head{background:linear-gradient(180deg,rgba(217,64,64,.12),transparent),var(--panel-solid);color:#fff;}
+.sec-color-purple{border-color:rgba(155,89,182,.35);}
+.sec-color-purple .sec-head{background:linear-gradient(180deg,rgba(155,89,182,.12),transparent),var(--panel-solid);color:#fff;}
+.sec-color-blue{border-color:var(--line-strong);}
+.sec-color-blue .sec-head{background:linear-gradient(180deg,color-mix(in srgb,var(--primary) 28%,transparent),transparent),var(--panel-solid);color:#fff;}
 .sec-body{padding:6px;display:flex;flex-direction:column;gap:4px;}
 .lock-note{padding:10px 14px;font-size:11px;color:var(--muted-2);border-top:1px dashed var(--line);background:rgba(0,0,0,.15);display:flex;gap:7px;align-items:center;}
 .endorse-pill{display:inline;margin-left:4px;font-size:12px;font-weight:700;color:#f0b429;cursor:help;}
@@ -1036,20 +1046,28 @@ function renderAdminSections() {
     </div>`;
   }
   
+  const colorOpts = ['blue','green','yellow','red','purple'];
+  const colorSelect = (current) => `<select onchange="setSectionColor(this.value,'SEC_IDX_PLACEHOLDER')" style="background:#0d0d0d;border:1px solid rgba(255,255,255,.1);border-radius:4px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 4px;outline:none;cursor:pointer;">
+    ${colorOpts.map(c => `<option value="${c}"${current===c?' selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('')}
+  </select>`;
+
   // Regular sections
   sections.forEach((section, secIdx) => {
     const locked = section.locked;
     const unitLabel = section.lockedLabel || '';
+    const curColor = section.color || (locked ? 'green' : 'blue');
     const lockBtn = locked
       ? `<button class="admin-mini-btn" onclick="toggleSectionLock(${secIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);">🔓 Unlock</button>`
       : `<button class="admin-mini-btn" onclick="toggleSectionLock(${secIdx})" style="color:var(--red);border-color:rgba(200,64,58,.3);">🔒 Lock</button>`;
     const unitBtn = locked
       ? `<button class="admin-mini-btn" onclick="setSectionUnitName(${secIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);" title="Change reserved unit name">🏷 ${esc(unitLabel) || 'Set Unit'}</button>`
       : '';
+    const colorDropdown = colorSelect(curColor).replace('SEC_IDX_PLACEHOLDER', 'sect_' + secIdx);
     html += `<div class="admin-section-item">
       <div class="admin-section-header">
         <span class="admin-section-name">${esc(section.name)}</span>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          ${colorDropdown}
           <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;background:${locked?'rgba(54,208,122,.12)':'rgba(61,135,212,.12)'};color:${locked?'#36d07a':'var(--primary-2)'};border:1px solid ${locked?'rgba(54,208,122,.2)':'rgba(61,135,212,.2)'};">${locked ? 'RESERVED' : 'AZO'}</span>
           ${lockBtn}
           ${unitBtn}
@@ -1071,16 +1089,19 @@ function renderAdminSections() {
     const attKey = '__attach_' + attIdx;
     const locked = att.locked;
     const unitLabel = att.lockedLabel || '';
+    const curColor = att.color || (locked ? 'green' : 'blue');
     const lockBtn = locked
       ? `<button class="admin-mini-btn" onclick="toggleAttachmentLock(${attIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);">🔓 Unlock</button>`
       : `<button class="admin-mini-btn" onclick="toggleAttachmentLock(${attIdx})" style="color:var(--red);border-color:rgba(200,64,58,.3);">🔒 Lock</button>`;
     const unitBtn = locked
       ? `<button class="admin-mini-btn" onclick="setAttachmentUnitName(${attIdx})" style="color:#36d07a;border-color:rgba(54,208,122,.3);" title="Change reserved unit name">🏷 ${esc(unitLabel) || 'Set Unit'}</button>`
       : '';
+    const colorDropdown = colorSelect(curColor).replace('SEC_IDX_PLACEHOLDER', 'att_' + attIdx);
     html += `<div class="admin-section-item">
       <div class="admin-section-header">
         <span class="admin-section-name">${esc(att.name || att.lockedLabel || 'Attachment')}</span>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          ${colorDropdown}
           <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;background:${locked?'rgba(54,208,122,.12)':'rgba(61,135,212,.12)'};color:${locked?'#36d07a':'var(--primary-2)'};border:1px solid ${locked?'rgba(54,208,122,.2)':'rgba(61,135,212,.2)'};">${locked ? 'RESERVED' : 'AZO'}</span>
           ${lockBtn}
           ${unitBtn}
@@ -1220,6 +1241,16 @@ window.setAttachmentUnitName = (attIdx) => {
   const att = currentRoster.attachments[attIdx];
   const name = prompt('Enter the unit name this section is reserved for:', att.lockedLabel || '');
   if (name) { att.lockedLabel = name; saveRoster(); renderAdminSections(); }
+};
+
+window.setSectionColor = (color, key) => {
+  if (key.startsWith('sect_')) {
+    const sec = currentRoster.sections[parseInt(key.replace('sect_', ''))];
+    if (sec) { sec.color = color; saveRoster(); renderAdminSections(); }
+  } else if (key.startsWith('att_')) {
+    const att = currentRoster.attachments[parseInt(key.replace('att_', ''))];
+    if (att) { att.color = color; saveRoster(); renderAdminSections(); }
+  }
 };
 
 window.editAttachmentName = (attIdx) => {
@@ -1940,8 +1971,8 @@ function render(roster){
     const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
     const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
-    const jointClass=sec.locked&&sec.joint?'joint':'';
-    return `<div class="sec ${sec.locked?'locked':''} ${jointClass} bracketed">
+    const secColor=sec.color?('sec-color-'+sec.color):(sec.locked&&sec.joint?'joint':'');
+    return `<div class="sec ${sec.locked?'locked':''} ${secColor} bracketed">
       <div class="sec-head">${esc(sec.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
   }).join('');
@@ -1952,8 +1983,8 @@ function render(roster){
     const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}},uname)).join('');
     const headRight=att.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=att.locked&&att.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>`:'';
-    const ajc=att.locked&&att.joint?'joint':'';
-    return `<div class="sec ${att.locked?'locked':''} ${ajc} bracketed">
+    const attColor=att.color?('sec-color-'+att.color):(att.locked&&att.joint?'joint':'');
+    return `<div class="sec ${att.locked?'locked':''} ${attColor} bracketed">
       <div class="sec-head">${esc(att.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
   }).join('');
