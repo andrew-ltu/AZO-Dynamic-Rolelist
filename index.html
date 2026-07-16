@@ -438,36 +438,35 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .ops-campaign-op-detail-inner .sec-label{font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:rgba(37,99,235,.5);margin:8px 0 4px;}
 .ops-campaign-op-detail-inner .att-row{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.2);font-size:11px;white-space:nowrap;margin:2px;}
 .ops-campaign-op-detail-inner .att-av{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.08);overflow:hidden;}
-.ops-month-year{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:14px;font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;}
+.ops-month-year{display:flex;align-items:center;gap:12px;font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:14px;}
 .ops-month-arrow{background:none;border:1px solid rgba(75,85,99,.4);color:rgba(255,255,255,.4);width:32px;height:32px;border-radius:4px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Share Tech Mono',monospace;}
 .ops-month-arrow:hover{border-color:#2563EB;color:#60a5fa;}
-.ops-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:12px;}
-.ops-cal-dow{text-align:center;font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:4px 0;}
-.ops-cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:12px;font-weight:500;color:rgba(255,255,255,.5);background:rgba(255,255,255,.02);border:1px solid transparent;position:relative;cursor:default;transition:all .15s;}
-.ops-cal-day.other-month{opacity:.15;}
-.ops-cal-day.today{border-color:#2563EB;color:#60a5fa;}
-.ops-cal-day.has-op{color:#fff;background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.2);cursor:pointer;}
-.ops-cal-day.has-op:hover{background:rgba(37,99,235,.2);border-color:#2563EB;}
-.ops-cal-day.has-op::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#2563EB;}
-.ops-cal-day.selected{background:rgba(37,99,235,.25);border-color:#2563EB;}
-.ops-cal-ops{margin-top:6px;}
-.ops-cal-op-item{padding:5px 10px;border-radius:4px;background:rgba(255,255,255,.03);border:1px solid rgba(75,85,99,.15);margin-bottom:3px;display:flex;align-items:center;gap:8px;}
-.ops-cal-op-name{font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.5px;flex:1;}
-.ops-cal-op-status{font-size:8px;padding:2px 6px;border-radius:999px;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
-.ops-cal-op-status.completed{background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.2);}
-.ops-cal-op-status.upcoming{background:rgba(37,99,235,.2);color:#60a5fa;border:1px solid rgba(37,99,235,.4);}
-.ops-cal-no-ops{font-size:11px;color:rgba(255,255,255,.2);text-align:center;padding:12px 0;font-family:'Share Tech Mono',monospace;}
 
-/* ---------- DETAIL CARD ---------- */
-.ops-detail-card{background:#0a0e14;border:1px solid rgba(75,85,99,.25);border-radius:10px;overflow:hidden;margin-top:16px;}
-.ops-detail-banner{width:100%;height:160px;object-fit:cover;display:block;background:#0d131f;}
-.ops-detail-body{padding:16px 18px 18px;}
-.ops-detail-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(96,165,250,.8);font-family:'Share Tech Mono',monospace;letter-spacing:.3px;margin-bottom:6px;}
-.ops-detail-title{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:1px;line-height:1.15;}
-.ops-detail-zeus{font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;}
-.ops-detail-placeholder{background:#0a0e14;border:1px dashed rgba(75,85,99,.25);border-radius:10px;padding:40px 20px;text-align:center;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.15);}
-.ops-detail-attendees{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(75,85,99,.12);}
-.ops-detail-att-label{font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);width:100%;margin-bottom:2px;}
+/* ---------- FULL-WIDTH CALENDAR ---------- */
+.ops-calendar-main{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+.ops-cal-dow{text-align:center;font-size:10px;font-family:'Share Tech Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:6px 0 2px;}
+.ops-cal-cell{background:rgba(10,14,20,.6);border:1px solid rgba(75,85,99,.15);border-radius:6px;min-height:120px;padding:6px;display:flex;flex-direction:column;transition:border-color .2s;position:relative;}
+.ops-cal-cell.other-month{opacity:.2;background:transparent;}
+.ops-cal-cell.today{border-color:rgba(37,99,235,.4);}
+.ops-cal-cell .day-num{font-size:11px;font-weight:600;color:rgba(255,255,255,.3);margin-bottom:4px;font-family:'Inter',sans-serif;letter-spacing:.2px;flex-shrink:0;}
+.ops-cal-cell.today .day-num{color:#60a5fa;}
+.ops-cal-cell.has-op{cursor:pointer;}
+.ops-cal-cell.has-op:hover{border-color:rgba(37,99,235,.3);background:rgba(10,14,20,.8);}
+
+/* Event card inside cell */
+.ops-cell-event{background:#0d131f;border:1px solid rgba(75,85,99,.2);border-radius:5px;overflow:hidden;flex:1;display:flex;flex-direction:column;}
+.ops-cell-event-img{width:100%;height:44px;object-fit:cover;display:block;background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(37,99,235,.05));flex-shrink:0;}
+.ops-cell-event-body{padding:5px 7px 6px;display:flex;flex-direction:column;gap:2px;flex:1;}
+.ops-cell-event-date{font-size:8px;font-family:'Share Tech Mono',monospace;color:rgba(96,165,250,.85);letter-spacing:.2px;line-height:1.2;}
+.ops-cell-event-count{font-size:8px;color:rgba(255,255,255,.35);font-family:'Share Tech Mono',monospace;}
+.ops-cell-event-title{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.3px;line-height:1.15;margin-top:1px;}
+.ops-cell-event-signup{display:block;margin-top:auto;padding:3px 0;border-radius:3px;background:#2563EB;color:#fff;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;text-align:center;text-decoration:none;border:0;cursor:pointer;transition:background .15s;line-height:1.4;}
+.ops-cell-event-signup:hover{background:#3b82f6;}
+
+/* Filter buttons */
+.ops-cal-filter{padding:5px 12px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;border:1px solid rgba(75,85,99,.25);background:transparent;color:rgba(255,255,255,.4);transition:all .15s;}
+.ops-cal-filter:hover{border-color:rgba(37,99,235,.4);color:#60a5fa;}
+.ops-cal-filter.active{background:rgba(37,99,235,.2);color:#60a5fa;border-color:#2563EB;}
 @media(max-width:900px){
   .ops-body{flex-direction:column;padding:20px;}
   .ops-col-feed,.ops-col-month{width:100%;padding:0;border:none;margin-bottom:30px;}
@@ -618,30 +617,32 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <!-- ====== ROSTER PAGE ====== -->
 <div class="page" id="page-roster">
   <div class="ops-board" style="min-height:auto;padding-bottom:40px;">
-    <div class="ops-header-bar" style="padding:20px 20px 20px;">
-      <div class="ops-header-left">
-        <div class="ops-sublabel">AZO TASKFORCE</div>
-        <div class="ops-title" style="font-size:28px;">Operations Board</div>
-      </div>
-      <div class="ops-search-wrap">
-        <span class="ops-search-icon">🔍</span>
-        <input type="text" id="opsSearch" placeholder="Search operations..." oninput="filterOpsFeed()">
-      </div>
-    </div>
     <div class="ops-body" style="padding:20px;">
-      <div class="ops-col ops-col-feed">
-        <div class="ops-col-title">Operations <b>2026</b></div>
-        <div class="ops-feed" id="opsFeed"></div>
-        <div id="opsDetailCard"></div>
-      </div>
-      <div class="ops-col ops-col-month">
-        <div class="ops-col-title">Calendar</div>
-        <div class="ops-month-year">
+      <!-- LEFT: Full-width calendar grid -->
+      <div class="ops-col ops-col-feed" style="width:100%;padding-right:20px;border-right:1px solid rgba(75,85,99,.2);">
+        <div class="ops-month-year" style="justify-content:flex-start;margin-bottom:14px;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(59,130,246,.6);margin-right:12px;">Calendar</span>
           <button class="ops-month-arrow" onclick="prevMonth()">‹</button>
           <span id="opsCalTitle">July 2026</span>
           <button class="ops-month-arrow" onclick="nextMonth()">›</button>
         </div>
-        <div class="ops-cal-grid" id="opsCalGrid"></div>
+        <div class="ops-calendar-main" id="opsCalMain"></div>
+      </div>
+      <!-- RIGHT: Search + month nav -->
+      <div class="ops-col ops-col-month" style="width:280px;flex-shrink:0;padding-left:20px;">
+        <div class="ops-search-wrap" style="margin-bottom:20px;width:100%;">
+          <span class="ops-search-icon">🔍</span>
+          <input type="text" id="opsSearch" placeholder="Search operations..." oninput="filterOpsFeed()" style="width:100%;">
+        </div>
+        <div class="ops-sublabel" style="margin-bottom:10px;">Filter by Status</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;">
+          <button class="ops-cal-filter" data-filter="all" onclick="setCalFilter('all')" style="background:rgba(37,99,235,.2);color:#60a5fa;border-color:#2563EB;">All</button>
+          <button class="ops-cal-filter" data-filter="upcoming" onclick="setCalFilter('upcoming')">Upcoming</button>
+          <button class="ops-cal-filter" data-filter="completed" onclick="setCalFilter('completed')">Completed</button>
+        </div>
+        <div class="ops-sublabel" style="margin-bottom:10px;">Quick Links</div>
+        <a href="/roster/" target="_blank" style="display:block;padding:10px 14px;border-radius:6px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);color:#60a5fa;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;text-decoration:none;transition:all .15s;text-align:center;" onmouseover="this.style.background='rgba(37,99,235,.25)'" onmouseout="this.style.background='rgba(37,99,235,.12)'">View Full Roster & Sign Up →</a>
+        <div id="opsCalStatus" style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.2);font-family:'Share Tech Mono',monospace;text-align:center;"></div>
       </div>
     </div>
   </div>
@@ -1323,9 +1324,20 @@ function renderOperatorsList(list, data, skipStore) {
     
     if (list) renderOperatorsList(list, data, false);
  
-    // Build ops dashboard
-    const opsMounted = document.getElementById('opsFeed');
-    if (opsMounted) buildOpsDashboard(data, rosterData);
+    // Build ops dashboard / calendar
+    const calMounted = document.getElementById('opsCalMain');
+    if (calMounted) {
+      // Update Karoonda III info from live roster data if available
+      if (rosterData && rosterData.operation) {
+        const op = rosterData.operation;
+        const st = (op.status || 'upcoming').toLowerCase();
+        OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
+        OPS_DATA[0].date = op.date || OPS_DATA[0].date;
+        OPS_DATA[0].name = op.name || OPS_DATA[0].name;
+        OPS_DATA[0].status = st;
+      }
+      renderCalendar();
+    }
   } catch(e) {console.error('Load error:', e);}
 
   // Live sign-up banner — visible until op starts (18 July 7pm AEST = 09:00 UTC)
@@ -1359,156 +1371,144 @@ const OPS_DATA = [
   ]}
 ];
 const OPS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 let calMonth = new Date().getMonth();
 let calYear = new Date().getFullYear();
-let selectedCalDay = null;
+let calFilter = 'all';
 
-function renderCalendar() {
-  const grid = document.getElementById('opsCalGrid');
-  const title = document.getElementById('opsCalTitle');
-  if (!grid) return;
-
-  title.textContent = `${OPS_MONTHS[calMonth].charAt(0)+OPS_MONTHS[calMonth].slice(1).toLowerCase()} ${calYear}`;
-
-  // Build map of op dates
-  const opMap = {};
+function getOpMap() {
+  const map = {};
   OPS_DATA.forEach((op, idx) => {
-    const parts = (op.short || op.date).split(' ');
     const months = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
     let d, m, y;
     if (op.short) {
-      m = months[op.short.split(' ')[1].toUpperCase()];
-      d = parseInt(op.short.split(' ')[2]);
-      y = parseInt(op.short.split(' ')[3]);
+      const p = op.short.split(' ');
+      m = months[p[1].toUpperCase()];
+      d = parseInt(p[2]);
+      y = parseInt(p[3]);
     } else {
-      m = months[op.date.split(' ')[1].toUpperCase()];
-      d = parseInt(op.date.split(' ')[0]);
-      y = parseInt(op.date.split(' ')[2]);
+      const p = op.date.split(' ');
+      m = months[p[1].toUpperCase()];
+      d = parseInt(p[0]);
+      y = parseInt(p[2]);
     }
     const key = `${y}-${m}-${d}`;
-    if (!opMap[key]) opMap[key] = [];
-    opMap[key].push(idx);
+    if (!map[key]) map[key] = [];
+    map[key].push(idx);
   });
+  return map;
+}
 
+function renderCalendar() {
+  const el = document.getElementById('opsCalMain');
+  const title = document.getElementById('opsCalTitle');
+  const status = document.getElementById('opsCalStatus');
+  if (!el) return;
+
+  title.textContent = `${MONTH_NAMES[calMonth]} ${calYear}`;
+
+  const opMap = getOpMap();
   const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+  const monStart = firstDay === 0 ? 6 : firstDay - 1; // convert to Mon=0
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
   const daysInPrev = new Date(calYear, calMonth, 0).getDate();
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+  const isDone = s => s === 'complete' || s === 'completed';
+  const months = {JAN:'Jan',FEB:'Feb',MAR:'Mar',APR:'Apr',MAY:'May',JUN:'Jun',JUL:'Jul',AUG:'Aug',SEP:'Sep',OCT:'Oct',NOV:'Nov',DEC:'Dec'};
 
-  const dow = ['S','M','T','W','T','F','S'];
-  let cells = dow.map(d => `<div class="ops-cal-dow">${d}</div>`).join('');
+  // Count total ops for status
+  let totalShown = 0;
+
+  // Day headers (Mon-Sun)
+  let html = DOW.map(d => `<div class="ops-cal-dow">${d}</div>`).join('');
 
   // Previous month overflow
-  for (let i = firstDay - 1; i >= 0; i--) {
-    cells += `<div class="ops-cal-day other-month">${daysInPrev - i}</div>`;
+  for (let i = monStart - 1; i >= 0; i--) {
+    html += `<div class="ops-cal-cell other-month"><div class="day-num">${daysInPrev - i}</div></div>`;
   }
 
+  // Current month days
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${calYear}-${calMonth}-${d}`;
-    const hasOp = !!opMap[key];
+    const opIndices = opMap[key] || [];
+    const filtered = calFilter === 'all' ? opIndices : opIndices.filter(i => {
+      const s = OPS_DATA[i].status;
+      return calFilter === 'upcoming' ? (s !== 'complete' && s !== 'completed') : (s === 'complete' || s === 'completed');
+    });
+    const hasOp = filtered.length > 0;
     const isToday = key === todayStr;
-    const isSelected = selectedCalDay === d;
-    let cls = 'ops-cal-day';
+
+    let cls = 'ops-cal-cell';
     if (isToday) cls += ' today';
     if (hasOp) cls += ' has-op';
-    if (isSelected) cls += ' selected';
-    const onclick = hasOp ? `onclick="selectCalDay(${d})"` : '';
-    cells += `<div class="${cls}" ${onclick}>${d}</div>`;
+
+    let inner = `<div class="day-num">${d}</div>`;
+    if (hasOp) {
+      totalShown++;
+      inner += filtered.map(i => {
+        const op = OPS_DATA[i];
+        const p = (op.short || op.date).split(' ');
+        const mon = p[1] ? months[p[1].toUpperCase()] || p[1] : '';
+        const dayNum = p[2] ? parseInt(p[2]) : '';
+        const suffix = dayNum ? (dayNum%10===1&&dayNum!==11?'st':dayNum%10===2&&dayNum!==12?'nd':dayNum%10===3&&dayNum!==13?'rd':'th') : '';
+        const isUpcoming = op.status !== 'complete' && op.status !== 'completed';
+        return `<div class="ops-cell-event">
+          <div class="ops-cell-event-img"></div>
+          <div class="ops-cell-event-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ops-cell-event-date">${mon} ${dayNum}${suffix} · 19:00</span>
+              <span class="ops-cell-event-count">👤 ${op.count || 0}</span>
+            </div>
+            <div class="ops-cell-event-title">${esc(op.name)}</div>
+            ${isUpcoming ? '<a href="/roster/" target="_blank" class="ops-cell-event-signup">Sign Up →</a>' : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+    html += `<div class="${cls}">${inner}</div>`;
   }
 
   // Next month overflow
-  const totalCells = cells.match(/<div class="ops-cal/g).length;
+  const totalCells = html.match(/<div class="ops-cal/g).length;
   const remaining = (7 - (totalCells % 7)) % 7;
   for (let i = 1; i <= remaining; i++) {
-    cells += `<div class="ops-cal-day other-month">${i}</div>`;
+    html += `<div class="ops-cal-cell other-month"><div class="day-num">${i}</div></div>`;
   }
 
-  grid.innerHTML = cells;
-  renderCalOps(opMap);
-}
-
-function renderCalOps(opMap) {
-  const el = document.getElementById('opsDetailCard');
-  if (!el) return;
-  const day = selectedCalDay;
-  const key = day ? `${calYear}-${calMonth}-${day}` : null;
-  const opIndices = key ? opMap[key] : null;
-
-  if (!opIndices || !opIndices.length) {
-    el.innerHTML = '<div class="ops-detail-placeholder">Select a date with an operation to view details</div>';
-    return;
-  }
-
-  const isDone = s => s === 'complete' || s === 'completed';
-  const badgeTxt = s => s === 'live' ? 'LIVE' : isDone(s) ? 'COMPLETED' : 'UPCOMING';
-  const badgeCls = s => s === 'live' ? 'live' : isDone(s) ? 'completed' : 'upcoming';
-
-  el.innerHTML = opIndices.map(i => {
-    const op = OPS_DATA[i];
-    const parsed = (op.short || op.date).split(' ');
-    const months = {JAN:'Jan',FEB:'Feb',MAR:'Mar',APR:'Apr',MAY:'May',JUN:'Jun',JUL:'Jul',AUG:'Aug',SEP:'Sep',OCT:'Oct',NOV:'Nov',DEC:'Dec'};
-    const mon = parsed[1] ? months[parsed[1].toUpperCase()] || parsed[1] : '';
-    const dayNum = parsed[2] ? parseInt(parsed[2]) : '';
-    const suffix = dayNum ? (dayNum%10===1&&dayNum!==11?'st':dayNum%10===2&&dayNum!==12?'nd':dayNum%10===3&&dayNum!==13?'rd':'th') : '';
-    const time = '19:00';
-    const dateStr = `📅 ${mon} ${dayNum}${suffix} · ${time}`;
-    const sectionsHtml = op.sections.length
-      ? op.sections.map(sec =>
-          `<div style="font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:rgba(37,99,235,.5);margin:6px 0 3px;">${esc(sec.name)}</div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;">${sec.members.map(m => attRowHtml(m.n, m.p, null)).join('')}</div>`
-        ).join('')
-      : '<div style="font-size:11px;color:rgba(255,255,255,.2);padding:6px 0;">No attendance data yet</div>';
-
-    return `<div class="ops-detail-card">
-      <div class="ops-detail-banner"></div>
-      <div class="ops-detail-body">
-        <div class="ops-detail-meta">
-          <span>${dateStr}</span>
-          <span>👤 ${op.count || 0}</span>
-        </div>
-        <div class="ops-detail-title">${esc(op.name)}</div>
-        <div class="ops-detail-zeus">Zeus: ${esc(op.zeus)}</div>
-        <div class="ops-detail-attendees">
-          <div class="ops-detail-att-label">ATTENDEES</div>
-          ${sectionsHtml}
-        </div>
-        <a href="/roster/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 20px;border-radius:6px;background:#2563EB;color:#fff;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#3b82f6'" onmouseout="this.style.background='#2563EB'">View Roster &amp; Sign Up →</a>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function selectCalDay(d) {
-  selectedCalDay = selectedCalDay === d ? null : d;
-  renderCalendar();
+  el.innerHTML = html;
+  if (status) status.textContent = totalShown ? `${totalShown} operation${totalShown!==1?'s':''} shown` : 'No operations this month';
 }
 
 function prevMonth() {
   calMonth--;
   if (calMonth < 0) { calMonth = 11; calYear--; }
-  selectedCalDay = null;
   renderCalendar();
 }
 
 function nextMonth() {
   calMonth++;
   if (calMonth > 11) { calMonth = 0; calYear++; }
-  selectedCalDay = null;
+  renderCalendar();
+}
+
+function setCalFilter(f) {
+  calFilter = f;
+  document.querySelectorAll('.ops-cal-filter').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === f);
+  });
   renderCalendar();
 }
 
 function filterOpsFeed() {
   const q = (document.getElementById('opsSearch').value || '').toLowerCase();
-  document.querySelectorAll('.ops-feed-item').forEach(item => {
-    const txt = item.textContent.toLowerCase();
-    item.style.display = txt.includes(q) ? '' : 'none';
+  document.querySelectorAll('.ops-cal-cell.has-op').forEach(cell => {
+    cell.style.display = cell.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
 
-function renderMonthGrid() { renderCalendar(); } // alias for init
-
-function attRowHtml(nm, rl, data) {
+function renderMonthGrid() { renderCalendar(); }
   let m = data ? data[nm] : null;
   if (!m && data) {
     const norm = nm.toLowerCase().replace(/[\s_.]/g,'');
