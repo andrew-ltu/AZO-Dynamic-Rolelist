@@ -16,7 +16,7 @@ function corsHeaders(origin) {
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Credentials': 'true'
   };
@@ -224,6 +224,10 @@ export default {
     if (url.pathname === '/api/discord-stats' && request.method === 'GET') return handleDiscordStats(request, env, origin);
     if (url.pathname === '/api/admin/sync-github' && request.method === 'POST') return handleSyncFromGitHub(request, env, origin);
     if (url.pathname === '/api/admin/restore-snapshot' && request.method === 'POST') return handleRestoreSnapshot(request, env, origin);
+    if (url.pathname === '/api/gallery' && request.method === 'GET') return handleListGallery(request, env, origin);
+    if (url.pathname === '/api/gallery/upload' && request.method === 'POST') return handleGalleryUpload(request, env, origin);
+    if (url.pathname.match(/^\/api\/gallery\/image\//) && request.method === 'GET') return handleGalleryImage(request, env, origin);
+    if (url.pathname.match(/^\/api\/gallery\//) && request.method === 'DELETE') return handleGalleryDelete(request, env, origin);
 
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
@@ -770,6 +774,70 @@ async function handleRestoreSnapshot(request, env, origin) {
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare(`INSERT OR REPLACE INTO roster (id, data, updated_at) VALUES (1, ?, ?)`).bind(JSON.stringify(data), now).run();
     return jsonResponse({ ok: true, message: 'Restored from last snapshot' }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleListGallery(request, env, origin) {
+  try {
+    const rows = await env.DB.prepare(`SELECT id, op_name, filename, uploaded_by, uploaded_by_name, uploaded_at FROM gallery_images ORDER BY uploaded_at DESC`).all();
+    return jsonResponse(rows.results || [], 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleGalleryUpload(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const form = await request.formData();
+    const file = form.get('file');
+    const opName = form.get('opName') || 'Unknown';
+    if (!file || !file.name) return jsonResponse({ error: 'No file provided' }, 400, origin);
+    const ext = file.name.split('.').pop().toLowerCase();
+    const allowed = ['jpg','jpeg','png','gif','webp'];
+    if (!allowed.includes(ext)) return jsonResponse({ error: 'Invalid file type. Allowed: ' + allowed.join(', ') }, 400, origin);
+    const id = crypto.randomUUID();
+    const slug = opName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'unknown';
+    const r2Key = 'gallery/' + slug + '/' + id + '.' + ext;
+    const buffer = await file.arrayBuffer();
+    await env.GALLERY.put(r2Key, buffer, { httpMetadata: { contentType: file.type || 'image/jpeg' } });
+    const now = Math.floor(Date.now() / 1000);
+    const username = auth.username || 'staff';
+    await env.DB.prepare('INSERT INTO gallery_images (id, op_name, filename, r2_key, content_type, uploaded_by, uploaded_by_name, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(id, opName, file.name, r2Key, file.type || 'image/jpeg', auth.sub, username, now).run();
+    return jsonResponse({ ok: true, id, opName, filename: file.name }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleGalleryImage(request, env, origin) {
+  try {
+    const id = request.url.split('/').pop();
+    const row = await env.DB.prepare('SELECT r2_key, content_type FROM gallery_images WHERE id = ?').bind(id).first();
+    if (!row) return jsonResponse({ error: 'Not found' }, 404, origin);
+    const obj = await env.GALLERY.get(row.r2_key);
+    if (!obj) return jsonResponse({ error: 'Image not found in storage' }, 404, origin);
+    const headers = { 'Content-Type': row.content_type, 'Cache-Control': 'public, max-age=86400', ...corsHeaders(origin) };
+    return new Response(obj.body, { headers });
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleGalleryDelete(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const id = request.url.split('/').pop();
+    const row = await env.DB.prepare('SELECT r2_key FROM gallery_images WHERE id = ?').bind(id).first();
+    if (!row) return jsonResponse({ error: 'Not found' }, 404, origin);
+    await env.GALLERY.delete(row.r2_key);
+    await env.DB.prepare('DELETE FROM gallery_images WHERE id = ?').bind(id).run();
+    return jsonResponse({ ok: true }, 200, origin);
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, origin);
   }

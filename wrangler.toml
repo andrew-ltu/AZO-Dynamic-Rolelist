@@ -8,6 +8,11 @@ binding = "DB"
 database_name = "azo-database"
 database_id = "19d2b5fd-4de0-4afa-87d1-3edbd39c7575"
 
+# R2 bucket for gallery images
+[[r2_buckets]]
+binding = "GALLERY"
+bucket_name = "azo-gallery"
+
 # Environment variables (set via wrangler secret put)
 # DISCORD_CLIENT_ID - Discord OAuth app client ID
 # DISCORD_CLIENT_SECRET - Discord OAuth app client secret

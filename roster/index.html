@@ -2251,6 +2251,59 @@ function getCurrentUserSlot() {
   return null;
 }
 
+// ---- Gallery Upload ----
+function populateGalleryOps() {
+  const sel = document.getElementById('galleryOpSelect');
+  if (!sel) return;
+  const ops = ['Karoonda III','Karoonda II','Karoonda I','SOP Training','Other'];
+  sel.innerHTML = ops.map(o => '<option value="' + o.replace(/&/g,'&amp;').replace(/"/g,'&quot;') + '">' + o.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</option>').join('');
+}
+async function doGalleryUpload(file, opName) {
+  const status = document.getElementById('galleryUploadStatus');
+  const token = localStorage.getItem('azo_token');
+  if (!token) { status.textContent = 'Not authenticated'; return; }
+  status.textContent = 'Uploading ' + file.name + '...';
+  const form = new FormData();
+  form.append('file', file);
+  form.append('opName', opName);
+  try {
+    const res = await fetch(API_BASE + '/api/gallery/upload', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: form });
+    const data = await res.json();
+    if (res.ok) {
+      status.textContent = 'Uploaded ' + file.name;
+      setTimeout(() => { if (status.textContent === 'Uploaded ' + file.name) status.textContent = ''; }, 3000);
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'Upload failed');
+    }
+  } catch(e) {
+    status.textContent = 'Upload error: ' + e.message;
+  }
+}
+function handleGalleryDrop(e) {
+  const zone = document.getElementById('galleryDropZone');
+  zone.style.borderColor = 'var(--line-strong)';
+  zone.style.background = 'rgba(0,0,0,.1)';
+  handleGalleryFiles(e.dataTransfer.files);
+}
+function handleGalleryFiles(files) {
+  const preview = document.getElementById('galleryPreview');
+  const opName = document.getElementById('galleryOpSelect').value;
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const thumb = document.createElement('div');
+    thumb.style.cssText = 'width:60px;height:60px;border-radius:4px;overflow:hidden;border:1px solid var(--line);position:relative;';
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+    thumb.appendChild(img);
+    preview.appendChild(thumb);
+    doGalleryUpload(file, opName);
+  }
+}
+// Populate op dropdown when admin panel opens
+const _origOpenAdmin = openAdminPanel;
+openAdminPanel = function() { _origOpenAdmin.apply(this, arguments); populateGalleryOps(); };
+
 async function tryFetchUser() {
   const token = localStorage.getItem('azo_token');
   if (!token) return null;
@@ -2499,6 +2552,23 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="admin-section">
       <h2 class="admin-section-title">Previous Ops</h2>
       <div id="previousOpsList" style="font-size:13px;color:var(--muted);">Loading...</div>
+    </div>
+
+    <!-- Gallery Upload -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Gallery Upload</h2>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Operation</label>
+        <select id="galleryOpSelect" style="width:100%;padding:6px 8px;border-radius:6px;border:1px solid var(--line-strong);background:var(--panel-solid);color:#fff;font:inherit;font-size:12px;outline:none;"></select>
+      </div>
+      <div id="galleryDropZone" style="border:2px dashed var(--line-strong);border-radius:8px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(0,0,0,.1);" ondragover="this.style.borderColor='#2563EB';this.style.background='rgba(37,99,235,.08)';event.preventDefault()" ondragleave="this.style.borderColor='var(--line-strong)';this.style.background='rgba(0,0,0,.1)'" ondrop="event.preventDefault();handleGalleryDrop(event)">
+        <div style="font-size:32px;margin-bottom:8px;opacity:.4;">📁</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Drag & drop images here</div>
+        <div style="font-size:11px;color:var(--muted-2);">or <a href="#" onclick="document.getElementById('galleryFileInput').click();return false;" style="color:#60a5fa;">browse files</a></div>
+        <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none" onchange="handleGalleryFiles(this.files)">
+      </div>
+      <div id="galleryUploadStatus" style="font-size:11px;color:var(--muted);margin-top:6px;"></div>
+      <div id="galleryPreview" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
     </div>
 
     <!-- Backup & Restore (AI/auto-use only) -->

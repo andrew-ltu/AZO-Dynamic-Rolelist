@@ -59,6 +59,19 @@ CREATE TABLE IF NOT EXISTS members (
   updated_at INTEGER NOT NULL
 );
 
+-- Gallery images table - stores uploaded operation screenshots
+CREATE TABLE IF NOT EXISTS gallery_images (
+  id TEXT PRIMARY KEY,
+  op_name TEXT NOT NULL,
+  filename TEXT NOT NULL,
+  r2_key TEXT NOT NULL,
+  content_type TEXT DEFAULT 'image/jpeg',
+  uploaded_by TEXT NOT NULL,
+  uploaded_by_name TEXT NOT NULL,
+  uploaded_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_gallery_op_name ON gallery_images(op_name);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
