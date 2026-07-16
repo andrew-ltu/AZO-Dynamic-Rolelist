@@ -1940,7 +1940,7 @@ function render(roster){
     const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
     const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
-    const jointClass=sec.joint?'joint':'';
+    const jointClass=sec.locked&&sec.joint?'joint':'';
     return `<div class="sec ${sec.locked?'locked':''} ${jointClass} bracketed">
       <div class="sec-head">${esc(sec.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
@@ -1952,7 +1952,7 @@ function render(roster){
     const rows=roles.map((r,roleIdx)=>slotHTML(r,r.member,!!att.locked,attendedSet,showAtt,att.lockedLabel,{sectionKey:'__attachment',roleIndex:{attIdx,roleIdx}},uname)).join('');
     const headRight=att.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
     const note=att.locked&&att.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(att.lockedLabel)}</b></span></div>`:'';
-    const ajc=att.joint?'joint':'';
+    const ajc=att.locked&&att.joint?'joint':'';
     return `<div class="sec ${att.locked?'locked':''} ${ajc} bracketed">
       <div class="sec-head">${esc(att.name)} ${headRight}</div>
       <div class="sec-body">${rows}</div>${note}</div>`;
