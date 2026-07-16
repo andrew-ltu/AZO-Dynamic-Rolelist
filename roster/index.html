@@ -402,7 +402,7 @@ footer b{color:var(--muted);}
 
 
 <!-- Background layers -->
-<div id="bgLayer" style="background-image:url('/assets/bg.jpg');"></div>
+<div id="bgLayer" style="background-image:url('/roster/assets/bg.jpg');"></div>
 <div id="bgOverlay"></div>
 
 <!-- Main content -->
@@ -1897,9 +1897,9 @@ function render(roster){
 
   if(op.background){
     const tryLoad=(src,fb)=>{const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("${src}")`;};img.onerror=()=>{if(fb)tryLoad(fb,null);};img.src=src;};
-    tryLoad(op.background,'/assets/bg.jpg');
+    tryLoad(op.background,'/roster/assets/bg.jpg');
   } else {
-    const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("/assets/bg.jpg")`;};img.src='/assets/bg.jpg';
+    const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("/roster/assets/bg.jpg")`;};img.src='/roster/assets/bg.jpg';
   }
 
   const statusMap={live:{cls:'status-live pill-live',txt:'Live'},upcoming:{cls:'',txt:'Upcoming'},complete:{cls:'',txt:'Complete'}};
