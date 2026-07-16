@@ -1320,6 +1320,7 @@ function renderOperatorsList(list, data, skipStore) {
         OPS_DATA[0].status = st;
       }
       _calRosterData = rosterData;
+      _calMemberData = data;
       renderCalendar();
     }
   } catch(e) {console.error('Load error:', e);}
@@ -1359,7 +1360,7 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 let calMonth = new Date().getMonth();
 let calYear = new Date().getFullYear();
-let _calRosterData = null;
+let _calRosterData = null, _calMemberData = null;
 
 function getOpMap() {
   const map = {};
@@ -1479,6 +1480,29 @@ function closeOpDetail() {
   document.getElementById('opsDetailOverlay').style.display = 'none';
 }
 
+function lookupAvatar(name) {
+  if (!_calMemberData || !name) return null;
+  const norm = name.toLowerCase().replace(/[\s_.]/g, '');
+  for (const [k, v] of Object.entries(_calMemberData)) {
+    if (k.startsWith('_')) continue;
+    if (k.toLowerCase().replace(/[\s_.]/g, '') === norm) return v.avatar || null;
+  }
+  return null;
+}
+
+function memberRow(name, role) {
+  const av = lookupAvatar(name);
+  const initial = (name || '?').charAt(0).toUpperCase();
+  const imgHtml = av
+    ? `<img src="${esc(av)}" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span style="display:none;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);font-size:9px;font-weight:700;align-items:center;justify-content:center;flex-shrink:0;">${esc(initial)}</span>`
+    : `<span style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${esc(initial)}</span>`;
+  const vacant = !name || name === '\u2014';
+  if (vacant) {
+    return `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="width:22px;flex-shrink:0;"></span><span style="color:rgba(255,255,255,.2);">${esc(role)}</span><span style="margin-left:auto;color:rgba(255,255,255,.15);">vacant</span></div>`;
+  }
+  return `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;">${imgHtml}<span style="color:#fff;font-weight:500;">${esc(name)}</span><span style="margin-left:auto;color:rgba(255,255,255,.4);">${esc(role)}</span></div>`;
+}
+
 function showOpDetail(idx) {
   const op = OPS_DATA[idx];
   if (!op) return;
@@ -1490,35 +1514,25 @@ function showOpDetail(idx) {
   document.getElementById('opDetailMeta').textContent = metaParts.join(' · ');
 
   let bodyHtml = '';
-  // For Karoonda III (index 0 / upcoming), try to show live roster roles
   if (idx === 0 && _calRosterData && _calRosterData.sections) {
     const r = _calRosterData;
     const allRoles = [...(r.command || [])];
     for (const a of (r.attachments || [])) { for (const role of (a.roles || [])) allRoles.push(role); }
     for (const s of (r.sections || [])) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(s.section || s.name)}</div>`;
-      for (const role of (s.roles || [])) {
-        const who = role.member ? esc(role.member) : '<span style="color:rgba(255,255,255,.2);">— vacant</span>';
-        bodyHtml += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="color:rgba(255,255,255,.5);">${esc(role.label || role.role || 'Slot')}</span><span style="color:#fff;">${who}</span></div>`;
-      }
+      for (const role of (s.roles || [])) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
       bodyHtml += `</div>`;
     }
     if (allRoles.length) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">Command / Attachments</div>`;
-      for (const role of allRoles) {
-        const who = role.member ? esc(role.member) : '<span style="color:rgba(255,255,255,.2);">— vacant</span>';
-        bodyHtml += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="color:rgba(255,255,255,.5);">${esc(role.label || role.role || 'Slot')}</span><span style="color:#fff;">${who}</span></div>`;
-      }
+      for (const role of allRoles) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
       bodyHtml += `</div>`;
     }
     if (!bodyHtml) bodyHtml = '<div style="color:rgba(255,255,255,.3);">No role data available yet</div>';
   } else if (op.sections && op.sections.length) {
-    // Completed ops with attendance data
     for (const sec of op.sections) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(sec.name)}</div>`;
-      for (const m of (sec.members || [])) {
-        bodyHtml += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="color:#fff;">${esc(m.n)}</span><span style="color:rgba(255,255,255,.5);">${esc(m.p)}</span></div>`;
-      }
+      for (const m of (sec.members || [])) bodyHtml += memberRow(m.n, m.p);
       bodyHtml += `</div>`;
     }
   } else {
@@ -1549,9 +1563,9 @@ function loadPreviousOps() {
       for (const s of sections) {
         secHtml += '<div style="margin-bottom:12px;"><div style="font-size:10px;color:rgba(96,165,250,.6);letter-spacing:1px;margin-bottom:4px;font-weight:600;text-transform:uppercase;">' + esc(s.name || s.section || 'Section') + '</div>';
         for (const role of (s.roles || s.members || [])) {
-          const who = role.member || role.n || '\u2014';
+          const who = role.member || role.n || null;
           const label = role.label || role.role || role.p || 'Slot';
-          secHtml += '<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="color:rgba(255,255,255,.5);">' + esc(label) + '</span><span style="color:#fff;">' + esc(who) + '</span></div>';
+          secHtml += memberRow(who, label);
         }
         secHtml += '</div>';
       }
