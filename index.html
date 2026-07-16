@@ -448,8 +448,49 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 
 #galleryContainer img:hover{opacity:.85;}
 #galleryContainer{min-height:100px;}
+#page-roster{max-width:none;padding:0;}
+.ops-body{max-width:1400px;margin:0 auto;}
 @media(max-width:900px){
   .ops-header-bar{padding:30px 20px 20px;}
+  .ops-body{padding:12px 10px!important;}
+  .ops-calendar-main{gap:4px;}
+  .ops-cal-cell{min-height:100px;padding:4px;border-radius:4px;}
+  .ops-cal-cell .day-num{font-size:10px;margin-bottom:3px;}
+  .ops-cell-event-img{height:32px;}
+  .ops-cell-event-body{padding:4px 5px;gap:1px;}
+  .ops-cell-event-date{font-size:8px;}
+  .ops-cell-event-count{font-size:8px;}
+  .ops-cell-event-title{font-size:10px;}
+  .ops-cell-event-signup{font-size:7px;padding:3px 0;}
+  .ops-month-year{margin-bottom:10px;}
+  .ops-month-year span:first-child{font-size:9px!important;}
+  #opsCalTitle{font-size:16px;}
+  .ops-month-arrow{width:26px;height:26px;font-size:14px;}
+  .ops-cal-dow{font-size:9px;padding:4px 0 0;}
+  #opsCalStatus{font-size:9px!important;}
+}
+@media(max-width:640px){
+  .ops-calendar-main{overflow-x:auto;grid-template-columns:repeat(7,minmax(70px,1fr));-webkit-overflow-scrolling:touch;}
+  .ops-cal-cell{min-height:85px;}
+  .ops-cal-cell .day-num{font-size:9px;margin-bottom:2px;}
+  .ops-cell-event-img{height:28px;}
+  .ops-cell-event-body{padding:3px 4px;gap:1px;}
+  .ops-cell-event-title{font-size:9px;}
+  .ops-cell-event-date{font-size:7px;}
+  .ops-cell-event-count{font-size:7px;}
+  .ops-cell-event-signup{font-size:6px;padding:2px 0;}
+  .ops-month-year span:first-child{font-size:8px!important;}
+  #opsCalTitle{font-size:14px;}
+  .ops-month-arrow{width:24px;height:24px;font-size:12px;}
+}
+@media(max-width:420px){
+  .ops-calendar-main{grid-template-columns:repeat(7,minmax(50px,1fr));}
+  .ops-cal-cell{min-height:65px;padding:2px;}
+  .ops-cal-cell .day-num{font-size:7px;margin-bottom:1px;}
+  .ops-cell-event-img{height:20px;}
+  .ops-cell-event-title{font-size:7px;}
+  .ops-cell-event-date{font-size:6px;}
+  .ops-cell-event-signup{font-size:5px;padding:1px 0;letter-spacing:.2px;}
 }
 </style>
 </head>
