@@ -1307,16 +1307,18 @@ function renderOperatorsList(list, data, skipStore) {
       for (const a of (rosterData.attachments || [])) {
         for (const r of (a.roles || [])) { totalSlots++; if (r.member) filledSlots++; }
       }
-      document.getElementById('upcomingOpTitle').textContent = op.name || 'Upcoming Operation';
-      document.getElementById('upcomingOpDesc').textContent = `View available roles and sign up for the next operation.`;
-      document.getElementById('upcomingOpStatus').textContent = (op.status || 'upcoming').charAt(0).toUpperCase() + (op.status || 'upcoming').slice(1);
-      document.getElementById('upcomingOpStatus').style.color = op.status === 'live' ? '#36d07a' : op.status === 'complete' ? '#6a7f98' : '#f0b429';
-      document.getElementById('upcomingOpZeus').textContent = op.zeus || '-';
-      document.getElementById('upcomingOpDate').textContent = formatOpDate(op);
-      document.getElementById('upcomingOpFilled').textContent = `${filledSlots} / ${totalSlots} filled`;
+      document.getElementById('upcomingOpTitle') && (document.getElementById('upcomingOpTitle').textContent = op.name || 'Upcoming Operation');
+      document.getElementById('upcomingOpDesc') && (document.getElementById('upcomingOpDesc').textContent = `View available roles and sign up for the next operation.`);
+      if (document.getElementById('upcomingOpStatus')) {
+        document.getElementById('upcomingOpStatus').textContent = (op.status || 'upcoming').charAt(0).toUpperCase() + (op.status || 'upcoming').slice(1);
+        document.getElementById('upcomingOpStatus').style.color = op.status === 'live' ? '#36d07a' : op.status === 'complete' ? '#6a7f98' : '#f0b429';
+      }
+      document.getElementById('upcomingOpZeus') && (document.getElementById('upcomingOpZeus').textContent = op.zeus || '-');
+      document.getElementById('upcomingOpDate') && (document.getElementById('upcomingOpDate').textContent = formatOpDate(op));
+      document.getElementById('upcomingOpFilled') && (document.getElementById('upcomingOpFilled').textContent = `${filledSlots} / ${totalSlots} filled`);
     } else {
-      document.getElementById('upcomingOpTitle').textContent = 'Upcoming Operation';
-      document.getElementById('upcomingOpDesc').textContent = 'View available roles and sign up for the next operation. Login with Discord to claim your slot.';
+      document.getElementById('upcomingOpTitle') && (document.getElementById('upcomingOpTitle').textContent = 'Upcoming Operation');
+      document.getElementById('upcomingOpDesc') && (document.getElementById('upcomingOpDesc').textContent = 'View available roles and sign up for the next operation. Login with Discord to claim your slot.');
     }
     
     if (list) renderOperatorsList(list, data, false);
@@ -1471,6 +1473,7 @@ function renderCalOps(opMap) {
           <div class="ops-detail-att-label">ATTENDEES</div>
           ${sectionsHtml}
         </div>
+        <a href="/roster/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 20px;border-radius:6px;background:#2563EB;color:#fff;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#3b82f6'" onmouseout="this.style.background='#2563EB'">View Roster &amp; Sign Up →</a>
       </div>
     </div>`;
   }).join('');
