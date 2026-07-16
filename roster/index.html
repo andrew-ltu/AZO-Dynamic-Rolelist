@@ -326,57 +326,24 @@ footer b{color:var(--muted);}
   padding:calc(var(--banner-h) + var(--top-bar-h)) 0 40px;
 }
 #adminPanel.show{display:block;}
-.admin-wrap{max-width:1200px;margin:0 auto;padding:20px;}
-.admin-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:16px 0 20px;border-bottom:2px solid var(--line-strong);
-  margin-bottom:24px;
-}
-.admin-header h1{
-  font-family:'Oswald';font-size:28px;letter-spacing:2px;
-  text-transform:uppercase;margin:0;color:var(--primary-2);
-}
-.admin-close{
-  background:var(--panel);border:1px solid var(--line-strong);
-  color:var(--text);padding:8px 18px;border-radius:8px;
-  cursor:pointer;font:inherit;font-weight:600;
-  transition:background .15s;
-}
+.admin-wrap{max-width:1200px;margin:0 auto;padding:12px;}
+.admin-header{display:flex;justify-content:space-between;align-items:center;padding:8px 0 12px;border-bottom:1px solid var(--line-strong);margin-bottom:12px;}
+.admin-header h1{font-family:'Oswald';font-size:20px;letter-spacing:1.5px;text-transform:uppercase;margin:0;color:var(--primary-2);}
+.admin-close{background:var(--panel);border:1px solid var(--line-strong);color:var(--text);padding:5px 12px;border-radius:6px;cursor:pointer;font:inherit;font-weight:600;font-size:12px;transition:background .15s;}
 .admin-close:hover{background:var(--primary);color:#fff;}
 
-.admin-section{
-  background:var(--panel);border:1px solid var(--line-strong);
-  border-radius:12px;padding:20px;margin-bottom:20px;
-}
-.admin-section-title{
-  font-family:'Oswald';font-size:18px;letter-spacing:2px;
-  text-transform:uppercase;color:#fff;margin:0 0 16px;
-  padding-bottom:12px;border-bottom:1px solid var(--line);
-}
-.admin-form{display:grid;gap:16px;}
-.admin-form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
-.admin-field{display:flex;flex-direction:column;gap:6px;}
-.admin-field label{
-  font-family:'Share Tech Mono',monospace;font-size:10px;
-  text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
-}
-.admin-field input,.admin-field select,.admin-field textarea{
-  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
-  border-radius:6px;padding:10px 12px;color:var(--text);
-  font:inherit;font-size:14px;outline:none;
-  transition:border-color .15s;
-}
-.admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{
-  border-color:var(--primary);
-}
-.admin-field textarea{min-height:80px;resize:vertical;}
+.admin-section{background:var(--panel);border:1px solid var(--line-strong);border-radius:8px;padding:12px;margin-bottom:12px;}
+.admin-section-title{font-family:'Oswald';font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+.admin-form{display:grid;gap:10px;}
+.admin-form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+.admin-field{display:flex;flex-direction:column;gap:4px;}
+.admin-field label{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.admin-field input,.admin-field select,.admin-field textarea{background:rgba(0,0,0,.3);border:1px solid var(--line-strong);border-radius:4px;padding:6px 8px;color:var(--text);font:inherit;font-size:13px;outline:none;transition:border-color .15s;}
+.admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{border-color:var(--primary);}
+.admin-field textarea{min-height:50px;resize:vertical;}
 
-.admin-btn-group{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
-.admin-btn{
-  padding:10px 20px;border-radius:8px;font:inherit;
-  font-weight:600;cursor:pointer;border:1px solid var(--line-strong);
-  transition:all .15s;
-}
+.admin-btn-group{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.admin-btn{padding:6px 12px;border-radius:6px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--line-strong);transition:all .15s;font-size:12px;}
 .admin-btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);}
 .admin-btn-primary:hover{background:var(--primary-2);}
 .admin-btn-secondary{background:transparent;color:var(--text);}
@@ -384,50 +351,28 @@ footer b{color:var(--muted);}
 .admin-btn-danger{background:#d94040;color:#fff;border-color:#d94040;}
 .admin-btn-danger:hover{background:#c02020;}
 
-.admin-slots-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-.admin-slot-item{
-  background:rgba(0,0,0,.3);border:1px solid var(--line);
-  border-radius:8px;padding:12px 14px;
-  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
-}
-.admin-slot-actions{display:flex;flex-wrap:wrap;gap:6px;}
-.admin-slot-info{display:flex;flex-direction:column;gap:4px;}
-.admin-slot-role{font-weight:600;font-size:14px;}
-.admin-slot-member{font-size:12px;color:var(--muted);}
+.admin-slots-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
+.admin-slot-item{background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:5px;padding:6px 8px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;}
+.admin-slot-actions{display:flex;flex-wrap:wrap;gap:3px;}
+.admin-slot-info{display:flex;flex-direction:column;gap:2px;}
+.admin-slot-role{font-weight:600;font-size:12px;}
+.admin-slot-member{font-size:11px;color:var(--muted);}
 .slot-unassign{position:absolute;top:2px;right:2px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(200,64,58,.2);color:var(--red);font-size:11px;cursor:pointer;opacity:0;transition:opacity .15s;z-index:2;border:0;}
 .slot:hover .slot-unassign,.slot-unassign:hover{opacity:1;}
 .slot-unassign:hover{background:rgba(200,64,58,.4);}
-.admin-slot-endorsement{
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:#f0b429;background:rgba(240,180,41,.1);
-  border:1px solid rgba(240,180,41,.3);
-  border-radius:4px;padding:2px 6px;margin-top:2px;display:inline-block;
-}
+.admin-slot-endorsement{font-family:'Share Tech Mono',monospace;font-size:8px;color:#f0b429;background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.3);border-radius:3px;padding:1px 4px;display:inline-block;}
 
-.admin-section-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.admin-section-item{
-  background:rgba(0,0,0,.3);border:1px solid var(--line-strong);
-  border-radius:10px;padding:16px;
-}
-.admin-section-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
-}
-.admin-section-name{font-family:'Oswald';font-size:16px;color:#fff;}
+.admin-section-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.admin-section-item{background:rgba(0,0,0,.2);border:1px solid var(--line-strong);border-radius:6px;padding:8px;}
+.admin-section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.admin-section-name{font-family:'Oswald';font-size:14px;color:#fff;}
 
-.admin-mini-btn{
-  padding:6px 12px;font-size:12px;border-radius:6px;
-  font-weight:600;cursor:pointer;border:1px solid var(--line);
-  background:transparent;color:var(--text);transition:all .15s;
-}
+.admin-mini-btn{padding:3px 8px;font-size:10px;border-radius:4px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text);transition:all .15s;}
 .admin-mini-btn:hover{background:var(--panel);border-color:var(--primary);}
 .admin-mini-btn-danger{color:#ff6060;border-color:rgba(200,64,58,.4);}
 .admin-mini-btn-danger:hover{background:rgba(200,64,58,.15);border-color:#d94040;}
 
-.admin-status-msg{
-  padding:12px 16px;border-radius:8px;margin-top:16px;
-  font-size:13px;display:none;
-}
+.admin-status-msg{padding:6px 10px;border-radius:4px;margin-top:6px;font-size:11px;display:none;}
 .admin-status-msg.show{display:block;}
 .admin-status-msg.success{background:rgba(54,208,122,.15);border:1px solid rgba(54,208,122,.4);color:#36d07a;}
 .admin-status-msg.error{background:rgba(200,64,58,.15);border:1px solid rgba(200,64,58,.4);color:#ff6060;}
@@ -457,7 +402,7 @@ footer b{color:var(--muted);}
 
 
 <!-- Background layers -->
-<div id="bgLayer"></div>
+<div id="bgLayer" style="background-image:url('/assets/bg.jpg');"></div>
 <div id="bgOverlay"></div>
 
 <!-- Main content -->
@@ -1335,18 +1280,18 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
   const overlay = document.createElement('div');
   overlay.id = 'adminAssignOverlay';
   overlay.innerHTML = `
-    <div class="admin-assign-backdrop" onclick="if(event.target===this)document.getElementById('adminAssignOverlay').remove()" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:24px;width:min(520px,90vw);max-height:80vh;overflow:hidden;display:flex;flex-direction:column;gap:8px;">
-        <h3 style="margin:0;font-family:Oswald;font-size:17px;letter-spacing:1px;text-transform:uppercase;color:#fff;">Assign to slot</h3>
-        <div style="font-size:12px;color:var(--muted-2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;">${esc(roleDisplay)}</div>
-        <div style="position:relative;margin:4px 0;">
-          <input id="adminAssignInput" type="text" placeholder="Search members..." style="width:100%;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:14px;outline:none;">
-          <div id="adminAssignList" style="position:absolute;top:100%;left:0;right:0;max-height:320px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;margin-top:4px;display:none;z-index:10;box-shadow:0 8px 32px rgba(0,0,0,.4);"></div>
+    <div class="admin-assign-backdrop" onclick="if(event.target===this)document.getElementById('adminAssignOverlay').remove()" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:12px;">
+      <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px;width:min(420px,90vw);max-height:70vh;overflow:hidden;display:flex;flex-direction:column;gap:6px;">
+        <h3 style="margin:0;font-family:Oswald;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:#fff;">Assign to slot</h3>
+        <div style="font-size:11px;color:var(--muted-2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;">${esc(roleDisplay)}</div>
+        <div style="position:relative;margin:2px 0;">
+          <input id="adminAssignInput" type="text" placeholder="Search members..." style="width:100%;padding:6px 10px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:4px;color:var(--text);font-size:13px;outline:none;">
+          <div id="adminAssignList" style="position:absolute;top:100%;left:0;right:0;max-height:260px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;margin-top:2px;display:none;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,.4);"></div>
         </div>
-        <div id="adminAssignStatus" style="font-size:12px;color:var(--muted-2);"></div>
-        <div style="display:flex;gap:8px;margin-top:4px;">
+        <div id="adminAssignStatus" style="font-size:11px;color:var(--muted-2);"></div>
+        <div style="display:flex;gap:6px;margin-top:2px;">
           <button class="admin-mini-btn" onclick="document.getElementById('adminAssignOverlay').remove()">Cancel</button>
-          <button class="admin-mini-btn" onclick="clearAndFilter()" style="margin-left:auto;">Clear Assignments</button>
+          <button class="admin-mini-btn" onclick="clearAndFilter()" style="margin-left:auto;">Clear</button>
         </div>
       </div>
     </div>`;
@@ -1379,9 +1324,9 @@ window.editSlotAssign = (sectionKey, slotIdx) => {
     const assigned = getAssignedMap();
     list.innerHTML = filtered.map(n => {
       const isAssigned = assigned[n] || false;
-      return `<div class="op-dropdown-item" data-value="${esc(n)}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${isAssigned?'opacity:.55;':''}">
-        <span style="flex:1;font-size:14px;font-weight:600;">${esc(n)}</span>
-        ${isAssigned?'<span style="font-size:10px;font-family:\'Share Tech Mono\',monospace;letter-spacing:1px;color:var(--muted-2);">ASSIGNED</span>':''}
+      return `<div class="op-dropdown-item" data-value="${esc(n)}" style="display:flex;align-items:center;gap:6px;padding:5px 10px;${isAssigned?'opacity:.55;':''}">
+        <span style="flex:1;font-size:13px;font-weight:600;">${esc(n)}</span>
+        ${isAssigned?'<span style="font-size:9px;font-family:\'Share Tech Mono\',monospace;letter-spacing:1px;color:var(--muted-2);">ASSIGNED</span>':''}
       </div>`;
     }).join('');
     list.style.display = 'block';
@@ -1637,15 +1582,15 @@ function renderMembers() {
   if (!el) return;
   const entries = Object.entries(membersData).filter(([k]) => !k.startsWith('_'));
   el.innerHTML = entries.map(([name, m]) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);gap:6px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;border-bottom:1px solid var(--line);gap:4px;">
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:600;font-size:13px;color:#fff;">${esc(name)}</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${esc(m.discordRank||'No rank')} · ${m.opsAttended||0} ops · ${(m.endorsements||[]).length} endorsements</div>
+        <div style="font-weight:600;font-size:12px;color:#fff;">${esc(name)}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted-2);">${esc(m.discordRank||'No rank')} · ${m.opsAttended||0} ops · ${(m.endorsements||[]).length} end.</div>
       </div>
-      <button class="admin-mini-btn" onclick="editMemberRank('${esc(name)}')" style="flex-shrink:0;" title="Change rank">Rank</button>
-      <button class="admin-mini-btn" onclick="editMemberEndorsements('${esc(name)}')" style="flex-shrink:0;" title="Edit endorsements">Endorse</button>
-      <button class="admin-mini-btn" onclick="editMemberLeadership('${esc(name)}')" style="flex-shrink:0;" title="Set leadership">Lead</button>
-      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteMember('${esc(name)}')" style="flex-shrink:0;" title="Remove member">🗑</button>
+      <button class="admin-mini-btn" onclick="editMemberRank('${esc(name)}')" style="flex-shrink:0;padding:2px 6px;font-size:9px;" title="Rank">R</button>
+      <button class="admin-mini-btn" onclick="editMemberEndorsements('${esc(name)}')" style="flex-shrink:0;padding:2px 6px;font-size:9px;" title="Endorsements">E</button>
+      <button class="admin-mini-btn" onclick="editMemberLeadership('${esc(name)}')" style="flex-shrink:0;padding:2px 6px;font-size:9px;" title="Leadership">L</button>
+      <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteMember('${esc(name)}')" style="flex-shrink:0;padding:2px 6px;font-size:9px;" title="Remove">✕</button>
     </div>
   `).join('');
 }
@@ -1743,14 +1688,14 @@ async function renderPreviousOps() {
     const ops = await res.json();
     if (!ops.length) { el.innerHTML = '<span style="color:var(--muted-2);">No archived operations yet</span>'; return; }
     el.innerHTML = ops.slice().reverse().map((op, i) => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;border-bottom:1px solid var(--line);gap:6px;">
         <div style="flex:1;min-width:0;">
-          <strong style="color:#fff;">${esc(op.name)}</strong><br>
-          <span style="font-size:11px;color:var(--muted-2);">${esc(op.date||'No date')} · Zeus: ${esc(op.zeus||'N/A')}</span>
+          <strong style="color:#fff;font-size:12px;">${esc(op.name)}</strong><br>
+          <span style="font-size:10px;color:var(--muted-2);">${esc(op.date||'No date')} · ${esc(op.zeus||'N/A')}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted-2);">${new Date(op.archivedAt).toLocaleDateString()}</span>
-          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteArchivedOp(${ops.length - 1 - i})" style="padding:4px 8px;font-size:10px;" title="Delete">✕</button>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted-2);">${new Date(op.archivedAt).toLocaleDateString()}</span>
+          <button class="admin-mini-btn admin-mini-btn-danger" onclick="deleteArchivedOp(${ops.length - 1 - i})" style="padding:2px 5px;font-size:9px;" title="Delete">✕</button>
         </div>
       </div>
     `).join('');
@@ -1952,9 +1897,9 @@ function render(roster){
 
   if(op.background){
     const tryLoad=(src,fb)=>{const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("${src}")`;};img.onerror=()=>{if(fb)tryLoad(fb,null);};img.src=src;};
-    tryLoad(op.background,'/assets/operation-bg.png');
+    tryLoad(op.background,'/assets/bg.jpg');
   } else {
-    const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("/assets/operation-bg.png")`;};img.src='/assets/operation-bg.png';
+    const img=new Image();img.onload=()=>{$('#bgLayer').style.backgroundImage=`url("/assets/bg.jpg")`;};img.src='/assets/bg.jpg';
   }
 
   const statusMap={live:{cls:'status-live pill-live',txt:'Live'},upcoming:{cls:'',txt:'Upcoming'},complete:{cls:'',txt:'Complete'}};
@@ -2540,53 +2485,32 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- Member Management -->
-    <div class="admin-section">
-      <h2 class="admin-section-title">Member Management</h2>
-      <div class="admin-form">
-        <div class="admin-form-row">
-          <div class="admin-field">
-            <label>Add New Member</label>
-            <div style="display:flex;gap:8px;">
-              <input type="text" id="adminNewMemberName" placeholder="Display name" style="flex:1;">
-              <input type="text" id="adminNewMemberRank" placeholder="Rank" style="width:120px;">
-              <button class="admin-btn admin-btn-primary" id="addMemberBtn" style="padding:8px 16px;">Add</button>
-            </div>
-          </div>
-        </div>
-        <div id="adminMembersList" style="margin-top:12px;"></div>
-        <div id="membersStatus" class="admin-status-msg"></div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="admin-section">
-      <h2 class="admin-section-title">Previous Ops</h2>
-      <div id="previousOpsList" style="font-size:13px;color:var(--muted);">Loading...</div>
-    </div>
-
     <!-- Quick Actions -->
     <div class="admin-section">
       <h2 class="admin-section-title">Quick Actions</h2>
       <div class="admin-btn-group">
         <button class="admin-btn admin-btn-secondary" id="clearAllAssignmentsBtn">Clear All Slot Assignments</button>
-        <button class="admin-btn admin-btn-danger" id="archiveOperationBtn">Archive Operation → Previous Ops</button>
+        <button class="admin-btn admin-btn-danger" id="archiveOperationBtn">Archive → Previous Ops</button>
       </div>
       <div id="quickActionsStatus" class="admin-status-msg"></div>
     </div>
 
-    <!-- Backup & Restore -->
+    <!-- Previous Ops -->
     <div class="admin-section">
-      <h2 class="admin-section-title">Backup &amp; Restore</h2>
-      <div class="admin-btn-group">
-        <button class="admin-btn admin-btn-secondary" onclick="downloadBackup()">⬇ Download Backup</button>
-        <button class="admin-btn admin-btn-secondary" onclick="document.getElementById('restoreFileInput').click()">⬆ Restore from Backup</button>
-        <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="restoreFromBackup(event)">
-        <button class="admin-btn admin-btn-secondary" onclick="restoreLocalBackup()">↩ Restore Local Backup</button>
-        <button class="admin-btn admin-btn-secondary" onclick="syncFromGitHub()">🔄 Sync from GitHub</button>
-        <button class="admin-btn admin-btn-secondary" onclick="restoreSnapshot()">⏪ Restore Auto-Snapshot</button>
-      </div>
-      <div id="backupStatus" class="admin-status-msg"></div>
+      <h2 class="admin-section-title">Previous Ops</h2>
+      <div id="previousOpsList" style="font-size:13px;color:var(--muted);">Loading...</div>
+    </div>
+
+    <!-- Backup & Restore (AI/auto-use only) -->
+    <div style="margin-top:4px;padding:4px 8px;border:1px dashed var(--line);border-radius:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:rgba(0,0,0,.1);">
+      <span style="font-size:8px;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2);">Backup</span>
+      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="downloadBackup()">⬇</button>
+      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="document.getElementById('restoreFileInput').click()">⬆</button>
+      <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="restoreFromBackup(event)">
+      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="restoreLocalBackup()">↩</button>
+      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="syncFromGitHub()">🔄</button>
+      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="restoreSnapshot()">⏪</button>
+      <div id="backupStatus" style="font-size:8px;color:var(--muted-2);display:none;"></div>
     </div>
   </div>
 </div>
