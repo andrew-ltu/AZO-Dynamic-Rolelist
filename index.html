@@ -1550,7 +1550,8 @@ function showOpDetail(idx) {
   // For Karoonda III (index 0 / upcoming), try to show live roster roles
   if (idx === 0 && _calRosterData && _calRosterData.sections) {
     const r = _calRosterData;
-    const allRoles = [...(r.command || []), ...(r.attachments || [])];
+    const allRoles = [...(r.command || [])];
+    for (const a of (r.attachments || [])) { for (const role of (a.roles || [])) allRoles.push(role); }
     for (const s of (r.sections || [])) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(s.section || s.name)}</div>`;
       for (const role of (s.roles || [])) {
@@ -1595,7 +1596,7 @@ function loadPreviousOps() {
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-family:\'Share Tech Mono\',monospace;">Loading archived operations...</div>';
   fetch(API_BASE + '/api/previous-ops').then(r => r.ok ? r.json() : []).catch(() => []).then(ops => {
     if (!ops || !ops.length) {
-      el.innerHTML = '<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;opacity:.3;">\u{1F4ED}</div><div style="color:var(--muted);font-family:\'Share Tech Mono\',monospace;font-size:13px;">No archived operations yet</div></div>';
+      el.innerHTML = '<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;opacity:.3;">📭</div><div style="color:var(--muted);font-family:\'Share Tech Mono\',monospace;font-size:13px;">No archived operations yet</div></div>';
       return;
     }
     let html = '';
