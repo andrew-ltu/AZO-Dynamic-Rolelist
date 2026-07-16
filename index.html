@@ -1508,16 +1508,19 @@ function showOpDetail(idx) {
   let bodyHtml = '';
   if (idx === 0 && _calRosterData && _calRosterData.sections) {
     const r = _calRosterData;
-    const allRoles = [...(r.command || [])];
-    for (const a of (r.attachments || [])) { for (const role of (a.roles || [])) allRoles.push(role); }
     for (const s of (r.sections || [])) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(s.section || s.name)}</div>`;
       for (const role of (s.roles || [])) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
       bodyHtml += `</div>`;
     }
-    if (allRoles.length) {
-      bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">Command / Attachments</div>`;
-      for (const role of allRoles) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
+    if ((r.command || []).length) {
+      bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">Command</div>`;
+      for (const role of (r.command || [])) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
+      bodyHtml += `</div>`;
+    }
+    for (const a of (r.attachments || [])) {
+      bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(a.name || a.lockedLabel || 'Attachment')}</div>`;
+      for (const role of (a.roles || [])) bodyHtml += memberRow(role.member, role.label || role.role || 'Slot');
       bodyHtml += `</div>`;
     }
     if (!bodyHtml) bodyHtml = '<div style="color:rgba(255,255,255,.3);">No role data available yet</div>';
