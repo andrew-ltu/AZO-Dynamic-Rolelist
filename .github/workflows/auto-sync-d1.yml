@@ -1,0 +1,25 @@
+name: Auto-sync roster & members to D1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - roster.json
+      - members.json
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call auto-sync API
+        env:
+          API_SYNC_SECRET: ${{ secrets.API_SYNC_SECRET }}
+          WORKER_URL: https://azo-dynamic-rolelist-api.andrewtb02.workers.dev
+        run: |
+          curl -X POST "$WORKER_URL/api/auto-sync" \
+            -H "Authorization: Bearer $API_SYNC_SECRET" \
+            -H "Content-Type: application/json" \
+            -w "\nHTTP %{http_code}\n"

@@ -18,6 +18,7 @@ bucket_name = "azo-gallery"
 # DISCORD_CLIENT_SECRET - Discord OAuth app client secret
 # JWT_SECRET - Secret key for JWT token signing
 # GITHUB_TOKEN - GitHub personal access token (existing)
+# API_SYNC_SECRET - Shared secret for auto-sync workflow
 
 [observability]
 logs = { enabled = true, invocation_logs = true }

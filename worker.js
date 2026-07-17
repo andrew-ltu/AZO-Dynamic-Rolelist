@@ -237,6 +237,7 @@ export default {
     if (url.pathname === '/api/previous-ops' && request.method === 'GET') return handleGetPreviousOps(request, env, origin);
     if (url.pathname === '/api/discord-stats' && request.method === 'GET') return handleDiscordStats(request, env, origin);
     if (url.pathname === '/api/admin/sync-github' && request.method === 'POST') return handleSyncFromGitHub(request, env, origin);
+    if (url.pathname === '/api/auto-sync' && request.method === 'POST') return handleAutoSync(request, env, origin);
     if (url.pathname === '/api/admin/restore-snapshot' && request.method === 'POST') return handleRestoreSnapshot(request, env, origin);
     if (url.pathname === '/api/gallery' && request.method === 'GET') return handleListGallery(request, env, origin);
     if (url.pathname === '/api/gallery/upload' && request.method === 'POST') return handleGalleryUpload(request, env, origin);
@@ -938,6 +939,38 @@ async function handleSyncFromGitHub(request, env, origin) {
     }
   } catch (e) { results.push('members: ' + e.message); }
   return jsonResponse({ ok: true, message: 'Synced from GitHub: ' + results.join(', ') }, 200, origin);
+}
+
+async function handleAutoSync(request, env, origin) {
+  const authHeader = request.headers.get('Authorization');
+  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : '';
+  if (!token || token !== env.API_SYNC_SECRET) {
+    return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  }
+  const results = [];
+  try {
+    const rosterRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
+    if (rosterRes.ok) {
+      await saveRoster(env, await rosterRes.json());
+      results.push('roster');
+    }
+  } catch (e) { results.push('roster: ' + e.message); }
+  try {
+    const membersRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/members.json`);
+    if (membersRes.ok) {
+      const gitMembers = await membersRes.json();
+      const existing = await getMembers(env);
+      for (const [name, data] of Object.entries(existing)) {
+        if (name.startsWith('_')) continue;
+        if (!gitMembers[name]) {
+          gitMembers[name] = data;
+        }
+      }
+      await saveMembers(env, gitMembers);
+      results.push('members');
+    }
+  } catch (e) { results.push('members: ' + e.message); }
+  return jsonResponse({ ok: true, message: 'Auto-synced from GitHub: ' + results.join(', ') }, 200, origin);
 }
 
 async function handleRestoreSnapshot(request, env, origin) {

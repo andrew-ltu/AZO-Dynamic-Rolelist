@@ -1422,27 +1422,6 @@ window.restoreLocalBackup = () => {
   }
 };
 
-window.syncFromGitHub = async () => {
-  if (!confirm('Sync roster and members from GitHub? Members will be updated from members.json in the repo.')) return;
-  const token = localStorage.getItem('azo_token');
-  if (!token) return alert('Not authenticated');
-  const el = document.getElementById('backupStatus');
-  try {
-    const res = await fetch(`${API_BASE}/api/admin/sync-github`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Sync failed');
-    const [roster, members] = await Promise.all([
-      fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json()),
-      fetch(`${API_BASE}/api/members`, { cache: 'no-store' }).then(r => r.json())
-    ]);
-    currentRoster = roster; MEMBERS = members; membersData = members; render(roster); renderMembers();
-    el.textContent = '✅ Synced from GitHub'; el.style.color = '#36d07a'; el.style.display = '';
-  } catch (err) {
-    el.textContent = '❌ ' + err.message; el.style.color = '#d94040'; el.style.display = '';
-  }
-};
 window.restoreSnapshot = async () => {
   if (!confirm('Restore from last auto-snapshot? This is taken every time the roster is saved via admin panel.')) return;
   const token = localStorage.getItem('azo_token');
@@ -2859,7 +2838,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="document.getElementById('restoreFileInput').click()">⬆</button>
       <input type="file" id="restoreFileInput" accept=".json" style="display:none" onchange="restoreFromBackup(event)">
       <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="restoreLocalBackup()">↩</button>
-      <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="syncFromGitHub()">🔄</button>
       <button style="font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .15s;" onclick="restoreSnapshot()">⏪</button>
       <div id="backupStatus" style="font-size:8px;color:var(--muted-2);display:none;"></div>
     </div>
