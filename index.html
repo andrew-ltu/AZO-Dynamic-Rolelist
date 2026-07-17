@@ -453,14 +453,15 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .gallery-hero h1{position:relative;font-family:'Oswald',sans-serif;font-size:72px;letter-spacing:8px;color:#fff;margin:0;font-weight:600;text-shadow:0 0 40px rgba(0,0,0,.8);}
 .gallery-hero-underline{position:absolute;bottom:60px;width:80px;height:3px;background:#d94040;}
 
-.gallery-carousel-wrap{background:#0a0a0a;padding:24px 0 32px;border-bottom:1px solid #1a1a1a;}
-.gallery-carousel{display:flex;gap:14px;overflow-x:auto;padding:0 40px 8px;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#333 transparent;}
-.gallery-carousel::-webkit-scrollbar{height:6px;}
-.gallery-carousel::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
-.gallery-carousel-card{flex:0 0 320px;height:180px;border-radius:6px;overflow:hidden;border:1px solid #1a1a1a;cursor:pointer;transition:transform .2s,opacity .3s,box-shadow .3s;position:relative;background:#0d0d0d;}
-.gallery-carousel-card:hover{transform:scale(1.03);box-shadow:0 0 30px rgba(217,64,64,.15);}
-.gallery-carousel-card img{width:100%;height:100%;object-fit:cover;display:block;}
-.gallery-carousel-card.dim{opacity:.35;}
+.gallery-carousel-wrap{background:#000;padding:32px 40px;border-bottom:1px solid #1a1a1a;}
+.gallery-carousel{position:relative;max-width:1000px;margin:0 auto;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:#0a0a0a;border:1px solid #1a1a1a;}
+.gallery-carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;cursor:pointer;}
+.gallery-carousel-slide.active{opacity:1;}
+.gallery-carousel-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.gallery-carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+.gallery-carousel-dot{width:8px;height:8px;border-radius:50%;border:0;background:#222;cursor:pointer;transition:background .2s;padding:0;}
+.gallery-carousel-dot.active{background:#d94040;}
+.gallery-carousel-dot:hover{background:#555;}
 
 .gallery-filter{background:#000;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:28px 40px;display:grid;grid-template-columns:140px 1fr 220px;gap:32px;}
 .gallery-filter-header{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:2px;color:#d94040;margin-bottom:12px;font-weight:600;}
@@ -1722,15 +1723,44 @@ function loadGallery() {
   });
 }
 
+let _carouselTimer = null;
 function buildCarousel(images) {
   const el = document.getElementById('galleryCarousel');
   if (!el) return;
+  if (_carouselTimer) { clearInterval(_carouselTimer); _carouselTimer = null; }
   const featured = images.slice(0, 10);
+  if (!featured.length) { el.innerHTML = ''; return; }
   el.innerHTML = featured.map((img, i) => {
     const url = API_BASE + '/api/gallery/image/' + img.id;
-    const dim = i === 0 || i === featured.length - 1 ? ' dim' : '';
-    return '<div class="gallery-carousel-card' + dim + '" onclick="openGalleryLightbox(\'' + url + '\')"><img src="' + url + '" loading="lazy"></div>';
-  }).join('');
+    return '<div class="gallery-carousel-slide' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '" onclick="openGalleryLightbox(\'' + url + '\')"><img src="' + url + '" loading="lazy"></div>';
+  }).join('') + '<div class="gallery-carousel-dots">' + featured.map((_, i) => '<button class="gallery-carousel-dot' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '"></button>').join('') + '</div>';
+  // Dot click navigation
+  el.querySelectorAll('.gallery-carousel-dot').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      goToCarouselSlide(idx);
+      resetCarouselTimer(featured);
+    });
+  });
+  // Start auto-cycle
+  _carouselIdx = 0;
+  _carouselTimer = setInterval(() => { advanceCarousel(featured); }, 4500);
+}
+let _carouselIdx = 0;
+function advanceCarousel(featured) {
+  _carouselIdx = (_carouselIdx + 1) % featured.length;
+  goToCarouselSlide(_carouselIdx);
+}
+function goToCarouselSlide(idx) {
+  const el = document.getElementById('galleryCarousel');
+  if (!el) return;
+  _carouselIdx = idx;
+  el.querySelectorAll('.gallery-carousel-slide').forEach(s => s.classList.toggle('active', parseInt(s.dataset.idx) === idx));
+  el.querySelectorAll('.gallery-carousel-dot').forEach(d => d.classList.toggle('active', parseInt(d.dataset.idx) === idx));
+}
+function resetCarouselTimer(featured) {
+  if (_carouselTimer) clearInterval(_carouselTimer);
+  _carouselTimer = setInterval(() => { advanceCarousel(featured); }, 4500);
 }
 
 function buildFilters(images) {
