@@ -1638,18 +1638,19 @@ function loadGallery() {
   if (!container) return;
   container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-family:\'Share Tech Mono\',monospace;">Loading...</div>';
   if (empty) empty.style.display = 'none';
-  fetch(API_BASE + '/api/gallery').then(r => r.ok ? r.json() : []).catch(() => []).then(images => {
+  fetch(API_BASE + '/api/gallery?_=' + Date.now()).then(r => r.ok ? r.json() : []).catch(() => []).then(images => {
     if (!images || !images.length) {
       container.innerHTML = '';
       if (empty) empty.style.display = 'block';
       return;
     }
+    // Build groups
     const groups = {};
     for (const img of images) {
       if (!groups[img.op_name]) groups[img.op_name] = [];
       groups[img.op_name].push(img);
     }
-    // Sort groups so newest op (by most recent upload) appears first
+    // Sort groups by newest upload time (descending) so newest op appears first
     const sortedGroups = Object.entries(groups).sort((a, b) => {
       const aMax = Math.max(...a[1].map(i => i.uploaded_at));
       const bMax = Math.max(...b[1].map(i => i.uploaded_at));
