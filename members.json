@@ -2,7 +2,7 @@
     "_comment":  "Member directory. discordRank from AZO promotion chart. opsAttended = total ops attended in 2026, updated manually each op. endorsements/leadership/avatar from Discord.",
     "Jag McMuffin":  {
                          "discordId":  "207012290401271818",
-                         "discordRank":  "SOCOMD",
+                         "discordRank":  "SOHQ",
                          "avatar":  "/assets/avatars/jagmcmuffin.png",
                          "opsAttended":  5,
                          "endorsements":  [
@@ -18,8 +18,8 @@
                          "leadership":  "senior"
                      },
     "SirDanger":  {
-                      "discordId":  "203678139220623361",
-                      "discordRank":  "SOCOMD",
+                       "discordId":  "203678139220623361",
+                       "discordRank":  "SOHQ",
                       "avatar":  "/assets/avatars/sirdanger.png",
                       "opsAttended":  5,
                       "endorsements":  [
@@ -32,8 +32,8 @@
                       "leadership":  null
                   },
     "Gunter":  {
-                   "discordId":  "850370739998818335",
-                   "discordRank":  "SOCOMD",
+                    "discordId":  "850370739998818335",
+                    "discordRank":  "SOHQ",
                    "avatar":  "/assets/avatars/gunter.png",
                    "opsAttended":  5,
                    "endorsements":  [
