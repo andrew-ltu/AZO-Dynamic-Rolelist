@@ -66,12 +66,12 @@
                                             "endorsementRequired":  true,
                                             "endorsementType":  "Leadership Endorsement"
                                         },
-                                        {
-                                            "role":  "Asst. Section Leader",
-                                            "member":  "Jon Taiwan",
-                                            "endorsementRequired":  true,
-                                            "endorsementType":  "Leadership Endorsement"
-                                        },
+                        {
+                                             "role":  "Asst. Section Leader",
+                                             "member":  "Vain",
+                                             "endorsementRequired":  true,
+                                             "endorsementType":  "Leadership Endorsement"
+                                         },
                                         {
                                             "role":  "Grenadier",
                                             "member":  "Earthball"
@@ -143,12 +143,9 @@
                                        }
                                    ]
                      },
-                     {
-                         "name":  "CHARLIE",
-                         "joint":  true,
-                         "locked":  true,
-                         "lockedLabel":  "13th Crash Division",
-                         "roles":  [
+                      {
+                          "name":  "CHARLIE",
+                          "roles":  [
                                        {
                                            "role":  "Section Leader",
                                            "member":  null,
@@ -192,11 +189,8 @@
                  ],
     "attachments":  [
                         {
-                            "name":  "BLACKJACK",
-                            "joint":  true,
-                            "locked":  true,
-                            "lockedLabel":  "AFSOC",
-                            "roles":  [
+                             "name":  "BLACKJACK",
+                             "roles":  [
                                           {
                                               "role":  "Pilot",
                                               "member":  "1st Lt B. Hag"
