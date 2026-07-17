@@ -448,12 +448,32 @@
                     "leadership":  null
                 },
     "J. Jabbzo":  {
-                      "discordRank":  "Recruit",
-                      "avatar":  "",
-                      "opsAttended":  0,
-                      "endorsements":  [
+                       "discordRank":  "Recruit",
+                       "avatar":  "",
+                       "opsAttended":  0,
+                       "endorsements":  [
 
-                                       ],
-                      "leadership":  null
-                  }
+                                        ],
+                       "leadership":  null
+                   },
+    "coach_jake":  {
+                       "discordId":  "1023502222815940660",
+                       "discordRank":  "Recruit",
+                       "avatar":  "",
+                       "opsAttended":  0,
+                       "endorsements":  [
+
+                                        ],
+                       "leadership":  null
+                   },
+    "valro_bread_adddict":  {
+                       "discordId":  "769946853893472277",
+                       "discordRank":  "Recruit",
+                       "avatar":  "",
+                       "opsAttended":  0,
+                       "endorsements":  [
+
+                                        ],
+                       "leadership":  null
+                   }
 }

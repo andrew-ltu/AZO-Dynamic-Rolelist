@@ -924,7 +924,16 @@ async function handleSyncFromGitHub(request, env, origin) {
   try {
     const membersRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/members.json`);
     if (membersRes.ok) {
-      await saveMembers(env, await membersRes.json());
+      const gitMembers = await membersRes.json();
+      // Merge: keep any D1-only members (e.g. Discord-added) that aren't in GitHub
+      const existing = await getMembers(env);
+      for (const [name, data] of Object.entries(existing)) {
+        if (name.startsWith('_')) continue;
+        if (!gitMembers[name]) {
+          gitMembers[name] = data;
+        }
+      }
+      await saveMembers(env, gitMembers);
       results.push('members');
     }
   } catch (e) { results.push('members: ' + e.message); }
