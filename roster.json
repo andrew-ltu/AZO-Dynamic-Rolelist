@@ -174,12 +174,12 @@
                                            "role":  "LSW (Minimi)",
                                            "member":  null
                                        },
-                                       {
-                                           "role":  "Rifleman",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "Medic",
+                                        {
+                                            "role":  "Rifleman",
+                                            "member":  "The Raven"
+                                        },
+                                        {
+                                            "role":  "Medic",
                                            "member":  null,
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
