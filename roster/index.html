@@ -1384,6 +1384,7 @@ window.downloadBackup = () => {
 window.restoreFromBackup = (event) => {
   const file = event.target.files[0];
   if (!file) return;
+  const el = document.getElementById('backupStatus');
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
@@ -1396,11 +1397,11 @@ window.restoreFromBackup = (event) => {
       });
       if (!res.ok) throw new Error(`Save failed: ${res.status}`);
       currentRoster = data; render(data);
-      document.getElementById('backupStatus').textContent = '✅ Restored successfully';
-      document.getElementById('backupStatus').style.color = '#36d07a';
+      el.textContent = '✅ Restored successfully';
+      el.style.color = '#36d07a'; el.style.display = '';
     } catch(err) {
-      document.getElementById('backupStatus').textContent = '❌ ' + err.message;
-      document.getElementById('backupStatus').style.color = '#d94040';
+      el.textContent = '❌ ' + err.message;
+      el.style.color = '#d94040'; el.style.display = '';
     }
   };
   reader.readAsText(file);
@@ -1447,6 +1448,7 @@ window.restoreSnapshot = async () => {
   if (!confirm('Restore from last auto-snapshot? This is taken every time the roster is saved via admin panel.')) return;
   const token = localStorage.getItem('azo_token');
   if (!token) return alert('Not authenticated');
+  const el = document.getElementById('backupStatus');
   try {
     const res = await fetch(`${API_BASE}/api/admin/restore-snapshot`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
@@ -1455,11 +1457,11 @@ window.restoreSnapshot = async () => {
     if (!res.ok) throw new Error(data.error || 'Restore failed');
     const roster = await fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json());
     currentRoster = roster; render(roster);
-    document.getElementById('backupStatus').textContent = '✅ Restored from auto-snapshot';
-    document.getElementById('backupStatus').style.color = '#36d07a';
+    el.textContent = '✅ Restored from auto-snapshot';
+    el.style.color = '#36d07a'; el.style.display = '';
   } catch (err) {
-    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
-    document.getElementById('backupStatus').style.color = '#d94040';
+    el.textContent = '❌ ' + err.message;
+    el.style.color = '#d94040'; el.style.display = '';
   }
 };
 
