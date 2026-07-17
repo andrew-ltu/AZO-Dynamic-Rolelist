@@ -4,6 +4,10 @@ on:
   workflow_dispatch: {}          # lets you run it manually from the Actions tab
   schedule:
     - cron: '0 15 * * *'         # daily ~01:00 AEST (15:00 UTC)
+  push:
+    branches: [main]
+    paths:
+      - members.json
 
 permissions:
   contents: write                # so the job can commit members.json + avatars
@@ -35,3 +39,12 @@ jobs:
             git commit -m "Sync Discord roles & avatars [skip ci]"
             git push
           fi
+      - name: Sync to D1
+        env:
+          API_SYNC_SECRET: ${{ secrets.API_SYNC_SECRET }}
+          WORKER_URL: https://azo-dynamic-rolelist-api.andrewtb02.workers.dev
+        run: |
+          curl -X POST "$WORKER_URL/api/auto-sync" \
+            -H "Authorization: Bearer $API_SYNC_SECRET" \
+            -H "Content-Type: application/json" \
+            -w "\nHTTP %{http_code}\n"
