@@ -1422,7 +1422,7 @@ window.restoreLocalBackup = () => {
 };
 
 window.syncFromGitHub = async () => {
-  if (!confirm('Sync roster from GitHub? This will replace current assignments with whatever is in the repo.')) return;
+  if (!confirm('Sync roster and members from GitHub? Members will be updated from members.json in the repo.')) return;
   const token = localStorage.getItem('azo_token');
   if (!token) return alert('Not authenticated');
   try {
@@ -1431,8 +1431,11 @@ window.syncFromGitHub = async () => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Sync failed');
-    const roster = await fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json());
-    currentRoster = roster; render(roster);
+    const [roster, members] = await Promise.all([
+      fetch(`${API_BASE}/api/roster`, { cache: 'no-store' }).then(r => r.json()),
+      fetch(`${API_BASE}/api/members`, { cache: 'no-store' }).then(r => r.json())
+    ]);
+    currentRoster = roster; MEMBERS = members; membersData = members; render(roster); renderMembers();
     document.getElementById('backupStatus').textContent = '✅ Synced from GitHub';
     document.getElementById('backupStatus').style.color = '#36d07a';
   } catch (err) {

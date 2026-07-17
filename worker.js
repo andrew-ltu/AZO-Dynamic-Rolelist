@@ -174,6 +174,20 @@ function findMemberName(membersData, discordId, displayName) {
   return null;
 }
 
+function matchRankFromRoles(roleIds, roleMap, rankPriority) {
+  let matchedRank = null;
+  let matchedPrio = Infinity;
+  for (const rid of roleIds) {
+    const rName = roleMap[rid] || '';
+    const idx = rankPriority.indexOf(rName);
+    if (idx !== -1 && idx < matchedPrio) {
+      matchedRank = rName;
+      matchedPrio = idx;
+    }
+  }
+  return matchedRank;
+}
+
 function findUserSlot(roster, userName) {
   if (!roster || !userName) return null;
   const lower = userName.toLowerCase();
@@ -440,48 +454,54 @@ async function handleGetMembers(request, env, origin) {
         }
       }
     }
-    // 2. Bot API — refreshes avatars AND syncs Discord ranks for members with discordId
+    // 2. Bot API — refreshes avatars, syncs Discord ranks for members with discordId,
+    //    and matches members without discordId by display name
     if (env.DISCORD_BOT_TOKEN) {
       const RANK_PRIORITY = ['SOCOMD','SOHQ','Senior Operator','Operator','Junior Operator','Recruit'];
-      const withDiscordId = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId);
-      if (withDiscordId.length > 0) {
-        try {
-          const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
-            headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
-          });
-          if (guildRes.ok) {
-            const roleMap = await getCachedGuildRoles(env);
-            const guildMembers = await guildRes.json();
-            let changed = false;
-            for (const [name, data] of withDiscordId) {
-              const gm = guildMembers.find(m => m.user && m.user.id === data.discordId);
-              if (!gm) continue;
-              // Refresh avatar
-              if (gm.user && gm.user.avatar) {
-                const newAv = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
-                if (data.avatar !== newAv) { data.avatar = newAv; changed = true; }
-              }
-              // Sync rank from Discord roles
-              const roleIds = gm.roles || [];
-              let matchedRank = null;
-              let matchedPrio = Infinity;
-              for (const rid of roleIds) {
-                const rName = roleMap[rid] || '';
-                const idx = RANK_PRIORITY.indexOf(rName);
-                if (idx !== -1 && idx < matchedPrio) {
-                  matchedRank = rName;
-                  matchedPrio = idx;
-                }
-              }
-              if (matchedRank && data.discordRank !== matchedRank) {
-                data.discordRank = matchedRank;
-                changed = true;
-              }
+      try {
+        const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
+          headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+        });
+        if (guildRes.ok) {
+          const roleMap = await getCachedGuildRoles(env);
+          const guildMembers = await guildRes.json();
+          let changed = false;
+          // Members with discordId — match by ID
+          for (const [name, data] of Object.entries(members)) {
+            if (name.startsWith('_') || !data.discordId) continue;
+            const gm = guildMembers.find(m => m.user && m.user.id === data.discordId);
+            if (!gm) continue;
+            if (gm.user && gm.user.avatar) {
+              const newAv = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+              if (data.avatar !== newAv) { data.avatar = newAv; changed = true; }
             }
-            if (changed) await saveMembers(env, members);
+            const matchedRank = matchRankFromRoles(gm.roles || [], roleMap, RANK_PRIORITY);
+            if (matchedRank && data.discordRank !== matchedRank) {
+              data.discordRank = matchedRank; changed = true;
+            }
           }
-        } catch(e) { console.error('Bot sync failed:', e); }
-      }
+          // Members without discordId — match by display name
+          for (const [name, data] of Object.entries(members)) {
+            if (name.startsWith('_') || data.discordId) continue;
+            const gm = guildMembers.find(m => {
+              if (!m.user) return false;
+              const disp = (m.nick || m.user.global_name || m.user.username || '').toLowerCase();
+              return disp === name.toLowerCase();
+            });
+            if (!gm) continue;
+            data.discordId = gm.user.id;
+            if (gm.user && gm.user.avatar) {
+              data.avatar = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+            }
+            const matchedRank = matchRankFromRoles(gm.roles || [], roleMap, RANK_PRIORITY);
+            if (matchedRank && data.discordRank !== matchedRank) {
+              data.discordRank = matchedRank;
+            }
+            changed = true;
+          }
+          if (changed) await saveMembers(env, members);
+        }
+      } catch(e) { console.error('Bot sync failed:', e); }
     }
     return jsonResponse(members, 200, origin);
   } catch (e) {
@@ -893,15 +913,22 @@ async function handleDiscordStats(request, env, origin) {
 async function handleSyncFromGitHub(request, env, origin) {
   const auth = await verifyAdmin(request, env);
   if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  const results = [];
   try {
-    const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
-    if (!res.ok) return jsonResponse({ error: 'Failed to fetch from GitHub' }, 502, origin);
-    const data = await res.json();
-    await saveRoster(env, data);
-    return jsonResponse({ ok: true, message: 'Roster synced from GitHub' }, 200, origin);
-  } catch (e) {
-    return jsonResponse({ error: e.message }, 500, origin);
-  }
+    const rosterRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/roster.json`);
+    if (rosterRes.ok) {
+      await saveRoster(env, await rosterRes.json());
+      results.push('roster');
+    }
+  } catch (e) { results.push('roster: ' + e.message); }
+  try {
+    const membersRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/members.json`);
+    if (membersRes.ok) {
+      await saveMembers(env, await membersRes.json());
+      results.push('members');
+    }
+  } catch (e) { results.push('members: ' + e.message); }
+  return jsonResponse({ ok: true, message: 'Synced from GitHub: ' + results.join(', ') }, 200, origin);
 }
 
 async function handleRestoreSnapshot(request, env, origin) {
