@@ -283,14 +283,14 @@
                                "leadership":  null
                            },
     "Earthball":  {
-                      "discordRank":  "Recruit",
-                      "avatar":  "/assets/avatars/earthball.png",
-                      "opsAttended":  0,
-                      "endorsements":  [
+                       "discordRank":  "SOCOMD",
+                       "avatar":  "/assets/avatars/earthball.png",
+                       "opsAttended":  0,
+                       "endorsements":  [
 
-                                       ],
-                      "leadership":  null
-                  },
+                                        ],
+                       "leadership":  null
+                   },
     "Crallers":  {
                      "discordId":  "179421557163163650",
                      "discordRank":  "Junior Operator",
