@@ -1436,7 +1436,12 @@ function renderOperatorsList(list, data, skipStore) {
       const ghRes = await fetch(MEMBERS_JSON_URL);
       if (ghRes.ok) {
         const gh = await ghRes.json();
-        data = Object.keys(data || {}).length > Object.keys(gh).length / 2 ? Object.assign({}, gh, data) : gh;
+        const d1data = data;
+        data = { ...gh };
+        for (const [k, v] of Object.entries(d1data)) {
+          if (k.startsWith('_')) continue;
+          if (!gh[k]) data[k] = v;
+        }
       }
     } catch {}
   }
