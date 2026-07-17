@@ -1630,7 +1630,7 @@ window.deleteMember = (name) => {
   saveMembers();
 };
 
-async function pruneDiscordLeavers() {
+window.pruneDiscordLeavers = async function() {
   if (!confirm('Check all members with a Discord ID against the guild and remove those who have left?')) return;
   const token = localStorage.getItem('azo_token');
   if (!token) return alert('Not authenticated');
@@ -1647,11 +1647,10 @@ async function pruneDiscordLeavers() {
     } else {
       alert('No members to prune — all members with Discord IDs are still in the guild.');
     }
-    // Reload members list
     loadMembers();
   } catch(e) { alert('Error: ' + e.message); }
   if (statusEl) { statusEl.textContent = ''; statusEl.className = 'admin-status-msg'; }
-}
+};
 
 async function saveMembers() {
   try {
