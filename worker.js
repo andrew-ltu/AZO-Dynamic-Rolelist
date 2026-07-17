@@ -442,7 +442,7 @@ async function handleGetMembers(request, env, origin) {
     }
     // 2. Bot API — refreshes avatars AND syncs Discord ranks for members with discordId
     if (env.DISCORD_BOT_TOKEN) {
-      const RANK_PRIORITY = ['SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
+      const RANK_PRIORITY = ['SOCOMD','SOHQ','Senior Operator','Operator','Junior Operator','Recruit'];
       const withDiscordId = Object.entries(members).filter(([n,d]) => !n.startsWith('_') && d.discordId);
       if (withDiscordId.length > 0) {
         try {

@@ -845,6 +845,10 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     .rank-header-socomd .rank-title { color: var(--accent-command, #ff1133); }
     .rank-header-socomd .rank-icon { background: rgba(255,17,51,.12); }
     
+    .rank-header-sohq .rank-title::before { background: #d4a020; }
+    .rank-header-sohq .rank-title { color: #d4a020; }
+    .rank-header-sohq .rank-icon { background: rgba(212,160,32,.12); }
+    
     .rank-header-senior-operator .rank-title::before { background: var(--accent-staff, #00ff66); }
     .rank-header-senior-operator .rank-title { color: var(--accent-staff, #00ff66); }
     .rank-header-senior-operator .rank-icon { background: rgba(0,255,102,.12); }
@@ -880,6 +884,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
     }
     
     .operator-card.socomd{--card-accent:#ff1133;--glow-color:rgba(255,17,51,.4);--card-avatar:60px;--card-name:16px;}
+    .operator-card.sohq{--card-accent:#d4a020;--glow-color:rgba(212,160,32,.4);--card-avatar:60px;--card-name:16px;}
     .operator-card.senior{--card-accent:#00ff66;--glow-color:rgba(0,255,102,.4);--card-avatar:54px;--card-name:14px;}
     .operator-card.operator{--card-accent:#00ccff;--glow-color:rgba(0,204,255,.4);--card-avatar:48px;--card-name:13px;}
     .operator-card.junior{--card-accent:#00ccff;--glow-color:rgba(0,204,255,.3);--card-avatar:44px;--card-name:12px;}
@@ -1221,10 +1226,10 @@ document.addEventListener('keydown', function(e) {
 })();
 
 const RANK_ORDER = [
-  'SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'
+  'SOCOMD','SOHQ','Senior Operator','Operator','Junior Operator','Recruit'
 ];
 const RANK_COLORS = {
-  'SOCOMD':'#264d7a','Senior Operator':'#326ba8',
+  'SOCOMD':'#264d7a','SOHQ':'#d4a020','Senior Operator':'#326ba8',
   'Operator':'#3d87d4','Junior Operator':'#5a9fe0','Recruit':'#6a7f98'
 };
 const ATT_MONTHS = [
@@ -1233,6 +1238,7 @@ const ATT_MONTHS = [
 const OP_NAME_BY_INDEX = {0:'Karoonda I',1:'Karoonda II'};
 const RANK_HEADER_CLASS = {
   'SOCOMD': 'rank-header-socomd',
+  'SOHQ': 'rank-header-sohq',
   'Senior Operator': 'rank-header-senior-operator',
   'Operator': 'rank-header-operator',
   'Junior Operator': 'rank-header-junior-operator',
@@ -1240,6 +1246,7 @@ const RANK_HEADER_CLASS = {
 };
 const CARD_CLASS = {
   'SOCOMD': 'socomd',
+  'SOHQ': 'sohq',
   'Senior Operator': 'senior',
   'Operator': 'operator',
   'Junior Operator': 'junior',

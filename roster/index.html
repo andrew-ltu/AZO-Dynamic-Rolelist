@@ -783,8 +783,8 @@ footer b{color:var(--muted);}
 
 const RANK_LADDER    = ['Recruit','Junior Operator','Operator','Senior Operator'];
 const RANK_THRESHOLD = {'Junior Operator':1,'Operator':6,'Senior Operator':14};
-const RANK_SORT      = {'SOCOMD':0,'Senior Operator':1,'Operator':2,'Junior Operator':3,'Recruit':4};
-const RANK_COLORS    = {'SOCOMD':'#264d7a','Senior Operator':'#326ba8','Operator':'#3d87d4','Junior Operator':'#5a9fe0','Recruit':'#6a7f98'};
+const RANK_SORT      = {'SOCOMD':0,'SOHQ':1,'Senior Operator':2,'Operator':3,'Junior Operator':4,'Recruit':5};
+const RANK_COLORS    = {'SOCOMD':'#264d7a','SOHQ':'#d4a020','Senior Operator':'#326ba8','Operator':'#3d87d4','Junior Operator':'#5a9fe0','Recruit':'#6a7f98'};
 
 const ATT_MONTHS = [
   {m:'Jun',done:1,up:0},{m:'Jul',done:1,up:0}
@@ -1814,7 +1814,7 @@ function member(name){
 }
 
 function promotion(rank,ops){
-  if(rank==='SOCOMD')return{kind:'command'};
+  if(rank==='SOCOMD'||rank==='SOHQ')return{kind:'command'};
   const idx=RANK_LADDER.indexOf(rank);
   if(idx===RANK_LADDER.length-1)return{kind:'max'};
   const base=idx<0?0:idx;
@@ -2048,7 +2048,7 @@ function openProfile(name){
     :`<span class="badge" style="opacity:.55">No endorsements yet</span>`;
   let promoBlock;
   if(p.kind==='command'){
-    promoBlock=`<div class="promo-label"><span class="nxt">Command staff</span><span class="pct">SOCOMD</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Above the operator ladder.</div>`;
+    promoBlock=`<div class="promo-label"><span class="nxt">Command staff</span><span class="pct">${rank}</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Above the operator ladder.</div>`;
   } else if(p.kind==='max'){
     promoBlock=`<div class="promo-label"><span class="nxt">Top of the ladder</span><span class="pct">MAX</span></div><div class="promo-track"><div class="promo-fill maxed" style="width:100%"></div></div><div class="promo-note">Senior Operator - fully promoted.</div>`;
   } else {
