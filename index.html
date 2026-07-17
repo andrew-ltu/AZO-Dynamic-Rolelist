@@ -1509,21 +1509,33 @@ let _calRosterData = null, _calMemberData = null;
 
 function getOpMap() {
   const map = {};
-  OPS_DATA.forEach((op, idx) => {
-    const months = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11,
-      JANUARY:0,FEBRUARY:1,MARCH:2,APRIL:3,MAY:4,JUNE:5,JULY:6,AUGUST:7,SEPTEMBER:8,OCTOBER:9,NOVEMBER:10,DECEMBER:11};
-    let d, m, y;
-    if (op.short) {
-      const p = op.short.split(' ');
-      m = months[p[1] && p[1].toUpperCase()];
-      d = parseInt(p[2]);
-      y = parseInt(p[3]);
-    } else {
-      const p = op.date && op.date.split(' ');
-      if (p) { m = months[p[1] && p[1].toUpperCase()]; d = parseInt(p[0]); y = parseInt(p[2]); }
+  const months = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11,
+    JANUARY:0,FEBRUARY:1,MARCH:2,APRIL:3,MAY:4,JUNE:5,JULY:6,AUGUST:7,SEPTEMBER:8,OCTOBER:9,NOVEMBER:10,DECEMBER:11};
+  function parseOpDate(op) {
+    const parts = (op.short || op.date || '').split(' ');
+    if (parts.length < 3) return null;
+    // Try positions for month: parts[1] or parts[2]; for day: parts[0], parts[1], or parts[2]
+    let monthName = months[parts[1] && parts[1].toUpperCase()] !== undefined ? parts[1] :
+                    months[parts[2] && parts[2].toUpperCase()] !== undefined ? parts[2] : null;
+    if (!monthName) return null;
+    const monthIdx = months[monthName.toUpperCase()];
+    // Day is whichever of parts[0], parts[1], parts[2] is NOT the month and is a number
+    let dayVal = null, yearVal = null;
+    for (const part of [parts[0], parts[1], parts[2]]) {
+      if (part.toUpperCase() === monthName.toUpperCase()) continue;
+      const num = parseInt(part);
+      if (num > 31 && yearVal === null) { yearVal = num; }
+      else if (num > 0 && num <= 31 && dayVal === null) { dayVal = num; }
+      else if (num > 31) { yearVal = num; }
     }
-    if (m == null || isNaN(d) || isNaN(y)) return; // skip unparseable
-    const key = `${y}-${m}-${d}`;
+    if (yearVal === null) yearVal = parseInt(parts[3]) || null;
+    if (dayVal === null || yearVal === null) return null;
+    return { d: dayVal, m: monthIdx, y: yearVal };
+  }
+  OPS_DATA.forEach((op, idx) => {
+    const parsed = parseOpDate(op);
+    if (!parsed) return;
+    const key = `${parsed.y}-${parsed.m}-${parsed.d}`;
     if (!map[key]) map[key] = [];
     map[key].push(idx);
   });
@@ -1587,9 +1599,19 @@ function renderCalendar() {
       totalShown++;
       inner += filtered.map(i => {
         const op = OPS_DATA[i];
-        const p = (op.short || op.date).split(' ');
-        const mon = p[1] ? months[p[1].toUpperCase()] || p[1] : '';
-        const dayNum = p[2] ? parseInt(p[2]) : '';
+        const ds = (op.short || op.date || '').split(' ');
+        // Determine month position: try pos 1 first, then pos 2
+        let mon, dayNum;
+        if (months[ds[1] && ds[1].toUpperCase()] !== undefined) {
+          mon = months[ds[1].toUpperCase()];
+          dayNum = parseInt(ds[2]);
+        } else if (months[ds[2] && ds[2].toUpperCase()] !== undefined) {
+          mon = months[ds[2].toUpperCase()];
+          dayNum = parseInt(ds[1]);
+        } else {
+          mon = ds[1] || '';
+          dayNum = parseInt(ds[2]) || parseInt(ds[1]) || '';
+        }
         const suffix = dayNum ? (dayNum%10===1&&dayNum!==11?'st':dayNum%10===2&&dayNum!==12?'nd':dayNum%10===3&&dayNum!==13?'rd':'th') : '';
         const isUpcoming = op.status !== 'complete' && op.status !== 'completed';
         const isNearest = i === nearestUpcomingIdx;
