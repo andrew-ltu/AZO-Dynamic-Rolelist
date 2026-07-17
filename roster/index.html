@@ -1408,17 +1408,17 @@ window.restoreFromBackup = (event) => {
   event.target.value = '';
 };
 window.restoreLocalBackup = () => {
+  const el = document.getElementById('backupStatus');
   try {
     const raw = localStorage.getItem('azo_roster_backup');
     const time = localStorage.getItem('azo_backup_time');
     if (!raw) return alert('No local backup found');
     const data = JSON.parse(raw);
-    document.getElementById('backupStatus').textContent = `📋 Backup from ${time ? new Date(time).toLocaleString() : 'unknown date'} loaded. Click "Save" in Operation Settings to apply.`;
-    document.getElementById('backupStatus').style.color = '#f0b429';
+    el.textContent = `📋 Backup from ${time ? new Date(time).toLocaleString() : 'unknown date'} loaded. Click "Save" in Operation Settings to apply.`;
+    el.style.color = '#f0b429'; el.style.display = '';
     currentRoster = data; render(data);
   } catch(err) {
-    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
-    document.getElementById('backupStatus').style.color = '#d94040';
+    el.textContent = '❌ ' + err.message; el.style.color = '#d94040'; el.style.display = '';
   }
 };
 
@@ -1426,6 +1426,7 @@ window.syncFromGitHub = async () => {
   if (!confirm('Sync roster and members from GitHub? Members will be updated from members.json in the repo.')) return;
   const token = localStorage.getItem('azo_token');
   if (!token) return alert('Not authenticated');
+  const el = document.getElementById('backupStatus');
   try {
     const res = await fetch(`${API_BASE}/api/admin/sync-github`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
@@ -1437,11 +1438,9 @@ window.syncFromGitHub = async () => {
       fetch(`${API_BASE}/api/members`, { cache: 'no-store' }).then(r => r.json())
     ]);
     currentRoster = roster; MEMBERS = members; membersData = members; render(roster); renderMembers();
-    document.getElementById('backupStatus').textContent = '✅ Synced from GitHub';
-    document.getElementById('backupStatus').style.color = '#36d07a';
+    el.textContent = '✅ Synced from GitHub'; el.style.color = '#36d07a'; el.style.display = '';
   } catch (err) {
-    document.getElementById('backupStatus').textContent = '❌ ' + err.message;
-    document.getElementById('backupStatus').style.color = '#d94040';
+    el.textContent = '❌ ' + err.message; el.style.color = '#d94040'; el.style.display = '';
   }
 };
 window.restoreSnapshot = async () => {
