@@ -711,10 +711,6 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <!-- ====== OPERATORS PAGE ====== -->
 <div class="page" id="page-operators">
   <div style="padding:20px 0;">
-    <div class="section-sub" style="margin-bottom:4px;">Personnel</div>
-    <h2 class="section-title">Active Operators</h2>
-    <p class="section-desc">Current roster of AZO operators and their ranks.</p>
-    
     <style>
     /* Tactical Operators Page Styles */
     .tactical-operators-container {
@@ -869,6 +865,65 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 10px;
+    }
+    
+    @media (max-width: 480px) {
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+        gap: 5px;
+      }
+      .operator-card {
+        border-radius: 4px;
+      }
+      .operator-card.sohq{--card-avatar:32px;--card-name:10px;}
+      .operator-card.socomd{--card-avatar:32px;--card-name:10px;}
+      .operator-card.senior{--card-avatar:30px;--card-name:9px;}
+      .operator-card.operator{--card-avatar:28px;--card-name:9px;}
+      .operator-card.junior{--card-avatar:26px;--card-name:8px;}
+      .operator-card.recruit{--card-avatar:24px;--card-name:8px;}
+      .card-body {
+        padding: 6px 4px 4px;
+      }
+      .avatar-wrapper {
+        margin-bottom: 4px;
+        border-width: 1.5px;
+      }
+      .operator-rank {
+        font-size: 7px;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+      }
+      .operator-name {
+        font-size: var(--card-name, 9px);
+      }
+      .card-details {
+        display: none !important;
+      }
+      .rank-header .rank-title {
+        font-size: 11px;
+      }
+      .rank-header .rank-icon {
+        width: 18px; height: 18px; font-size: 10px;
+      }
+      .rank-section {
+        margin-bottom: 8px;
+      }
+      .operators-header {
+        margin-bottom: 16px !important;
+      }
+      .operators-title {
+        font-size: 20px !important;
+      }
+      .operators-subtitle {
+        font-size: 9px !important;
+      }
+      .operators-stats-bar {
+        gap: 8px !important;
+      }
+      .ops-filter-bar {
+        padding: 4px 8px !important;
+        margin-bottom: 8px !important;
+      }
     }
     
     .operator-card {
