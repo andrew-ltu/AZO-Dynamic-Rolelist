@@ -463,7 +463,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .gallery-carousel-dot.active{background:#2563EB;}
 .gallery-carousel-dot:hover{background:rgba(255,255,255,.4);}
 
-.gallery-filter{border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:28px 40px;display:grid;grid-template-columns:140px 1fr 220px;gap:32px;}
+.gallery-filter{border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:28px 40px;display:grid;grid-template-columns:140px 1fr;gap:32px;}
 .gallery-filter-header{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;color:#2563EB;margin-bottom:12px;font-weight:600;}
 .gallery-filter-col-wide{min-width:0;}
 .gallery-year-item{font-size:13px;padding:4px 8px;cursor:pointer;color:rgba(255,255,255,.25);transition:color .15s;font-family:'Share Tech Mono',monospace;}
@@ -1160,10 +1160,6 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       <div class="gallery-filter-header">OPERATION</div>
       <div id="galleryOpList"></div>
     </div>
-    <div class="gallery-filter-col">
-      <div class="gallery-filter-header">MISSION</div>
-      <input type="text" id="galleryMissionInput" placeholder="Search filenames...">
-    </div>
   </div>
 
   <!-- Grid -->
@@ -1701,7 +1697,7 @@ function showOpDetail(idx) {
 
 /* ---------- Gallery ---------- */
 let _galleryImages = [];
-let _galleryFilter = { year: null, op: null, query: '' };
+let _galleryFilter = { year: null, op: null };
 
 function loadGallery() {
   const grid = document.getElementById('galleryGrid');
@@ -1766,7 +1762,6 @@ function resetCarouselTimer(featured) {
 function buildFilters(images) {
   const yearEl = document.getElementById('galleryYearList');
   const opEl = document.getElementById('galleryOpList');
-  const inputEl = document.getElementById('galleryMissionInput');
   if (!yearEl || !opEl) return;
 
   // Extract unique years sorted descending
@@ -1797,14 +1792,6 @@ function buildFilters(images) {
     });
   });
 
-  // Mission input
-  if (inputEl) {
-    inputEl.value = _galleryFilter.query;
-    inputEl.oninput = () => {
-      _galleryFilter.query = inputEl.value.toLowerCase();
-      renderGalleryGrid();
-    };
-  }
 }
 
 function renderGalleryGrid() {
@@ -1815,7 +1802,6 @@ function renderGalleryGrid() {
   let filtered = _galleryImages;
   if (_galleryFilter.year) filtered = filtered.filter(i => new Date(i.uploaded_at * 1000).getFullYear() === _galleryFilter.year);
   if (_galleryFilter.op) filtered = filtered.filter(i => i.op_name === _galleryFilter.op);
-  if (_galleryFilter.query) filtered = filtered.filter(i => i.filename.toLowerCase().includes(_galleryFilter.query));
 
   if (!filtered.length) {
     grid.innerHTML = '';
