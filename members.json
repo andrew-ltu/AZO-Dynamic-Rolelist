@@ -330,16 +330,6 @@
                                               ],
                              "leadership":  null
                          },
-    "Mietsko":  {
-                    "discordId":  "1310305215077158965",
-                    "discordRank":  "Recruit",
-                    "avatar":  "/assets/avatars/mietsko.png",
-                    "opsAttended":  0,
-                    "endorsements":  [
-
-                                     ],
-                    "leadership":  null
-                },
     "Gill":  {
                  "discordId":  "173612996680089600",
                  "discordRank":  "Junior Operator",
