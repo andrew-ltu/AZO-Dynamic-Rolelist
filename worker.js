@@ -239,6 +239,9 @@ export default {
     if (url.pathname === '/api/admin/roster-bg' && request.method === 'POST') return handleSetRosterBg(request, env, origin);
     if (url.pathname === '/api/admin/roster-bg' && request.method === 'DELETE') return handleRemoveRosterBg(request, env, origin);
 
+    // Prune members who left Discord
+    if (url.pathname === '/api/admin/prune-members' && request.method === 'POST') return handlePruneMembers(request, env, origin);
+
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
@@ -468,6 +471,21 @@ async function handleGetMembers(request, env, origin) {
                 if (idx !== -1 && idx < matchedPrio) {
                   matchedRank = rName;
                   matchedPrio = idx;
+                }
+              }
+              if (matchedRank && data.discordRank !== matchedRank) {
+                data.discordRank = matchedRank;
+                changed = true;
+              }
+            }
+            if (changed) await saveMembers(env, members);
+          }
+        } catch(e) { console.error('Bot sync failed:', e); }
+      }
+    }
+    return jsonResponse(members, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: 'Failed to fetch members' }, 500, origin);
   }
 }
 
@@ -540,7 +558,6 @@ async function handleSetRosterBg(request, env, origin) {
     const data = JSON.stringify({ imageId, url, r2Key: row.r2_key, opName: row.op_name });
     const now = Math.floor(Date.now() / 1000);
     await env.DB.prepare('INSERT OR REPLACE INTO members (name, data, updated_at) VALUES (\'_roster_bg\', ?, ?)').bind(data, now).run();
-    // Also update roster operation.background so existing UI picks it up
     const roster = await getRoster(env);
     if (roster) {
       roster.operation = roster.operation || {};
@@ -558,7 +575,6 @@ async function handleRemoveRosterBg(request, env, origin) {
   if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
   try {
     await env.DB.prepare('DELETE FROM members WHERE name = \'_roster_bg\'').run();
-    // Also remove from roster
     const roster = await getRoster(env);
     if (roster && roster.operation && roster.operation.background) {
       delete roster.operation.background;
@@ -569,19 +585,34 @@ async function handleRemoveRosterBg(request, env, origin) {
     return jsonResponse({ error: e.message }, 500, origin);
   }
 }
-              if (matchedRank && data.discordRank !== matchedRank) {
-                data.discordRank = matchedRank;
-                changed = true;
-              }
-            }
-            if (changed) await saveMembers(env, members);
-          }
-        } catch(e) { console.error('Bot sync failed:', e); }
+
+/* ---------- Prune Discord Leavers ---------- */
+
+async function handlePruneMembers(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    if (!env.DISCORD_BOT_TOKEN) return jsonResponse({ error: 'DISCORD_BOT_TOKEN not configured' }, 500, origin);
+    const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
+      headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+    });
+    if (!guildRes.ok) return jsonResponse({ error: 'Failed to fetch guild members from Discord' }, 502, origin);
+    const guildMembers = await guildRes.json();
+    const guildIds = new Set(guildMembers.map(m => m.user && m.user.id).filter(Boolean));
+    const members = await getMembers(env);
+    const pruned = [];
+    for (const [name, data] of Object.entries(members)) {
+      if (name.startsWith('_')) continue;
+      if (!data.discordId) continue;
+      if (!guildIds.has(data.discordId)) {
+        pruned.push(name);
+        delete members[name];
       }
     }
-    return jsonResponse(members, 200, origin);
+    if (pruned.length) await saveMembers(env, members);
+    return jsonResponse({ ok: true, pruned, count: pruned.length }, 200, origin);
   } catch (e) {
-    return jsonResponse({ error: 'Failed to fetch members' }, 500, origin);
+    return jsonResponse({ error: e.message }, 500, origin);
   }
 }
 

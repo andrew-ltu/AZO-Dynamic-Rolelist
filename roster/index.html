@@ -1630,6 +1630,29 @@ window.deleteMember = (name) => {
   saveMembers();
 };
 
+async function pruneDiscordLeavers() {
+  if (!confirm('Check all members with a Discord ID against the guild and remove those who have left?')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return alert('Not authenticated');
+  const statusEl = document.getElementById('adminMembersStatus');
+  if (statusEl) { statusEl.textContent = 'Checking Discord guild members...'; statusEl.className = 'admin-status-msg show'; }
+  try {
+    const res = await fetch(API_BASE + '/api/admin/prune-members', {
+      method: 'POST', headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('Error: ' + (data.error || 'Failed')); return; }
+    if (data.count > 0) {
+      alert('Removed ' + data.count + ' member(s) who left Discord:\n' + data.pruned.join('\n'));
+    } else {
+      alert('No members to prune — all members with Discord IDs are still in the guild.');
+    }
+    // Reload members list
+    loadMembers();
+  } catch(e) { alert('Error: ' + e.message); }
+  if (statusEl) { statusEl.textContent = ''; statusEl.className = 'admin-status-msg'; }
+}
+
 async function saveMembers() {
   try {
     const token = localStorage.getItem('azo_token');
@@ -2789,6 +2812,24 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div id="calOpStatusMsg" class="admin-status-msg"></div>
       </div>
+    </div>
+
+    <!-- Member Management -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Member Management</h2>
+      <div style="margin-bottom:6px;">
+        <div style="display:flex;gap:4px;margin-bottom:6px;">
+          <input type="text" id="adminNewMemberName" placeholder="Member name" style="flex:1;padding:4px 8px;border-radius:4px;border:1px solid var(--line);background:rgba(0,0,0,.2);color:#fff;font-size:12px;">
+          <input type="text" id="adminNewMemberRank" placeholder="Rank" style="width:100px;padding:4px 8px;border-radius:4px;border:1px solid var(--line);background:rgba(0,0,0,.2);color:#fff;font-size:12px;">
+          <button class="admin-btn admin-btn-primary" id="addMemberBtn" style="font-size:11px;padding:4px 10px;">+ Add</button>
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:6px;">
+          <button class="admin-btn admin-btn-secondary" onclick="pruneDiscordLeavers()" style="font-size:10px;padding:3px 8px;">Prune Discord Leavers</button>
+        </div>
+        <div id="adminMembersStatus" class="admin-status-msg"></div>
+      </div>
+      <div id="adminMembersList" style="font-size:12px;"></div>
+      <div id="membersStatus" class="admin-status-msg"></div>
     </div>
 
     <!-- Quick Actions -->
