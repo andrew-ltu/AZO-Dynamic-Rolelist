@@ -1244,6 +1244,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 <script>
 const API_BASE = 'https://azo-dynamic-rolelist-api.andrewtb02.workers.dev';
 const ROSTER_JSON_URL = 'https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/roster.json';
+const MEMBERS_JSON_URL = 'https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/members.json';
 
 function switchPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1425,14 +1426,32 @@ function renderOperatorsList(list, data, skipStore) {
 
 // Load operators list & roster
 (async function() {
+  let data;
   try {
-    const [data, rosterData] = await Promise.all([
-      fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({})),
-      fetch(API_BASE + '/api/roster').then(r => r.ok ? r.json() : null).catch(() => null)
-    ]);
+    data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  } catch {}
+  // Use GitHub raw as fallback if API data is missing these members
+  if (!data || !data.coach_jake || !data.valro_bread_adddict || !data['The Raven']) {
+    try {
+      const ghRes = await fetch(MEMBERS_JSON_URL);
+      if (ghRes.ok) {
+        const gh = await ghRes.json();
+        data = Object.keys(data || {}).length > Object.keys(gh).length / 2 ? Object.assign({}, gh, data) : gh;
+      }
+    } catch {}
+  }
+  let rosterData;
+  try {
+    rosterData = await fetch(API_BASE + '/api/roster').then(r => r.ok ? r.json() : null).catch(() => null);
+  } catch {}
+  if (!rosterData || !rosterData.sections) {
+    try {
+      const ghRes = await fetch(ROSTER_JSON_URL);
+      if (ghRes.ok) rosterData = await ghRes.json();
+    } catch {}
+  }
+  try {
     const list = document.getElementById('operatorsList');
-    
-    // Render upcoming op from roster data
     if (rosterData && rosterData.operation) {
       let op = rosterData.operation;
       if (!op.zeus || !op.date) {
@@ -1468,15 +1487,10 @@ function renderOperatorsList(list, data, skipStore) {
       document.getElementById('upcomingOpTitle') && (document.getElementById('upcomingOpTitle').textContent = 'Upcoming Operation');
       document.getElementById('upcomingOpDesc') && (document.getElementById('upcomingOpDesc').textContent = 'View available roles and sign up for the next operation. Login with Discord to claim your slot.');
     }
-    
     if (list) renderOperatorsList(list, data, false);
- 
-    // Build ops dashboard / calendar
     const calMounted = document.getElementById('opsCalMain');
     if (calMounted) {
-      // Fetch calendar ops from API and merge with roster data
       let calOps = await fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : null).catch(() => null);
-      // Fallback to hardcoded seed ops if API unavailable or empty (legacy support)
       const FALLBACK_OPS = [
         {name:'Op Karoonda III',date:'18 JULY 2026',zeus:'Jag McMuffin',count:0,short:'SAT JUL 18 2026',status:'upcoming',sections:[]},
         {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',status:'completed',sections:[
@@ -1496,7 +1510,6 @@ function renderOperatorsList(list, data, skipStore) {
       if (!calOps || !calOps.length) {
         OPS_DATA = FALLBACK_OPS;
       } else {
-        // Merge API ops with fallback ops (API first, then fallback not already present)
         const apiNames = new Set(calOps.map(o => o.name));
         OPS_DATA = calOps.map(op => ({
           name: op.name,
@@ -1511,22 +1524,18 @@ function renderOperatorsList(list, data, skipStore) {
           if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
         }
       }
-      // If roster has a live/upcoming operation, merge it into matching calendar entry or append
       if (rosterData && rosterData.operation) {
         const op = rosterData.operation;
         const st = (op.status || 'upcoming').toLowerCase();
-        // Find an existing entry that matches by name or date
         const matchIdx = OPS_DATA.findIndex(e =>
           (e.name && op.name && e.name.toLowerCase() === op.name.toLowerCase()) ||
           (e.date && op.date && e.date === op.date)
         );
         if (matchIdx !== -1) {
-          // Enrich matching entry — use roster data as override only when present
           if (op.zeus) OPS_DATA[matchIdx].zeus = op.zeus;
           if (op.date) OPS_DATA[matchIdx].date = op.date;
           OPS_DATA[matchIdx].status = st;
         } else {
-          // No match, append as new entry
           OPS_DATA.push({
             name: op.name || 'Upcoming Operation',
             date: op.date || '',
