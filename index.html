@@ -1434,15 +1434,21 @@ function renderOperatorsList(list, data, skipStore) {
       if (!calOps || !calOps.length) {
         OPS_DATA = FALLBACK_OPS;
       } else {
+        // Merge API ops with fallback ops (API first, then fallback not already present)
+        const apiNames = new Set(calOps.map(o => o.name));
         OPS_DATA = calOps.map(op => ({
-        name: op.name,
-        date: op.date,
-        zeus: op.zeus,
-        count: 0,
-        short: op.short,
-        status: (op.status || 'upcoming').toLowerCase(),
-        sections: []
-      }));
+          name: op.name,
+          date: op.date,
+          zeus: op.zeus,
+          count: 0,
+          short: op.short,
+          status: (op.status || 'upcoming').toLowerCase(),
+          sections: []
+        }));
+        for (const fb of FALLBACK_OPS) {
+          if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
+        }
+      }
       // If roster has a live/upcoming operation, prepend it (or merge with first entry)
       if (rosterData && rosterData.operation) {
         const op = rosterData.operation;
@@ -1502,15 +1508,14 @@ function getOpMap() {
     let d, m, y;
     if (op.short) {
       const p = op.short.split(' ');
-      m = months[p[1].toUpperCase()];
+      m = months[p[1] && p[1].toUpperCase()];
       d = parseInt(p[2]);
       y = parseInt(p[3]);
     } else {
-      const p = op.date.split(' ');
-      m = months[p[1].toUpperCase()];
-      d = parseInt(p[0]);
-      y = parseInt(p[2]);
+      const p = op.date && op.date.split(' ');
+      if (p) { m = months[p[1] && p[1].toUpperCase()]; d = parseInt(p[0]); y = parseInt(p[2]); }
     }
+    if (m == null || isNaN(d) || isNaN(y)) return; // skip unparseable
     const key = `${y}-${m}-${d}`;
     if (!map[key]) map[key] = [];
     map[key].push(idx);
