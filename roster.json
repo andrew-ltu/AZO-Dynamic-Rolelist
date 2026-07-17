@@ -158,14 +158,14 @@
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Leadership Endorsement"
                                        },
-                                       {
-                                           "role":  "Grenadier",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "Grenadier",
-                                           "member":  null
-                                       },
+                                        {
+                                            "role":  "Grenadier",
+                                            "member":  "coach_jake"
+                                        },
+                                        {
+                                            "role":  "Grenadier",
+                                            "member":  "valro_bread_adddict"
+                                        },
                                        {
                                            "role":  "LSW (Minimi)",
                                            "member":  null
