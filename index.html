@@ -1649,8 +1649,16 @@ function loadGallery() {
       if (!groups[img.op_name]) groups[img.op_name] = [];
       groups[img.op_name].push(img);
     }
+    // Sort groups so newest op (by most recent upload) appears first
+    const sortedGroups = Object.entries(groups).sort((a, b) => {
+      const aMax = Math.max(...a[1].map(i => i.uploaded_at));
+      const bMax = Math.max(...b[1].map(i => i.uploaded_at));
+      return bMax - aMax;
+    });
     let html = '';
-    for (const [opName, imgs] of Object.entries(groups)) {
+    for (const [opName, imgs] of sortedGroups) {
+      // Sort images within group so newest image appears first
+      imgs.sort((a, b) => b.uploaded_at - a.uploaded_at);
       html += '<div style="margin-bottom:32px;">';
       html += '<h3 style="font-family:\'Oswald\',sans-serif;font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin:0 0 12px;">' + esc(opName) + ' <span style="color:rgba(255,255,255,.2);font-size:12px;font-family:\'Share Tech Mono\',monospace;">' + imgs.length + ' image' + (imgs.length > 1 ? 's' : '') + '</span></h3>';
       html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">';
