@@ -1456,24 +1456,28 @@ function renderOperatorsList(list, data, skipStore) {
           if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
         }
       }
-      // If roster has a live/upcoming operation, prepend it (or merge with first entry)
+      // If roster has a live/upcoming operation, merge it into matching calendar entry or append
       if (rosterData && rosterData.operation) {
         const op = rosterData.operation;
         const st = (op.status || 'upcoming').toLowerCase();
-        if (OPS_DATA.length > 0) {
-          // Update the first entry with live roster data
-          OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
-          OPS_DATA[0].date = op.date || OPS_DATA[0].date;
-          OPS_DATA[0].name = op.name || OPS_DATA[0].name;
-          OPS_DATA[0].status = st;
+        // Find an existing entry that matches by name or date
+        const matchIdx = OPS_DATA.findIndex(e =>
+          (e.name && op.name && e.name.toLowerCase() === op.name.toLowerCase()) ||
+          (e.date && op.date && e.date === op.date)
+        );
+        if (matchIdx !== -1) {
+          // Enrich matching entry — use roster data as override only when present
+          if (op.zeus) OPS_DATA[matchIdx].zeus = op.zeus;
+          if (op.date) OPS_DATA[matchIdx].date = op.date;
+          OPS_DATA[matchIdx].status = st;
         } else {
-          // No calendar ops yet, create a placeholder entry
+          // No match, append as new entry
           OPS_DATA.push({
             name: op.name || 'Upcoming Operation',
             date: op.date || '',
             zeus: op.zeus || '',
             count: 0,
-            short: '',
+            short: op.short || '',
             status: st,
             sections: []
           });
@@ -1871,14 +1875,18 @@ function buildOpsDashboard(data, rosterData) {
   const feed = document.getElementById('opsFeed');
   if (!feed) return;
 
-  // Update Karoonda III info from live roster data if available
+  // Merge live roster data into matching calendar entry
   if (rosterData && rosterData.operation) {
     const op = rosterData.operation;
     const st = (op.status || 'upcoming').toLowerCase();
-    OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
-    OPS_DATA[0].date = op.date || OPS_DATA[0].date;
-    OPS_DATA[0].name = op.name || OPS_DATA[0].name;
-    OPS_DATA[0].status = st;
+    const matchIdx = OPS_DATA.findIndex(e =>
+      (e.name && op.name && e.name.toLowerCase() === op.name.toLowerCase()) ||
+      (e.date && op.date && e.date === op.date)
+    );
+    const target = matchIdx !== -1 ? matchIdx : 0;
+    if (op.zeus) OPS_DATA[target].zeus = op.zeus;
+    if (op.date) OPS_DATA[target].date = op.date;
+    OPS_DATA[target].status = st;
   }
 
   const totalAtt = OPS_DATA.reduce((s,o) => s + o.count, 0);
