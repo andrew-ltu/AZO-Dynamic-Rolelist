@@ -59,6 +59,21 @@ CREATE TABLE IF NOT EXISTS members (
   updated_at INTEGER NOT NULL
 );
 
+-- Calendar operations table - stores custom ops for the calendar (added by admins)
+CREATE TABLE IF NOT EXISTS calendar_ops (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  date TEXT NOT NULL,
+  short TEXT NOT NULL,
+  zeus TEXT NOT NULL,
+  status TEXT DEFAULT 'upcoming',
+  theme TEXT DEFAULT '',
+  sort_order INTEGER DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_calendar_ops_date ON calendar_ops(date);
+
 -- Gallery images table - stores uploaded operation screenshots
 CREATE TABLE IF NOT EXISTS gallery_images (
   id TEXT PRIMARY KEY,

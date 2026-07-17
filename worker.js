@@ -229,6 +229,16 @@ export default {
     if (url.pathname.match(/^\/api\/gallery\/image\//) && request.method === 'GET') return handleGalleryImage(request, env, origin);
     if (url.pathname.match(/^\/api\/gallery\//) && request.method === 'DELETE') return handleGalleryDelete(request, env, origin);
 
+    // Calendar ops
+    if (url.pathname === '/api/calendar-ops' && request.method === 'GET') return handleListCalendarOps(env, origin);
+    if (url.pathname === '/api/admin/calendar-ops' && request.method === 'POST') return handleSaveCalendarOp(request, env, origin);
+    if (url.pathname.match(/^\/api\/admin\/calendar-ops\//) && request.method === 'DELETE') return handleDeleteCalendarOp(request, env, origin);
+
+    // Roster background
+    if (url.pathname === '/api/roster-bg' && request.method === 'GET') return handleGetRosterBg(env, origin);
+    if (url.pathname === '/api/admin/roster-bg' && request.method === 'POST') return handleSetRosterBg(request, env, origin);
+    if (url.pathname === '/api/admin/roster-bg' && request.method === 'DELETE') return handleRemoveRosterBg(request, env, origin);
+
     return jsonResponse({ error: 'Not found' }, 404, origin);
   }
 };
@@ -458,8 +468,107 @@ async function handleGetMembers(request, env, origin) {
                 if (idx !== -1 && idx < matchedPrio) {
                   matchedRank = rName;
                   matchedPrio = idx;
-                }
-              }
+  }
+}
+
+/* ---------- Calendar Operations ---------- */
+
+async function handleListCalendarOps(env, origin) {
+  try {
+    const rows = await env.DB.prepare('SELECT * FROM calendar_ops ORDER BY sort_order ASC, created_at DESC').all();
+    return jsonResponse(rows.results || [], 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleSaveCalendarOp(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const body = await request.json();
+    const { id, name, date, short, zeus, status, theme, sort_order } = body;
+    if (!name || !date || !short || !zeus) return jsonResponse({ error: 'Missing required fields (name, date, short, zeus)' }, 400, origin);
+    const now = Math.floor(Date.now() / 1000);
+    if (id) {
+      await env.DB.prepare('UPDATE calendar_ops SET name=?, date=?, short=?, zeus=?, status=?, theme=?, sort_order=?, updated_at=? WHERE id=?')
+        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, now, id).run();
+    } else {
+      await env.DB.prepare('INSERT INTO calendar_ops (name, date, short, zeus, status, theme, sort_order, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, now, now).run();
+    }
+    return jsonResponse({ ok: true }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleDeleteCalendarOp(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const id = request.url.split('/').pop();
+    await env.DB.prepare('DELETE FROM calendar_ops WHERE id = ?').bind(id).run();
+    return jsonResponse({ ok: true }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+/* ---------- Roster Background ---------- */
+
+async function handleGetRosterBg(env, origin) {
+  try {
+    const row = await env.DB.prepare(`SELECT data FROM members WHERE name = '_roster_bg'`).first();
+    if (!row) return jsonResponse(null, 200, origin);
+    return jsonResponse(JSON.parse(row.data), 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleSetRosterBg(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const body = await request.json();
+    const { imageId } = body;
+    if (!imageId) return jsonResponse({ error: 'Missing imageId' }, 400, origin);
+    const row = await env.DB.prepare('SELECT r2_key, op_name FROM gallery_images WHERE id = ?').bind(imageId).first();
+    if (!row) return jsonResponse({ error: 'Image not found' }, 404, origin);
+    const url = `https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/api/gallery/image/${imageId}`;
+    const data = JSON.stringify({ imageId, url, r2Key: row.r2_key, opName: row.op_name });
+    const now = Math.floor(Date.now() / 1000);
+    await env.DB.prepare('INSERT OR REPLACE INTO members (name, data, updated_at) VALUES (\'_roster_bg\', ?, ?)').bind(data, now).run();
+    // Also update roster operation.background so existing UI picks it up
+    const roster = await getRoster(env);
+    if (roster) {
+      roster.operation = roster.operation || {};
+      roster.operation.background = url;
+      await saveRoster(env, roster);
+    }
+    return jsonResponse({ ok: true, url }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleRemoveRosterBg(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    await env.DB.prepare('DELETE FROM members WHERE name = \'_roster_bg\'').run();
+    // Also remove from roster
+    const roster = await getRoster(env);
+    if (roster && roster.operation && roster.operation.background) {
+      delete roster.operation.background;
+      await saveRoster(env, roster);
+    }
+    return jsonResponse({ ok: true }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
               if (matchedRank && data.discordRank !== matchedRank) {
                 data.discordRank = matchedRank;
                 changed = true;

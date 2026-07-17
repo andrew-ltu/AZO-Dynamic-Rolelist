@@ -2321,7 +2321,183 @@ async function galleryUploadAll() {
 }
 // Populate op dropdown when admin panel opens
 const _origOpenAdmin = openAdminPanel;
-openAdminPanel = function() { _origOpenAdmin.apply(this, arguments); populateGalleryOps(); };
+openAdminPanel = function() { _origOpenAdmin.apply(this, arguments); populateGalleryOps(); loadCalendarOps(); loadRosterBg(); };
+
+/* ---------- Calendar Operations CRUD ---------- */
+function loadCalendarOps() {
+  const list = document.getElementById('calendarOpsList');
+  if (!list) return;
+  list.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0;">Loading...</div>';
+  fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : []).catch(() => []).then(ops => {
+    if (!ops || !ops.length) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--muted-2);padding:8px 0;">No custom operations yet.</div>';
+      return;
+    }
+    let html = '';
+    for (const op of ops) {
+      const statusStyle = op.status === 'live' ? 'color:#36d07a;' : op.status === 'completed' ? 'color:#6a7f98;' : 'color:#f0b429;';
+      html += '<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:4px;margin-bottom:4px;">';
+      html += '<div style="flex:1;font-size:12px;"><strong>' + esc(op.name) + '</strong> <span style="color:var(--muted);">' + esc(op.date) + ' &mdash; ' + esc(op.zeus) + '</span> <span style="font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;' + statusStyle + '">' + op.status + '</span></div>';
+      html += '<button class="admin-btn admin-btn-secondary" style="font-size:10px;padding:2px 8px;" onclick="editCalendarOp(' + op.id + ')">Edit</button>';
+      html += '<button class="admin-btn admin-btn-danger" style="font-size:10px;padding:2px 8px;" onclick="deleteCalendarOp(' + op.id + ')">Delete</button>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+  });
+}
+
+function showCalOpForm(data) {
+  const form = document.getElementById('calOpForm');
+  if (!form) return;
+  form.style.display = 'block';
+  document.getElementById('calOpId').value = data ? data.id || '' : '';
+  document.getElementById('calOpName').value = data ? data.name || '' : '';
+  document.getElementById('calOpDate').value = data ? data.date || '' : '';
+  document.getElementById('calOpShort').value = data ? data.short || '' : '';
+  document.getElementById('calOpZeus').value = data ? data.zeus || '' : '';
+  document.getElementById('calOpStatus').value = data ? data.status || 'upcoming' : 'upcoming';
+  document.getElementById('calOpSort').value = data ? data.sort_order || 0 : 0;
+}
+
+function cancelCalOpForm() {
+  const form = document.getElementById('calOpForm');
+  if (form) form.style.display = 'none';
+}
+
+function editCalendarOp(id) {
+  fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : []).catch(() => []).then(ops => {
+    const op = ops.find(o => o.id === id);
+    if (op) showCalOpForm(op);
+  });
+}
+
+async function saveCalendarOp() {
+  const btn = document.getElementById('saveCalOpBtn');
+  const status = document.getElementById('calOpStatusMsg');
+  const token = localStorage.getItem('azo_token');
+  if (!token) { status.textContent = 'Not authenticated'; status.className = 'admin-status-msg show'; return; }
+  const id = document.getElementById('calOpId').value;
+  const body = {
+    id: id ? parseInt(id) : null,
+    name: document.getElementById('calOpName').value.trim(),
+    date: document.getElementById('calOpDate').value.trim(),
+    short: document.getElementById('calOpShort').value.trim(),
+    zeus: document.getElementById('calOpZeus').value.trim(),
+    status: document.getElementById('calOpStatus').value,
+    sort_order: parseInt(document.getElementById('calOpSort').value) || 0
+  };
+  if (!body.name || !body.date || !body.short || !body.zeus) {
+    status.textContent = 'Please fill in all required fields (name, date, short date, zeus)';
+    status.className = 'admin-status-msg show';
+    return;
+  }
+  btn.disabled = true;
+  status.textContent = 'Saving...';
+  status.className = 'admin-status-msg show';
+  try {
+    const res = await fetch(API_BASE + '/api/admin/calendar-ops', {
+      method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) { status.textContent = 'Error: ' + (data.error || 'Save failed'); status.className = 'admin-status-msg show'; btn.disabled = false; return; }
+    status.textContent = 'Operation saved!';
+    status.className = 'admin-status-msg show success';
+    cancelCalOpForm();
+    loadCalendarOps();
+  } catch (e) { status.textContent = 'Error: ' + e.message; status.className = 'admin-status-msg show'; }
+  btn.disabled = false;
+  setTimeout(() => { status.className = 'admin-status-msg'; }, 3000);
+}
+
+async function deleteCalendarOp(id) {
+  if (!confirm('Delete this operation from the calendar?')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return;
+  const status = document.getElementById('calOpStatusMsg');
+  try {
+    const res = await fetch(API_BASE + '/api/admin/calendar-ops/' + id, {
+      method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) { const d = await res.json(); status.textContent = 'Error: ' + (d.error || 'Delete failed'); status.className = 'admin-status-msg show'; return; }
+    loadCalendarOps();
+  } catch (e) { status.textContent = 'Error: ' + e.message; status.className = 'admin-status-msg show'; }
+  setTimeout(() => { status.className = 'admin-status-msg'; }, 3000);
+}
+
+/* ---------- Roster Background ---------- */
+function loadRosterBg() {
+  const preview = document.getElementById('rosterBgPreview');
+  const status = document.getElementById('rosterBgStatus');
+  if (!preview) return;
+  preview.innerHTML = 'Loading...';
+  fetch(API_BASE + '/api/roster-bg').then(r => r.ok ? r.json() : null).catch(() => null).then(bg => {
+    if (bg && bg.url) {
+      preview.innerHTML = '<div style="position:relative;display:inline-block;"><img src="' + bg.url + '" style="width:100%;max-height:120px;object-fit:cover;border-radius:4px;display:block;"><button class="admin-btn admin-btn-danger" style="position:absolute;top:4px;right:4px;font-size:10px;padding:2px 8px;" onclick="removeRosterBg()">Remove</button></div>';
+    } else {
+      preview.innerHTML = '<div style="font-size:12px;color:var(--muted-2);padding:8px 0;">No background set. Click an image below to set one.</div>';
+    }
+  });
+  // Load recent gallery images for selection
+  loadRecentGalleryImages();
+}
+
+function loadRecentGalleryImages() {
+  const list = document.getElementById('recentGalleryImages');
+  if (!list) return;
+  list.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:4px 0;">Loading images...</div>';
+  fetch(API_BASE + '/api/gallery').then(r => r.ok ? r.json() : []).catch(() => []).then(images => {
+    if (!images || !images.length) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--muted-2);padding:4px 0;">No gallery images yet. Upload some first.</div>';
+      return;
+    }
+    let html = '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    for (const img of images.slice(0, 12)) {
+      const url = API_BASE + '/api/gallery/image/' + img.id;
+      html += '<div style="width:60px;height:60px;border-radius:4px;overflow:hidden;border:1px solid var(--line);cursor:pointer;position:relative;" onclick="setRosterBg(\'' + img.id + '\')" title="Set as roster background">';
+      html += '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;display:block;">';
+      html += '<div style="position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:9px;color:#fff;font-weight:600;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">Set BG</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+    list.innerHTML = html;
+  });
+}
+
+async function setRosterBg(imageId) {
+  const token = localStorage.getItem('azo_token');
+  if (!token) { alert('Not authenticated'); return; }
+  const status = document.getElementById('rosterBgStatus');
+  status.textContent = 'Setting background...';
+  status.className = 'admin-status-msg show';
+  try {
+    const res = await fetch(API_BASE + '/api/admin/roster-bg', {
+      method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ imageId })
+    });
+    const data = await res.json();
+    if (!res.ok) { status.textContent = 'Error: ' + (data.error || 'Failed'); status.className = 'admin-status-msg show'; return; }
+    status.textContent = 'Background set! Refreshing preview...';
+    status.className = 'admin-status-msg show success';
+    loadRosterBg();
+  } catch (e) { status.textContent = 'Error: ' + e.message; status.className = 'admin-status-msg show'; }
+  setTimeout(() => { status.className = 'admin-status-msg'; }, 3000);
+}
+
+async function removeRosterBg() {
+  if (!confirm('Remove the current roster background?')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return;
+  const status = document.getElementById('rosterBgStatus');
+  try {
+    const res = await fetch(API_BASE + '/api/admin/roster-bg', {
+      method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) { const d = await res.json(); status.textContent = 'Error: ' + (d.error || 'Failed'); status.className = 'admin-status-msg show'; return; }
+    status.textContent = 'Background removed';
+    status.className = 'admin-status-msg show success';
+    loadRosterBg();
+  } catch (e) { status.textContent = 'Error: ' + e.message; status.className = 'admin-status-msg show'; }
+  setTimeout(() => { status.className = 'admin-status-msg'; }, 3000);
+}
 
 async function tryFetchUser() {
   const token = localStorage.getItem('azo_token');
@@ -2568,12 +2744,50 @@ document.addEventListener('DOMContentLoaded', () => {
       <div id="galleryUploadStatus" style="font-size:11px;color:var(--muted);margin-top:6px;"></div>
     </div>
 
+    <!-- Roster Background -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Roster Background</h2>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Set a gallery image as the blurred roster background</div>
+      <div id="rosterBgPreview" style="margin-bottom:6px;font-size:12px;color:var(--muted);">Loading...</div>
+      <div id="rosterBgStatus" class="admin-status-msg"></div>
+      <div style="margin-top:8px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Recent Gallery Images</div>
+        <div id="recentGalleryImages"></div>
+      </div>
+    </div>
+
     <!-- Roster Structure Editor -->
     <div class="admin-section">
       <h2 class="admin-section-title">Roster Structure</h2>
       <div id="adminSectionsList" class="admin-section-list"></div>
       <div class="admin-btn-group">
         <button class="admin-btn admin-btn-secondary" id="addSectionBtn">+ Add Section</button>
+      </div>
+    </div>
+
+    <!-- Calendar Operations -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">Calendar Operations</h2>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Add or manage operations displayed on the calendar</div>
+      <div id="calendarOpsList" style="margin-bottom:6px;">Loading...</div>
+      <div class="admin-btn-group">
+        <button class="admin-btn admin-btn-secondary" onclick="showCalOpForm(null)">+ Add Operation</button>
+      </div>
+      <div id="calOpForm" style="display:none;margin-top:8px;padding:8px;border:1px solid var(--line);border-radius:6px;background:rgba(0,0,0,.15);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+          <div class="admin-field"><label>Op Name</label><input type="text" id="calOpName" placeholder="Op Name"></div>
+          <div class="admin-field"><label>Zeus</label><input type="text" id="calOpZeus" placeholder="Zeus name"></div>
+          <div class="admin-field"><label>Date (e.g. 18 JULY 2026)</label><input type="text" id="calOpDate" placeholder="18 JULY 2026"></div>
+          <div class="admin-field"><label>Short Date (e.g. SAT JUL 18 2026)</label><input type="text" id="calOpShort" placeholder="SAT JUL 18 2026"></div>
+          <div class="admin-field"><label>Status</label><select id="calOpStatus"><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select></div>
+          <div class="admin-field"><label>Sort Order</label><input type="number" id="calOpSort" value="0" style="width:80px;"></div>
+        </div>
+        <input type="hidden" id="calOpId">
+        <div style="display:flex;gap:6px;">
+          <button class="admin-btn admin-btn-primary" id="saveCalOpBtn" onclick="saveCalendarOp()">Save</button>
+          <button class="admin-btn admin-btn-secondary" onclick="cancelCalOpForm()">Cancel</button>
+        </div>
+        <div id="calOpStatusMsg" class="admin-status-msg"></div>
       </div>
     </div>
 

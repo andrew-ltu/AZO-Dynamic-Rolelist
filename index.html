@@ -1349,15 +1349,61 @@ function renderOperatorsList(list, data, skipStore) {
     // Build ops dashboard / calendar
     const calMounted = document.getElementById('opsCalMain');
     if (calMounted) {
-      // Update Karoonda III info from live roster data if available
+      // Fetch calendar ops from API and merge with roster data
+      let calOps = await fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : null).catch(() => null);
+      // Fallback to hardcoded seed ops if API unavailable or empty (legacy support)
+      const FALLBACK_OPS = [
+        {name:'Op Karoonda III',date:'18 JULY 2026',zeus:'Jag McMuffin',count:0,short:'SAT JUL 18 2026',status:'upcoming',sections:[]},
+        {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',status:'completed',sections:[
+          {name:'Command',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'Jäger',p:'JTAC'}]},
+          {name:'Alpha',members:[{n:'Vain',p:'Section Leader'},{n:'24pool1',p:'Asst. Section Leader'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW (Minimi)'},{n:'HiveMynd',p:'Rifleman'},{n:'The Raven',p:'Rifleman'},{n:'blueberet',p:'Rifleman'}]},
+          {name:'Bravo',members:[{n:'Gunter',p:'Section Leader'},{n:'Misaka',p:'Asst. Section Leader'},{n:'Jon Taiwan',p:'Anti-tank'},{n:'Gill',p:'LSW (Minimi)'},{n:'Terack',p:'Rifleman'},{n:'Xeonovaes',p:'Rifleman'}]},
+          {name:'Medical',members:[{n:'Zep',p:'Platoon Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},{n:'Crallers',p:'Medic'}]},
+          {name:'Joint Op - Charlie',members:[{n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},{n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},{n:'SecOps. Dan',p:'LSW (Minimi)'},{n:'QM. DODO',p:'LSW (Minimi)'},{n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}]},
+          {name:'Joint Op - Blackjack',members:[{n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},{n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}]}
+        ]},
+        {name:'Op Karoonda I',date:'20 JUNE 2026',zeus:'Jag McMuffin',count:17,short:'SAT JUN 20 2026',status:'completed',sections:[
+          {name:'Platoon HQ',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}]},
+          {name:'Alpha',members:[{n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}]},
+          {name:'Bravo',members:[{n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},{n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}]}
+        ]}
+      ];
+      if (!calOps || !calOps.length) {
+        OPS_DATA = FALLBACK_OPS;
+      } else {
+        OPS_DATA = calOps.map(op => ({
+        name: op.name,
+        date: op.date,
+        zeus: op.zeus,
+        count: 0,
+        short: op.short,
+        status: (op.status || 'upcoming').toLowerCase(),
+        sections: []
+      }));
+      // If roster has a live/upcoming operation, prepend it (or merge with first entry)
       if (rosterData && rosterData.operation) {
         const op = rosterData.operation;
         const st = (op.status || 'upcoming').toLowerCase();
-        OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
-        OPS_DATA[0].date = op.date || OPS_DATA[0].date;
-        OPS_DATA[0].name = op.name || OPS_DATA[0].name;
-        OPS_DATA[0].status = st;
+        if (OPS_DATA.length > 0) {
+          // Update the first entry with live roster data
+          OPS_DATA[0].zeus = op.zeus || OPS_DATA[0].zeus;
+          OPS_DATA[0].date = op.date || OPS_DATA[0].date;
+          OPS_DATA[0].name = op.name || OPS_DATA[0].name;
+          OPS_DATA[0].status = st;
+        } else {
+          // No calendar ops yet, create a placeholder entry
+          OPS_DATA.push({
+            name: op.name || 'Upcoming Operation',
+            date: op.date || '',
+            zeus: op.zeus || '',
+            count: 0,
+            short: '',
+            status: st,
+            sections: []
+          });
+        }
       }
+      } // end else (API ops)
       _calRosterData = rosterData;
       _calMemberData = data;
       renderCalendar();
@@ -1378,22 +1424,7 @@ function toggleOp(el) {
 }
 
 // ------- Ops Dashboard -------
-const OPS_DATA = [
-  {name:'Op Karoonda III',date:'18 JULY 2026',zeus:'Jag McMuffin',count:0,short:'SAT JUL 18 2026',status:'upcoming',sections:[]},
-  {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',status:'completed',sections:[
-    {name:'Command',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'Jäger',p:'JTAC'}]},
-    {name:'Alpha',members:[{n:'Vain',p:'Section Leader'},{n:'24pool1',p:'Asst. Section Leader'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW (Minimi)'},{n:'HiveMynd',p:'Rifleman'},{n:'The Raven',p:'Rifleman'},{n:'blueberet',p:'Rifleman'}]},
-    {name:'Bravo',members:[{n:'Gunter',p:'Section Leader'},{n:'Misaka',p:'Asst. Section Leader'},{n:'Jon Taiwan',p:'Anti-tank'},{n:'Gill',p:'LSW (Minimi)'},{n:'Terack',p:'Rifleman'},{n:'Xeonovaes',p:'Rifleman'}]},
-    {name:'Medical',members:[{n:'Zep',p:'Platoon Medic'},{n:'GoGoBendy',p:'Medic'},{n:'Spacecat82',p:'Medic'},{n:'Crallers',p:'Medic'}]},
-    {name:'Joint Op - Charlie',members:[{n:'Cmdr. Garuda XIII',p:'Section Leader'},{n:'Cmmsr Tooko',p:'Asst. Section Leader'},{n:'Snr Ctr. Unphayzable',p:'Grenadier'},{n:'Lt. Fracture',p:'Grenadier'},{n:'SecOps. Dan',p:'LSW (Minimi)'},{n:'QM. DODO',p:'LSW (Minimi)'},{n:'Snr Ctr. Kenn',p:'Rifleman'},{n:'Snr Ctr. Boomer',p:'Rifleman'}]},
-    {name:'Joint Op - Blackjack',members:[{n:'1st Lt B. Hag',p:'Pilot'},{n:'2d Lt D. Mason',p:'Co-pilot'},{n:'TSgt C. Weeb',p:'Crew Chief'},{n:'SSgt J. Jabbzo',p:'Gunner'}]}
-  ]},
-  {name:'Op Karoonda I',date:'20 JUNE 2026',zeus:'Jag McMuffin',count:17,short:'SAT JUN 20 2026',status:'completed',sections:[
-    {name:'Platoon HQ',members:[{n:'Sir Danger',p:'Platoon Commander'},{n:'BadKarma',p:'Signaller'},{n:'Zep',p:'Platoon Medic'}]},
-    {name:'Alpha',members:[{n:'Gunter',p:'Section Leader'},{n:'24pool1',p:'2IC'},{n:'Monke',p:'Grenadier'},{n:'AnimePanda',p:'LSW'},{n:'Spacecat82',p:'Combat Medic'},{n:'Kiren77',p:'Attendee'}]},
-    {name:'Bravo',members:[{n:'Malt',p:'Section Leader'},{n:'Vain',p:'2IC'},{n:'Misaka',p:'Anti Tank'},{n:'GoGoBendy',p:'Combat Medic'},{n:'sebs',p:'Attendee'}]}
-  ]}
-];
+let OPS_DATA = []; // populated from API at load
 const OPS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
