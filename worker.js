@@ -457,7 +457,7 @@ async function handleGetMembers(request, env, origin) {
     // 2. Bot API — refreshes avatars, syncs Discord ranks for members with discordId,
     //    and matches members without discordId by display name
     if (env.DISCORD_BOT_TOKEN) {
-      const RANK_PRIORITY = ['SOCOMD','SOHQ','Senior Operator','Operator','Junior Operator','Recruit'];
+      const RANK_PRIORITY = ['SOHQ','SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
       try {
         const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
           headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
