@@ -91,7 +91,7 @@ async function run() {
         if (res.ok) {
           const file = `assets/avatars/${norm(name)}.${ext}`;
           writeFileSync(file, Buffer.from(await res.arrayBuffer()));
-          data.avatar = file;
+          data.avatar = '/' + file;
           avatars++;
         }
       } catch (e) { console.log(`  ! avatar failed for ${name}: ${e.message}`); }
