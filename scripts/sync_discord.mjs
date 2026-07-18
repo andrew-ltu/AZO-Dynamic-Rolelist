@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Sync AZO members' Discord roles -> endorsements / leadership, and pull their
+/* Sync AZO members' Discord roles -> endorsements / leadership / rank, and pull their
    profile pictures into assets/avatars/. Runs in GitHub Actions (Node 20+),
    zero npm dependencies (uses global fetch/Buffer).
 
    Reads:  discord_config.json, members.json
-   Writes: members.json  (only endorsements / leadership / avatar of MATCHED members)
-           assets/avatars/<name>.<ext>
-   Never touches discordRank / opsAttended / attendance — those stay chart-managed. */
+   Writes: members.json  (endorsements / leadership / discordRank / avatar of MATCHED members)
+            assets/avatars/<name>.<ext>
+   Does not touch opsAttended / attendance — those stay chart-managed. */
 
 import { readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 
@@ -82,6 +82,20 @@ async function run() {
     data.endorsements = endorsementRoles.filter(r => have.has(r)).map(r => r.replace(/\s*Endorsement$/i, '').trim());
     data.leadership = [...have].some(r => seniorRoles.has(r)) ? 'senior'
                     : [...have].some(r => juniorRoles.has(r)) ? 'junior' : null;
+
+    // Sync discordRank from Discord roles
+    const RANK_PRIORITY = ['SOHQ','SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
+    const rankLower = RANK_PRIORITY.map(r => r.toLowerCase());
+    let matchedRank = data.discordRank || '';
+    let bestPrio = Infinity;
+    for (const rn of have) {
+      const idx = rankLower.indexOf(rn.toLowerCase());
+      if (idx !== -1 && idx < bestPrio) { matchedRank = RANK_PRIORITY[idx]; bestPrio = idx; }
+    }
+    if (data.discordRank !== matchedRank) {
+      data.discordRank = matchedRank;
+      console.log(`  ~ ${name}: ${data.discordRank} -> ${matchedRank}`);
+    }
 
     const u = dm.user;
     if (u.avatar) {
