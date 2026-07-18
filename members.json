@@ -4,7 +4,7 @@
     "discordId": "207012290401271818",
     "discordRank": "SOHQ",
     "avatar": "/assets/avatars/jagmcmuffin.png",
-    "opsAttended": 5,
+    "opsAttended": 6,
     "endorsements": [
       "Medical",
       "Fixed Wing",
@@ -21,7 +21,7 @@
     "discordId": "203678139220623361",
     "discordRank": "SOHQ",
     "avatar": "/assets/avatars/sirdanger.png",
-    "opsAttended": 5,
+    "opsAttended": 6,
     "endorsements": [
       "Fixed Wing",
       "Rotary",
@@ -34,7 +34,7 @@
     "discordId": "850370739998818335",
     "discordRank": "SOHQ",
     "avatar": "/assets/avatars/gunter.png",
-    "opsAttended": 5,
+    "opsAttended": 6,
     "endorsements": [],
     "leadership": "junior"
   },
@@ -42,7 +42,7 @@
     "discordId": "317887795131842571",
     "discordRank": "Senior Operator",
     "avatar": "/assets/avatars/badkarma.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Rotary",
       "JTAC",
@@ -53,7 +53,7 @@
   "Monke": {
     "discordRank": "Senior Operator",
     "avatar": "/assets/avatars/monke.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Demolition",
       "Radioman"
@@ -63,7 +63,7 @@
   "Crowded_tank": {
     "discordRank": "Recruit",
     "avatar": "/assets/avatars/crowdedtank.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [
       "Medical",
       "Demolition"
@@ -73,14 +73,14 @@
   "Malt": {
     "discordRank": "Operator",
     "avatar": "/assets/avatars/malt.gif",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [],
     "leadership": "junior"
   },
   "GoGoBendy": {
     "discordRank": "Operator",
     "avatar": "/",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Medical"
     ],
@@ -97,7 +97,7 @@
   "AnimePanda": {
     "discordRank": "Operator",
     "avatar": "/assets/avatars/animepanda.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [],
     "leadership": null
   },
@@ -111,7 +111,7 @@
   "Zep": {
     "discordRank": "Operator",
     "avatar": "/assets/avatars/zep.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Medical",
       "Rotary",
@@ -131,7 +131,7 @@
   "Velteck": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/velteck.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [],
     "leadership": null
   },
@@ -145,7 +145,7 @@
   "HiveMynd": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/hivemynd.png",
-    "opsAttended": 5,
+    "opsAttended": 6,
     "endorsements": [],
     "leadership": null
   },
@@ -166,7 +166,7 @@
   "24pool1": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/24pool1.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [
       "Marksman"
     ],
@@ -175,14 +175,14 @@
   "Misaka": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/misaka.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [],
     "leadership": "junior"
   },
   "Vain": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/vain.png",
-    "opsAttended": 4,
+    "opsAttended": 5,
     "endorsements": [],
     "leadership": "junior"
   },
@@ -196,7 +196,7 @@
   "Kiren77": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/kiren77.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "endorsements": [],
     "leadership": null
   },
@@ -210,7 +210,7 @@
   "Terack": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/terack.png",
-    "opsAttended": 2,
+    "opsAttended": 3,
     "endorsements": [],
     "leadership": null
   },
@@ -231,7 +231,7 @@
   "Orter": {
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/orter.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -245,7 +245,7 @@
   "Earthball": {
     "discordRank": "SOCOMD",
     "avatar": "/assets/avatars/earthball.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
@@ -253,7 +253,7 @@
     "discordId": "179421557163163650",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/crallers.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [
       "Medical"
     ],
@@ -263,7 +263,7 @@
     "discordId": "678926904774098955",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/blueberet.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -271,7 +271,7 @@
     "discordId": "1354384792153493597",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/jontaiwan.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": "junior"
   },
@@ -286,7 +286,7 @@
     "discordId": "173612996680089600",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/gill.png",
-    "opsAttended": 3,
+    "opsAttended": 4,
     "endorsements": [],
     "leadership": null
   },
@@ -294,7 +294,7 @@
     "discordId": "1445639562302062696",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/xeonovaes.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -302,7 +302,7 @@
     "discordId": "1062040553807675493",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/theraven.gif",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -334,7 +334,7 @@
     "discordId": "864798598662979615",
     "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/adeptustupidus.png",
-    "opsAttended": 1,
+    "opsAttended": 2,
     "endorsements": [],
     "leadership": null
   },
@@ -342,7 +342,7 @@
     "discordId": "342813758931992576",
     "discordRank": "Recruit",
     "avatar": "/assets/avatars/rose.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   },
@@ -386,7 +386,7 @@
     "discordId": "769946853893472277",
     "discordRank": "Recruit",
     "avatar": "/assets/avatars/val.png",
-    "opsAttended": 0,
+    "opsAttended": 1,
     "endorsements": [],
     "leadership": null
   }
