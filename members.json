@@ -61,7 +61,7 @@
     "leadership": null
   },
   "Crowded_tank": {
-    "discordRank": "Recruit",
+    "discordRank": "Operator",
     "avatar": "/assets/avatars/crowdedtank.png",
     "opsAttended": 1,
     "endorsements": [
@@ -136,7 +136,7 @@
     "leadership": null
   },
   "Mas": {
-    "discordRank": "Junior Operator",
+    "discordRank": "Operator",
     "avatar": "/assets/avatars/mas.png",
     "opsAttended": 3,
     "endorsements": [],
@@ -243,7 +243,7 @@
     "leadership": null
   },
   "Earthball": {
-    "discordRank": "SOCOMD",
+    "discordRank": "SOHQ",
     "avatar": "/assets/avatars/earthball.png",
     "opsAttended": 1,
     "endorsements": [],
@@ -324,7 +324,7 @@
   },
   "J+�ger": {
     "discordId": "254553396546109440",
-    "discordRank": "Junior Operator",
+    "discordRank": "Operator",
     "avatar": "/assets/avatars/jger.png",
     "opsAttended": 1,
     "endorsements": [],
@@ -340,7 +340,7 @@
   },
   "Rose": {
     "discordId": "342813758931992576",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/rose.png",
     "opsAttended": 1,
     "endorsements": [],
@@ -384,7 +384,7 @@
   },
   "val": {
     "discordId": "769946853893472277",
-    "discordRank": "Recruit",
+    "discordRank": "Junior Operator",
     "avatar": "/assets/avatars/val.png",
     "opsAttended": 1,
     "endorsements": [],
