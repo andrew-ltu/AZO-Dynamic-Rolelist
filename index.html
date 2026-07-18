@@ -1483,15 +1483,19 @@ function renderOperatorsList(list, data, skipStore) {
     data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   } catch {}
   // Always use GitHub as authoritative source, merge D1-only members not in GitHub
+  const REMOVED_MEMBERS = ['mietsko'];
   try {
     const ghRes = await fetch(MEMBERS_JSON_URL);
     if (ghRes.ok) {
       const gh = await ghRes.json();
       const d1data = data;
       data = { ...gh };
+      const ghLower = {};
+      for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = 1;
       for (const [k, v] of Object.entries(d1data || {})) {
         if (k.startsWith('_')) continue;
-        if (!gh[k]) data[k] = v;
+        if (REMOVED_MEMBERS.includes(k.toLowerCase())) continue;
+        if (!ghLower[k.toLowerCase()]) data[k] = v;
       }
     }
   } catch {}

@@ -2689,9 +2689,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const gh = await ghRes.json();
         const d1data = members;
         members = { ...gh };
+        const ghLower = {};
+        for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = 1;
         for (const [k, v] of Object.entries(d1data || {})) {
           if (k.startsWith('_')) continue;
-          if (!gh[k]) members[k] = v;
+          if (!ghLower[k.toLowerCase()]) members[k] = v;
         }
       }
     } catch {}

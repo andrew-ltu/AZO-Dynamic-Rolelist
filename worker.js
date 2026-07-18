@@ -443,6 +443,10 @@ async function handleGetRoster(request, env, origin) {
 async function handleGetMembers(request, env, origin) {
   try {
     const members = await getMembers(env);
+    const REMOVED_MEMBERS = ['mietsko'];
+    for (const name of Object.keys(members)) {
+      if (REMOVED_MEMBERS.includes(name.toLowerCase())) delete members[name];
+    }
     // 1. Enrich from users table (cached OAuth) — only for members without discordId (local-name match)
     const userResults = await env.DB.prepare(`SELECT id, username, global_name, avatar FROM users`).all();
     for (const user of userResults.results) {
@@ -956,10 +960,16 @@ async function handleSyncFromGitHub(request, env, origin) {
     if (membersRes.ok) {
       const gitMembers = await membersRes.json();
       // Merge: keep any D1-only members (e.g. Discord-added) that aren't in GitHub
-      const existing = await getMembers(env);
+      let existing = await getMembers(env);
+      const REMOVED_MEMBERS = ['mietsko'];
+      for (const name of Object.keys(existing)) {
+        if (REMOVED_MEMBERS.includes(name.toLowerCase())) delete existing[name];
+      }
+      const gitLower = {};
+      for (const k of Object.keys(gitMembers)) gitLower[k.toLowerCase()] = 1;
       for (const [name, data] of Object.entries(existing)) {
         if (name.startsWith('_')) continue;
-        if (!gitMembers[name]) {
+        if (!gitLower[name.toLowerCase()]) {
           gitMembers[name] = data;
         }
       }
@@ -988,10 +998,16 @@ async function handleAutoSync(request, env, origin) {
     const membersRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/members.json`);
     if (membersRes.ok) {
       const gitMembers = await membersRes.json();
-      const existing = await getMembers(env);
+      let existing = await getMembers(env);
+      const REMOVED_MEMBERS = ['mietsko'];
+      for (const name of Object.keys(existing)) {
+        if (REMOVED_MEMBERS.includes(name.toLowerCase())) delete existing[name];
+      }
+      const gitLower = {};
+      for (const k of Object.keys(gitMembers)) gitLower[k.toLowerCase()] = 1;
       for (const [name, data] of Object.entries(existing)) {
         if (name.startsWith('_')) continue;
-        if (!gitMembers[name]) {
+        if (!gitLower[name.toLowerCase()]) {
           gitMembers[name] = data;
         }
       }
