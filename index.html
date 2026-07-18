@@ -1584,6 +1584,7 @@ function toggleOp(el) {
 
 // ------- Ops Dashboard -------
 let OPS_DATA = []; // populated from API at load
+let nearestUpcomingIdx = -1; // index of the nearest upcoming op for Sign Up / pulse
 const OPS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -1646,7 +1647,7 @@ function renderCalendar() {
     JANUARY:'Jan',FEBRUARY:'Feb',MARCH:'Mar',APRIL:'Apr',MAY:'May',JUNE:'Jun',JULY:'Jul',AUGUST:'Aug',SEPTEMBER:'Sep',OCTOBER:'Oct',NOVEMBER:'Nov',DECEMBER:'Dec'};
 
   // Find nearest upcoming op for pulsing dot — stays on op's day until midnight
-  let nearestUpcomingIdx = -1, nearestUpcomingMs = Infinity;
+  nearestUpcomingIdx = -1; let nearestUpcomingMs = Infinity;
   const todayStart = new Date(); todayStart.setHours(0,0,0,0);
   OPS_DATA.forEach((op, i) => {
     if (isDone(op.status)) return;
@@ -1711,7 +1712,7 @@ function renderCalendar() {
               <span class="ops-cell-event-count">${isNearest ? '<span class="live-label">LIVE</span>' : '👤 ' + (op.count || 0)}</span>
             </div>
             <div class="ops-cell-event-title">${esc(op.name)}</div>
-            ${isUpcoming ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : ''}
+            ${isUpcoming && isNearest ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : ''}
           </div>
         </div>`;
       }).join('');
@@ -1795,7 +1796,7 @@ function showOpDetail(idx) {
     bodyHtml += '<div style="color:rgba(255,255,255,.3);">No details available</div>';
   }
 
-  if (op.status !== 'complete' && op.status !== 'completed') {
+  if (op.status !== 'complete' && op.status !== 'completed' && idx === nearestUpcomingIdx) {
     if (op.notes) {
       bodyHtml += `<div style="margin-top:20px;text-align:center;padding:10px 24px;border-radius:6px;background:rgba(255,255,255,.05);color:#f0b429;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.5px;">${esc(op.notes)}</div>`;
     } else {
