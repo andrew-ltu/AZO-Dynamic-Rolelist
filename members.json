@@ -1,5 +1,5 @@
 {
-  "_comment": "Member directory. discordRank synced from Discord roles. opsAttended = total ops attended in 2026, updated manually each op. endorsements/leadership/avatar from Discord.",
+  "_comment": "Member directory. discordRank synced from Discord roles automatically. opsAttended = total ops attended in 2026, updated manually each op. endorsements/leadership/avatar from Discord.",
   "Jag McMuffin": {
     "discordId": "207012290401271818",
     "discordRank": "SOHQ",
