@@ -2690,10 +2690,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const d1data = members;
         members = { ...gh };
         const ghLower = {};
-        for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = 1;
+        for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = k;
         for (const [k, v] of Object.entries(d1data || {})) {
           if (k.startsWith('_')) continue;
-          if (!ghLower[k.toLowerCase()]) members[k] = v;
+          const match = ghLower[k.toLowerCase()];
+          if (match) {
+            if (v.discordRank) members[match].discordRank = v.discordRank;
+          } else {
+            members[k] = v;
+          }
         }
       }
     } catch {}
