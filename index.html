@@ -355,6 +355,22 @@ nav{
 .btn-blue{background:#2563EB;color:#fff;border:1px solid #3b82f6;}
 .btn-blue:hover{background:#3b82f6;}
 
+/* ---------- LEGACY ---------- */
+@keyframes spin-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.legacy-section{padding:60px 20px 80px;background:#080808;border-top:1px solid rgba(255,255,255,.04);text-align:center;}
+.legacy-label{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;color:#c8932b;text-transform:uppercase;margin-bottom:24px;}
+.legacy-card{max-width:700px;margin:0 auto;display:flex;gap:28px;text-align:left;align-items:flex-start;}
+.legacy-avatar-wrap{position:relative;flex-shrink:0;width:120px;height:120px;margin-top:4px;}
+.legacy-ring{position:absolute;inset:-6px;border-radius:50%;border:2.5px solid transparent;background:conic-gradient(#c8932b,#f0d080,#c8932b,#f0d080,#c8932b) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin-ring 4s linear infinite;}
+.legacy-avatar{width:120px;height:120px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.04);}
+.legacy-avatar img{width:100%;height:100%;object-fit:cover;}
+.legacy-body{flex:1;min-width:0;}
+.legacy-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;color:#f0d080;letter-spacing:1px;}
+.legacy-years{font-family:'Share Tech Mono',monospace;font-size:10px;color:#c8932b;letter-spacing:1px;margin:2px 0 14px;}
+.legacy-subhead{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:#f0d080;letter-spacing:.5px;margin:14px 0 4px;}
+.legacy-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;}
+@media(max-width:600px){.legacy-card{flex-direction:column;align-items:center;text-align:center;gap:16px;}.legacy-avatar-wrap{width:100px;height:100px;}.legacy-avatar{width:100px;height:100px;}}
+
 /* ---------- FOOTER ---------- */
 footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 24px;margin-bottom:30px;}
@@ -663,6 +679,27 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
     <a class="btn btn-blue" onclick="switchPage('roster')">Upcoming Operation</a>
     <a class="btn btn-outline" href="https://discord.gg/7CKJhBN5DF" target="_blank">Join Discord</a>
+  </div>
+</div>
+
+<div class="legacy-section">
+  <div class="legacy-label">AZO Legacy Members</div>
+  <div class="legacy-card">
+    <div class="legacy-avatar-wrap">
+      <div class="legacy-ring"></div>
+      <div class="legacy-avatar"><img src="/assets/avatars/otto.png" alt="Otto"></div>
+    </div>
+    <div class="legacy-body">
+      <div class="legacy-name">SSGT. Otto</div>
+      <div class="legacy-years">Year of Service: 2018-2020</div>
+      <div class="legacy-desc">AZO recognizes the foundational impact and enduring legacy of Staff Sergeant Otto. As one of the first founding members of AZO, SSGT. Otto did not merely hold a position &mdash; he built the framework upon which this community stands today.</div>
+      <div class="legacy-desc" style="margin-top:10px;">Serving in the dual capacity of NCO and Staff Member, Otto bridged the gap between operational excellence and administrative integrity.</div>
+      <div class="legacy-subhead">Operational Innovation</div>
+      <div class="legacy-desc">As an NCO, Otto was the architect of the innovative Platoon structure introduced in 2020, a system so robust it served as the core framework for AZO operations for years. He introduced a level of organization, discipline, and tactical rigor that transformed our operations and was embraced whole-heartedly by the membership.</div>
+      <div class="legacy-subhead">Administrative Leadership</div>
+      <div class="legacy-desc">Within the Staff Team, Otto was synonymous with accountability. He established essential protocols, including mandatory staff meetings to ensure cohesion, prioritizing the health of the organization even when he could not be present on the field. His leadership was marked by an unpartisan, steadfast commitment to what was best for AZO as a whole.</div>
+      <div class="legacy-desc" style="margin-top:12px;font-weight:600;">SSGT. Otto&rsquo;s contributions shaped our history, and his standards define our present.</div>
+    </div>
   </div>
 </div>
 
