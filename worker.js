@@ -177,11 +177,12 @@ function findMemberName(membersData, discordId, displayName) {
 function matchRankFromRoles(roleIds, roleMap, rankPriority) {
   let matchedRank = null;
   let matchedPrio = Infinity;
+  const rankLower = rankPriority.map(r => r.toLowerCase());
   for (const rid of roleIds) {
-    const rName = roleMap[rid] || '';
-    const idx = rankPriority.indexOf(rName);
+    const rName = (roleMap[rid] || '').toLowerCase();
+    const idx = rankLower.indexOf(rName);
     if (idx !== -1 && idx < matchedPrio) {
-      matchedRank = rName;
+      matchedRank = rankPriority[idx];
       matchedPrio = idx;
     }
   }
