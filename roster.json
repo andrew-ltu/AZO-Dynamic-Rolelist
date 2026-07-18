@@ -97,6 +97,14 @@
                                             "member":  "Spacecat82",
                                             "endorsementRequired":  true,
                                             "endorsementType":  "Medical Endorsement"
+                                        },
+                                        {
+                                            "role":  "Rifleman",
+                                            "member":  "coach_jake"
+                                        },
+                                        {
+                                            "role":  "Rifleman",
+                                            "member":  "The Raven"
                                         }
                                     ]
                       },
@@ -140,53 +148,14 @@
                                            "member":  "GoGoBendy",
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
-                                       }
-                                   ]
-                     },
-                      {
-                          "name":  "CHARLIE",
-                          "roles":  [
-                                       {
-                                           "role":  "Section Leader",
-                                           "member":  null,
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Leadership Endorsement"
                                        },
                                        {
-                                           "role":  "Asst. Section Leader",
-                                           "member":  null,
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Leadership Endorsement"
-                                       },
-                                        {
-                                            "role":  "Rifleman",
-                                            "member":  "coach_jake"
-                                        },
-                                        {
-                                            "role":  "Grenadier",
-                                            "member":  "val"
-                                        },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  null
-                                       },
-                                        {
-                                            "role":  "Rifleman",
-                                            "member":  "The Raven"
-                                        },
-                                        {
-                                            "role":  "Medic",
-                                           "member":  null,
-                                           "endorsementRequired":  true,
-                                           "endorsementType":  "Medical Endorsement"
+                                           "role":  "Grenadier",
+                                           "member":  "val"
                                        }
                                    ]
                      }
-                 ],
+                  ],
     "attachments":  [
                         {
                              "name":  "BLACKJACK",
