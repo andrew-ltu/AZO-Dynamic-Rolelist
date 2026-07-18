@@ -1870,7 +1870,7 @@ function slotHTML(roleObj,name,locked,attendedSet,showAtt,lockedLabel,claimCtx,c
     </button>`;
   }
   const m=member(name);
-  const isExternal=!MEMBERS[name];
+  const isExternal=!MEMBERS[name] && !Object.keys(MEMBERS).some(k=>!k.startsWith('_')&&k.toLowerCase().replace(/[\s_.]/g,'')===name.toLowerCase().replace(/[\s_.]/g,''));
   const lvl=leaderLevel(role);
   const av=lvl==='lvl-command'?54:lvl==='lvl-section'?48:42;
   // Only show attendance badge for AZO members in members.json - externals get nothing
