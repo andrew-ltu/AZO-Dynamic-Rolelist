@@ -1495,12 +1495,7 @@ function renderOperatorsList(list, data, skipStore) {
       for (const [k, v] of Object.entries(d1data || {})) {
         if (k.startsWith('_')) continue;
         if (REMOVED_MEMBERS.includes(k.toLowerCase())) continue;
-        const match = ghLower[k.toLowerCase()];
-        if (match) {
-          if (v.discordRank) data[match].discordRank = v.discordRank;
-        } else {
-          data[k] = v;
-        }
+        if (!ghLower[k.toLowerCase()]) data[k] = v;
       }
     }
   } catch {}
