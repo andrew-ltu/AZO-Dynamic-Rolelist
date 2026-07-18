@@ -331,6 +331,26 @@ async function handleCallback(request, env) {
         for (const roleName of roleNames) {
           await env.DB.prepare(stmt).bind(user.id, roleName, now, 'discord-sync').run();
         }
+        // Sync rank to members table
+        const RANK_PRIORITY = ['SOHQ','SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
+        const rankLower = RANK_PRIORITY.map(r => r.toLowerCase());
+        let matchedRank = '';
+        let matchedPrio = Infinity;
+        for (const rn of roleNames) {
+          const idx = rankLower.indexOf(rn.toLowerCase());
+          if (idx !== -1 && idx < matchedPrio) { matchedRank = RANK_PRIORITY[idx]; matchedPrio = idx; }
+        }
+        if (matchedRank) {
+          const members = await getMembers(env);
+          for (const [name, data] of Object.entries(members)) {
+            if (name.startsWith('_')) continue;
+            if (data.discordId === user.id && data.discordRank !== matchedRank) {
+              data.discordRank = matchedRank;
+              await saveMembers(env, members);
+              break;
+            }
+          }
+        }
       }
     } catch (e) { console.error('Failed to sync Discord roles:', e); }
     if (isDiscordAdmin) {
@@ -470,10 +490,10 @@ async function handleGetMembers(request, env, origin) {
         const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
           headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
         });
+        const roleMap = await getCachedGuildRoles(env);
+        let changed = false;
         if (guildRes.ok) {
-          const roleMap = await getCachedGuildRoles(env);
           const guildMembers = await guildRes.json();
-          let changed = false;
           // Members with discordId — match by ID
           for (const [name, data] of Object.entries(members)) {
             if (name.startsWith('_') || !data.discordId) continue;
@@ -516,8 +536,29 @@ async function handleGetMembers(request, env, origin) {
               changed = true;
             }
           }
-          if (changed) await saveMembers(env, members);
+        } else {
+          // Bulk endpoint failed (likely missing Server Members Intent) — check individually
+          console.error('Bulk guild members fetch failed:', guildRes.status);
+          for (const [name, data] of Object.entries(members)) {
+            if (name.startsWith('_') || !data.discordId) continue;
+            try {
+              const indRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members/${data.discordId}`, {
+                headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+              });
+              if (!indRes.ok) continue;
+              const gm = await indRes.json();
+              const matchedRank = matchRankFromRoles(gm.roles || [], roleMap, RANK_PRIORITY);
+              if (matchedRank && data.discordRank !== matchedRank) {
+                data.discordRank = matchedRank; changed = true;
+              }
+              if (gm.user && gm.user.avatar) {
+                const newAv = `https://cdn.discordapp.com/avatars/${gm.user.id}/${gm.user.avatar}.webp?size=256`;
+                if (data.avatar !== newAv) { data.avatar = newAv; changed = true; }
+              }
+            } catch(e) { console.error('Individual member fetch failed for', name, e.message); }
+          }
         }
+        if (changed) await saveMembers(env, members);
       } catch(e) { console.error('Bot sync failed:', e); }
     }
     return jsonResponse(members, 200, origin);
