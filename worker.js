@@ -685,6 +685,24 @@ async function handleClaimSlot(request, env, origin) {
 
   if (!name) return jsonResponse({ error: 'Missing member name' }, 400, origin);
 
+  // Verify user is in the AZO Discord guild
+  if (authHeader && authHeader.startsWith('Bearer ') && env.DISCORD_BOT_TOKEN) {
+    const payload = await verifyToken(authHeader.substring(7), env.JWT_SECRET);
+    if (payload) {
+      try {
+        const gmRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members/${payload.sub}`, {
+          headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
+        });
+        if (!gmRes.ok || gmRes.status === 404) {
+          return jsonResponse({ error: 'Access Denied: You must be a member of the AZO Discord server to sign up.' }, 403, origin);
+        }
+      } catch (e) {
+        // Bot API unavailable — allow claim anyway (fallback for bot issues)
+        console.error('Guild check failed:', e.message);
+      }
+    }
+  }
+
   const existingSlot = findUserSlot(roster, name);
   if (existingSlot) {
     if (existingSlot.sectionKey === sectionKey && JSON.stringify(existingSlot.roleIndex) === JSON.stringify(roleIndex)) {
