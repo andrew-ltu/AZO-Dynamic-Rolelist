@@ -152,10 +152,14 @@
                                        {
                                            "role":  "Grenadier",
                                            "member":  "val"
+                                       },
+                                       {
+                                           "role":  "Rifleman",
+                                           "member":  "Crowded_tank"
                                        }
-                                   ]
-                     }
-                  ],
+                                    ]
+                      }
+                   ],
     "attachments":  [
                         {
                              "name":  "BLACKJACK",
