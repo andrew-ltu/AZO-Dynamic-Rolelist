@@ -1524,7 +1524,9 @@ function renderOperatorsList(list, data, skipStore) {
           count: 0,
           short: op.short,
           status: (op.status || 'upcoming').toLowerCase(),
-          sections: []
+          sections: [],
+          banner: op.banner || '',
+          notes: op.notes || ''
         }));
         for (const fb of FALLBACK_OPS) {
           if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
