@@ -358,8 +358,10 @@ nav{
 /* ---------- LEGACY ---------- */
 @keyframes spin-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .legacy-section{padding:60px 20px 80px;background:#080808;border-top:1px solid rgba(255,255,255,.04);text-align:center;}
-.legacy-label{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;color:#c8932b;text-transform:uppercase;margin-bottom:24px;}
-.legacy-card{max-width:700px;margin:0 auto;display:flex;gap:28px;text-align:left;align-items:flex-start;}
+.legacy-label{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;color:#c8932b;text-transform:uppercase;margin-bottom:24px;user-select:none;}
+.legacy-label:hover{color:#f0d080;}
+.legacy-card{max-width:700px;margin:0 auto;display:none;gap:28px;text-align:left;align-items:flex-start;}
+.legacy-card.open{display:flex;}
 .legacy-avatar-wrap{position:relative;flex-shrink:0;width:120px;height:120px;margin-top:4px;}
 .legacy-ring{position:absolute;inset:-6px;border-radius:50%;border:2.5px solid transparent;background:conic-gradient(#c8932b,#f0d080,#c8932b,#f0d080,#c8932b) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin-ring 4s linear infinite;}
 .legacy-avatar{width:120px;height:120px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.04);}
@@ -683,8 +685,8 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 </div>
 
 <div class="legacy-section">
-  <div class="legacy-label">AZO Legacy Members</div>
-  <div class="legacy-card">
+  <div class="legacy-label" onclick="document.getElementById('legacyCard').classList.toggle('open')" style="cursor:pointer;">AZO Legacy Members <span id="legacyToggle" style="font-size:9px;opacity:.5;margin-left:6px;">▼</span></div>
+  <div class="legacy-card" id="legacyCard">
     <div class="legacy-avatar-wrap">
       <div class="legacy-ring"></div>
       <div class="legacy-avatar"><img src="/assets/avatars/otto.png" alt="Otto"></div>
@@ -698,6 +700,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       <div class="legacy-desc">As an NCO, Otto was the architect of the innovative Platoon structure introduced in 2020, a system so robust it served as the core framework for AZO operations for years. He introduced a level of organization, discipline, and tactical rigor that transformed our operations and was embraced whole-heartedly by the membership.</div>
       <div class="legacy-subhead">Administrative Leadership</div>
       <div class="legacy-desc">Within the Staff Team, Otto was synonymous with accountability. He established essential protocols, including mandatory staff meetings to ensure cohesion, prioritizing the health of the AZO community even when he could not be present on the field. His leadership was marked by an unpartisan, steadfast commitment to what was best for AZO as a whole.</div>
+      <div class="legacy-desc" style="margin-top:10px;">There is a well-known reflection on history that perfectly captures the weight of his tenure: &ldquo;There are decades where nothing happens; and there are weeks where decades happen.&rdquo; Though Otto&rsquo;s time with us was relatively brief, it was precisely that kind of transformative era. In a highly concentrated window, he accelerated AZO&rsquo;s evolution, fast-tracking advancements and structural changes that would normally take years to mature.</div>
       <div class="legacy-desc" style="margin-top:12px;font-weight:600;">SSGT. Otto&rsquo;s contributions shaped our history, and his standards define our present.</div>
     </div>
   </div>
