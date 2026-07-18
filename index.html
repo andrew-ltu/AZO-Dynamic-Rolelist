@@ -448,12 +448,12 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .ops-cell-event-signup:hover{background:#3b82f6;}
 
 /* --- Gallery Redesign --- */
-.gallery-hero{position:relative;height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.gallery-hero{position:relative;height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .gallery-hero-bg{position:absolute;inset:0;background:url('https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/roster/public/assets/bg.jpg') center/cover no-repeat;opacity:1;filter:brightness(.35) saturate(.3);}
-.gallery-hero h1{position:relative;font-family:'Oswald',sans-serif;font-size:72px;letter-spacing:8px;color:#fff;margin:0;font-weight:600;text-shadow:0 0 60px rgba(0,0,0,.9);}
-.gallery-hero-underline{position:absolute;bottom:60px;width:80px;height:3px;background:#2563EB;}
+.gallery-hero h1{position:relative;font-family:'Oswald',sans-serif;font-size:48px;letter-spacing:6px;color:#fff;margin:0;font-weight:600;text-shadow:0 0 40px rgba(0,0,0,.8);}
+.gallery-hero-underline{position:absolute;bottom:30px;width:60px;height:2px;background:#2563EB;}
 
-.gallery-carousel-wrap{padding:32px 0 28px;}
+.gallery-carousel-wrap{padding:20px 0 16px;}
 .gallery-carousel{position:relative;max-width:1000px;margin:0 auto;aspect-ratio:16/9;overflow:hidden;border-radius:6px;}
 .gallery-carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;cursor:pointer;}
 .gallery-carousel-slide.active{opacity:1;}
@@ -488,8 +488,8 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 #galleryEmpty{display:none;padding:60px 40px;text-align:center;}
 #galleryEmpty p{color:rgba(255,255,255,.2);font-family:'Share Tech Mono',monospace;font-size:13px;}
 
-@media(max-width:900px){.gallery-filter{grid-template-columns:1fr;gap:20px;padding:20px 24px;}.gallery-grid{grid-template-columns:repeat(2,1fr);}.gallery-hero h1{font-size:48px;}.gallery-op-grid{grid-template-columns:1fr;}.gallery-grid-wrap{padding:24px 24px;}}
-@media(max-width:500px){.gallery-grid{grid-template-columns:1fr;}.gallery-hero h1{font-size:32px;letter-spacing:4px;}.gallery-hero{height:200px;}.gallery-filter{padding:16px 16px;}.gallery-grid-wrap{padding:16px;}}
+@media(max-width:900px){.gallery-filter{grid-template-columns:1fr;gap:20px;padding:20px 24px;}.gallery-grid{grid-template-columns:repeat(2,1fr);}.gallery-hero h1{font-size:32px;}.gallery-op-grid{grid-template-columns:1fr;}.gallery-grid-wrap{padding:24px 24px;}}
+@media(max-width:500px){.gallery-grid{grid-template-columns:1fr;}.gallery-hero h1{font-size:24px;letter-spacing:3px;}.gallery-hero{height:120px;}.gallery-filter{padding:16px 16px;}.gallery-grid-wrap{padding:16px;}}
 #page-roster{max-width:none;padding:0;}
 .ops-body{max-width:1400px;margin:0 auto;}
 @keyframes pulse-dot{0%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}100%{opacity:1;transform:scale(1)}}
