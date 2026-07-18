@@ -2367,6 +2367,26 @@ function showCalOpForm(data) {
   document.getElementById('calOpNotes').value = data ? data.notes || '' : '';
 }
 
+async function uploadBannerImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) return alert('Not authenticated');
+  const status = document.getElementById('saveCalOpBtn');
+  const orig = status.textContent;
+  status.textContent = 'Uploading...';
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/upload-banner`, { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
+    document.getElementById('calOpBanner').value = data.url;
+  } catch (e) { alert('Upload error: ' + e.message); }
+  status.textContent = orig;
+  event.target.value = '';
+}
+
 function cancelCalOpForm() {
   const form = document.getElementById('calOpForm');
   if (form) form.style.display = 'none';
@@ -2810,7 +2830,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="admin-field"><label>Short Date (e.g. SAT JUL 18 2026)</label><input type="text" id="calOpShort" placeholder="SAT JUL 18 2026"></div>
           <div class="admin-field"><label>Status</label><select id="calOpStatus"><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select></div>
           <div class="admin-field"><label>Sort Order</label><input type="number" id="calOpSort" value="0" style="width:80px;"></div>
-          <div class="admin-field" style="grid-column:1/-1;"><label>Banner Image URL</label><input type="text" id="calOpBanner" placeholder="https://... or /assets/..."></div>
+          <div class="admin-field" style="grid-column:1/-1;"><label>Banner Image URL</label><div style="display:flex;gap:4px;"><input type="text" id="calOpBanner" placeholder="https://... or /assets/..." style="flex:1;"><label style="font-size:9px;padding:4px 8px;border-radius:3px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;">Upload<input type="file" id="bannerUploadInput" accept="image/*" style="display:none" onchange="uploadBannerImage(event)"></label></div></div>
           <div class="admin-field" style="grid-column:1/-1;"><label>Notes (replaces Sign Up button)</label><input type="text" id="calOpNotes" placeholder="e.g. Role sheet in progress by SirDanger"></div>
         </div>
         <input type="hidden" id="calOpId">

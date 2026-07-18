@@ -248,6 +248,8 @@ export default {
     if (url.pathname === '/api/calendar-ops' && request.method === 'GET') return handleListCalendarOps(env, origin);
     if (url.pathname === '/api/admin/calendar-ops' && request.method === 'POST') return handleSaveCalendarOp(request, env, origin);
     if (url.pathname.match(/^\/api\/admin\/calendar-ops\//) && request.method === 'DELETE') return handleDeleteCalendarOp(request, env, origin);
+    if (url.pathname === '/api/admin/upload-banner' && request.method === 'POST') return handleUploadBanner(request, env, origin);
+    if (url.pathname.match(/^\/api\/banner-image\//) && request.method === 'GET') return handleBannerImage(request, env, origin);
 
     // Roster background
     if (url.pathname === '/api/roster-bg' && request.method === 'GET') return handleGetRosterBg(env, origin);
@@ -1039,6 +1041,26 @@ async function handleGalleryUpload(request, env, origin) {
   }
 }
 
+async function handleUploadBanner(request, env, origin) {
+  const auth = await verifyAdmin(request, env);
+  if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
+  try {
+    const form = await request.formData();
+    const file = form.get('file');
+    if (!file || !file.name) return jsonResponse({ error: 'No file provided' }, 400, origin);
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['jpg','jpeg','png','gif','webp'].includes(ext)) return jsonResponse({ error: 'Invalid file type' }, 400, origin);
+    const id = crypto.randomUUID();
+    const r2Key = 'banners/' + id + '.' + ext;
+    const buffer = await file.arrayBuffer();
+    await env.GALLERY.put(r2Key, buffer, { httpMetadata: { contentType: file.type || 'image/jpeg' } });
+    const url = `https://azo-dynamic-rolelist-api.andrewtb02.workers.dev/api/banner-image/${id}.${ext}`;
+    return jsonResponse({ ok: true, url, r2Key }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
 async function handleGalleryImage(request, env, origin) {
   try {
     const id = request.url.split('/').pop();
@@ -1063,6 +1085,20 @@ async function handleGalleryDelete(request, env, origin) {
     await env.GALLERY.delete(row.r2_key);
     await env.DB.prepare('DELETE FROM gallery_images WHERE id = ?').bind(id).run();
     return jsonResponse({ ok: true }, 200, origin);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, origin);
+  }
+}
+
+async function handleBannerImage(request, env, origin) {
+  try {
+    const id = request.url.split('/').pop();
+    const r2Key = 'banners/' + id;
+    const obj = await env.GALLERY.get(r2Key);
+    if (!obj) return jsonResponse({ error: 'Not found' }, 404, origin);
+    const ct = obj.httpMetadata?.contentType || 'image/jpeg';
+    const headers = { 'Content-Type': ct, 'Cache-Control': 'public, max-age=86400', ...corsHeaders(origin) };
+    return new Response(obj.body, { headers });
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, origin);
   }
