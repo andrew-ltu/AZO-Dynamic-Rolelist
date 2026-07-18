@@ -1711,7 +1711,7 @@ function renderCalendar() {
               <span class="ops-cell-event-count">${isNearest ? '<span class="live-label">LIVE</span>' : '👤 ' + (op.count || 0)}</span>
             </div>
             <div class="ops-cell-event-title">${esc(op.name)}</div>
-            ${isUpcoming ? '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>' : ''}
+            ${isUpcoming ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : ''}
           </div>
         </div>`;
       }).join('');
@@ -1782,6 +1782,9 @@ function showOpDetail(idx) {
   document.getElementById('opDetailMeta').textContent = metaParts.join(' · ');
 
   let bodyHtml = '';
+  if (op.banner) {
+    bodyHtml += `<div style="margin-bottom:16px;border-radius:8px;overflow:hidden;max-height:200px;"><img src="${esc(op.banner)}" alt="" style="width:100%;height:auto;object-fit:cover;" onerror="this.parentElement.style.display='none'"></div>`;
+  }
   if (op.sections && op.sections.length) {
     for (const sec of op.sections) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(sec.name)}</div>`;
@@ -1789,11 +1792,15 @@ function showOpDetail(idx) {
       bodyHtml += `</div>`;
     }
   } else {
-    bodyHtml = '<div style="color:rgba(255,255,255,.3);">No details available</div>';
+    bodyHtml += '<div style="color:rgba(255,255,255,.3);">No details available</div>';
   }
 
   if (op.status !== 'complete' && op.status !== 'completed') {
-    bodyHtml += `<div style="margin-top:20px;text-align:center;"><a href="/roster/" target="_blank" style="display:inline-block;padding:10px 24px;border-radius:6px;background:#2563EB;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:600;text-decoration:none;">Sign Up for This Operation →</a></div>`;
+    if (op.notes) {
+      bodyHtml += `<div style="margin-top:20px;text-align:center;padding:10px 24px;border-radius:6px;background:rgba(255,255,255,.05);color:#f0b429;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.5px;">${esc(op.notes)}</div>`;
+    } else {
+      bodyHtml += `<div style="margin-top:20px;text-align:center;"><a href="/roster/" target="_blank" style="display:inline-block;padding:10px 24px;border-radius:6px;background:#2563EB;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:600;text-decoration:none;">Sign Up for This Operation →</a></div>`;
+    }
   }
 
   document.getElementById('opDetailBody').innerHTML = bodyHtml;

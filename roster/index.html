@@ -2363,6 +2363,8 @@ function showCalOpForm(data) {
   document.getElementById('calOpZeus').value = data ? data.zeus || '' : '';
   document.getElementById('calOpStatus').value = data ? data.status || 'upcoming' : 'upcoming';
   document.getElementById('calOpSort').value = data ? data.sort_order || 0 : 0;
+  document.getElementById('calOpBanner').value = data ? data.banner || '' : '';
+  document.getElementById('calOpNotes').value = data ? data.notes || '' : '';
 }
 
 function cancelCalOpForm() {
@@ -2390,7 +2392,9 @@ async function saveCalendarOp() {
     short: document.getElementById('calOpShort').value.trim(),
     zeus: document.getElementById('calOpZeus').value.trim(),
     status: document.getElementById('calOpStatus').value,
-    sort_order: parseInt(document.getElementById('calOpSort').value) || 0
+    sort_order: parseInt(document.getElementById('calOpSort').value) || 0,
+    banner: document.getElementById('calOpBanner').value.trim(),
+    notes: document.getElementById('calOpNotes').value.trim()
   };
   if (!body.name || !body.date || !body.short || !body.zeus) {
     status.textContent = 'Please fill in all required fields (name, date, short date, zeus)';
@@ -2806,6 +2810,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="admin-field"><label>Short Date (e.g. SAT JUL 18 2026)</label><input type="text" id="calOpShort" placeholder="SAT JUL 18 2026"></div>
           <div class="admin-field"><label>Status</label><select id="calOpStatus"><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select></div>
           <div class="admin-field"><label>Sort Order</label><input type="number" id="calOpSort" value="0" style="width:80px;"></div>
+          <div class="admin-field" style="grid-column:1/-1;"><label>Banner Image URL</label><input type="text" id="calOpBanner" placeholder="https://... or /assets/..."></div>
+          <div class="admin-field" style="grid-column:1/-1;"><label>Notes (replaces Sign Up button)</label><input type="text" id="calOpNotes" placeholder="e.g. Role sheet in progress by SirDanger"></div>
         </div>
         <input type="hidden" id="calOpId">
         <div style="display:flex;gap:6px;">

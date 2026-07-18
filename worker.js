@@ -535,15 +535,15 @@ async function handleSaveCalendarOp(request, env, origin) {
   if (!auth) return jsonResponse({ error: 'Unauthorized' }, 401, origin);
   try {
     const body = await request.json();
-    const { id, name, date, short, zeus, status, theme, sort_order } = body;
+    const { id, name, date, short, zeus, status, theme, sort_order, banner, notes } = body;
     if (!name || !date || !short || !zeus) return jsonResponse({ error: 'Missing required fields (name, date, short, zeus)' }, 400, origin);
     const now = Math.floor(Date.now() / 1000);
     if (id) {
-      await env.DB.prepare('UPDATE calendar_ops SET name=?, date=?, short=?, zeus=?, status=?, theme=?, sort_order=?, updated_at=? WHERE id=?')
-        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, now, id).run();
+      await env.DB.prepare('UPDATE calendar_ops SET name=?, date=?, short=?, zeus=?, status=?, theme=?, sort_order=?, banner=?, notes=?, updated_at=? WHERE id=?')
+        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, banner || '', notes || '', now, id).run();
     } else {
-      await env.DB.prepare('INSERT INTO calendar_ops (name, date, short, zeus, status, theme, sort_order, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
-        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, now, now).run();
+      await env.DB.prepare('INSERT INTO calendar_ops (name, date, short, zeus, status, theme, sort_order, banner, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(name, date, short, zeus, status || 'upcoming', theme || '', sort_order || 0, banner || '', notes || '', now, now).run();
     }
     return jsonResponse({ ok: true }, 200, origin);
   } catch (e) {
