@@ -1430,21 +1430,19 @@ function renderOperatorsList(list, data, skipStore) {
   try {
     data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   } catch {}
-  // Use GitHub raw as fallback if API data is missing these members
-  if (!data || !data.coach_jake || !data.valro_bread_adddict || !data['The Raven']) {
-    try {
-      const ghRes = await fetch(MEMBERS_JSON_URL);
-      if (ghRes.ok) {
-        const gh = await ghRes.json();
-        const d1data = data;
-        data = { ...gh };
-        for (const [k, v] of Object.entries(d1data)) {
-          if (k.startsWith('_')) continue;
-          if (!gh[k]) data[k] = v;
-        }
+  // Always use GitHub as authoritative source, merge D1-only members not in GitHub
+  try {
+    const ghRes = await fetch(MEMBERS_JSON_URL);
+    if (ghRes.ok) {
+      const gh = await ghRes.json();
+      const d1data = data;
+      data = { ...gh };
+      for (const [k, v] of Object.entries(d1data || {})) {
+        if (k.startsWith('_')) continue;
+        if (!gh[k]) data[k] = v;
       }
-    } catch {}
-  }
+    }
+  } catch {}
   let rosterData;
   try {
     rosterData = await fetch(API_BASE + '/api/roster').then(r => r.ok ? r.json() : null).catch(() => null);
