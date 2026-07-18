@@ -698,11 +698,13 @@ async function handleClaimSlot(request, env, origin) {
         const gmRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members/${payload.sub}`, {
           headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
         });
-        if (!gmRes.ok || gmRes.status === 404) {
+        if (gmRes.status === 404) {
           return jsonResponse({ error: 'Access Denied: You must be a member of the AZO Discord server to sign up.' }, 403, origin);
         }
+        if (!gmRes.ok) {
+          console.error('Guild check non-404 error:', gmRes.status, await gmRes.text().catch(()=>''));
+        }
       } catch (e) {
-        // Bot API unavailable — allow claim anyway (fallback for bot issues)
         console.error('Guild check failed:', e.message);
       }
     }
