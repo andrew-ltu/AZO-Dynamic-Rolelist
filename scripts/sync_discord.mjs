@@ -8,7 +8,7 @@
            assets/avatars/<name>.<ext>
    Never touches discordRank / opsAttended / attendance — those stay chart-managed. */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 
 const API   = 'https://discord.com/api/v10';
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
@@ -98,8 +98,23 @@ async function run() {
     }
   }
 
+  // Prune members who have left the Discord server
+  const guildIds = new Set(all.map(m => m.user.id));
+  let pruned = 0;
+  for (const [name, data] of Object.entries(members)) {
+    if (name === '_comment' || typeof data !== 'object' || data === null) continue;
+    if (data.discordId && !guildIds.has(data.discordId)) {
+      // Remove avatar file if it exists
+      if (data.avatar && data.avatar.startsWith('/assets/avatars/')) {
+        try { unlinkSync('.' + data.avatar); } catch {}
+      }
+      delete members[name];
+      pruned++;
+    }
+  }
+
   writeFileSync('members.json', JSON.stringify(members, null, 2) + '\n');
-  console.log(`\nMatched ${matched} members; downloaded ${avatars} avatars.`);
+  console.log(`\nMatched ${matched} members; downloaded ${avatars} avatars; pruned ${pruned} leavers.`);
   if (unmatched.length) console.log(`Unmatched (add a "discordId" or fix the name in members.json): ${unmatched.join(', ')}`);
 }
 

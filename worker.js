@@ -500,6 +500,15 @@ async function handleGetMembers(request, env, origin) {
             }
             changed = true;
           }
+          // Prune members with discordId no longer in the server
+          const guildIdSet = new Set(guildMembers.filter(m => m.user).map(m => m.user.id));
+          for (const [name, data] of Object.entries(members)) {
+            if (name.startsWith('_') || typeof data !== 'object' || !data.discordId) continue;
+            if (!guildIdSet.has(data.discordId)) {
+              delete members[name];
+              changed = true;
+            }
+          }
           if (changed) await saveMembers(env, members);
         }
       } catch(e) { console.error('Bot sync failed:', e); }
