@@ -15,27 +15,21 @@
                       "countdownTo":  ""
                   },
     "attended":  [],
-    "command":  [],
+    "command":  [
+                    {
+                        "role":  "Platoon Commander",
+                        "member":  null
+                    },
+                    {
+                        "role":  "Assistant Platoon Commander",
+                        "member":  null
+                    },
+                    {
+                        "role":  "JTAC",
+                        "member":  null
+                    }
+                ],
     "sections":  [
-                     {
-                         "name":  "PLATOON HQ",
-                         "locked":  true,
-                         "lockedLabel":  "Work in progress - subject to change",
-                         "roles":  [
-                                       {
-                                           "role":  "Platoon Commander",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "Assistant Platoon Commander",
-                                           "member":  null
-                                       },
-                                       {
-                                           "role":  "JTAC",
-                                           "member":  null
-                                       }
-                                   ]
-                     },
                      {
                          "name":  "ANVIL",
                          "locked":  true,
