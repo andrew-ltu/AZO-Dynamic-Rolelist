@@ -487,12 +487,16 @@ async function handleGetMembers(request, env, origin) {
     if (env.DISCORD_BOT_TOKEN) {
       const RANK_PRIORITY = ['SOHQ','SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'];
       try {
+        const ac = new AbortController();
+        const timer = setTimeout(() => ac.abort(), 5000);
         const guildRes = await fetch(`${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members?limit=1000`, {
-          headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` }
-        });
+          headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` },
+          signal: ac.signal
+        }).catch(() => null);
+        clearTimeout(timer);
         const roleMap = await getCachedGuildRoles(env);
         let changed = false;
-        if (guildRes.ok) {
+        if (guildRes && guildRes.ok) {
           const guildMembers = await guildRes.json();
           // Members with discordId — match by ID
           for (const [name, data] of Object.entries(members)) {

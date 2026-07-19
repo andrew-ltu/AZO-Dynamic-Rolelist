@@ -1479,6 +1479,8 @@ function renderOperatorsList(list, data, skipStore) {
 
 // Load operators list & roster
 (async function() {
+  // Start calendar ops fetch early (parallel with other fetches)
+  const calOpsPromise = fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : null).catch(() => null);
   let data;
   try {
     data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
@@ -1553,7 +1555,7 @@ function renderOperatorsList(list, data, skipStore) {
     if (list) renderOperatorsList(list, data, false);
     const calMounted = document.getElementById('opsCalMain');
     if (calMounted) {
-      let calOps = await fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : null).catch(() => null);
+      let calOps = await calOpsPromise;
       const FALLBACK_OPS = [
         {name:'Op Karoonda III',date:'18 JULY 2026',zeus:'Jag McMuffin',count:0,short:'SAT JUL 18 2026',status:'upcoming',sections:[]},
         {name:'Op Karoonda II',date:'4 JULY 2026',zeus:'Jag McMuffin',count:31,short:'SAT JUL 4 2026',status:'completed',sections:[
