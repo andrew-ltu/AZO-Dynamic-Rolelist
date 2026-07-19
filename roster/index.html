@@ -2499,14 +2499,30 @@ function loadRecentGalleryImages() {
     let html = '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
     for (const img of images.slice(0, 12)) {
       const url = API_BASE + '/api/gallery/image/' + img.id;
-      html += '<div style="width:60px;height:60px;border-radius:4px;overflow:hidden;border:1px solid var(--line);cursor:pointer;position:relative;" onclick="setRosterBg(\'' + img.id + '\')" title="Set as roster background">';
-      html += '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;display:block;">';
-      html += '<div style="position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:9px;color:#fff;font-weight:600;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">Set BG</div>';
+      html += '<div style="width:60px;height:60px;border-radius:4px;overflow:hidden;border:1px solid var(--line);position:relative;">';
+      html += '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;" onclick="setRosterBg(\'' + img.id + '\')" title="Set as roster background">';
+      html += '<div style="position:absolute;top:2px;right:2px;z-index:2;display:flex;gap:2px;">';
+      html += '<button onclick="event.stopPropagation();deleteGalleryImage(\'' + img.id + '\')" style="width:18px;height:18px;border-radius:3px;border:none;background:rgba(217,64,64,.8);color:#fff;font-size:10px;cursor:pointer;padding:0;line-height:18px;text-align:center;" title="Delete image">✕</button>';
+      html += '</div>';
+      html += '<div style="position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:9px;color:#fff;font-weight:600;pointer-events:none;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">Set BG</div>';
       html += '</div>';
     }
     html += '</div>';
     list.innerHTML = html;
   });
+}
+
+async function deleteGalleryImage(imageId) {
+  if (!confirm('Delete this gallery image? This cannot be undone.')) return;
+  const token = localStorage.getItem('azo_token');
+  if (!token) { alert('Not authenticated'); return; }
+  try {
+    const res = await fetch(API_BASE + '/api/gallery/' + imageId, {
+      method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) { const d = await res.json(); alert('Delete failed: ' + (d.error || res.status)); return; }
+    loadRecentGalleryImages();
+  } catch (e) { alert('Delete error: ' + e.message); }
 }
 
 async function setRosterBg(imageId) {
