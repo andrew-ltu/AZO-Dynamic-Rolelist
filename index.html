@@ -1481,30 +1481,31 @@ function renderOperatorsList(list, data, skipStore) {
 (async function() {
   // Start calendar ops fetch early (parallel with other fetches)
   const calOpsPromise = fetch(API_BASE + '/api/calendar-ops').then(r => r.ok ? r.json() : null).catch(() => null);
-  let data;
-  try {
-    data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
-  } catch {}
-  // Always use GitHub as authoritative source, merge D1-only members not in GitHub
+  // Fetch members in background (may be slow due to Discord Bot API)
+  const membersPromise = fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  // Start with GitHub members (fast) so operators tab renders immediately
+  let data = {};
   const REMOVED_MEMBERS = ['mietsko', 'b. hag', 'c. weeb', 'd. mason', 'j. jabbzo'];
   try {
     const ghRes = await fetch(MEMBERS_JSON_URL);
-    if (ghRes.ok) {
-      const gh = await ghRes.json();
-      const d1data = data;
-      data = {};
-      for (const [k, v] of Object.entries(gh)) {
-        if (!REMOVED_MEMBERS.includes(k.toLowerCase())) data[k] = v;
-      }
-      const ghLower = {};
-      for (const k of Object.keys(data)) ghLower[k.toLowerCase()] = k;
-      for (const [k, v] of Object.entries(d1data || {})) {
-        if (k.startsWith('_')) continue;
-        if (REMOVED_MEMBERS.includes(k.toLowerCase())) continue;
-        if (!ghLower[k.toLowerCase()]) data[k] = v;
-      }
+    if (ghRes.ok) data = await ghRes.json();
+    for (const k of Object.keys(data)) {
+      if (REMOVED_MEMBERS.includes(k.toLowerCase())) delete data[k];
     }
   } catch {}
+  // Merge D1-only members in background when they arrive
+  membersPromise.then(d1data => {
+    if (!d1data) return;
+    const ghLower = {};
+    for (const k of Object.keys(data)) ghLower[k.toLowerCase()] = k;
+    for (const [k, v] of Object.entries(d1data)) {
+      if (k.startsWith('_')) continue;
+      if (REMOVED_MEMBERS.includes(k.toLowerCase())) continue;
+      if (!ghLower[k.toLowerCase()]) data[k] = v;
+    }
+    const list = document.getElementById('operatorsList');
+    if (list) renderOperatorsList(list, data, false);
+  });
   let rosterData;
   try {
     rosterData = await fetch(API_BASE + '/api/roster').then(r => r.ok ? r.json() : null).catch(() => null);
