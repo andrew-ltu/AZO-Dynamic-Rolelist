@@ -29,7 +29,7 @@
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);min-height:100vh;overflow-x:hidden;}
-#bgLayer{position:fixed;inset:0;z-index:-2;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0.35;filter:blur(8px) saturate(0.85) brightness(0.8);transform:scale(1.08);transition:opacity .6s;}
+#bgLayer{position:fixed;inset:-10px;z-index:-2;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0.35;filter:blur(8px) saturate(0.85) brightness(0.8);transition:opacity .6s;}
 #bgOverlay{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(5,8,14,.55) 0%,rgba(5,8,14,.78) 50%,var(--bg) 100%);}
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.22;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.009) 0 1px,transparent 1px 3px);}
 a{color:var(--primary-2);}
