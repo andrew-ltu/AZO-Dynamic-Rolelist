@@ -1875,9 +1875,6 @@ function showOpDetail(idx) {
   document.getElementById('opDetailMeta').textContent = metaParts.join(' · ');
 
   let bodyHtml = '';
-  if (op.banner) {
-    bodyHtml += `<div style="margin-bottom:16px;border-radius:8px;overflow:hidden;max-height:200px;"><img src="${esc(op.banner)}" alt="" style="width:100%;height:auto;object-fit:cover;" onerror="this.parentElement.style.display='none'"></div>`;
-  }
   if (op.sections && op.sections.length) {
     for (const sec of op.sections) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(sec.name)}</div>`;
