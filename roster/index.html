@@ -2694,42 +2694,43 @@ document.addEventListener('DOMContentLoaded', () => {
   await initAuth();
   
   try{
-    let[roster,members]=await Promise.all([
-      fetch(`${API_BASE}/api/roster`).then(r=>{if(!r.ok)throw new Error('roster fetch failed');return r.json();}),
-      fetch(`${API_BASE}/api/members`,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
-    ]);
-    // Always use GitHub as authoritative source, merge D1-only members not in GitHub
-    try {
-      const ghRes = await fetch('https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/members.json');
-      if (ghRes.ok) {
-        const gh = await ghRes.json();
-        const d1data = members;
-        const REMOVED = ['mietsko', 'b. hag', 'c. weeb', 'd. mason', 'j. jabbzo'];
-        members = {};
-        for (const [k, v] of Object.entries(gh)) {
-          if (!REMOVED.includes(k.toLowerCase())) members[k] = v;
-        }
-        const ghLower = {};
-        for (const k of Object.keys(members)) ghLower[k.toLowerCase()] = k;
-        for (const [k, v] of Object.entries(d1data || {})) {
-          if (k.startsWith('_')) continue;
-          if (REMOVED.includes(k.toLowerCase())) continue;
-          if (!ghLower[k.toLowerCase()]) members[k] = v;
-        }
-      }
-    } catch {}
+    const roRes = await fetch(`${API_BASE}/api/roster`);
+    if (!roRes.ok) throw new Error('roster fetch failed');
+    let roster = await roRes.json();
     if (!roster || !roster.sections) {
       try {
         const ghRes = await fetch('https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/roster.json');
         if (ghRes.ok) roster = await ghRes.json();
       } catch {}
     }
-    MEMBERS=members||{};
     renderAuthUI();
     window._rosterData = roster;
     render(roster);
-    // Auto-backup roster to localStorage
     try{localStorage.setItem('azo_roster_backup',JSON.stringify(roster));localStorage.setItem('azo_backup_time',new Date().toISOString());}catch(e){}
+    // Fetch members in background (may be slow due to Discord Bot API)
+    fetch(`${API_BASE}/api/members`,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})).then(async function(d1data){
+      let members = d1data || {};
+      try {
+        const ghRes = await fetch('https://raw.githubusercontent.com/andrew-ltu/AZO-Dynamic-Rolelist/main/members.json');
+        if (ghRes.ok) {
+          const gh = await ghRes.json();
+          const REMOVED = ['mietsko', 'b. hag', 'c. weeb', 'd. mason', 'j. jabbzo'];
+          members = {};
+          for (const [k, v] of Object.entries(gh)) {
+            if (!REMOVED.includes(k.toLowerCase())) members[k] = v;
+          }
+          const ghLower = {};
+          for (const k of Object.keys(members)) ghLower[k.toLowerCase()] = k;
+          for (const [k, v] of Object.entries(d1data || {})) {
+            if (k.startsWith('_')) continue;
+            if (REMOVED.includes(k.toLowerCase())) continue;
+            if (!ghLower[k.toLowerCase()]) members[k] = v;
+          }
+        }
+      } catch {}
+      MEMBERS = members || {};
+      render(roster);
+    });
 
   }catch(err){
     $('#app').innerHTML=`<div class="load-err"><h2 style="font-family:Oswald;color:var(--text)">Couldn't load the role list</h2><p>${esc(err.message)}</p><p>If you opened this file directly (<code>file://</code>), browsers block <code>fetch()</code> of local files. Run a tiny local server first - e.g. double-click <code>serve.ps1</code> - then open <code>http://localhost:8770</code>. On GitHub Pages it just works.</p></div>`;
