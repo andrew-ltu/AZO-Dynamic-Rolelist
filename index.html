@@ -1486,15 +1486,18 @@ function renderOperatorsList(list, data, skipStore) {
     data = await fetch(API_BASE + '/api/members').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   } catch {}
   // Always use GitHub as authoritative source, merge D1-only members not in GitHub
-  const REMOVED_MEMBERS = ['mietsko'];
+  const REMOVED_MEMBERS = ['mietsko', 'b. hag', 'c. weeb', 'd. mason', 'j. jabbzo'];
   try {
     const ghRes = await fetch(MEMBERS_JSON_URL);
     if (ghRes.ok) {
       const gh = await ghRes.json();
       const d1data = data;
-      data = { ...gh };
+      data = {};
+      for (const [k, v] of Object.entries(gh)) {
+        if (!REMOVED_MEMBERS.includes(k.toLowerCase())) data[k] = v;
+      }
       const ghLower = {};
-      for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = k;
+      for (const k of Object.keys(data)) ghLower[k.toLowerCase()] = k;
       for (const [k, v] of Object.entries(d1data || {})) {
         if (k.startsWith('_')) continue;
         if (REMOVED_MEMBERS.includes(k.toLowerCase())) continue;
@@ -1585,7 +1588,8 @@ function renderOperatorsList(list, data, skipStore) {
           status: (op.status || 'upcoming').toLowerCase(),
           sections: [],
           banner: op.banner || '',
-          notes: op.notes || ''
+          notes: op.notes || '',
+          roster: op.roster ? (typeof op.roster === 'string' ? JSON.parse(op.roster) : op.roster) : null
         }));
         for (const fb of FALLBACK_OPS) {
           if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
@@ -1877,7 +1881,23 @@ function showOpDetail(idx) {
   document.getElementById('opDetailMeta').textContent = metaParts.join(' · ');
 
   let bodyHtml = '';
-  if (op.sections && op.sections.length) {
+  if (op.roster && op.roster.sections && op.roster.sections.length) {
+    for (const sec of op.roster.sections) {
+      bodyHtml += `<div style="margin-bottom:16px;">`;
+      bodyHtml += `<div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(sec.name)}</div>`;
+      if (sec.locked && sec.lockedLabel) {
+        bodyHtml += `<div style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px;">${esc(sec.lockedLabel)}</div>`;
+      }
+      for (const r of (sec.roles || [])) {
+        if (r.member) {
+          bodyHtml += memberRow(r.member, r.role);
+        } else {
+          bodyHtml += `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;"><span style="width:22px;flex-shrink:0;"></span><span style="color:rgba(255,255,255,.2);">${esc(r.role)}</span><span style="margin-left:auto;color:rgba(255,255,255,.15);">vacant</span></div>`;
+        }
+      }
+      bodyHtml += `</div>`;
+    }
+  } else if (op.sections && op.sections.length) {
     for (const sec of op.sections) {
       bodyHtml += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:rgba(96,165,250,.7);letter-spacing:1px;margin-bottom:6px;font-weight:600;">${esc(sec.name)}</div>`;
       for (const m of (sec.members || [])) bodyHtml += memberRow(m.n, m.p);

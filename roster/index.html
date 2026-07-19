@@ -2345,7 +2345,7 @@ function loadCalendarOps() {
     for (const op of ops) {
       const statusStyle = op.status === 'live' ? 'color:#36d07a;' : op.status === 'completed' ? 'color:#6a7f98;' : 'color:#f0b429;';
       html += '<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:4px;margin-bottom:4px;">';
-      html += '<div style="flex:1;font-size:12px;"><strong>' + esc(op.name) + '</strong> <span style="color:var(--muted);">' + esc(op.date) + ' &mdash; ' + esc(op.zeus) + '</span> <span style="font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;' + statusStyle + '">' + op.status + '</span></div>';
+      html += '<div style="flex:1;font-size:12px;"><strong>' + esc(op.name) + '</strong> <span style="color:var(--muted);">' + esc(op.date) + ' &mdash; ' + esc(op.zeus) + '</span> <span style="font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;' + statusStyle + '">' + op.status + '</span>' + (op.roster ? ' <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(37,99,235,.2);color:#60a5fa;">roster</span>' : '') + '</div>';
       html += '<button class="admin-btn admin-btn-secondary" style="font-size:10px;padding:2px 8px;" onclick="editCalendarOp(' + op.id + ')">Edit</button>';
       html += '<button class="admin-btn admin-btn-danger" style="font-size:10px;padding:2px 8px;" onclick="deleteCalendarOp(' + op.id + ')">Delete</button>';
       html += '</div>';
@@ -2367,6 +2367,7 @@ function showCalOpForm(data) {
   document.getElementById('calOpSort').value = data ? data.sort_order || 0 : 0;
   document.getElementById('calOpBanner').value = data ? data.banner || '' : '';
   document.getElementById('calOpNotes').value = data ? data.notes || '' : '';
+  document.getElementById('calOpRoster').value = data && data.roster ? (typeof data.roster === 'string' ? data.roster : JSON.stringify(data.roster)) : '';
 }
 
 async function uploadBannerImage(event) {
@@ -2392,6 +2393,7 @@ async function uploadBannerImage(event) {
 function cancelCalOpForm() {
   const form = document.getElementById('calOpForm');
   if (form) form.style.display = 'none';
+  document.getElementById('calOpRoster').value = '';
 }
 
 function editCalendarOp(id) {
@@ -2399,6 +2401,16 @@ function editCalendarOp(id) {
     const op = ops.find(o => o.id === id);
     if (op) showCalOpForm(op);
   });
+}
+
+function saveRosterSnapshot() {
+  const status = document.getElementById('calOpStatusMsg');
+  const rosterInput = document.getElementById('calOpRoster');
+  if (!window._rosterData) { status.textContent = 'No roster data loaded'; status.className = 'admin-status-msg show'; return; }
+  rosterInput.value = JSON.stringify(window._rosterData);
+  status.textContent = 'Roster snapshot attached. Save the op to persist.';
+  status.className = 'admin-status-msg show';
+  setTimeout(() => { status.className = 'admin-status-msg'; }, 3000);
 }
 
 async function saveCalendarOp() {
@@ -2416,8 +2428,10 @@ async function saveCalendarOp() {
     status: document.getElementById('calOpStatus').value,
     sort_order: parseInt(document.getElementById('calOpSort').value) || 0,
     banner: document.getElementById('calOpBanner').value.trim(),
-    notes: document.getElementById('calOpNotes').value.trim()
+    notes: document.getElementById('calOpNotes').value.trim(),
+    roster: document.getElementById('calOpRoster').value.trim() || undefined
   };
+  if (body.roster) { try { body.roster = JSON.parse(body.roster); } catch(e) { body.roster = undefined; } }
   if (!body.name || !body.date || !body.short || !body.zeus) {
     status.textContent = 'Please fill in all required fields (name, date, short date, zeus)';
     status.className = 'admin-status-msg show';
@@ -2690,11 +2704,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ghRes.ok) {
         const gh = await ghRes.json();
         const d1data = members;
-        members = { ...gh };
+        const REMOVED = ['mietsko', 'b. hag', 'c. weeb', 'd. mason', 'j. jabbzo'];
+        members = {};
+        for (const [k, v] of Object.entries(gh)) {
+          if (!REMOVED.includes(k.toLowerCase())) members[k] = v;
+        }
         const ghLower = {};
-        for (const k of Object.keys(gh)) ghLower[k.toLowerCase()] = k;
+        for (const k of Object.keys(members)) ghLower[k.toLowerCase()] = k;
         for (const [k, v] of Object.entries(d1data || {})) {
           if (k.startsWith('_')) continue;
+          if (REMOVED.includes(k.toLowerCase())) continue;
           if (!ghLower[k.toLowerCase()]) members[k] = v;
         }
       }
@@ -2707,6 +2726,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     MEMBERS=members||{};
     renderAuthUI();
+    window._rosterData = roster;
     render(roster);
     // Auto-backup roster to localStorage
     try{localStorage.setItem('azo_roster_backup',JSON.stringify(roster));localStorage.setItem('azo_backup_time',new Date().toISOString());}catch(e){}
@@ -2838,8 +2858,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="admin-field" style="grid-column:1/-1;"><label>Notes (replaces Sign Up button)</label><input type="text" id="calOpNotes" placeholder="e.g. Role sheet in progress by SirDanger"></div>
         </div>
         <input type="hidden" id="calOpId">
+        <input type="hidden" id="calOpRoster">
         <div style="display:flex;gap:6px;">
           <button class="admin-btn admin-btn-primary" id="saveCalOpBtn" onclick="saveCalendarOp()">Save</button>
+          <button class="admin-btn admin-btn-secondary" onclick="saveRosterSnapshot()" style="font-size:10px;">Save Current Roster</button>
           <button class="admin-btn admin-btn-secondary" onclick="cancelCalOpForm()">Cancel</button>
         </div>
         <div id="calOpStatusMsg" class="admin-status-msg"></div>

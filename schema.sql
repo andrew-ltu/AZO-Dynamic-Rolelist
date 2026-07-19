@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS calendar_ops (
   sort_order INTEGER DEFAULT 0,
   banner TEXT DEFAULT '',
   notes TEXT DEFAULT '',
+  roster TEXT DEFAULT '',
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
