@@ -68,6 +68,7 @@ a{color:var(--primary-2);}
   border:1px solid var(--line);transition:all .15s;
 }
 .back-link:hover{color:var(--primary-2);border-color:var(--line-strong);background:rgba(255,255,255,.03);}
+.lock-banner{text-align:center;padding:10px 20px;background:rgba(240,180,41,.08);border-bottom:1px solid rgba(240,180,41,.15);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.5px;color:#f0b429;margin-top:42px;}
 
 
 /* ======================== HEADER ======================== */
@@ -1921,7 +1922,7 @@ function render(roster){
     const filled=roles.filter(r=>r.member).length;
     const rows=roles.map((r,i)=>slotHTML(r,r.member,!!sec.locked,attendedSet,showAtt,sec.lockedLabel,{sectionKey:sec.name,roleIndex:i},uname)).join('');
     const headRight=sec.locked?`<span class="lock">🔒</span>`:`<span class="count">${filled}/${roles.length}</span>`;
-    const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>Reserved for <b>${esc(sec.lockedLabel)}</b></span></div>`:'';
+    const note=sec.locked&&sec.lockedLabel?`<div class="lock-note"><span>🔒</span><span>${esc(sec.lockedLabel)}</span></div>`:'';
     const secColor=sec.color?('sec-color-'+sec.color):(sec.locked&&sec.joint?'joint':'');
     return `<div class="sec ${sec.locked?'locked':''} ${secColor} bracketed">
       <div class="sec-head">${esc(sec.name)} ${headRight}</div>
@@ -1949,6 +1950,7 @@ function render(roster){
         <a href="/" class="back-link">← Back to AZO</a>
       </div>
     </div>
+    <div class="lock-banner">🔒 Rolesheet is still a work in progress — subject to change. Sign-ups are not currently being taken.</div>
     <header class="hero">
       <div class="brand">
         <span class="logo" style="--ls:60px">

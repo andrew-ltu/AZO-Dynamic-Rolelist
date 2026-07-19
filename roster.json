@@ -1,195 +1,152 @@
 {
     "operation":  {
-                      "name":  "Operation Karoonda III",
-                      "zeus":  "Jag McMuffin",
+                      "name":  "Operation Steel Master",
+                      "zeus":  "Sir Danger",
                       "tier":  "Tier 2 Operation",
-                      "date":  "18 JULY 2026",
+                      "date":  "",
                       "status":  "upcoming",
                       "theme":  "tactical-blue",
                       "background":  "assets/backgrounds/operation-bg.png",
                       "campaignMap":  "assets/campaign-map.png",
-                      "feedbackForm":  "https://forms.gle/SPoTNHAT17HwALhm9",
-                      "comingSoonText":  "Operation Karoonda III is complete. Thanks for deploying with AZO.",
+                      "feedbackForm":  "",
+                      "comingSoonText":  "",
                       "music":  "assets/music/anthem1.mp3",
                       "music2":  "assets/music/anthem2.mp3",
-                      "countdownTo":  "2026-07-18T09:00:00.000Z"
+                      "countdownTo":  ""
                   },
-    "attended":  [
-                     "24pool1",
-                     "AnimePanda",
-                     "BadKarma",
-                     "blueberet",
-                     "Crallers",
-                     "Crowded_tank",
-                     "Earthball",
-                     "Gill",
-                     "GoGoBendy",
-                     "Gunter",
-                     "Jag McMuffin",
-                     "Jon Taiwan",
-                     "J+n++ger",
-                     "Kiren77",
-                     "Malt",
-                     "Misaka",
-                     "Monke",
-                     "Orter",
-                     "Rose",
-                     "adeptustupidus",
-                     "SirDanger",
-                     "Spacecat82",
-                     "Terack",
-                     "The Raven",
-                     "Vain",
-                     "Val",
-                     "Velteck",
-                     "Xeonovaes",
-                     "Zep"
-                 ],
-    "command":  [
-                    {
-                        "role":  "Platoon Commander",
-                        "member":  "SirDanger",
-                        "endorsementRequired":  true,
-                        "endorsementType":  "Leadership Endorsement"
-                    },
-                    {
-                        "role":  "JTAC",
-                        "member":  "BadKarma",
-                        "endorsementRequired":  true,
-                        "endorsementType":  "JTAC Endorsement"
-                    },
-                    {
-                        "role":  "Platoon Medic",
-                        "member":  "Zep",
-                        "endorsementRequired":  true,
-                        "endorsementType":  "Medical Endorsement"
-                    }
-                ],
+    "attended":  [],
+    "command":  [],
     "sections":  [
                      {
-                          "name":  "ALPHA",
-                          "roles":  [
-                                        {
-                                            "role":  "Section Leader",
-                                            "member":  "Malt",
-                                            "endorsementRequired":  true,
-                                            "endorsementType":  "Leadership Endorsement"
-                                        },
-                        {
-                                             "role":  "Asst. Section Leader",
-                                             "member":  "Vain",
-                                             "endorsementRequired":  true,
-                                             "endorsementType":  "Leadership Endorsement"
-                                         },
-                                        {
-                                            "role":  "Grenadier",
-                                            "member":  "Earthball"
-                                        },
-                                        {
-                                            "role":  "Grenadier",
-                                            "member":  "blueberet"
-                                        },
-                                        {
-                                            "role":  "LSW (Minimi)",
-                                            "member":  "Kiren77"
-                                        },
-                                        {
-                                            "role":  "LSW (Minimi)",
-                                            "member":  "Velteck"
-                                        },
-                                        {
-                                            "role":  "Rifleman",
-                                            "member":  "Gunter"
-                                        },
-                                        {
-                                            "role":  "Medic",
-                                            "member":  "Spacecat82",
-                                            "endorsementRequired":  true,
-                                            "endorsementType":  "Medical Endorsement"
-                                        },
-                                        {
-                                            "role":  "Rifleman",
-                                            "member":  "coach_jake"
-                                        },
-                                        {
-                                            "role":  "Rifleman",
-                                            "member":  "The Raven"
-                                        }
-                                    ]
-                      },
-                      {
-                          "name":  "BRAVO",
+                         "name":  "PLATOON HQ",
+                         "locked":  true,
+                         "lockedLabel":  "Work in progress - subject to change",
                          "roles":  [
                                        {
-                                           "role":  "Section Leader",
-                                           "member":  "Misaka",
+                                           "role":  "Platoon Commander",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Assistant Platoon Commander",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "JTAC",
+                                           "member":  null
+                                       }
+                                   ]
+                     },
+                     {
+                         "name":  "ANVIL",
+                         "locked":  true,
+                         "lockedLabel":  "Work in progress - subject to change",
+                         "roles":  [
+                                       {
+                                           "role":  "Squad Leader",
+                                           "member":  null,
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Leadership Endorsement"
                                        },
                                        {
-                                           "role":  "Asst. Section Leader",
-                                           "member":  "24pool1",
+                                           "role":  "Team Leader",
+                                           "member":  null,
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Leadership Endorsement"
                                        },
                                        {
-                                           "role":  "Anti-tank",
-                                           "member":  "Rose"
+                                           "role":  "Automatic Rifleman",
+                                           "member":  null
                                        },
                                        {
-                                           "role":  "Asst. Anti-tank",
-                                           "member":  "Orter"
-                                       },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  "adeptustupidus"
-                                       },
-                                       {
-                                           "role":  "LSW (Minimi)",
-                                           "member":  "Gill"
-                                       },
-                                       {
-                                           "role":  "Rifleman",
-                                           "member":  "Xeonovaes"
+                                           "role":  "Grenadier",
+                                           "member":  null
                                        },
                                        {
                                            "role":  "Medic",
-                                           "member":  "GoGoBendy",
+                                           "member":  null,
                                            "endorsementRequired":  true,
                                            "endorsementType":  "Medical Endorsement"
                                        },
                                        {
-                                           "role":  "Grenadier",
-                                           "member":  "val"
+                                           "role":  "Team Leader",
+                                           "member":  null,
+                                           "endorsementRequired":  true,
+                                           "endorsementType":  "Leadership Endorsement"
                                        },
                                        {
-                                           "role":  "Rifleman",
-                                           "member":  "Crowded_tank"
+                                           "role":  "Automatic Rifleman",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Grenadier",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Medic",
+                                           "member":  null,
+                                           "endorsementRequired":  true,
+                                           "endorsementType":  "Medical Endorsement"
+                                       },
+                                       {
+                                           "role":  "Team Leader",
+                                           "member":  null,
+                                           "endorsementRequired":  true,
+                                           "endorsementType":  "Leadership Endorsement"
+                                       },
+                                       {
+                                           "role":  "Automatic Rifleman",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Grenadier",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Medic",
+                                           "member":  null,
+                                           "endorsementRequired":  true,
+                                           "endorsementType":  "Medical Endorsement"
                                        }
-                                    ]
-                      }
-                   ],
-    "attachments":  [
-                        {
-                             "name":  "BLACKJACK",
-                             "roles":  [
-                                          {
-                                              "role":  "Pilot",
-                                              "member":  "1st Lt B. Hag"
-                                          },
-                                          {
-                                              "role":  "Co-pilot",
-                                              "member":  "2d Lt D. Mason"
-                                          },
-                                          {
-                                              "role":  "Crew Chief",
-                                              "member":  "TSgt C. Weeb"
-                                          },
-                                          {
-                                              "role":  "Gunner",
-                                              "member":  "SSgt J. Jabbzo"
-                                          }
-                                      ]
-                        }
-                    ]
+                                   ]
+                     },
+                     {
+                         "name":  "HAMMER 1",
+                         "locked":  true,
+                         "lockedLabel":  "Work in progress - subject to change",
+                         "roles":  [
+                                       {
+                                           "role":  "Commander",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Driver",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Gunner",
+                                           "member":  null
+                                       }
+                                   ]
+                     },
+                     {
+                         "name":  "HAMMER 2",
+                         "locked":  true,
+                         "lockedLabel":  "Work in progress - subject to change",
+                         "roles":  [
+                                       {
+                                           "role":  "Commander",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Driver",
+                                           "member":  null
+                                       },
+                                       {
+                                           "role":  "Gunner",
+                                           "member":  null
+                                       }
+                                   ]
+                     }
+                  ],
+    "attachments":  []
 }
