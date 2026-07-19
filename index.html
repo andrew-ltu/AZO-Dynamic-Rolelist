@@ -592,17 +592,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 </div>
 
 <section class="hero">
-  <div class="hero-slideshow">
-    <img src="/assets/slide1.jpg" class="active" alt="">
-    <img src="/assets/slide2.jpg" alt="">
-    <img src="/assets/slide3.jpg" alt="">
-    <img src="/assets/slide4.jpg" alt="">
-    <img src="/assets/slide5.jpg" alt="">
-    <img src="/assets/slide6.jpg" alt="">
-    <img src="/assets/slide7.jpg" alt="">
-  </div>
+  <div class="hero-slideshow" id="heroSlideshow"></div>
   <div class="hero-overlay"></div>
-  <div class="hero-op-label">Previous Operation: Karoonda II</div>
+  <div class="hero-op-label">Previous Operation: Karoonda III July 18th</div>
   <div class="hero-pattern"></div>
   <div class="hero-content">
     <img class="hero-logo" src="/assets/logo.png" alt="AZO" onerror="this.style.display='none'">
@@ -1324,15 +1316,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Slideshow
-(function() {
-  const imgs = document.querySelectorAll('.hero-slideshow img');
-  let idx = 0;
-  setInterval(() => {
-    imgs[idx].classList.remove('active');
-    idx = (idx + 1) % imgs.length;
-    imgs[idx].classList.add('active');
-  }, 5000);
-})();
+initHeroSlideshow();
 
 const RANK_ORDER = [
   'SOHQ','SOCOMD','Senior Operator','Operator','Junior Operator','Recruit'
@@ -1921,6 +1905,32 @@ function showOpDetail(idx) {
 
   document.getElementById('opDetailBody').innerHTML = bodyHtml;
   document.getElementById('opsDetailOverlay').style.display = 'flex';
+}
+
+/* ---------- Hero Slideshow ---------- */
+let _heroTimer = null;
+function initHeroSlideshow() {
+  const el = document.getElementById('heroSlideshow');
+  if (!el) return;
+  fetch(API_BASE + '/api/gallery?_=' + Date.now()).then(r => r.ok ? r.json() : []).catch(() => []).then(images => {
+    const karoonda = images.filter(i => i.op_name === 'Karoonda III');
+    if (!karoonda.length) {
+      el.innerHTML = '<img src="/assets/slide1.jpg" class="active" alt="">';
+      return;
+    }
+    if (_heroTimer) { clearInterval(_heroTimer); _heroTimer = null; }
+    el.innerHTML = karoonda.map((img, i) => {
+      const url = API_BASE + '/api/gallery/image/' + img.id;
+      return '<img src="' + url + '" class="' + (i === 0 ? 'active' : '') + '" alt="">';
+    }).join('');
+    let idx = 0;
+    _heroTimer = setInterval(() => {
+      const imgs = el.querySelectorAll('img');
+      imgs.forEach(img => img.classList.remove('active'));
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('active');
+    }, 5000);
+  });
 }
 
 /* ---------- Gallery ---------- */
