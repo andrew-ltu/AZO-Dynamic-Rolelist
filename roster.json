@@ -33,7 +33,7 @@
                      {
                          "name":  "ANVIL",
                          "locked":  true,
-                         "lockedLabel":  "Work in progress - subject to change",
+                         "lockedLabel":  "",
                          "roles":  [
                                        {
                                            "role":  "Squad Leader",
@@ -106,7 +106,7 @@
                      {
                          "name":  "HAMMER 1",
                          "locked":  true,
-                         "lockedLabel":  "Work in progress - subject to change",
+                         "lockedLabel":  "",
                          "roles":  [
                                        {
                                            "role":  "Commander",
@@ -125,7 +125,7 @@
                      {
                          "name":  "HAMMER 2",
                          "locked":  true,
-                         "lockedLabel":  "Work in progress - subject to change",
+                         "lockedLabel":  "",
                          "roles":  [
                                        {
                                            "role":  "Commander",

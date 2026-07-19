@@ -1915,7 +1915,7 @@ function render(roster){
   const attendedSet=new Set(roster.attended||[]);
 
   const uname = currentUser ? (currentUser.rosterName || currentUser.displayName) : null;
-  const cmdLockedLabel = 'Work in progress - subject to change';
+  const cmdLockedLabel = '';
   const cmd=(roster.command||[]).map((r,i)=>slotHTML(r,r.member,true,attendedSet,showAtt,cmdLockedLabel,{sectionKey:'__command',roleIndex:i},uname)).join('');
 
   const sections=(roster.sections||[]).map(sec=>{
@@ -1981,7 +1981,7 @@ function render(roster){
     <section class="command bracketed locked">
       <span class="section-tag">Platoon HQ 🔒</span>
       <div class="hq-grid">${cmd}</div>
-      <div class="lock-note"><span>🔒</span><span>${cmdLockedLabel}</span></div>
+      ${cmdLockedLabel ? `<div class="lock-note"><span>🔒</span><span>${cmdLockedLabel}</span></div>` : ''}
     </section>
 
     <section class="sections">${sections}</section>
