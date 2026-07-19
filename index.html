@@ -1579,18 +1579,21 @@ function renderOperatorsList(list, data, skipStore) {
         OPS_DATA = FALLBACK_OPS;
       } else {
         const apiNames = new Set(calOps.map(o => o.name));
-        OPS_DATA = calOps.map(op => ({
-          name: op.name,
-          date: op.date,
-          zeus: op.zeus,
-          count: 0,
-          short: op.short,
-          status: (op.status || 'upcoming').toLowerCase(),
-          sections: [],
-          banner: op.banner || '',
-          notes: op.notes || '',
-          roster: op.roster ? (typeof op.roster === 'string' ? JSON.parse(op.roster) : op.roster) : null
-        }));
+        OPS_DATA = calOps.map(op => {
+          const roster = op.roster ? (typeof op.roster === 'string' ? JSON.parse(op.roster) : op.roster) : null;
+          let count = 0;
+          if (roster && roster.attended) count = roster.attended.length;
+          else if (roster && roster.sections) {
+            for (const s of roster.sections) {
+              for (const r of (s.roles || [])) { if (r.member) count++; }
+            }
+          }
+          return {
+            name: op.name, date: op.date, zeus: op.zeus, count, short: op.short,
+            status: (op.status || 'upcoming').toLowerCase(), sections: [],
+            banner: op.banner || '', notes: op.notes || '', roster
+          };
+        });
         for (const fb of FALLBACK_OPS) {
           if (!apiNames.has(fb.name)) OPS_DATA.push(fb);
         }
