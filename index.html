@@ -1792,7 +1792,7 @@ function renderCalendar() {
         <div class="ops-cell-event-body">
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <span class="ops-cell-event-date">${isNearest && !isMinor ? '<span class="live-pulse"></span>' : ''}${mon} ${dayNum}${suffix} · 19:00</span>
-            <span class="ops-cell-event-count">${isNearest && !isMinor ? '<span class="live-label">LIVE</span>' : '👤 ' + (op.count || 0)}</span>
+            <span class="ops-cell-event-count">${isNearest && !isMinor ? '<span class="live-label">LIVE</span>' : isMinor ? '' : '👤 ' + (op.count || 0)}</span>
           </div>
           <div class="ops-cell-event-title">${esc(op.name)}</div>
           ${isMinor ? '<span class="ops-cell-event-notes">' + esc(op.notes) + '</span>' : (isUpcoming && isNearest ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : '')}
