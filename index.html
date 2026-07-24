@@ -73,6 +73,8 @@ nav{
 }
 .nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.04);}
 .nav-links a.active{color:var(--primary);}
+.soon-badge{display:inline-block;font-size:8px;font-family:'Share Tech Mono',monospace;font-weight:700;letter-spacing:1px;color:#f59e0b;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:middle;text-shadow:0 0 8px rgba(245,158,11,.5);box-shadow:0 0 12px rgba(245,158,11,.2),inset 0 0 8px rgba(245,158,11,.08);animation:soon-glow 2s ease-in-out infinite alternate;}
+@keyframes soon-glow{0%{box-shadow:0 0 8px rgba(245,158,11,.15),inset 0 0 6px rgba(245,158,11,.05);}100%{box-shadow:0 0 20px rgba(245,158,11,.35),inset 0 0 12px rgba(245,158,11,.12);}}
 /* ---------- HERO ---------- */
 .hero{
   position:relative;min-height:calc(100vh - var(--nav-h));
@@ -595,7 +597,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
       <a data-page="roster" onclick="switchPage('roster')">Upcoming Op</a>
       <a data-page="operators" onclick="switchPage('operators')">Operators</a>
       <a data-page="gallery" onclick="switchPage('gallery')">Gallery</a>
-      <a data-page="ocap" onclick="switchPage('ocap')">OCAP (coming soon)</a>
+      <a data-page="ocap" onclick="switchPage('ocap')">OCAP <span class="soon-badge">SOON</span></a>
     </div>
   </div>
 </nav>
