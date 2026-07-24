@@ -479,6 +479,9 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
 .ops-cell-event-title{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;text-transform:uppercase;color:#fff;letter-spacing:.3px;line-height:1.2;margin-top:2px;}
 .ops-cell-event-signup{display:block;margin-top:auto;padding:6px 0;border-radius:4px;background:#2563EB;color:#fff;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;text-align:center;text-decoration:none;border:0;cursor:pointer;transition:background .15s;line-height:1.4;}
 .ops-cell-event-signup:hover{background:#3b82f6;}
+.minor-event{background:rgba(37,99,235,.03);border-color:rgba(255,255,255,.05);}
+.minor-event .ops-cell-event-title{font-size:13px;}
+.ops-cell-event-notes{display:block;font-size:9px;color:#f0b429;font-family:'Share Tech Mono',monospace;letter-spacing:.3px;margin-top:auto;padding:4px 0;opacity:.85;}
 
 /* --- Gallery Redesign --- */
 .gallery-hero{position:relative;height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -542,6 +545,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-cell-event-count{font-size:8px;}
   .ops-cell-event-title{font-size:10px;}
   .ops-cell-event-signup{font-size:7px;padding:3px 0;}
+  .ops-cell-event-notes{font-size:7px;padding:3px 0;}
   .ops-month-year{margin-bottom:10px;}
   .ops-month-year span:first-child{font-size:9px!important;}
   #opsCalTitle{font-size:16px;}
@@ -559,6 +563,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-cell-event-date{font-size:7px;}
   .ops-cell-event-count{font-size:7px;}
   .ops-cell-event-signup{font-size:6px;padding:2px 0;}
+  .ops-cell-event-notes{font-size:7px;padding:2px 0;}
   .ops-month-year span:first-child{font-size:8px!important;}
   #opsCalTitle{font-size:14px;}
   .ops-month-arrow{width:24px;height:24px;font-size:12px;}
@@ -570,6 +575,7 @@ footer{padding:40px 20px 24px;max-width:1100px;margin:0 auto;text-align:center;}
   .ops-cell-event-img{height:20px;}
   .ops-cell-event-title{font-size:7px;}
   .ops-cell-event-date{font-size:6px;}
+  .ops-cell-event-notes{font-size:6px;padding:1px 0;}
   .ops-cell-event-signup{font-size:5px;padding:1px 0;letter-spacing:.2px;}
 }
 </style>
@@ -1719,6 +1725,7 @@ function renderCalendar() {
   const todayStart = new Date(); todayStart.setHours(0,0,0,0);
   OPS_DATA.forEach((op, i) => {
     if (isDone(op.status)) return;
+    if (op.notes) return; // minor events (announcements) don't get pulse/LIVE
     const dateStr = op.short || op.date;
     if (!dateStr) return;
     const parsed = new Date(dateStr);
@@ -1767,16 +1774,17 @@ function renderCalendar() {
       const suffix = dayNum ? (dayNum%10===1&&dayNum!==11?'st':dayNum%10===2&&dayNum!==12?'nd':dayNum%10===3&&dayNum!==13?'rd':'th') : '';
       const isUpcoming = op.status !== 'complete' && op.status !== 'completed';
       const isNearest = i === nearestUpcomingIdx;
+      const isMinor = !!(op.notes);
       const bannerStyle = op.banner ? ' style="background-image:url(' + esc(op.banner) + ');background-size:cover;background-position:center;"' : '';
-      return `<div class="ops-cell-event${isNearest ? ' nearest-upcoming' : ''}" onclick="showOpDetail(${i})">
-        <div class="ops-cell-event-img"${bannerStyle}></div>
+      return `<div class="ops-cell-event${isNearest && !isMinor ? ' nearest-upcoming' : ''}${isMinor ? ' minor-event' : ''}" onclick="showOpDetail(${i})">
+        ${isMinor ? '' : `<div class="ops-cell-event-img"${bannerStyle}></div>`}
         <div class="ops-cell-event-body">
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="ops-cell-event-date">${isNearest ? '<span class="live-pulse"></span>' : ''}${mon} ${dayNum}${suffix} · 19:00</span>
-            <span class="ops-cell-event-count">${isNearest ? '<span class="live-label">LIVE</span>' : '👤 ' + (op.count || 0)}</span>
+            <span class="ops-cell-event-date">${isNearest && !isMinor ? '<span class="live-pulse"></span>' : ''}${mon} ${dayNum}${suffix} · 19:00</span>
+            <span class="ops-cell-event-count">${isNearest && !isMinor ? '<span class="live-label">LIVE</span>' : '👤 ' + (op.count || 0)}</span>
           </div>
           <div class="ops-cell-event-title">${esc(op.name)}</div>
-          ${isUpcoming && isNearest ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : ''}
+          ${isMinor ? '<span class="ops-cell-event-notes">' + esc(op.notes) + '</span>' : (isUpcoming && isNearest ? (op.notes ? '<span style="display:block;font-size:8px;color:#f0b429;font-family:\'Share Tech Mono\',monospace;letter-spacing:.3px;margin-top:auto;padding:6px 0;">' + esc(op.notes) + '</span>' : '<a href="/roster/" target="_blank" class="ops-cell-event-signup" onclick="event.stopPropagation()">Sign Up →</a>') : '')}
         </div>
       </div>`;
     }).join('');
